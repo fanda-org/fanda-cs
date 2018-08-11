@@ -1,0 +1,11 @@
+D:\Development\Fanda\src\Fanda\Fanda.Tests\bin\Debug\netcoreapp2.1\Fanda.Tests.deps.json
+D:\Development\Fanda\src\Fanda\Fanda.Tests\bin\Debug\netcoreapp2.1\Fanda.Tests.runtimeconfig.json
+D:\Development\Fanda\src\Fanda\Fanda.Tests\bin\Debug\netcoreapp2.1\Fanda.Tests.runtimeconfig.dev.json
+D:\Development\Fanda\src\Fanda\Fanda.Tests\bin\Debug\netcoreapp2.1\Fanda.Tests.dll
+D:\Development\Fanda\src\Fanda\Fanda.Tests\bin\Debug\netcoreapp2.1\Fanda.Tests.pdb
+D:\Development\Fanda\src\Fanda\Fanda.Tests\obj\Debug\netcoreapp2.1\Fanda.Tests.csproj.CoreCompileInputs.cache
+D:\Development\Fanda\src\Fanda\Fanda.Tests\obj\Debug\netcoreapp2.1\Fanda.Tests.AssemblyInfoInputs.cache
+D:\Development\Fanda\src\Fanda\Fanda.Tests\obj\Debug\netcoreapp2.1\Fanda.Tests.AssemblyInfo.cs
+D:\Development\Fanda\src\Fanda\Fanda.Tests\obj\Debug\netcoreapp2.1\Fanda.Tests.dll
+D:\Development\Fanda\src\Fanda\Fanda.Tests\obj\Debug\netcoreapp2.1\Fanda.Tests.pdb
+D:\Development\Fanda\src\Fanda\Fanda.Tests\obj\Debug\netcoreapp2.1\Fanda.Tests.csprojAssemblyReference.cache

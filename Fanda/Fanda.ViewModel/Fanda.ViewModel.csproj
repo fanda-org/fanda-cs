@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <RuntimeFrameworkVersion>2.1.2</RuntimeFrameworkVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="AutoMapperProfile\**" />
+    <Compile Remove="Services\**" />
+    <EmbeddedResource Remove="AutoMapperProfile\**" />
+    <EmbeddedResource Remove="Services\**" />
+    <None Remove="AutoMapperProfile\**" />
+    <None Remove="Services\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Fanda.Common\Fanda.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Accounting\" />
+    <Folder Include="Tracking\" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,14 @@
+D:\Development\Fanda\src\Fanda\Fanda.Data\bin\Release\netcoreapp2.1\Fanda.Data.deps.json
+D:\Development\Fanda\src\Fanda\Fanda.Data\bin\Release\netcoreapp2.1\Fanda.Data.runtimeconfig.json
+D:\Development\Fanda\src\Fanda\Fanda.Data\bin\Release\netcoreapp2.1\Fanda.Data.runtimeconfig.dev.json
+D:\Development\Fanda\src\Fanda\Fanda.Data\bin\Release\netcoreapp2.1\Fanda.Data.dll
+D:\Development\Fanda\src\Fanda\Fanda.Data\bin\Release\netcoreapp2.1\Fanda.Data.pdb
+D:\Development\Fanda\src\Fanda\Fanda.Data\bin\Release\netcoreapp2.1\Fanda.Common.dll
+D:\Development\Fanda\src\Fanda\Fanda.Data\bin\Release\netcoreapp2.1\Fanda.Common.pdb
+D:\Development\Fanda\src\Fanda\Fanda.Data\obj\Release\netcoreapp2.1\Fanda.Data.csprojAssemblyReference.cache
+D:\Development\Fanda\src\Fanda\Fanda.Data\obj\Release\netcoreapp2.1\Fanda.Data.csproj.CoreCompileInputs.cache
+D:\Development\Fanda\src\Fanda\Fanda.Data\obj\Release\netcoreapp2.1\Fanda.Data.AssemblyInfoInputs.cache
+D:\Development\Fanda\src\Fanda\Fanda.Data\obj\Release\netcoreapp2.1\Fanda.Data.AssemblyInfo.cs
+D:\Development\Fanda\src\Fanda\Fanda.Data\obj\Release\netcoreapp2.1\Fanda.Data.csproj.CopyComplete
+D:\Development\Fanda\src\Fanda\Fanda.Data\obj\Release\netcoreapp2.1\Fanda.Data.dll
+D:\Development\Fanda\src\Fanda\Fanda.Data\obj\Release\netcoreapp2.1\Fanda.Data.pdb

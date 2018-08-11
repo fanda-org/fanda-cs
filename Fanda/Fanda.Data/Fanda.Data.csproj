@@ -1,0 +1,66 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <RuntimeFrameworkVersion>2.1.2</RuntimeFrameworkVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="AutoMapperProfile\**" />
+    <Compile Remove="Enums\**" />
+    <Compile Remove="Seed\**" />
+    <Compile Remove="Services\**" />
+    <Compile Remove="Utility\**" />
+    <Compile Remove="ViewModels\**" />
+    <EmbeddedResource Remove="AutoMapperProfile\**" />
+    <EmbeddedResource Remove="Enums\**" />
+    <EmbeddedResource Remove="Seed\**" />
+    <EmbeddedResource Remove="Services\**" />
+    <EmbeddedResource Remove="Utility\**" />
+    <EmbeddedResource Remove="ViewModels\**" />
+    <None Remove="AutoMapperProfile\**" />
+    <None Remove="Enums\**" />
+    <None Remove="Seed\**" />
+    <None Remove="Services\**" />
+    <None Remove="Utility\**" />
+    <None Remove="ViewModels\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20180715031348_Initial.cs" />
+    <Compile Remove="Migrations\20180718024008_OrgDateModified.cs" />
+    <Compile Remove="Migrations\20180805161018_IngredientRemoveFK.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="appsettings.Development.json" />
+    <None Remove="appsettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings.Development.json">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="appsettings.json">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Fanda.Common\Fanda.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Accounting\" />
+  </ItemGroup>
+</Project>
