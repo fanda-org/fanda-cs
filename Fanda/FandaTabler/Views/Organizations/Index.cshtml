@@ -1,0 +1,128 @@
+﻿@{
+    ViewData["Title"] = "Index";
+}
+<div class="page-header">
+    <h1 class="page-title">
+        Organizations
+    </h1>
+</div>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">List of Organizations</h3>
+    </div>
+    <div class="card-body">
+        @*<div class="row mb-3">
+                <div class="col-sm-3">
+                    <div class="input-icon">
+                        <input type="search" class="form-control header-search" placeholder="Search&hellip;" tabindex="1">
+                        <div class="input-icon-addon">
+                            <i class="fe fe-search"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-1">
+                    <a href="javascript:void(0)" class="btn btn-secondary"><i class="fe fe-refresh-cw"></i></a>
+                </div>
+                <div class="col-sm">
+                    <div class="float-right">
+                        <a href="javascript:void(0)" class="btn btn-secondary"><i class="fe fe-plus-circle"></i> Create New</a>
+                    </div>
+                </div>
+            </div>*@
+        <form method="post">
+            @Html.AntiForgeryToken()
+            <div id="jsGrid"></div>
+        </form>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+    require(['jquery', 'jsgrid'], function () {
+        $(document).ajaxSend(function (e, xhr, options) {
+            if (options.type.toUpperCase() == "POST" || options.type.toUpperCase() == "PATCH") {
+                var token = $("input[name='__RequestVerificationToken']").val();
+                xhr.setRequestHeader("RequestVerificationToken", token);
+            }
+        });
+
+        $("#jsGrid").jsGrid({
+            height: "auto",
+            width: "100%",
+
+            heading: true,
+            filtering: true,
+
+            inserting: false,
+            editing: false,
+            selecting: true,
+            sorting: true,
+
+            paging: true,
+            pageLoading: false,
+            autoload: true,
+            pageSize: 10,
+            pageButtonCount: 3,
+
+            noDataContent: "No records",
+
+            confirmDeleting: true,
+            deleteConfirm: "Do you really want to delete the organization?",
+
+            //data: clients,
+            controller: {
+                loadData: function (filter) {
+                    return $.ajax({
+                        type: "GET",
+                        url: "@Url.Action("GetAll")",
+                        data: filter
+                    });
+                }
+            },
+
+            onError: function (grid, args) {
+                consol.log(args);
+                alert(args.item);
+            },
+
+            //rowClick: function(args) {
+            //    console.log(args)
+            //    var getData = args.item;
+            //    var keys = Object.keys(getData);
+            //    var text = [];
+
+            //    $.each(keys, function(idx, value) {
+            //      text.push(value + " : " + getData[value])
+            //    });
+
+            //    $("#label").text(text.join(", "))
+            //},
+
+            fields: [
+                {
+                    name: "orgCode", title: "Code", type: "text", width: 75, validate: "required",
+                    itemTemplate: function (value, item) {
+                        var url = '@Url.Action("Select", "Organizations", new { id = -1 })'; @*"/Organizations/Select/" + item.OrgId;*@
+                        url = url.replace('-1', item.orgId);
+                        return $("<a href='" + url + "'>" + value + "</a>");
+                    }
+                },
+                { name: "orgName", title: "Name", type: "text", width: 150, validate: "required" },
+                { name: "description", type: "text", width: 200 },
+                { name: "active", type: "checkbox", title: "Active", sorting: false },
+                { name: "orgId", visible: false, width: 0 },
+                //{ name: "Age", type: "number", width: 50 },
+                //{ name: "Address", type: "text", width: 200 },
+                //{ name: "Country", type: "select", items: countries, valueField: "Id", textField: "Name" },
+                {
+                    type: "control", editButton: false, deleteButton: false,
+                    clearFilterButton: true,                        // show clear filter button
+                    modeSwitchButton: true,                         // show switching filtering/inserting button
+                    filtering: true,
+                }
+            ]
+        });
+        $("#jsGrid").find(".jsgrid-mode-button").click();
+    });
+    </script>
+}

@@ -4,22 +4,22 @@ using Fanda.Data.Business;
 using Fanda.Data.Commodity;
 using Fanda.Data.Inventory;
 using Fanda.Data.Tracking;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+//using Microsoft.AspNetCore.Identity;
+//using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 
 namespace Fanda.Data.Context
 {
-    public class FandaContext : IdentityDbContext<User, Role, Guid>
+    public class FandaContext : DbContext //IdentityDbContext<User, Role, Guid>
     {
         public FandaContext(DbContextOptions<FandaContext> options)
         : base(options)
         { }
 
-        //public DbSet<Role> Roles { get; set; }
-        //public DbSet<User> Users { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<User> Users { get; set; }
         public DbSet<Address> Addresses { get; set; }
 
         public DbSet<Contact> Contacts { get; set; }
@@ -74,11 +74,12 @@ namespace Fanda.Data.Context
             //modelBuilder.Entity<Role>().ToTable("Roles");
             modelBuilder.ApplyConfiguration(new RoleConfig());
             modelBuilder.ApplyConfiguration(new UserConfig());
-            modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("UserClaims");
-            modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("UserRoles");
-            modelBuilder.Entity<IdentityUserLogin<Guid>>().ToTable("UserLogins");
-            modelBuilder.Entity<IdentityRoleClaim<Guid>>().ToTable("RoleClaims");
-            modelBuilder.Entity<IdentityUserToken<Guid>>().ToTable("UserTokens");
+            modelBuilder.ApplyConfiguration(new OrgUserRoleConfig());
+            //modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("UserClaims");
+            //modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("UserRoles");
+            //modelBuilder.Entity<IdentityUserLogin<Guid>>().ToTable("UserLogins");
+            //modelBuilder.Entity<IdentityRoleClaim<Guid>>().ToTable("RoleClaims");
+            //modelBuilder.Entity<IdentityUserToken<Guid>>().ToTable("UserTokens");
 
             modelBuilder.ApplyConfiguration(new AddressConfig());
             modelBuilder.ApplyConfiguration(new ContactConfig());
@@ -124,7 +125,8 @@ namespace Fanda.Data.Context
                 .SelectMany(t => t.GetProperties())
                 .Where(p => p.ClrType == typeof(decimal)))
             {
-                property.Relational().ColumnType = "decimal(16, 4)";
+                property.SetColumnType("decimal(16, 4)");
+                    //.Relational().ColumnType = "decimal(16, 4)";
             }
         }
     }

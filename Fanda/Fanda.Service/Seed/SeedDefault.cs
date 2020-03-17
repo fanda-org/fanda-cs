@@ -1,8 +1,19 @@
-﻿using Fanda.Data.Access;
-using Microsoft.AspNetCore.Identity;
+﻿using Fanda.Common.Helpers;
+using Fanda.Data.Access;
+using Fanda.Service.Access;
+using Fanda.Service.Business;
+using Fanda.Service.Commodity;
+using Fanda.ViewModel.Access;
+using Fanda.ViewModel.Business;
+using Fanda.ViewModel.Commodity;
+//using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Fanda.Service.Seed
@@ -10,94 +21,162 @@ namespace Fanda.Service.Seed
     public class SeedDefault
     {
         private readonly IServiceProvider _serviceProvider;
-        private readonly IConfiguration _configuration;
+        private readonly AppSettings _settings;
 
-        public SeedDefault(IServiceProvider serviceProvider, IConfiguration configuration)
+        public SeedDefault(IServiceProvider serviceProvider, IOptions<AppSettings> options)
         {
             _serviceProvider = serviceProvider;
-            _configuration = configuration;
+            _settings = options.Value;
         }
 
-        public async Task CreateRoles()
+        #region Fanda Org
+        public async Task CreateFanda()
+        {
+            var service = _serviceProvider.GetRequiredService<IOrganizationService>();
+            var org = await service.ExistsAsync("FANDA");
+            if (org == null)
+            {
+                org = await service.SaveAsync(new OrganizationViewModel
+                {
+                    OrgCode = "FANDA",
+                    OrgName = "Fanda",
+                    Description = "Fanda has default values",
+                    Active = true
+                });
+
+                await CreateRoles();
+                var loc = await CreateLocations(org);
+                await CreateUsers(org, loc);
+                await CreateUnits(org);
+                await CreatePartyCategories(org);
+            }
+
+            // create demo org
+            org = await service.ExistsAsync("DEMO");
+            if (org == null)
+                await service.SaveAsync(new OrganizationViewModel
+                {
+                    OrgCode = "DEMO",
+                    OrgName = "Demo",
+                    Description = "Demo organization",
+                    Active = true
+                });
+        }
+        #endregion
+
+        private async Task CreateRoles()
         {
             //adding customs roles
-            var RoleManager = _serviceProvider.GetRequiredService<RoleManager<Role>>();
+            var service = _serviceProvider.GetRequiredService<IRoleService>();
 
-            string[] roles = {
+            string[] rolesArray = {
                     "SuperAdmin:Super Administrators have complete and unrestricted access to the application",
                     "Admin:Administrators have complete and unrestricted access to the organization",
-                    "Manager:Managers are possess limited administrative powers",
+                    //"Manager:Managers are possess limited administrative powers",
                     "SuperUser:Super users are have additional access than users",
-                    "Member:Members are prevented from making accidental or intentional system-wide changes and can run most"
+                    "User:Users are prevented from making accidental or intentional system-wide changes and can run most"
                 };
-            IdentityResult roleResult;
+            //IdentityResult roleResult;
 
-            foreach (var role in roles)
+            foreach (var roleElement in rolesArray)
             {
-                string roleName = role.Split(':')[0];
-                string description = role.Split(':')[1];
+                string roleName = roleElement.Split(':')[0];
+                string description = roleElement.Split(':')[1];
                 string roleCode = roleName.ToUpper();
                 // creating the roles and seeding them to the database
-                var roleExist = await RoleManager.RoleExistsAsync(roleName);
+                var roleExist = await service.ExistsAsync(roleCode);
                 if (!roleExist)
                 {
-                    roleResult = await RoleManager.CreateAsync(new Role(roleCode, roleName, description));
+                    var model = new RoleViewModel
+                    {
+                        Code = roleCode,
+                        Name = roleName,
+                        Description = description,
+                        Active = true
+                    };
+                    await service.SaveAsync(model);
                 }
             }
         }
 
-        public async Task CreateUsers()
+        private async Task<LocationViewModel> CreateLocations(OrganizationViewModel org)
         {
-            var UserManager = _serviceProvider.GetRequiredService<UserManager<User>>();
-            // creating a super user who could maintain the web app
-            var superAdmin = new User
+            var service = _serviceProvider.GetRequiredService<ILocationService>();
+            var loc = await service.ExistsAsync("DEFAULT");
+            if (loc == null)
             {
-                UserName = _configuration["AppSettings:UserName"],
-                Email = _configuration["AppSettings:UserEmail"],
+                loc = new LocationViewModel
+                {
+                    Code = "DEFAULT",
+                    Name = "Default",
+                    Description = "Default Location",
+                    Active = true
+                };
+                loc = await service.SaveAsync(org.OrgId, loc);
+            }
+            return loc;
+        }
+
+        private async Task CreateUsers(OrganizationViewModel org, LocationViewModel loc)
+        {
+            var service = _serviceProvider.GetRequiredService<IUserService>();
+            // creating a super user who could maintain the web app
+            var superAdmin = new UserViewModel
+            {
+                UserName = _settings.FandaSettings.UserName,
+                Email = _settings.FandaSettings.UserEmail,
+                LocationId = loc.LocationId,
                 Active = true
             };
-            string userPassword = _configuration["AppSettings:UserPassword"];
-            var user = await UserManager.FindByNameAsync(superAdmin.UserName);
-
-            if (user == null)
+            if (!await service.ExistsAsync(superAdmin.UserName))
             {
-                var createSuperAdmin = await UserManager.CreateAsync(superAdmin, userPassword);
-                if (createSuperAdmin.Succeeded)
-                {
-                    // here we assign the new user the "SuperAdmin" role
-                    await UserManager.AddToRoleAsync(superAdmin, "SuperAdmin");
-                }
+                var user = await service.SaveAsync(org.OrgId, superAdmin, _settings.FandaSettings.UserPassword);
+                await service.AddToRoleAsync(org.OrgId, user, "SuperAdmin");
             }
         }
 
-        public Task CreateLocations()
+        //public async Task CreateDevices()
+        //{
+        //    //throw new NotImplementedException();
+        //}
+
+        private async Task CreateUnits(OrganizationViewModel org)
         {
-            throw new NotImplementedException();
+            var service = _serviceProvider.GetRequiredService<IUnitService>();
+            if (!await service.ExistsAsync("DEFAULT"))
+            {
+                var unit = new UnitViewModel
+                {
+                    Code = "DEFAULT",
+                    Name = "Default",
+                    Active = true,
+                };
+                await service.SaveAsync(org.OrgId, unit);
+            }
         }
 
-        public Task CreateDevices()
+        private async Task CreatePartyCategories(OrganizationViewModel org)
         {
-            throw new NotImplementedException();
+            var service = _serviceProvider.GetRequiredService<IPartyCategoryService>();
+            if(!service.ExistsAsync("DEFAULT").Result)
+            {
+                await service.SaveAsync(org.OrgId, new PartyCategoryViewModel {
+                    Code="DEFAULT",
+                    Name="Default",
+                    Description= "Default Category",
+                    Active=true
+                });
+            }
         }
 
-        public Task CreateUnits()
-        {
-            throw new NotImplementedException();
-        }
+        //public async Task CreateProductCategories()
+        //{
+        //    //throw new NotImplementedException();
+        //}
 
-        public Task CreateProductCategories()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task CreatePartyCategories()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task CreateInvoiceCategories()
-        {
-            throw new NotImplementedException();
-        }
+        //public async Task CreateInvoiceCategories()
+        //{
+        //    //throw new NotImplementedException();
+        //}
     }
 }

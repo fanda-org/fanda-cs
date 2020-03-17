@@ -5,7 +5,7 @@ namespace Fanda.ViewModel.Access
 {
     public class UserViewModel
     {
-        public Guid UserId { get; set; }
+        public string UserId { get; set; }
 
         [StringLength(16)]
         public string UserName { get; set; }
@@ -20,29 +20,28 @@ namespace Fanda.ViewModel.Access
         [StringLength(50)]
         public string LastName { get; set; }
 
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
+        //[DataType(DataType.Password)]
+        //public string Password { get; set; }
 
-        public string PhoneNumber { get; set; }
+        //public string PhoneNumber { get; set; }
+
+        public string Token { get; set; }
 
         //public bool EmailConfirmed { get; set; }
         //public bool PhoneNumberConfirmed { get; set; }
         //public int AccessFailedCount { get; set; }
-
+        public string LocationId { get; set; }
         public bool Active { get; set; }
         public DateTime? DateLastLogin { get; set; }
         public DateTime DateCreated { get; set; }
         public DateTime? DateModified { get; set; }
-
-        //public virtual ICollection<RoleViewModel> Roles { get; set; }
-        //public virtual RoleViewModel Role { get; set; }
-        //public Guid RoleId { get; set; }
     }
 
     public class LoginViewModel
     {
         [Required]
         //[EmailAddress]
+        [Display(Name = "Name / Email")]
         public string NameOrEmail { get; set; }
 
         [Required]
@@ -51,6 +50,8 @@ namespace Fanda.ViewModel.Access
 
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
+
+        public string ReturnUrl { get; set; }
     }
 
     public class RegisterViewModel
@@ -72,10 +73,10 @@ namespace Fanda.ViewModel.Access
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
-        public string ConfirmPassword { get; set; }
+        //[DataType(DataType.Password)]
+        //[Display(Name = "Confirm password")]
+        //[Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        //public string ConfirmPassword { get; set; }
     }
 
     public class ChangePasswordViewModel

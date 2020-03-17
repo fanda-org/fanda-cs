@@ -1,0 +1,193 @@
+﻿@model Fanda.ViewModel.Business.PartyViewModel
+@using Fanda.Common.Enums
+@using Fanda.Common.Extensions
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="Code" class="control-label"></label>
+            @if (ViewBag.Readonly)
+            {
+                <input asp-for="Code" class="form-control text-uppercase" readonly />
+            }
+            else
+            {
+                <input asp-for="Code" class="form-control input-uppercase" autofocus />
+            }
+            <span asp-validation-for="Code" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="Name" class="control-label"></label>
+            @if (ViewBag.Readonly)
+            {
+                <input asp-for="Name" class="form-control" readonly />
+            }
+            else
+            {
+                <input asp-for="Name" class="form-control" />
+            }
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="PartyType" class="control-label"></label>
+            @if (ViewBag.Readonly)
+            {
+                <input id="PartyTypeInput" asp-for="PartyType" class="form-control" readonly disabled />
+            }
+            else
+            {
+                <select asp-for="PartyType" asp-items='Html.GetEnumSelectList<PartyType>()' class="form-control">
+                    <option selected="selected" value="">Please select</option>
+                </select>
+            }
+            <span asp-validation-for="PartyType" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="CategoryId" class="control-label"></label>
+            @if (ViewBag.Readonly)
+            {
+                <input asp-for="CategoryName" class="form-control" readonly />
+            }
+            else
+            {
+                <select asp-for="CategoryId" asp-items='TempData.Peek<List<SelectListItem>>("PartyCategories")' class="form-control" autofocus></select>
+            }
+            <span asp-validation-for="CategoryId" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="RegdNum" class="control-label"></label>
+            @if (ViewBag.Readonly)
+            {
+                <input asp-for="RegdNum" class="form-control" readonly />
+            }
+            else
+            {
+                <input asp-for="RegdNum" class="form-control" />
+            }
+            <span asp-validation-for="RegdNum" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="PAN" class="control-label"></label>
+            @if (ViewBag.Readonly)
+            {
+                <input asp-for="PAN" class="form-control" readonly />
+            }
+            else
+            {
+                <input asp-for="PAN" class="form-control" />
+            }
+            <span asp-validation-for="PAN" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="TAN" class="control-label"></label>
+            @if (ViewBag.Readonly)
+            {
+                <input asp-for="TAN" class="form-control" readonly />
+            }
+            else
+            {
+                <input asp-for="TAN" class="form-control" />
+            }
+            <span asp-validation-for="TAN" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="GSTIN" class="control-label"></label>
+            @if (ViewBag.Readonly)
+            {
+                <input asp-for="GSTIN" class="form-control" readonly />
+            }
+            else
+            {
+                <input asp-for="GSTIN" class="form-control" />
+            }
+            <span asp-validation-for="GSTIN" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="PaymentTerm" class="control-label"></label>
+            @if (ViewBag.Readonly)
+            {
+                <input id="PaymentTermInput" asp-for="PaymentTerm" class="form-control" readonly />
+            }
+            else
+            {
+                <select asp-for="PaymentTerm" asp-items='Html.GetEnumSelectList<PaymentTerm>()' class="form-control">
+                    <option selected="selected" value="">Please select</option>
+                </select>
+            }
+            <span asp-validation-for="PaymentTerm" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="CreditLimit" class="control-label"></label>
+            @if (ViewBag.Readonly)
+            {
+                <input asp-for="CreditLimit" class="form-control text-right" readonly />
+            }
+            else
+            {
+                <input asp-for="CreditLimit" class="form-control right text-right" />
+            }
+            <span asp-validation-for="CreditLimit" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="form-group">
+            <label class="control-label" asp-for="Active"></label>
+            <label class="custom-switch form-control-plaintext">
+                @if (ViewBag.Readonly)
+                {
+                    <input type="checkbox" class="custom-switch-input" asp-for="Active" disabled readonly>
+                }
+                else
+                {
+                    <input type="checkbox" class="custom-switch-input" asp-for="Active">
+                }
+                <span class="custom-switch-indicator"></span>
+                <span class="custom-switch-description">&nbsp;</span>
+            </label>
+        </div>
+    </div>
+</div>
+
+@*<div class="row">
+        @if (ViewBag.Mode != "Create")
+        {
+            <div class="col-md-4">
+                <div class="form-group mb-0">
+                    <label asp-for="DateCreated" class="control-label"></label>
+                    <input asp-for="DateCreated" class="form-control" type="text" readonly tabindex="-1" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group mb-0">
+                    <label asp-for="DateModified" class="control-label"></label>
+                    <input asp-for="DateModified" class="form-control" type="text" readonly tabindex="-1" />
+                </div>
+            </div>
+        }
+    </div>*@

@@ -7,6 +7,11 @@ namespace Fanda.Data.Business
 {
     public class Party
     {
+        public Party()
+        {
+            Contacts = new HashSet<PartyContact>();
+            Addresses = new HashSet<PartyAddress>();
+        }
         public Guid PartyId { get; set; }
         public Guid OrgId { get; set; }
         public string Code { get; set; }
@@ -44,6 +49,8 @@ namespace Fanda.Data.Business
         public virtual ICollection<PartyContact> Contacts { get; set; }
         public virtual ICollection<PartyAddress> Addresses { get; set; }
         public virtual ICollection<PartyBank> Banks { get; set; }
+
         public virtual ICollection<Invoice> Invoices { get; set; }
+        public virtual ICollection<Invoice> BuyerInvoices { get; set; }
     }
 }

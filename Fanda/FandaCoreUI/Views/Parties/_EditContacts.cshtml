@@ -1,0 +1,24 @@
+﻿@model List<ContactViewModel>
+@using Fanda.ViewModel.Base
+
+<div>
+    <table id="tblContacts" class="table table-borderless table-responsive-md">
+        <thead>
+            <tr>
+                <th scope="col"><label asp-for="@Model[0].ContactName"></label></th>
+                <th scope="col"><label asp-for="@Model[0].ContactTitle"></label></th>
+                <th scope="col"><label asp-for="@Model[0].ContactPhone"></label></th>
+                <th scope="col"><label asp-for="@Model[0].ContactEmail"></label></th>
+                <th scope="col" class="text-right">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @*<input asp-for="@Model" />*@
+            @Html.EditorFor(model => model)
+            @*@foreach (ContactViewModel contact in Model)
+                {
+                    <partial name="_EditContactRow" model="contact" />
+                }*@
+        </tbody>
+    </table>
+</div>

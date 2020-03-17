@@ -1,0 +1,261 @@
+﻿@using Microsoft.AspNetCore.Http
+@using Fanda.Common.Extensions
+@using Fanda.ViewModel.Business
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    var org = Context.Session.Get<OrganizationViewModel>("CurrentOrg");
+    string orgCode = "Fanda";
+    string orgName = "Fanda";
+    if (org != null)
+    {
+        orgCode = org.OrgCode;
+        orgName = org.OrgName;
+    }
+}
+
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Content-Language" content="en" />
+    <meta name="msapplication-TileColor" content="#2d89ef">
+    <meta name="theme-color" content="#4188c9">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <link rel="icon" href="~/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" type="image/x-icon" href="~/favicon.ico" />
+    <!-- Generated: 2018-04-16 09:29:05 +0200 -->
+    <title>@orgCode - @ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/assets/css/google-fonts.css" />
+    <script src="~/assets/js/require.min.js"></script>
+    <script>
+        requirejs.config({
+            baseUrl: '/'
+        });
+    </script>
+    <!-- Dashboard Core -->
+    <link href="~/assets/css/dashboard.css" rel="stylesheet" type="text/css" />
+    <script src="~/assets/js/dashboard.js"></script>
+    <!-- SweetAlert2 -->
+    <link href="~/assets/css/sweetalert2.min.css" rel="stylesheet" type="text/css" />
+    <!-- JSGrid Plugin -->
+    <link href="~/assets/plugins/jsgrid/jsgrid.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/plugins/jsgrid/jsgrid-theme.min.css" rel="stylesheet" type="text/css" />
+    <script src="~/assets/plugins/jsgrid/plugin.js"></script>
+    <!-- Datatables Plugin -->
+    <script src="~/assets/plugins/datatables/plugin.js"></script>
+    <!-- Tabulator Tables Plugin -->
+    <link href="~/assets/plugins/tabulator-tables/tabulator_bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <script src="~/assets/plugins/tabulator-tables/plugin.js"></script>
+    <!-- Select2 -->
+    <link href="~/assets/plugins/select2/select2.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/plugins/select2/select2-bootstrap4.css" rel="stylesheet" type="text/css" />
+    <script src="~/assets/plugins/select2/plugin.js"></script>
+
+    @RenderSection("Styles", required: false)
+</head>
+<body class="">
+    <div class="page">
+        @if (Context.User.Identity.IsAuthenticated)
+        {
+            <div class="flex-fill">
+                <div class="header py-4">
+                    <div class="container">
+                        <div class="d-flex">
+                            <a class="header-brand" href='@Url.Action("Index", "Home")'>
+                                <img src="~/demo/logo.svg" class="header-brand-img" alt="fanda logo">
+                                @if (!string.IsNullOrEmpty(orgName))
+                                {
+                                    @orgName
+                                }
+                            </a>
+                            <div class="d-flex order-lg-2 ml-auto">
+                                <div class="dropdown d-none d-md-flex">
+                                    <a class="nav-link icon" data-toggle="dropdown">
+                                        <i class="fe fe-bell"></i>
+                                        <span class="nav-unread"></span>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                        <a href="#" class="dropdown-item d-flex">
+                                            <span class="avatar mr-3 align-self-center" style="background-image: url(../demo/faces/male/41.jpg)"></span>
+                                            <div>
+                                                <strong>Nathan</strong> pushed new commit: Fix page load performance issue.
+                                                <div class="small text-muted">10 minutes ago</div>
+                                            </div>
+                                        </a>
+                                        <a href="#" class="dropdown-item d-flex">
+                                            <span class="avatar mr-3 align-self-center" style="background-image: url(../demo/faces/female/1.jpg)"></span>
+                                            <div>
+                                                <strong>Alice</strong> started new task: Tabler UI design.
+                                                <div class="small text-muted">1 hour ago</div>
+                                            </div>
+                                        </a>
+                                        <a href="#" class="dropdown-item d-flex">
+                                            <span class="avatar mr-3 align-self-center" style="background-image: url(../demo/faces/female/18.jpg)"></span>
+                                            <div>
+                                                <strong>Rose</strong> deployed new version of NodeJS REST Api V3
+                                                <div class="small text-muted">2 hours ago</div>
+                                            </div>
+                                        </a>
+                                        <div class="dropdown-divider"></div>
+                                        <a href="#" class="dropdown-item text-center">Mark all as read</a>
+                                    </div>
+                                </div>
+                                <div class="dropdown">
+                                    <a href="#" class="nav-link pr-0 leading-none" data-toggle="dropdown">
+                                        <span class="avatar" style="background-image: url(/demo/faces/male/11.jpg)"></span>
+                                        <span class="ml-2 d-none d-lg-block">
+                                            <span class="text-default">@Context.User.Identity.Name</span>
+                                            <small class="text-muted d-block mt-1">Administrator</small>
+                                        </span>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                        <a class="dropdown-item" href="#">
+                                            <i class="dropdown-icon fe fe-user"></i> Profile
+                                        </a>
+                                        <a class="dropdown-item" href="#">
+                                            <i class="dropdown-icon fe fe-settings"></i> Settings
+                                        </a>
+                                        <a class="dropdown-item" href="#">
+                                            <i class="dropdown-icon fe fe-send"></i> Message
+                                        </a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="#">
+                                            <i class="dropdown-icon fe fe-help-circle"></i> Need help?
+                                        </a>
+                                        <a class="dropdown-item" href='@Url.Action("Logout", "Users")'>
+                                            <i class="dropdown-icon fe fe-log-out"></i> Sign out
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="dropdown d-md-flex">
+                                    <a class="nav-link icon pr-0 leading-none @Html.IsSelected(controllers: "Organizations", actions: "Index")" data-toggle="dropdown">
+                                        <span class="stamp mr-0">
+                                            <i class="fe fe-settings"></i>
+                                        </span>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                        <a class="dropdown-item @Html.IsSelected(controllers: "Organizations", actions: "Index")" href='@Url.Action("Index", "Organizations")'>
+                                            <i class="dropdown-icon fe fe-briefcase"></i> Organizations
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="#" class="header-toggler d-lg-none ml-3 ml-lg-0" data-toggle="collapse" data-target="#headerMenuCollapse">
+                                <span class="header-toggler-icon"></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="header collapse d-lg-flex p-0" id="headerMenuCollapse">
+                    <div class="container">
+                        <div class="row align-items-center">
+                            <div class="col-lg-3 ml-auto">
+                                <form class="input-icon my-3 my-lg-0">
+                                    <input type="search" class="form-control header-search" placeholder="Search&hellip;" tabindex="1">
+                                    <div class="input-icon-addon">
+                                        <i class="fe fe-search"></i>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-lg order-lg-first">
+                                <ul class="nav nav-tabs border-0 flex-column flex-lg-row">
+                                    <li class="nav-item">
+                                        <a href='@Url.Action("Index", "Home")' class="nav-link @Html.IsSelected(controllers: "Home", actions: "Index")"><i class="fe fe-home"></i> Home</a>
+                                    </li>
+                                    @if (org != null)
+                                    {
+                                        <li class="nav-item">
+                                            <a href="javascript:void(0)" class="nav-link" data-toggle="dropdown"><i class="fe fe-book"></i> Transactions</a>
+                                            <div class="dropdown-menu dropdown-menu-arrow">
+                                                <a href="#" class="dropdown-item "><i class="fe fe-shopping-cart"></i> Sales</a>
+                                                <a href="#" class="dropdown-item "><i class="fe fe-truck"></i> Purchase</a>
+                                            </div>
+                                        </li>
+                                        <li class="nav-item dropdown">
+                                            <a href="javascript:void(0)" class="nav-link" data-toggle="dropdown"><i class="fe fe-box"></i> Inventory</a>
+                                            <div class="dropdown-menu dropdown-menu-arrow">
+                                                <a href="#" class="dropdown-item ">Goods and Services</a>
+                                                <a href="#" class="dropdown-item ">Categories</a>
+                                                <a href="#" class="dropdown-item ">Units</a>
+                                                <div class="dropdown-divider"></div>
+                                                <a href="#" class="dropdown-item ">Brands</a>
+                                                <a href="#" class="dropdown-item ">Segments</a>
+                                                <a href="#" class="dropdown-item ">Varieties</a>
+                                            </div>
+                                        </li>
+                                        <li class="nav-item dropdown">
+                                            <a href="javascript:void(0)" class="nav-link @Html.IsSelected("Parties,PartyCategories", "Index,IndexEdit")" data-toggle="dropdown"><i class="fe fe-users"></i> Contacts</a>
+                                            <div class="dropdown-menu dropdown-menu-arrow">
+                                                <a href='@Url.Action("Index", "Parties")' class="dropdown-item @Html.IsSelected("Parties", actions: "Index")"><i class="fe fe-user"></i> Business Contacts</a>
+                                                <a href="#" class="dropdown-item "><i class="fe fe-dollar-sign"></i> Banks</a>
+                                                <div class="dropdown-divider"></div>
+                                                <a href='@Url.Action("IndexEdit", "PartyCategories")' class="dropdown-item @Html.IsSelected(controllers: "PartyCategories", actions: "IndexEdit")"><i class="fe fe-package"></i> Categories</a>
+                                            </div>
+                                        </li>
+                                        <li class="nav-item dropdown">
+                                            <a href="javascript:void(0)" class="nav-link" data-toggle="dropdown"><i class="fe fe-pie-chart"></i> Reports</a>
+                                            <div class="dropdown-menu dropdown-menu-arrow">
+                                                <a href="#" class="dropdown-item ">Sales Reports</a>
+                                                <a href="#" class="dropdown-item ">Purchase Reports</a>
+                                                <div class="dropdown-divider"></div>
+                                                <a href="#" class="dropdown-item ">Inventory Reports</a>
+                                                <a href="#" class="dropdown-item ">Stock Reports</a>
+                                            </div>
+                                        </li>
+                                    }
+                                    <li class="nav-item">
+                                        <a href='@Url.Action("Docs", "Home")' class="nav-link @Html.IsSelected(controllers: "Home", actions: "Docs")"><i class="fe fe-file-text"></i> Documentation</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="my-3 my-md-5">
+                    <div class="container">
+                        @RenderBody()
+                    </div>
+                </div>
+            </div>
+            <footer class="footer">
+                <div class="container">
+                    <div class="row align-items-center flex-row-reverse">
+                        <div class="col-auto ml-lg-auto">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <ul class="list-inline list-inline-dots mb-0">
+                                        <li class="list-inline-item"><a href='@Url.Action("Docs", "Home")'>Documentation</a></li>
+                                        <li class="list-inline-item"><a href='@Url.Action("FAQ", "Home")'>FAQ</a></li>
+                                    </ul>
+                                </div>
+                                @*<div class="col-auto">
+                                        <a href="https://github.com/tabler/tabler" class="btn btn-outline-primary btn-sm">Source code</a>
+                                    </div>*@
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-auto mt-3 mt-lg-0 text-center">
+                            Copyright © @DateTime.Today.Year <a href="#">FandaSoft</a>. All rights reserved.
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        }
+        else
+        {
+            <div class="page-single">
+                <div class="container">
+                    @RenderBody()
+                </div>
+            </div>
+        }
+    </div>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

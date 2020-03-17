@@ -40,97 +40,65 @@ namespace Fanda.Service.Commodity
 
         public async Task<List<ProductVarietyViewModel>> GetAllAsync(Guid orgId, bool? active)
         {
-            try
-            {
-                if (orgId == null || orgId == Guid.Empty)
-                    throw new ArgumentNullException("orgId", "Org id is missing");
+            if (orgId == null || orgId == Guid.Empty)
+                throw new ArgumentNullException("orgId", "Org id is missing");
 
-                var varieties = await _context.ProductVarieties
-                    .Where(p => p.OrgId == p.OrgId)
-                    .Where(p => p.Active == ((active == null) ? p.Active : active))
-                    .AsNoTracking()
-                    .ProjectTo<ProductVarietyViewModel>(_mapper.ConfigurationProvider)
-                    .ToListAsync();
-                return varieties;
-            }
-            catch (Exception ex)
-            {
-                ErrorMessage = ex.InnerMessage();
-                return null;
-            }
+            var varieties = await _context.ProductVarieties
+                .Where(p => p.OrgId == p.OrgId)
+                .Where(p => p.Active == ((active == null) ? p.Active : active))
+                .AsNoTracking()
+                .ProjectTo<ProductVarietyViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+            return varieties;
         }
 
         public async Task<ProductVarietyViewModel> GetByIdAsync(Guid varietyId)
         {
-            try
-            {
-                var variety = await _context.ProductVarieties
-                    .ProjectTo<ProductVarietyViewModel>(_mapper.ConfigurationProvider)
-                    .AsNoTracking()
-                    .SingleOrDefaultAsync(pc => pc.VarietyId == varietyId);
+            var variety = await _context.ProductVarieties
+                .ProjectTo<ProductVarietyViewModel>(_mapper.ConfigurationProvider)
+                .AsNoTracking()
+                .SingleOrDefaultAsync(pc => pc.VarietyId == varietyId);
 
-                if (variety != null)
-                    return variety;
+            if (variety != null)
+                return variety;
 
-                throw new KeyNotFoundException("Product variety not found");
-            }
-            catch (Exception ex)
-            {
-                ErrorMessage = ex.InnerMessage();
-                return null;
-            }
+            throw new KeyNotFoundException("Product variety not found");
         }
 
         public async Task<ProductVarietyViewModel> SaveAsync(Guid orgId, ProductVarietyViewModel varietyVM)
         {
-            try
-            {
-                if (orgId == null || orgId == Guid.Empty)
-                    throw new ArgumentNullException("orgId", "Org id is missing");
+            if (orgId == null || orgId == Guid.Empty)
+                throw new ArgumentNullException("orgId", "Org id is missing");
 
-                var variety = _mapper.Map<ProductVariety>(varietyVM);
-                if (variety.VarietyId == Guid.Empty)
-                {
-                    variety.OrgId = orgId;
-                    variety.DateCreated = DateTime.Now;
-                    variety.DateModified = null;
-                    _context.ProductVarieties.Add(variety);
-                }
-                else
-                {
-                    variety.DateModified = DateTime.Now;
-                    _context.ProductVarieties.Update(variety);
-                }
-                await _context.SaveChangesAsync();
-                varietyVM = _mapper.Map<ProductVarietyViewModel>(variety);
-                return varietyVM;
-            }
-            catch (Exception ex)
+            var variety = _mapper.Map<ProductVariety>(varietyVM);
+            if (variety.VarietyId == Guid.Empty)
             {
-                ErrorMessage = ex.InnerMessage();
-                return null;
+                variety.OrgId = orgId;
+                variety.DateCreated = DateTime.Now;
+                variety.DateModified = null;
+                _context.ProductVarieties.Add(variety);
             }
+            else
+            {
+                variety.DateModified = DateTime.Now;
+                _context.ProductVarieties.Update(variety);
+            }
+            await _context.SaveChangesAsync();
+            varietyVM = _mapper.Map<ProductVarietyViewModel>(variety);
+            return varietyVM;
         }
 
         public async Task<bool> DeleteAsync(Guid varietyId)
         {
-            try
+            var variety = await _context.ProductVarieties
+                .FindAsync(varietyId);
+            if (variety != null)
             {
-                var variety = await _context.ProductVarieties
-                    .FindAsync(varietyId);
-                if (variety != null)
-                {
-                    _context.ProductVarieties.Remove(variety);
-                    await _context.SaveChangesAsync();
-                    return true;
-                }
-                throw new KeyNotFoundException("Product variety not found");
+                _context.ProductVarieties.Remove(variety);
+                await _context.SaveChangesAsync();
+                return true;
             }
-            catch (Exception ex)
-            {
-                ErrorMessage = ex.InnerMessage();
-                return false;
-            }
+            throw new KeyNotFoundException("Product variety not found");
         }
     }
 }

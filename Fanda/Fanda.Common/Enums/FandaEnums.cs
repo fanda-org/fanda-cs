@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace Fanda.Common.Enums
 {
@@ -63,16 +64,28 @@ namespace Fanda.Common.Enums
     public enum PaymentTerm
     {
         None = 0,
-        Immediate = 1,
-        Net30 = 2,
-        Net45 = 3,
-        Net60 = 4
+        OnReceipt = 1,
+        Net7 = 2,
+        Net10 = 2,
+        Net30 = 3,
+        Net60 = 4,
+        Net90 = 5,
+        OnDate = 6
     }
 
     public enum PartyType
     {
+        [EnumMember(Value = "Customer")]
         Customer = 1,
-        Supplier = 2
+
+        [EnumMember(Value = "Supplier")]
+        Supplier = 2,
+
+        [EnumMember(Value = "Buyer")]
+        Buyer = 3,
+
+        [EnumMember(Value = "Other")]
+        Other = 4
     }
 
     //public enum PartyCategory
@@ -89,22 +102,28 @@ namespace Fanda.Common.Enums
 
     public enum ProductType
     {
-        RawMaterial = 1,
-        Goods = 2,
-        Services = 3
+        Goods = 1,
+        Services = 2
+    }
+
+    public enum ProductTaxPreference
+    {
+        Taxable = 1,
+        NonTaxable = 2
     }
 
     public enum InvoiceType
     {
         Stock = 1,
         Purchase = 2,
-        PurchaseReturn = 3,
+        PurchaseReturn = 3, //DebitNote
         Sales = 4,
-        SalesReturn = 5,
+        SalesReturn = 5,    //CreditNote
         Exchange = 6,
         Transfer = 7,
     }
 
+    //Billing Category : It is used to differntiate billing documents based on the requirements for invoice printing...etc Down payment, Billing request etc...we use this billing category = p when we use billing document for down payment.
     //public enum InvoiceCategory
     //{
     //    Cash = 0,
@@ -121,6 +140,17 @@ namespace Fanda.Common.Enums
         Loss = 5,
         WriteOff = 6,
         Expired = 7
+    }
+
+    public enum GstTreatment
+    {
+        RegisteredBusiness = 1
+    }
+
+    public enum InvoiceTaxPreference
+    {
+        Taxable = 1,
+        TaxExempt = 2
     }
 
     public enum Status

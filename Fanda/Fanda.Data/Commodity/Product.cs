@@ -14,22 +14,29 @@ namespace Fanda.Data.Commodity
         public string Name { get; set; }
         public string Description { get; set; }
         public ProductType ProductType { get; set; }
-
         public string ProductTypeString
         {
             get { return ProductType.ToString(); }
             set { ProductType = (ProductType)Enum.Parse(typeof(ProductType), value, true); }
         }
-
         public Guid CategoryId { get; set; }
         public Guid? BrandId { get; set; }
         public Guid? SegmentId { get; set; }
         public Guid? VarietyId { get; set; }
         public Guid UnitId { get; set; }
-        public decimal CostPrice { get; set; }
+        #region Tax / GST
+        public string TaxCode { get; set; } //HSN code for Goods; SAC code for Service
+        public ProductTaxPreference TaxPreference { get; set; }
+        public string TaxPreferenceString
+        {
+            get { return TaxPreference.ToString(); }
+            set { TaxPreference = (ProductTaxPreference)Enum.Parse(typeof(ProductTaxPreference), value, true); }
+        }
         public decimal CentralGstPct { get; set; }
         public decimal StateGstPct { get; set; }
         public decimal InterGstPct { get; set; }
+        #endregion Tax / GST
+        public decimal CostPrice { get; set; }
         public decimal SellingPrice { get; set; }
         public bool Active { get; set; }
         public DateTime DateCreated { get; set; }

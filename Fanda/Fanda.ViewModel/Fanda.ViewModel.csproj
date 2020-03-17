@@ -1,25 +1,34 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
-    <RuntimeFrameworkVersion>2.1.2</RuntimeFrameworkVersion>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <!--<RuntimeFrameworkVersion>2.1.2</RuntimeFrameworkVersion>-->
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Accounting\**" />
     <Compile Remove="AutoMapperProfile\**" />
     <Compile Remove="Services\**" />
+    <Compile Remove="Tracking\**" />
+    <EmbeddedResource Remove="Accounting\**" />
     <EmbeddedResource Remove="AutoMapperProfile\**" />
     <EmbeddedResource Remove="Services\**" />
+    <EmbeddedResource Remove="Tracking\**" />
+    <None Remove="Accounting\**" />
     <None Remove="AutoMapperProfile\**" />
     <None Remove="Services\**" />
+    <None Remove="Tracking\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Access\AccountViewModel.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Sieve" Version="2.3.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Fanda.Common\Fanda.Common.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Accounting\" />
-    <Folder Include="Tracking\" />
   </ItemGroup>
 </Project>

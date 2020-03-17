@@ -29,10 +29,28 @@ namespace Fanda.Data.Inventory
             set { StockInvoiceType = (StockInvoiceType)Enum.Parse(typeof(StockInvoiceType), value, true); }
         }
 
+        public GstTreatment GstTreatment { get; set; }
+
+        public string GstTreatmentString
+        {
+            get { return GstTreatment.ToString(); }
+            set { GstTreatment = (GstTreatment)Enum.Parse(typeof(GstTreatment), value, true); }
+        }
+
+        public InvoiceTaxPreference TaxPreference { get; set; }
+
+        public string TaxPreferenceString
+        {
+            get { return TaxPreference.ToString(); }
+            set { TaxPreference = (InvoiceTaxPreference)Enum.Parse(typeof(InvoiceTaxPreference), value, true); }
+        }
+
         public string Notes { get; set; }
         public Guid PartyId { get; set; }
         public string PartyRefNum { get; set; }
         public DateTime? PartyRefDate { get; set; }
+
+        public Guid? BuyerId { get; set; }
 
         // Trailer
         public decimal Subtotal { get; set; }
@@ -53,6 +71,7 @@ namespace Fanda.Data.Inventory
 
         public virtual InvoiceCategory Category { get; set; }
         public virtual Party Party { get; set; }
+        public virtual Party Buyer { get; set; }
         public virtual ICollection<InvoiceItem> InvoiceItems { get; set; }
     }
 }

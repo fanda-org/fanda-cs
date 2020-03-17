@@ -1,29 +1,47 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
-    <RuntimeFrameworkVersion>2.1.2</RuntimeFrameworkVersion>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <!--<RuntimeFrameworkVersion>2.1.2</RuntimeFrameworkVersion>-->
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="7.0.1" />
-    <PackageReference Include="IdentityServer4" Version="2.2.0" />
-    <PackageReference Include="IdentityServer4.AspNetIdentity" Version="2.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.1.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.1" />
-    <PackageReference Include="Sieve" Version="2.1.5" />
+    <Compile Remove="Accounting\**" />
+    <Compile Remove="Data\**" />
+    <Compile Remove="Tracking\**" />
+    <EmbeddedResource Remove="Accounting\**" />
+    <EmbeddedResource Remove="Data\**" />
+    <EmbeddedResource Remove="Tracking\**" />
+    <None Remove="Accounting\**" />
+    <None Remove="Data\**" />
+    <None Remove="Tracking\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Fanda.Data\Fanda.Data.csproj" PrivateAssets="All" />
+    <Compile Remove="Access\AccountService.cs" />
+    <Compile Remove="IdentityServerConfig.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.2" />
+    <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.19" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.2" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.1" />
+    <PackageReference Include="Sendgrid" Version="9.13.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Fanda.Common\Fanda.Common.csproj" />
+    <ProjectReference Include="..\Fanda.Data\Fanda.Data.csproj" />
     <ProjectReference Include="..\Fanda.ViewModel\Fanda.ViewModel.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Accounting\" />
-    <Folder Include="Tracking\" />
-  </ItemGroup>
+  <!--<ItemGroup>
+    <Reference Include="System">
+      <HintPath>System</HintPath>
+    </Reference>
+  </ItemGroup>-->
 </Project>

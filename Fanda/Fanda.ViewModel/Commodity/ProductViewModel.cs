@@ -6,6 +6,11 @@ namespace Fanda.ViewModel.Commodity
 {
     public class ProductViewModel
     {
+        public ProductViewModel()
+        {
+            Ingredients = new HashSet<ProductIngredientViewModel>();
+            ProductPricings = new HashSet<ProductPricingViewModel>();
+        }
         public Guid ProductId { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
@@ -26,7 +31,7 @@ namespace Fanda.ViewModel.Commodity
         public DateTime? DateModified { get; set; }
 
         public bool IsCompoundProduct { get; set; }
-        public virtual ICollection<ProductIngredientViewModel> Ingredients { get; set; }
-        public virtual ICollection<ProductPricingViewModel> ProductPricings { get; set; }
+        public ICollection<ProductIngredientViewModel> Ingredients { get; set; }
+        public ICollection<ProductPricingViewModel> ProductPricings { get; set; }
     }
 }

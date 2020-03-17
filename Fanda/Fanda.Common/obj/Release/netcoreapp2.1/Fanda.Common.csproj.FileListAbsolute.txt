@@ -1,9 +1,0 @@
-D:\Development\Fanda\src\Fanda\Fanda.Common\bin\Release\netcoreapp2.1\Fanda.Common.deps.json
-D:\Development\Fanda\src\Fanda\Fanda.Common\bin\Release\netcoreapp2.1\Fanda.Common.dll
-D:\Development\Fanda\src\Fanda\Fanda.Common\bin\Release\netcoreapp2.1\Fanda.Common.pdb
-D:\Development\Fanda\src\Fanda\Fanda.Common\obj\Release\netcoreapp2.1\Fanda.Common.csprojAssemblyReference.cache
-D:\Development\Fanda\src\Fanda\Fanda.Common\obj\Release\netcoreapp2.1\Fanda.Common.csproj.CoreCompileInputs.cache
-D:\Development\Fanda\src\Fanda\Fanda.Common\obj\Release\netcoreapp2.1\Fanda.Common.AssemblyInfoInputs.cache
-D:\Development\Fanda\src\Fanda\Fanda.Common\obj\Release\netcoreapp2.1\Fanda.Common.AssemblyInfo.cs
-D:\Development\Fanda\src\Fanda\Fanda.Common\obj\Release\netcoreapp2.1\Fanda.Common.dll
-D:\Development\Fanda\src\Fanda\Fanda.Common\obj\Release\netcoreapp2.1\Fanda.Common.pdb

@@ -1,11 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
-    <RuntimeFrameworkVersion>2.1.2</RuntimeFrameworkVersion>
+    <TargetFramework>netstandard2.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Api\" />
+    <Compile Remove="Models\DataTables\**" />
+    <EmbeddedResource Remove="Models\DataTables\**" />
+    <None Remove="Models\DataTables\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Utility\PasswordStorage.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DataTables.Queryable\DataTables.Queryable.csproj" />
   </ItemGroup>
 </Project>

@@ -40,97 +40,65 @@ namespace Fanda.Service.Commodity
 
         public async Task<List<ProductBrandViewModel>> GetAllAsync(Guid orgId, bool? active)
         {
-            try
-            {
-                if (orgId == null || orgId == Guid.Empty)
-                    throw new ArgumentNullException("orgId", "Org id is missing");
+            if (orgId == null || orgId == Guid.Empty)
+                throw new ArgumentNullException("orgId", "Org id is missing");
 
-                var brands = await _context.ProductBrands
-                    .Where(p => p.OrgId == p.OrgId)
-                    .Where(p => p.Active == ((active == null) ? p.Active : active))
-                    .AsNoTracking()
-                    .ProjectTo<ProductBrandViewModel>(_mapper.ConfigurationProvider)
-                    .ToListAsync();
-                return brands;
-            }
-            catch (Exception ex)
-            {
-                ErrorMessage = ex.InnerMessage();
-                return null;
-            }
+            var brands = await _context.ProductBrands
+                .Where(p => p.OrgId == p.OrgId)
+                .Where(p => p.Active == ((active == null) ? p.Active : active))
+                .AsNoTracking()
+                .ProjectTo<ProductBrandViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+            return brands;
         }
 
         public async Task<ProductBrandViewModel> GetByIdAsync(Guid brandId)
         {
-            try
-            {
-                var brand = await _context.ProductBrands
-                    .ProjectTo<ProductBrandViewModel>(_mapper.ConfigurationProvider)
-                    .AsNoTracking()
-                    .SingleOrDefaultAsync(pc => pc.BrandId == brandId);
+            var brand = await _context.ProductBrands
+                .ProjectTo<ProductBrandViewModel>(_mapper.ConfigurationProvider)
+                .AsNoTracking()
+                .SingleOrDefaultAsync(pc => pc.BrandId == brandId);
 
-                if (brand != null)
-                    return brand;
+            if (brand != null)
+                return brand;
 
-                throw new KeyNotFoundException("Product brand not found");
-            }
-            catch (Exception ex)
-            {
-                ErrorMessage = ex.InnerMessage();
-                return null;
-            }
+            throw new KeyNotFoundException("Product brand not found");
         }
 
         public async Task<ProductBrandViewModel> SaveAsync(Guid orgId, ProductBrandViewModel brandVM)
         {
-            try
-            {
-                if (orgId == null || orgId == Guid.Empty)
-                    throw new ArgumentNullException("orgId", "Org id is missing");
+            if (orgId == null || orgId == Guid.Empty)
+                throw new ArgumentNullException("orgId", "Org id is missing");
 
-                var brand = _mapper.Map<ProductBrand>(brandVM);
-                if (brand.BrandId == Guid.Empty)
-                {
-                    brand.OrgId = orgId;
-                    brand.DateCreated = DateTime.Now;
-                    brand.DateModified = null;
-                    _context.ProductBrands.Add(brand);
-                }
-                else
-                {
-                    brand.DateModified = DateTime.Now;
-                    _context.ProductBrands.Update(brand);
-                }
-                await _context.SaveChangesAsync();
-                brandVM = _mapper.Map<ProductBrandViewModel>(brand);
-                return brandVM;
-            }
-            catch (Exception ex)
+            var brand = _mapper.Map<ProductBrand>(brandVM);
+            if (brand.BrandId == Guid.Empty)
             {
-                ErrorMessage = ex.InnerMessage();
-                return null;
+                brand.OrgId = orgId;
+                brand.DateCreated = DateTime.Now;
+                brand.DateModified = null;
+                _context.ProductBrands.Add(brand);
             }
+            else
+            {
+                brand.DateModified = DateTime.Now;
+                _context.ProductBrands.Update(brand);
+            }
+            await _context.SaveChangesAsync();
+            brandVM = _mapper.Map<ProductBrandViewModel>(brand);
+            return brandVM;
         }
 
         public async Task<bool> DeleteAsync(Guid brandId)
         {
-            try
+            var brand = await _context.ProductBrands
+                .FindAsync(brandId);
+            if (brand != null)
             {
-                var brand = await _context.ProductBrands
-                    .FindAsync(brandId);
-                if (brand != null)
-                {
-                    _context.ProductBrands.Remove(brand);
-                    await _context.SaveChangesAsync();
-                    return true;
-                }
-                throw new KeyNotFoundException("Product brand not found");
+                _context.ProductBrands.Remove(brand);
+                await _context.SaveChangesAsync();
+                return true;
             }
-            catch (Exception ex)
-            {
-                ErrorMessage = ex.InnerMessage();
-                return false;
-            }
+            throw new KeyNotFoundException("Product brand not found");
         }
     }
 }

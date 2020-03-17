@@ -2,8 +2,9 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Fanda.Common.Utility;
 using Fanda.Data.Access;
+using Fanda.Data.Context;
 using Fanda.ViewModel.Access;
-using Microsoft.AspNetCore.Identity;
+//using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -14,127 +15,96 @@ namespace Fanda.Service.Access
 {
     public interface IRoleService
     {
-        Task<List<RoleViewModel>> GetAllAsync(bool? active);
-
-        Task<RoleViewModel> GetByIdAsync(Guid roleId);
-
-        Task<RoleViewModel> SaveAsync(RoleViewModel roleVM);
-
-        Task<bool> DeleteAsync(Guid roleId);
+        Task<List<RoleViewModel>> GetAllAsync(/*bool? active*/);
+        Task<RoleViewModel> GetByIdAsync(string roleId);
+        Task SaveAsync(RoleViewModel roleVM);
+        Task<bool> DeleteAsync(string roleId);
+        Task<bool> ExistsAsync(string code);
 
         string ErrorMessage { get; }
     }
 
     public class RoleService : IRoleService
     {
-        private readonly RoleManager<Role> _roleManager;
+        //private readonly RoleManager<Role> _roleManager;
+        private readonly FandaContext _context;
         private readonly IMapper _mapper;
 
-        public RoleService(RoleManager<Role> roleManager, IMapper mapper)
+        public RoleService(/*RoleManager<Role> roleManager,*/ FandaContext context, IMapper mapper)
         {
-            _roleManager = roleManager;
+            //_roleManager = roleManager;
+            _context = context;
             _mapper = mapper;
         }
 
         public string ErrorMessage { get; private set; }
 
-        public async Task<List<RoleViewModel>> GetAllAsync(bool? active)
+        public async Task<List<RoleViewModel>> GetAllAsync(/*bool? active*/)
         {
-            try
-            {
-                var roles = await _roleManager.Roles
-                    .ProjectTo<RoleViewModel>(_mapper.ConfigurationProvider)
-                    .Where(r => r.Active == (active == null) ? r.Active : (bool)active)
-                    .AsNoTracking()
-                    .ToListAsync();
-                return roles;
-            }
-            catch (Exception ex)
-            {
-                ErrorMessage = ex.InnerMessage();
-                return null;
-            }
+            var roles = await _context.Roles
+                .ProjectTo<RoleViewModel>(_mapper.ConfigurationProvider)
+                //.Where(r => r.Active == (active == null) ? r.Active : (bool)active)
+                .AsNoTracking()
+                .ToListAsync();
+            return roles;
         }
 
-        public async Task<RoleViewModel> GetByIdAsync(Guid roleId)
+        public async Task<RoleViewModel> GetByIdAsync(string roleId)
         {
-            try
-            {
-                var role = await _roleManager.Roles
+            RoleViewModel role = null;
+            if (!string.IsNullOrEmpty(roleId))
+                role = await _context.Roles
                     .ProjectTo<RoleViewModel>(_mapper.ConfigurationProvider)
                     .AsNoTracking()
                     .SingleOrDefaultAsync(r => r.RoleId == roleId);
+            if (role != null)
+                return role;
 
-                if (role != null)
-                    return role;
-
-                throw new KeyNotFoundException("Role not found");
-            }
-            catch (Exception ex)
-            {
-                ErrorMessage = ex.InnerMessage();
-                return null;
-            }
+            throw new KeyNotFoundException("Role not found");
         }
 
-        public async Task<RoleViewModel> SaveAsync(RoleViewModel roleVM)
+        public async Task SaveAsync(RoleViewModel model)
         {
-            try
+            Role role = null;
+            if (!string.IsNullOrEmpty(model.RoleId))
+                role = await _context.Roles.FindAsync(model.RoleId);
+            if (role == null)
             {
-                var role = await _roleManager
-                    .FindByIdAsync(roleVM.RoleId.ToString());
-                Microsoft.AspNetCore.Identity.IdentityResult result;
-                if (role == null)
-                {
-                    roleVM.DateCreated = DateTime.Now;
-                    roleVM.DateModified = null;
-                    role = _mapper.Map<Role>(roleVM);
-                    //role.DateCreated = DateTime.Now;
-                    result = await _roleManager.CreateAsync(role);
-                }
-                else
-                {
-                    roleVM.DateModified = DateTime.Now;
-                    _mapper.Map(roleVM, role);
-                    result = await _roleManager.UpdateAsync(role);
-                }
-                if (result.Succeeded)
-                {
-                    roleVM = _mapper.Map<RoleViewModel>(role);
-                    return roleVM;
-                }
-                ErrorMessage = string.Join(Environment.NewLine, result.Errors.Select(e => e.Description).ToArray());
-                return null;
+                model.DateCreated = DateTime.Now;
+                model.DateModified = null;
+                role = _mapper.Map<Role>(model);
+                await _context.Roles.AddAsync(role);
             }
-            catch (Exception ex)
+            else
             {
-                ErrorMessage = ex.InnerMessage();
-                return null;
+                model.DateModified = DateTime.Now;
+                _mapper.Map(model, role);
+                _context.Roles.Update(role);
             }
+            await _context.SaveChangesAsync();
+            //roleVM = _mapper.Map<RoleViewModel>(role);
+            //return roleVM;
         }
 
-        public async Task<bool> DeleteAsync(Guid roleId)
+        public async Task<bool> DeleteAsync(string roleId)
         {
-            try
+            Role role = null;
+            if (!string.IsNullOrEmpty(roleId))
+                role = await _context.Roles.FindAsync(roleId);
+            if (role != null)
             {
-                Microsoft.AspNetCore.Identity.IdentityResult result;
-                var role = await _roleManager
-                    .FindByIdAsync(roleId.ToString());
-                if (role != null)
-                {
-                    result = await _roleManager.DeleteAsync(role);
-                    if (result.Succeeded)
-                        return true;
-                    else
-                        ErrorMessage = string.Join(Environment.NewLine, result.Errors.Select(e => e.Description).ToArray());
-                }
-                throw new KeyNotFoundException("Role not found");
+                _context.Roles.Remove(role);
+                return true;
             }
-            catch (Exception ex)
-            {
-                ErrorMessage = ex.InnerMessage();
-                return false;
-            }
+            throw new KeyNotFoundException("Role not found");
+        }
+
+        public async Task<bool> ExistsAsync(string code)
+        {
+            Role role = null;
+            if (!string.IsNullOrEmpty(code))
+                role = await _context.Roles.FirstOrDefaultAsync(r => r.Code == code);
+            return role != null;
         }
     }
 }

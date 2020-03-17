@@ -4,7 +4,8 @@ namespace Fanda.ViewModel.Commodity
 {
     public class UnitViewModel
     {
-        public Guid UnitId { get; set; }
+        public string UnitId { get; set; }
+        //public string OrgId { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
         public bool Active { get; set; }

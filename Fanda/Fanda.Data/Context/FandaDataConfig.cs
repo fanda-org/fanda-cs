@@ -70,13 +70,35 @@ namespace Fanda.Data.Context
                 .IsUnique();
             builder.HasIndex(u => u.Email)
                 .IsUnique();
-            //// foreign keys
+            // foreign keys
+            builder.HasOne(ou => ou.Location)
+                .WithMany(l => l.Users)
+                .HasForeignKey(ou => ou.LocationId)
+                .OnDelete(DeleteBehavior.Restrict);
             //builder.HasOne(u => u.Role)
             //    .WithMany(r => r.Users)
             //    .HasForeignKey(u => u.RoleId)
             //    .OnDelete(DeleteBehavior.Restrict);
         }
     }
+
+    //public class UserRoleConfig : IEntityTypeConfiguration<UserRole>
+    //{
+    //    public void Configure(EntityTypeBuilder<UserRole> builder)
+    //    {
+    //        // table
+    //        builder.ToTable("UserRole");
+    //        // key
+    //        builder.HasKey(ur => new { ur.UserId, ur.RoleId });
+    //        // foreign keys
+    //        builder.HasOne<User>(ur => ur.User)
+    //            .WithMany(u => u.UserRoles)
+    //            .HasForeignKey(ur => ur.UserId);
+    //        builder.HasOne<Role>(ur => ur.Role)
+    //            .WithMany(r => r.UserRoles)
+    //            .HasForeignKey(ur => ur.RoleId);
+    //    }
+    //}
 
     public class ContactConfig : IEntityTypeConfiguration<Contact>
     {
@@ -372,10 +394,24 @@ namespace Fanda.Data.Context
                 .WithMany(c => c.Organizations)
                 .HasForeignKey(ou => ou.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
-            builder.HasOne(ou => ou.Location)
-                .WithMany(l => l.Users)
-                .HasForeignKey(ou => ou.LocationId)
-                .OnDelete(DeleteBehavior.Restrict);
+        }
+    }
+
+    public class OrgUserRoleConfig : IEntityTypeConfiguration<OrgUserRole>
+    {
+        public void Configure(EntityTypeBuilder<OrgUserRole> builder)
+        {
+            // table
+            builder.ToTable("OrgUserRole");
+            // key
+            builder.HasKey(our => new { our.OrgId, our.UserId, our.RoleId });
+            // foreign key
+            builder.HasOne<OrgUser>(our => our.OrgUser)
+                .WithMany(ou => ou.OrgUserRoles)
+                .HasForeignKey(our => new { our.OrgId, our.UserId });
+            builder.HasOne<Role>(our => our.Role)
+                .WithMany(r => r.OrgUserRoles)
+                .HasForeignKey(our => our.RoleId);
         }
     }
 
@@ -814,6 +850,10 @@ namespace Fanda.Data.Context
             builder.Property(p => p.ProductTypeString)
                 .HasColumnName("ProductType")
                 .HasMaxLength(16);
+            builder.Ignore(p => p.TaxPreference);
+            builder.Property(p => p.TaxPreferenceString)
+                .HasColumnName("TaxPreference")
+                .HasMaxLength(16);
             //builder.Property(p => p.DateCreated).ValueGeneratedOnAdd();
             //builder.Property(p => p.DateModified).ValueGeneratedOnUpdate();
             // index
@@ -981,6 +1021,15 @@ namespace Fanda.Data.Context
             builder.Property(i => i.StockInvoiceTypeString)
                 .HasColumnName("StockInvoiceType")
                 .HasMaxLength(16);
+            builder.Ignore(i => i.GstTreatment);
+            builder.Property(i => i.GstTreatmentString)
+                .HasColumnName("GstTreatment")
+                .HasMaxLength(16);
+            builder.Ignore(i => i.TaxPreference);
+            builder.Property(i => i.TaxPreferenceString)
+                .HasColumnName("TaxPreference")
+                .HasMaxLength(16);
+
             //builder.Property(o => o.DateCreated).ValueGeneratedOnAdd();
             //builder.Property(o => o.DateModified).ValueGeneratedOnUpdate();
             // index
@@ -998,6 +1047,10 @@ namespace Fanda.Data.Context
             builder.HasOne(i => i.Category)
                 .WithMany(ic => ic.Invoices)
                 .HasForeignKey(i => i.CategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(i => i.Buyer)
+                .WithMany(b => b.BuyerInvoices)
+                .HasForeignKey(i => i.BuyerId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

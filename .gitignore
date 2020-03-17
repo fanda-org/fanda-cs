@@ -1,0 +1,10 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+*.suo
+/.vs
+/Fanda/.vscode
+/Fanda/Fanda/bin/Debug/netcoreapp2.2
+/Fanda/Fanda/node_modules
+/Fanda/Fanda/obj

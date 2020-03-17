@@ -40,78 +40,80 @@ namespace Fanda.Service.Business
 
         public async Task<List<BankAccountViewModel>> GetAllAsync(AccountOwner owner, Guid? id, bool? active)
         {
-            try
-            {
-                IQueryable<BankAccount> acctQry;
+            IQueryable<BankAccount> acctQry;
 
-                if (owner == AccountOwner.Party && id != null && id != Guid.Empty)
-                    acctQry = _context.Parties //_userManager.Users
-                        .Where(p => p.PartyId == id)
-                        .SelectMany(p => p.Banks.Select(ou => ou.BankAccount));
-                else if (owner == AccountOwner.Organization && id != null && id != Guid.Empty)
-                    acctQry = _context.Organizations //_userManager.Users
-                        .Where(o => o.OrgId == id)
-                        .SelectMany(o => o.Banks.Select(ou => ou.BankAccount));
-                else
-                    acctQry = _context.BankAccounts;
+            if (owner == AccountOwner.Party && id != null && id != Guid.Empty)
+                acctQry = _context.Parties //_userManager.Users
+                    .Where(p => p.PartyId == id)
+                    .SelectMany(p => p.Banks.Select(ou => ou.BankAccount));
+            else if (owner == AccountOwner.Organization && id != null && id != Guid.Empty)
+                acctQry = _context.Organizations //_userManager.Users
+                    .Where(o => o.OrgId == id)
+                    .SelectMany(o => o.Banks.Select(ou => ou.BankAccount));
+            else
+                acctQry = _context.BankAccounts;
 
-                var acctList = _mapper.Map<List<BankAccountViewModel>>(await acctQry
-                    .Where(u => u.Active == (active == null) ? u.Active : (bool)active)
-                    .AsNoTracking()
-                    .ToListAsync());
+            var acctList = _mapper.Map<List<BankAccountViewModel>>(await acctQry
+                .Where(u => u.Active == (active == null) ? u.Active : (bool)active)
+                .AsNoTracking()
+                .ToListAsync());
 
-                if (owner != AccountOwner.None)
-                    acctList?.ForEach(b => { b.Owner = owner; b.OwnerId = id; });
-                return acctList;
-            }
-            catch (Exception ex)
-            {
-                ErrorMessage = ex.InnerMessage();
-                return null;
-            }
+            if (owner != AccountOwner.None)
+                acctList?.ForEach(b => { b.Owner = owner; b.OwnerId = id; });
+            return acctList;
         }
 
         public async Task<BankAccountViewModel> GetByIdAsync(Guid accountId)
         {
-            try
-            {
-                var account = await _context.BankAccounts
-                    .Where(ba => ba.BankAcctId == accountId)
-                    .Include(b => b.PartyBanks) //.ThenInclude(pb => pb.Party)
-                    .Include(b => b.OrgBanks)   //.ThenInclude(ob => ob.Organization)
-                    .Include(b => b.Contact)    //.ThenInclude(bc => bc.Contact)
-                    .Include(b => b.Address)    //.ThenInclude(ba => ba.Address)
-                    .AsNoTracking()
-                    .FirstOrDefaultAsync();
+            var account = await _context.BankAccounts
+                .Where(ba => ba.BankAcctId == accountId)
+                .Include(b => b.PartyBanks) //.ThenInclude(pb => pb.Party)
+                .Include(b => b.OrgBanks)   //.ThenInclude(ob => ob.Organization)
+                .Include(b => b.Contact)    //.ThenInclude(bc => bc.Contact)
+                .Include(b => b.Address)    //.ThenInclude(ba => ba.Address)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
 
-                if (account != null)
-                {
-                    var bavm = _mapper.Map<BankAccountViewModel>(account);
-                    return bavm;
-                }
-                throw new KeyNotFoundException("Bank account not found");
-            }
-            catch (Exception ex)
+            if (account != null)
             {
-                ErrorMessage = ex.InnerMessage();
-                return null;
+                var bavm = _mapper.Map<BankAccountViewModel>(account);
+                return bavm;
             }
+            throw new KeyNotFoundException("Bank account not found");
         }
 
         public async Task<BankAccountViewModel> SaveAsync(BankAccountViewModel accountVM)
         {
-            try
-            {
-                if (accountVM.Owner == AccountOwner.None || (accountVM.OwnerId == null || accountVM.OwnerId == Guid.Empty))
-                    throw new ArgumentNullException("Owner", "Owner not set");
+            if (accountVM.Owner == AccountOwner.None || (accountVM.OwnerId == null || accountVM.OwnerId == Guid.Empty))
+                throw new ArgumentNullException("Owner", "Owner not set");
 
-                BankAccount account;
-                if (accountVM.BankAcctId == Guid.Empty /*accountDb == null*/)
+            BankAccount account;
+            if (accountVM.BankAcctId == Guid.Empty /*accountDb == null*/)
+            {
+                account = _mapper.Map<BankAccount>(accountVM);
+                account.DateCreated = DateTime.Now;
+                account.DateModified = null;
+                _context.BankAccounts.Add(account);
+                if (accountVM.Owner == AccountOwner.Organization)
+                    _context.Set<OrgBank>().Add(new OrgBank { OrgId = (Guid)accountVM.OwnerId, BankAcctId = account.BankAcctId });
+                else if (accountVM.Owner == AccountOwner.Party)
+                    _context.Set<PartyBank>().Add(new PartyBank { PartyId = (Guid)accountVM.OwnerId, BankAcctId = account.BankAcctId });
+            }
+            else
+            {
+                account = await _context.BankAccounts
+                    .Include(b => b.OrgBanks)
+                    .Include(b => b.PartyBanks)
+                    .Include(b => b.Contact)
+                    .Include(b => b.Address)
+                    .SingleOrDefaultAsync(ba => ba.BankAcctId == accountVM.BankAcctId);
+                if (account == null)
                 {
                     account = _mapper.Map<BankAccount>(accountVM);
                     account.DateCreated = DateTime.Now;
                     account.DateModified = null;
                     _context.BankAccounts.Add(account);
+
                     if (accountVM.Owner == AccountOwner.Organization)
                         _context.Set<OrgBank>().Add(new OrgBank { OrgId = (Guid)accountVM.OwnerId, BankAcctId = account.BankAcctId });
                     else if (accountVM.Owner == AccountOwner.Party)
@@ -119,45 +121,17 @@ namespace Fanda.Service.Business
                 }
                 else
                 {
-                    account = await _context.BankAccounts
-                        .Include(b => b.OrgBanks)
-                        .Include(b => b.PartyBanks)
-                        .Include(b => b.Contact)
-                        .Include(b => b.Address)
-                        .SingleOrDefaultAsync(ba => ba.BankAcctId == accountVM.BankAcctId);
-                    if (account == null)
-                    {
-                        account = _mapper.Map<BankAccount>(accountVM);
-                        account.DateCreated = DateTime.Now;
-                        account.DateModified = null;
-                        _context.BankAccounts.Add(account);
+                    if (account.Contact != null && accountVM.Contact == null)
+                        _context.Contacts.Remove(account.Contact);
+                    if (account.Address != null && accountVM.Address == null)
+                        _context.Addresses.Remove(account.Address);
 
-                        if (accountVM.Owner == AccountOwner.Organization)
-                            _context.Set<OrgBank>().Add(new OrgBank { OrgId = (Guid)accountVM.OwnerId, BankAcctId = account.BankAcctId });
-                        else if (accountVM.Owner == AccountOwner.Party)
-                            _context.Set<PartyBank>().Add(new PartyBank { PartyId = (Guid)accountVM.OwnerId, BankAcctId = account.BankAcctId });
-                    }
-                    else
-                    {
-                        if (account.Contact != null && accountVM.Contact == null)
-                            _context.Contacts.Remove(account.Contact);
-                        if (account.Address != null && accountVM.Address == null)
-                            _context.Addresses.Remove(account.Address);
-
-                        accountVM.DateModified = DateTime.Now;
-                        _mapper.Map(accountVM, account);
-                        //account.DateModified = DateTime.Now;
-                        //_context.BankAccounts.Update(account);
-                    }
+                    accountVM.DateModified = DateTime.Now;
+                    _mapper.Map(accountVM, account);
                 }
-                await _context.SaveChangesAsync();
-                return _mapper.Map<BankAccountViewModel>(account);
             }
-            catch (Exception ex)
-            {
-                ErrorMessage = ex.InnerMessage();
-                return null;
-            }
+            await _context.SaveChangesAsync();
+            return _mapper.Map<BankAccountViewModel>(account);
         }
 
         //private void UpdateContacts(BankAccount account, IEnumerable<ContactViewModel> contactsVM)
@@ -236,35 +210,22 @@ namespace Fanda.Service.Business
 
         public async Task<bool> DeleteAsync(Guid accountId)
         {
-            try
+            var account = await _context.BankAccounts
+                .Include(ba => ba.OrgBanks)
+                .Include(ba => ba.PartyBanks)
+                .Include(ba => ba.Contact)
+                .Include(ba => ba.Address)
+                .SingleOrDefaultAsync(ba => ba.BankAcctId == accountId);
+            if (account != null)
             {
-                var account = await _context.BankAccounts
-                    .Include(ba => ba.OrgBanks)
-                    .Include(ba => ba.PartyBanks)
-                    .Include(ba => ba.Contact)
-                    .Include(ba => ba.Address)
-                    .SingleOrDefaultAsync(ba => ba.BankAcctId == accountId);
-                //var accountVM = _mapper.Map<BankAccountViewModel>(account);
-                if (account != null)
-                {
-                    //if (accountVM.Owner == Owner.Organization)
-                    //    _context.OrgBanks.Remove(account.OrgBanks.FirstOrDefault());
-                    //else if (accountVM.Owner == Owner.Party)
-                    //    _context.PartyBanks.Remove(account.PartyBanks.FirstOrDefault());
-                    _context.Contacts.Remove(account.Contact);
-                    _context.Addresses.Remove(account.Address);
-                    _context.BankAccounts.Remove(account);
+                _context.Contacts.Remove(account.Contact);
+                _context.Addresses.Remove(account.Address);
+                _context.BankAccounts.Remove(account);
 
-                    await _context.SaveChangesAsync();
-                    return true;
-                }
-                throw new KeyNotFoundException("Bank account not found");
+                await _context.SaveChangesAsync();
+                return true;
             }
-            catch (Exception ex)
-            {
-                ErrorMessage = ex.InnerMessage();
-                return false;
-            }
+            throw new KeyNotFoundException("Bank account not found");
         }
     }
 }

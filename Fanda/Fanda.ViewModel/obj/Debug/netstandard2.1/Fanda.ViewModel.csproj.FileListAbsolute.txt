@@ -1,0 +1,14 @@
+D:\Development\Projects\dotnet\Fanda\src\Fanda\Fanda.ViewModel\bin\Debug\netstandard2.1\Fanda.ViewModel.deps.json
+D:\Development\Projects\dotnet\Fanda\src\Fanda\Fanda.ViewModel\bin\Debug\netstandard2.1\Fanda.ViewModel.dll
+D:\Development\Projects\dotnet\Fanda\src\Fanda\Fanda.ViewModel\bin\Debug\netstandard2.1\Fanda.ViewModel.pdb
+D:\Development\Projects\dotnet\Fanda\src\Fanda\Fanda.ViewModel\bin\Debug\netstandard2.1\Fanda.Common.dll
+D:\Development\Projects\dotnet\Fanda\src\Fanda\Fanda.ViewModel\bin\Debug\netstandard2.1\Fanda.Common.pdb
+D:\Development\Projects\dotnet\Fanda\src\Fanda\Fanda.ViewModel\obj\Debug\netstandard2.1\Fanda.ViewModel.csprojAssemblyReference.cache
+D:\Development\Projects\dotnet\Fanda\src\Fanda\Fanda.ViewModel\obj\Debug\netstandard2.1\Fanda.ViewModel.csproj.CoreCompileInputs.cache
+D:\Development\Projects\dotnet\Fanda\src\Fanda\Fanda.ViewModel\obj\Debug\netstandard2.1\Fanda.ViewModel.AssemblyInfoInputs.cache
+D:\Development\Projects\dotnet\Fanda\src\Fanda\Fanda.ViewModel\obj\Debug\netstandard2.1\Fanda.ViewModel.AssemblyInfo.cs
+D:\Development\Projects\dotnet\Fanda\src\Fanda\Fanda.ViewModel\obj\Debug\netstandard2.1\Fanda.ViewModel.csproj.CopyComplete
+D:\Development\Projects\dotnet\Fanda\src\Fanda\Fanda.ViewModel\obj\Debug\netstandard2.1\Fanda.ViewModel.dll
+D:\Development\Projects\dotnet\Fanda\src\Fanda\Fanda.ViewModel\obj\Debug\netstandard2.1\Fanda.ViewModel.pdb
+D:\Development\Projects\dotnet\Fanda\src\Fanda\Fanda.ViewModel\bin\Debug\netstandard2.1\DataTables.Queryable.dll
+D:\Development\Projects\dotnet\Fanda\src\Fanda\Fanda.ViewModel\bin\Debug\netstandard2.1\DataTables.Queryable.pdb

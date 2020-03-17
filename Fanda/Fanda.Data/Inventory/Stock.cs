@@ -13,6 +13,7 @@ namespace Fanda.Data.Inventory
         public DateTime? ExpiryDate { get; set; }
         public Guid UnitId { get; set; }
         public decimal QtyOnHand { get; set; }
+
         public virtual Product Product { get; set; }
         public virtual Unit Unit { get; set; }
         public virtual ICollection<InvoiceItem> InvoiceItems { get; set; }

@@ -7,8 +7,15 @@ namespace Fanda.ViewModel.Business
 {
     public class OrganizationViewModel
     {
+        public OrganizationViewModel()
+        {
+            Contacts = new HashSet<ContactViewModel>();
+            Addresses = new HashSet<AddressViewModel>();
+            Banks = new HashSet<BankAccountViewModel>();
+        }
+
         [Required]
-        public Guid OrgId { get; set; }
+        public string OrgId { get; set; }
 
         [StringLength(16)]
         public string OrgCode { get; set; }
@@ -28,9 +35,8 @@ namespace Fanda.ViewModel.Business
         public DateTime DateCreated { get; set; }
         public DateTime? DateModified { get; set; }
 
-        public virtual ICollection<ContactViewModel> Contacts { get; set; }
-        public virtual ICollection<AddressViewModel> Addresses { get; set; }
-        //public virtual ICollection<UserViewModel> Users { get; set; }
-        //public virtual ICollection<BankAccountViewModel> Banks { get; set; }
+        public ICollection<ContactViewModel> Contacts { get; set; }
+        public ICollection<AddressViewModel> Addresses { get; set; }
+        public ICollection<BankAccountViewModel> Banks { get; set; }
     }
 }

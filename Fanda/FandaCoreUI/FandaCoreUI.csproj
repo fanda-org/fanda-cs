@@ -1,0 +1,95 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>aspnet-CoreUI.Mvc-52A0FEA6-215E-4864-A31A-8150ACE3121E</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Areas\Identity\Services\**" />
+    <Compile Remove="Data\**" />
+    <Compile Remove="Extensions\**" />
+    <Compile Remove="Models\**" />
+    <Compile Remove="ViewComponents\**" />
+    <Compile Remove="Views\Parties\Components\**" />
+    <Compile Remove="wwwroot-lib\**" />
+    <Compile Remove="wwwroot\lib\**" />
+    <Content Remove="Areas\Identity\Services\**" />
+    <Content Remove="Data\**" />
+    <Content Remove="Extensions\**" />
+    <Content Remove="Models\**" />
+    <Content Remove="ViewComponents\**" />
+    <Content Remove="Views\Parties\Components\**" />
+    <Content Remove="wwwroot-lib\**" />
+    <Content Remove="wwwroot\lib\**" />
+    <EmbeddedResource Remove="Areas\Identity\Services\**" />
+    <EmbeddedResource Remove="Data\**" />
+    <EmbeddedResource Remove="Extensions\**" />
+    <EmbeddedResource Remove="Models\**" />
+    <EmbeddedResource Remove="ViewComponents\**" />
+    <EmbeddedResource Remove="Views\Parties\Components\**" />
+    <EmbeddedResource Remove="wwwroot-lib\**" />
+    <EmbeddedResource Remove="wwwroot\lib\**" />
+    <None Remove="Areas\Identity\Services\**" />
+    <None Remove="Data\**" />
+    <None Remove="Extensions\**" />
+    <None Remove="Models\**" />
+    <None Remove="ViewComponents\**" />
+    <None Remove="Views\Parties\Components\**" />
+    <None Remove="wwwroot-lib\**" />
+    <None Remove="wwwroot\lib\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="AppSettings.cs" />
+    <Compile Remove="DesignTimeDbContextFactory.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Views\Parties\_EditContacts.cshtml" />
+    <Content Remove="Views\PartyCategories\Create.cshtml" />
+    <Content Remove="Views\PartyCategories\Index2.cshtml" />
+    <Content Remove="Views\PartyCategories\_breadcrumb-items.cshtml" />
+    <Content Remove="Views\PartyCategories\_CoreUILayout.cshtml" />
+    <Content Remove="wwwroot\select2-bootstrap.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BuildBundlerMinifier" Version="3.2.435" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.13.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.2" />
+    <!--<PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.2.0" />-->
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" PrivateAssets="All" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DataTables.Queryable\DataTables.Queryable.csproj" />
+    <ProjectReference Include="..\Fanda.Common\Fanda.Common.csproj" />
+    <ProjectReference Include="..\Fanda.Data\Fanda.Data.csproj" />
+    <ProjectReference Include="..\Fanda.Service\Fanda.Service.csproj" />
+    <ProjectReference Include="..\Fanda.ViewModel\Fanda.ViewModel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="appsettings.Development.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Views\Parties\Edit.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Shared\_breadcrumb-items.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Shared\_Layout.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services" />
+  </ItemGroup>
+</Project>

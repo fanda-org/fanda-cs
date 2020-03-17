@@ -1,0 +1,285 @@
+﻿@{
+    ViewData["Title"] = "Contact Categories";
+}
+
+@section styles {
+    <style>
+        .hide {
+            display: none;
+        }
+    </style>
+}
+
+@*<div class="page-header">
+    <h1 class="page-title">
+        Contact Categories
+    </h1>
+</div>*@
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Contact Categories</h3>
+    </div>
+    <div class="card-body">
+        @*<div class="row mb-3">*@
+        @*<div class="col-sm-3">
+                <div class="input-icon">
+                    <input type="search" class="form-control header-search" placeholder="Search&hellip;" tabindex="1">
+                    <div class="input-icon-addon">
+                        <i class="fe fe-search"></i>
+                    </div>
+                </div>
+            </div>*@
+        @*<div class="col-sm-1">
+                <a href="javascript:void(0)" class="btn btn-secondary"><i class="fe fe-refresh-cw"></i></a>
+            </div>*@
+        @*<div class="col-sm">*@
+        @*<div class="float-right">*@
+        @*<a href="javascript:void(0)" class="btn btn-secondary"><i class="fe fe-plus-circle"></i> Create New</a>*@
+        @*<a href="javascript:void(0)" class="btn btn-secondary"><i class="fe fe-refresh-cw"></i></a>*@
+        @*</div>*@
+        @*</div>*@
+        @*</div>*@
+        @*<div class="row">
+                <div class="col">
+                    <div id="errors" class="alert alert-danger alert-dismissible alert-icon hide"></div>
+                </div>
+            </div>*@
+        <form method="post">
+            <div id="jsGrid"></div>
+        </form>
+    </div>
+</div>
+
+
+@section scripts{
+    <script>
+        require(['jquery', 'jsgrid', 'sweetalert2'], function ($, jsGrid, Swal) {
+            //console.log($, grid, polyfill, Swal);
+            $(document).ajaxSend(function (e, xhr, options) {
+                if (options.type.toUpperCase() == "POST" || options.type.toUpperCase() == "PATCH") {
+                    var token = $("input[name='__RequestVerificationToken']").val();
+                    xhr.setRequestHeader("RequestVerificationToken", token);
+                }
+            });
+
+            var $grid = $("#jsGrid").jsGrid({
+                height: "auto",
+                width: "100%",
+
+                heading: true,
+                filtering: true,
+
+                inserting: true,
+                editing: true,
+                selecting: true,
+                sorting: true,
+
+                paging: true,
+                pageLoading: false,
+                autoload: true,
+                pageSize: 10,
+                pageButtonCount: 3,
+
+                noDataContent: "No records",
+
+                confirmDeleting: false,
+                deleteConfirm: function () {
+                    return "Do you really want to delete the category?";
+                },
+                //data: clients,
+                controller: {
+                    loadData: function (filter) {
+                        return $.ajax({
+                            type: "GET",
+                            url: "@Url.Action("GetAll")",
+                            data: filter                            
+                        });
+                    },
+
+                    insertItem: function (item) {
+                        var d = $.Deferred();
+
+                        $.ajax({
+                            type: 'POST',
+                            url: '@Url.Action("Save")',
+                            data: item                            
+                        }).done(function (response) {
+                            console.log("done:", response);
+                            d.resolve(response);
+                        }).fail(function (message) {
+                            console.log("fail", message);
+                            d.reject();
+                        });
+
+                        return d.promise();
+                    },
+
+                    updateItem: function (item) {
+                        return $.ajax({
+                            type: "POST",
+                            url: "@Url.Action("Save")",
+                            data: item
+                        });
+                    },
+
+                    deleteItem: function (item) {
+                        return $.ajax({
+                            type: "POST",
+                            url: "@Url.Action("Delete")",
+                            data: item
+                        });
+                    }
+                },
+                invalidNotify: function (args) {
+                    //console.log("invalidNotify", args);
+                    var messages = $.map(args.errors, function (error) {
+                        return error.field.name + ": " + error.message;
+                    });
+                    console.log("invalidNotify", messages);
+                    //var err = $("#errors").html(messages);
+                    //err.removeClass("hide");
+                    //swal(messages, { icon: 'error' });
+                },
+                onItemInvalid: function (args) {
+                    var messages = $.map(args.errors, function (error) {
+                        return error.field.name + ": " + error.message;
+                    });
+                    console.log("onItemInvalid", messages);
+
+                    const wrapper = document.createElement('div');
+                    wrapper.innerHTML = messages.join("<br>");
+                    Swal.fire({ title: 'Error', html: wrapper, type: 'error' });
+                },
+                onItemDeleting: function (args) {
+                    if (!args.item.deleteConfirmed) { // custom property for confirmation
+                        args.cancel = true; // cancel deleting
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: "Do you want to delete this Category? Once deleted, you will not be able to recover!",
+                            type: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Yes, delete it!',
+                            reverseButtons: true
+                        }).then((result) => {
+                            if (result.value) {
+                                args.item.deleteConfirmed = true;
+                                $grid.jsGrid('deleteItem', args.item); //call deleting once more in callback
+                                Swal.fire('Deleted!', 'Category has been deleted.',  'success');
+                            }
+                        });
+                        //confirm.showConfirm('Are you sure?', function() {
+                        //    args.item.deleteConfirmed = true;
+                        //    $grid.jsGrid('deleteItem', args.item); //call deleting once more in callback
+                        //});
+                    }
+                },
+                onError: function (args) {
+                    //debugger;
+                    //swal(args.errors[0].message, { icon: 'error' });
+                    //console.log("onError", args);
+                    //var err = $("#errors").html(args.args[1] + ": Error occured!");
+                    //err.removeClass("hide");
+                    Swal.fire('Error', 'Error occured!', 'error');
+                },
+                fields: [
+                    {
+                        name: "code", type: "text", title: "Code", width: 75,
+                        validate: {
+                            validator: function (value, item) {
+                                if (value == undefined || value == null || value == "")
+                                    return false;
+
+                                var gridData = $grid.jsGrid("option", "data");
+                                var editRow = $grid.jsGrid("option", "_editingRow");
+                                var editItem = undefined;
+                                if (editRow != null)
+                                    editItem = editRow.data("JSGridItem");
+                                //console.log("editingItem", editItem, item);
+                                //debugger;
+                                for (i = 0; i < gridData.length; i++) {
+                                    if (editItem == undefined) {
+                                        if (value.toLowerCase() == gridData[i].code.toLowerCase())
+                                            return false;
+                                    }
+                                    else {
+                                        if (editItem.categoryId == gridData[i].categoryId)
+                                            continue;
+                                        if (value.toLowerCase() == gridData[i].code.toLowerCase())
+                                            return false;
+                                    }
+                                }
+                                //clearError();
+                                return true;
+                            },
+                            message: function (value, item) {
+                                if (value == undefined || value == null || value == "")
+                                    return "should not be empty";
+                                else
+                                    return "'" + value + "' already exists";
+                            },
+                            param: undefined
+                        }
+                    },
+                    {
+                        name: "name", type: "text", title: "Name", width: 150,
+                        validate: {
+                            validator: function (value, item) {
+                                if (value == undefined || value == null || value == "")
+                                    return false;
+                                var gridData = $("#jsGrid").jsGrid("option", "data");
+                                var editRow = $("#jsGrid").jsGrid("option", "_editingRow");
+                                var editItem = undefined;
+                                if (editRow != null)
+                                    editItem = editRow.data("JSGridItem");
+                                //console.log("editingItem", editItem, item);
+                                //debugger;
+                                for (i = 0; i < gridData.length; i++) {
+                                    if (editItem == undefined) {
+                                        if (value.toLowerCase() == gridData[i].name.toLowerCase())
+                                            return false;
+                                    }
+                                    else {
+                                        if (editItem.categoryId == gridData[i].categoryId)
+                                            continue;
+                                        if (value.toLowerCase() == gridData[i].name.toLowerCase())
+                                            return false;
+                                    }
+                                }
+                                //clearError();
+                                return true;
+                            },
+                            message: function (value, item) {
+                                if (value == undefined || value == null || value == "")
+                                    return "should not be empty";
+                                else
+                                    return "'" + value + "' already exists";
+                            },
+                            param: undefined
+                        }
+                    },
+                    { name: "description", type: "text", title: "Description", width: 200 },
+                    {
+                        name: "active", type: "checkbox", title: "Active", sorting: false,
+                        insertTemplate: function () {
+                            var input = this.__proto__.insertTemplate.call(this); //original input
+                            input.prop('checked', true);
+                            return input;
+                        }
+                    },
+                    { name: "categoryId", visible: false, width: 0 },
+                    //{ name: "Age", type: "number", width: 50 },
+                    //{ name: "Address", type: "text", width: 200 },
+                    //{ name: "Country", type: "select", items: countries, valueField: "Id", textField: "Name" },
+                    { type: "control" }
+                ]
+            });
+            $("#jsGrid").find(".jsgrid-mode-button").click();
+            //function clearError() {
+            //    var err = $("#errors").html("");
+            //    err.addClass("hide");
+            //}
+        });
+    </script>
+}

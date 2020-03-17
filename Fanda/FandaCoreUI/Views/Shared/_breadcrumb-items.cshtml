@@ -1,0 +1,24 @@
+﻿@{
+    var breadCrumbs = ViewBag.Breadcrumbs as Dictionary<string, string>;
+    if (breadCrumbs != null)
+    {
+        int i = 0;
+        KeyValuePair<string, string> bcItem;
+        for (; i < breadCrumbs.Count - 1; i++)
+        {
+            bcItem = breadCrumbs.ElementAt(i);
+            <li class="breadcrumb-item">
+                <a href="@bcItem.Value">@bcItem.Key</a>
+            </li>
+        }
+        bcItem = breadCrumbs.ElementAt(i);
+        <li class="breadcrumb-item active">@bcItem.Key</li>
+    }
+}
+
+@*<li class="breadcrumb-item">
+        <a href="#">Home</a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="#">Admin</a>
+    </li>*@

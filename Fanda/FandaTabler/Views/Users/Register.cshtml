@@ -1,0 +1,41 @@
+﻿@model Fanda.ViewModel.Access.RegisterViewModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="row">
+    <div class="col col-login mx-auto">
+        <div class="header-brand text-center mb-6">
+            <img src="~/demo/logo.svg" class="h-6" alt=""> Fanda
+        </div>
+        <form class="card" asp-action="Register" method="post">
+            <div class="card-body p-6">
+                <div class="card-title">Create new account</div>
+                <div class="form-group">
+                    <label class="form-label" asp-for="UserName"></label>
+                    <input class="form-control" asp-for="UserName" placeholder="Enter name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" asp-for="Email"></label>
+                    <input class="form-control" asp-for="Email" placeholder="Enter email">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" asp-for="Password"></label>
+                    <input class="form-control" asp-for="Password" placeholder="Password">
+                </div>
+                <div class="form-group">
+                    <label class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" />
+                        <span class="custom-control-label">Agree the <a href="@Url.Action("Terms")">terms and policy</a></span>
+                    </label>
+                </div>
+                <div class="form-footer">
+                    <button type="submit" class="btn btn-primary btn-block">Create new account</button>
+                </div>
+            </div>
+        </form>
+        <div class="text-center text-muted">
+            Already have account? <a href="@Url.Action("Login")">Sign in</a>
+        </div>
+    </div>
+</div>

@@ -14,13 +14,11 @@ namespace Fanda.Service.Commodity
 {
     public interface IUnitService
     {
-        Task<List<UnitViewModel>> GetAllAsync(Guid orgId, bool? active);
-
-        Task<UnitViewModel> GetByIdAsync(Guid catId);
-
-        Task<UnitViewModel> SaveAsync(Guid orgId, UnitViewModel categoryVM);
-
-        Task<bool> DeleteAsync(Guid catId);
+        Task<List<UnitViewModel>> GetAllAsync(string orgId);
+        Task<UnitViewModel> GetByIdAsync(string unitId);
+        Task SaveAsync(string orgId, UnitViewModel model);
+        Task<bool> DeleteAsync(string unitId);
+        Task<bool> ExistsAsync(string unitCode);
 
         string ErrorMessage { get; }
     }
@@ -38,99 +36,80 @@ namespace Fanda.Service.Commodity
 
         public string ErrorMessage { get; private set; }
 
-        public async Task<List<UnitViewModel>> GetAllAsync(Guid orgId, bool? active)
+        public async Task<List<UnitViewModel>> GetAllAsync(string orgId)
         {
-            try
-            {
-                if (orgId == null || orgId == Guid.Empty)
-                    throw new ArgumentNullException("orgId", "Org id is missing");
+            if (string.IsNullOrEmpty(orgId))
+                throw new ArgumentNullException("OrgId", "Org id is missing");
 
-                var units = await _context.Units
-                    .Where(p => p.OrgId == p.OrgId)
-                    .Where(p => p.Active == ((active == null) ? p.Active : active))
-                    .AsNoTracking()
-                    .ProjectTo<UnitViewModel>(_mapper.ConfigurationProvider)
-                    .ToListAsync();
-                return units;
-            }
-            catch (Exception ex)
-            {
-                ErrorMessage = ex.InnerMessage();
-                return null;
-            }
+            var units = await _context.Units
+                .Where(p => p.OrgId == p.OrgId)
+                .AsNoTracking()
+                .ProjectTo<UnitViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+            return units;
         }
 
-        public async Task<UnitViewModel> GetByIdAsync(Guid unitId)
+        public async Task<UnitViewModel> GetByIdAsync(string unitId)
         {
-            try
-            {
-                var unit = await _context.Units
-                    .ProjectTo<UnitViewModel>(_mapper.ConfigurationProvider)
-                    .AsNoTracking()
-                    .SingleOrDefaultAsync(u => u.UnitId == unitId);
+            UnitViewModel unit = null;
+            if (!string.IsNullOrEmpty(unitId))
+                unit = await _context.Units
+                .ProjectTo<UnitViewModel>(_mapper.ConfigurationProvider)
+                .AsNoTracking()
+                .SingleOrDefaultAsync(u => u.UnitId == unitId);
 
-                if (unit != null)
-                    return unit;
+            if (unit != null)
+                return unit;
 
-                throw new KeyNotFoundException("Unit not found");
-            }
-            catch (Exception ex)
-            {
-                ErrorMessage = ex.InnerMessage();
-                return null;
-            }
+            throw new KeyNotFoundException("Unit not found");
         }
 
-        public async Task<UnitViewModel> SaveAsync(Guid orgId, UnitViewModel unitVM)
+        public async Task SaveAsync(string orgId, UnitViewModel model)
         {
-            try
-            {
-                if (orgId == null || orgId == Guid.Empty)
-                    throw new ArgumentNullException("orgId", "Org id is missing");
+            if (string.IsNullOrEmpty(orgId))
+                throw new ArgumentNullException("OrgId", "Org id is missing");
 
-                var unit = _mapper.Map<Unit>(unitVM);
-                if (unit.UnitId == Guid.Empty)
-                {
-                    unit.OrgId = orgId;
-                    unit.DateCreated = DateTime.Now;
-                    unit.DateModified = null;
-                    _context.Units.Add(unit);
-                }
-                else
-                {
-                    unit.DateModified = DateTime.Now;
-                    _context.Units.Update(unit);
-                }
+            Unit unit = null;
+            if (!string.IsNullOrEmpty(model.UnitId))
+                unit = await _context.Units.FindAsync(model.UnitId);
+            if (unit == null)
+            {
+                model.DateCreated = DateTime.Now;
+                model.DateModified = null;
+                unit = _mapper.Map<Unit>(model);
+                unit.OrgId = new Guid(orgId);
+                await _context.Units.AddAsync(unit);
+            }
+            else
+            {
+                unit.DateModified = DateTime.Now;
+                _mapper.Map(model, unit);
+                _context.Units.Update(unit);
+            }
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<bool> DeleteAsync(string unitId)
+        {
+            Unit unit = null;
+            if(!string.IsNullOrEmpty(unitId))
+            unit = await _context.Units
+                .FindAsync(unitId);
+            if (unit != null)
+            {
+                _context.Units.Remove(unit);
                 await _context.SaveChangesAsync();
-                unitVM = _mapper.Map<UnitViewModel>(unit);
-                return unitVM;
+                return true;
             }
-            catch (Exception ex)
-            {
-                ErrorMessage = ex.InnerMessage();
-                return null;
-            }
+            throw new KeyNotFoundException("Unit not found");
         }
 
-        public async Task<bool> DeleteAsync(Guid catId)
+        public async Task<bool> ExistsAsync(string unitCode)
         {
-            try
-            {
-                var unit = await _context.Units
-                    .FindAsync(catId);
-                if (unit != null)
-                {
-                    _context.Units.Remove(unit);
-                    await _context.SaveChangesAsync();
-                    return true;
-                }
-                throw new KeyNotFoundException("Unit not found");
-            }
-            catch (Exception ex)
-            {
-                ErrorMessage = ex.InnerMessage();
-                return false;
-            }
+            Unit unit = null;
+            if (!string.IsNullOrEmpty(unitCode))
+                unit = await _context.Units.FirstOrDefaultAsync(u => u.Code == unitCode);
+            return unit != null;
         }
     }
 }

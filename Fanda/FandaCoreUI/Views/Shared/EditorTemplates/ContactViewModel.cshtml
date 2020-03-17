@@ -1,0 +1,26 @@
+﻿@model ContactViewModel
+@using Fanda.ViewModel.Base
+
+<tr>
+    <td>
+        <input asp-for="ContactId" type="hidden" />
+        <input asp-for="ContactName" class="form-control" autofocus />
+        <span asp-validation-for="ContactName" class="text-danger"></span>
+    </td>
+    <td>
+        <input asp-for="ContactTitle" class="form-control" />
+        <span asp-validation-for="ContactTitle" class="text-danger"></span>
+    </td>
+    <td>
+        <input asp-for="ContactPhone" class="form-control" />
+        <span asp-validation-for="ContactPhone" class="text-danger"></span>
+    </td>
+    <td>
+        <input asp-for="ContactEmail" class="form-control" type="email" />
+        <span asp-validation-for="ContactEmail" class="text-danger"></span>
+    </td>
+    <td>
+        <input asp-for="IsDeleted" type="hidden" />
+        <button class="btn btn-danger" data-toggle="tooltip" title="Remove" type="button" id="btnRemoveContact"><i class="icon-trash"></i></button>
+    </td>
+</tr>

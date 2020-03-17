@@ -40,97 +40,65 @@ namespace Fanda.Service.Commodity
 
         public async Task<List<ProductSegmentViewModel>> GetAllAsync(Guid orgId, bool? active)
         {
-            try
-            {
-                if (orgId == null || orgId == Guid.Empty)
-                    throw new ArgumentNullException("orgId", "Org id is missing");
+            if (orgId == null || orgId == Guid.Empty)
+                throw new ArgumentNullException("orgId", "Org id is missing");
 
-                var segments = await _context.ProductSegments
-                    .Where(p => p.OrgId == p.OrgId)
-                    .Where(p => p.Active == ((active == null) ? p.Active : active))
-                    .AsNoTracking()
-                    .ProjectTo<ProductSegmentViewModel>(_mapper.ConfigurationProvider)
-                    .ToListAsync();
-                return segments;
-            }
-            catch (Exception ex)
-            {
-                ErrorMessage = ex.InnerMessage();
-                return null;
-            }
+            var segments = await _context.ProductSegments
+                .Where(p => p.OrgId == p.OrgId)
+                .Where(p => p.Active == ((active == null) ? p.Active : active))
+                .AsNoTracking()
+                .ProjectTo<ProductSegmentViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+            return segments;
         }
 
         public async Task<ProductSegmentViewModel> GetByIdAsync(Guid segmentId)
         {
-            try
-            {
-                var segment = await _context.ProductSegments
-                    .ProjectTo<ProductSegmentViewModel>(_mapper.ConfigurationProvider)
-                    .AsNoTracking()
-                    .SingleOrDefaultAsync(pc => pc.SegmentId == segmentId);
+            var segment = await _context.ProductSegments
+                .ProjectTo<ProductSegmentViewModel>(_mapper.ConfigurationProvider)
+                .AsNoTracking()
+                .SingleOrDefaultAsync(pc => pc.SegmentId == segmentId);
 
-                if (segment != null)
-                    return segment;
+            if (segment != null)
+                return segment;
 
-                throw new KeyNotFoundException("Product segment not found");
-            }
-            catch (Exception ex)
-            {
-                ErrorMessage = ex.InnerMessage();
-                return null;
-            }
+            throw new KeyNotFoundException("Product segment not found");
         }
 
         public async Task<ProductSegmentViewModel> SaveAsync(Guid orgId, ProductSegmentViewModel segmentVM)
         {
-            try
-            {
-                if (orgId == null || orgId == Guid.Empty)
-                    throw new ArgumentNullException("orgId", "Org id is missing");
+            if (orgId == null || orgId == Guid.Empty)
+                throw new ArgumentNullException("orgId", "Org id is missing");
 
-                var segment = _mapper.Map<ProductSegment>(segmentVM);
-                if (segment.SegmentId == Guid.Empty)
-                {
-                    segment.OrgId = orgId;
-                    segment.DateCreated = DateTime.Now;
-                    segment.DateModified = null;
-                    _context.ProductSegments.Add(segment);
-                }
-                else
-                {
-                    segment.DateModified = DateTime.Now;
-                    _context.ProductSegments.Update(segment);
-                }
-                await _context.SaveChangesAsync();
-                segmentVM = _mapper.Map<ProductSegmentViewModel>(segment);
-                return segmentVM;
-            }
-            catch (Exception ex)
+            var segment = _mapper.Map<ProductSegment>(segmentVM);
+            if (segment.SegmentId == Guid.Empty)
             {
-                ErrorMessage = ex.InnerMessage();
-                return null;
+                segment.OrgId = orgId;
+                segment.DateCreated = DateTime.Now;
+                segment.DateModified = null;
+                _context.ProductSegments.Add(segment);
             }
+            else
+            {
+                segment.DateModified = DateTime.Now;
+                _context.ProductSegments.Update(segment);
+            }
+            await _context.SaveChangesAsync();
+            segmentVM = _mapper.Map<ProductSegmentViewModel>(segment);
+            return segmentVM;
         }
 
         public async Task<bool> DeleteAsync(Guid segmentId)
         {
-            try
+            var segment = await _context.ProductSegments
+                .FindAsync(segmentId);
+            if (segment != null)
             {
-                var segment = await _context.ProductSegments
-                    .FindAsync(segmentId);
-                if (segment != null)
-                {
-                    _context.ProductSegments.Remove(segment);
-                    await _context.SaveChangesAsync();
-                    return true;
-                }
-                throw new KeyNotFoundException("Product segment not found");
+                _context.ProductSegments.Remove(segment);
+                await _context.SaveChangesAsync();
+                return true;
             }
-            catch (Exception ex)
-            {
-                ErrorMessage = ex.InnerMessage();
-                return false;
-            }
+            throw new KeyNotFoundException("Product segment not found");
         }
     }
 }
