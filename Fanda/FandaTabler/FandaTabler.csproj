@@ -148,10 +148,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataTables.Queryable\DataTables.Queryable.csproj" />
-    <ProjectReference Include="..\Fanda.Common\Fanda.Common.csproj" />
-    <ProjectReference Include="..\Fanda.Data\Fanda.Data.csproj" />
-    <ProjectReference Include="..\Fanda.Service\Fanda.Service.csproj" />
-    <ProjectReference Include="..\Fanda.ViewModel\Fanda.ViewModel.csproj" />
+    <ProjectReference Include="..\Fanda.Common\Fanda.Common.csproj" PrivateAssets="All"/>
+    <ProjectReference Include="..\Fanda.Service\Fanda.Service.csproj" PrivateAssets="All" />
+    <ProjectReference Include="..\Fanda.ViewModel\Fanda.ViewModel.csproj" PrivateAssets="All" />
   </ItemGroup>
 
 </Project>

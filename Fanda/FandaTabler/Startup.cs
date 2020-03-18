@@ -1,9 +1,9 @@
 using AutoMapper;
 using Fanda.Common.Helpers;
-using Fanda.Data.Context;
 using Fanda.Service.Access;
 using Fanda.Service.Business;
 using Fanda.Service.Commodity;
+using Fanda.Service.Data;
 using Fanda.Service.Utility;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
@@ -19,7 +19,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using System;
 using System.Linq;
 using System.Text.Json.Serialization;
@@ -65,38 +64,16 @@ namespace FandaTabler
             switch (appSettings.DatabaseType)
             {
                 case "MSSQL":
-                    services.AddEntityFrameworkSqlServer()
-                        .AddDbContextPool<FandaContext>((serviceProvider, options) =>
-                        {
-                            options.UseSqlServer(appSettings.ConnectionStrings.MsSqlConnection, sqlopt =>
-                            {
-                                sqlopt.EnableRetryOnFailure();
-                                //sqlopt.UseRowNumberForPaging();
-                            })
-                            //.ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning))
-                            .UseInternalServiceProvider(serviceProvider);
-                        });
+                    services.InitializeContext(appSettings.DatabaseType, appSettings.ConnectionStrings.MsSqlConnection);
                     break;
                 case "MYSQL":
-                    services.AddEntityFrameworkMySql()
-                        .AddDbContextPool<FandaContext>((serviceProvider, options) =>
-                        {
-                            options.UseMySql(appSettings.ConnectionStrings.MySqlConnection, mysqlopt =>
-                            {
-                                mysqlopt.ServerVersion(new Version(15, 1), ServerType.MariaDb);
-                            })
-                            //.ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning))
-                            .UseInternalServiceProvider(serviceProvider);
-                        });
+                    services.InitializeContext(appSettings.DatabaseType, appSettings.ConnectionStrings.MySqlConnection);
                     break;
                 case "PGSQL":
-                    services.AddEntityFrameworkNpgsql()
-                        .AddDbContextPool<FandaContext>((serviceProvider, options) =>
-                        {
-                            options.UseNpgsql(appSettings.ConnectionStrings.PgSqlConnection)
-                            //.ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning))
-                            .UseInternalServiceProvider(serviceProvider);
-                        });
+                    services.InitializeContext(appSettings.DatabaseType, appSettings.ConnectionStrings.PgSqlConnection);
+                    break;
+                default:
+                    services.InitializeContext("MSSQL", appSettings.ConnectionStrings.DefaultConnection);
                     break;
             }
             #endregion

@@ -92,7 +92,8 @@
           "netstandard2.1": {
             "projectReferences": {
               "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\DataTables.Queryable\\DataTables.Queryable.csproj": {
-                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\DataTables.Queryable\\DataTables.Queryable.csproj"
+                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\DataTables.Queryable\\DataTables.Queryable.csproj",
+                "privateAssets": "all"
               }
             }
           }
@@ -157,7 +158,8 @@
           "netstandard2.1": {
             "projectReferences": {
               "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Common\\Fanda.Common.csproj": {
-                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Common\\Fanda.Common.csproj"
+                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Common\\Fanda.Common.csproj",
+                "privateAssets": "all"
               }
             }
           }
@@ -258,13 +260,16 @@
           "netstandard2.1": {
             "projectReferences": {
               "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Common\\Fanda.Common.csproj": {
-                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Common\\Fanda.Common.csproj"
+                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Common\\Fanda.Common.csproj",
+                "privateAssets": "all"
               },
               "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Data\\Fanda.Data.csproj": {
-                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Data\\Fanda.Data.csproj"
+                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Data\\Fanda.Data.csproj",
+                "privateAssets": "all"
               },
               "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.ViewModel\\Fanda.ViewModel.csproj": {
-                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.ViewModel\\Fanda.ViewModel.csproj"
+                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.ViewModel\\Fanda.ViewModel.csproj",
+                "privateAssets": "all"
               }
             }
           }
@@ -357,7 +362,8 @@
           "netstandard2.1": {
             "projectReferences": {
               "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Common\\Fanda.Common.csproj": {
-                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Common\\Fanda.Common.csproj"
+                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Common\\Fanda.Common.csproj",
+                "privateAssets": "all"
               }
             }
           }
@@ -425,16 +431,16 @@
                 "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\DataTables.Queryable\\DataTables.Queryable.csproj"
               },
               "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Common\\Fanda.Common.csproj": {
-                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Common\\Fanda.Common.csproj"
-              },
-              "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Data\\Fanda.Data.csproj": {
-                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Data\\Fanda.Data.csproj"
+                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Common\\Fanda.Common.csproj",
+                "privateAssets": "all"
               },
               "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Service\\Fanda.Service.csproj": {
-                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Service\\Fanda.Service.csproj"
+                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Service\\Fanda.Service.csproj",
+                "privateAssets": "all"
               },
               "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.ViewModel\\Fanda.ViewModel.csproj": {
-                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.ViewModel\\Fanda.ViewModel.csproj"
+                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.ViewModel\\Fanda.ViewModel.csproj",
+                "privateAssets": "all"
               }
             }
           }

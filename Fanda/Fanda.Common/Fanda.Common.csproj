@@ -19,6 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataTables.Queryable\DataTables.Queryable.csproj" />
+    <ProjectReference Include="..\DataTables.Queryable\DataTables.Queryable.csproj" PrivateAssets="All"/>
   </ItemGroup>
 </Project>

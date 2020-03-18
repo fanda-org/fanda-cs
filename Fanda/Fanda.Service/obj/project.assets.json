@@ -2921,24 +2921,10 @@
           "lib/netstandard1.3/System.Xml.XPath.XmlDocument.dll": {}
         }
       },
-      "DataTables.Queryable/1.0.0": {
-        "type": "project",
-        "framework": ".NETStandard,Version=v2.1",
-        "dependencies": {
-          "Microsoft.EntityFrameworkCore": "3.1.2"
-        },
-        "compile": {
-          "bin/placeholder/DataTables.Queryable.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/DataTables.Queryable.dll": {}
-        }
-      },
       "Fanda.Common/1.0.0": {
         "type": "project",
         "framework": ".NETStandard,Version=v2.1",
         "dependencies": {
-          "DataTables.Queryable": "1.0.0",
           "Microsoft.AspNetCore.Mvc.ViewFeatures": "2.2.0"
         },
         "compile": {
@@ -2952,7 +2938,6 @@
         "type": "project",
         "framework": ".NETStandard,Version=v2.1",
         "dependencies": {
-          "Fanda.Common": "1.0.0",
           "Microsoft.EntityFrameworkCore": "3.1.2",
           "Microsoft.EntityFrameworkCore.SqlServer": "3.1.2",
           "Microsoft.Extensions.Configuration": "3.1.2",
@@ -2972,7 +2957,6 @@
         "type": "project",
         "framework": ".NETStandard,Version=v2.1",
         "dependencies": {
-          "Fanda.Common": "1.0.0",
           "Sieve": "2.3.3"
         },
         "compile": {
@@ -9219,11 +9203,6 @@
         "system.xml.xpath.xmldocument.nuspec"
       ]
     },
-    "DataTables.Queryable/1.0.0": {
-      "type": "project",
-      "path": "../DataTables.Queryable/DataTables.Queryable.csproj",
-      "msbuildProject": "../DataTables.Queryable/DataTables.Queryable.csproj"
-    },
     "Fanda.Common/1.0.0": {
       "type": "project",
       "path": "../Fanda.Common/Fanda.Common.csproj",
@@ -9286,13 +9265,16 @@
         "netstandard2.1": {
           "projectReferences": {
             "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Common\\Fanda.Common.csproj": {
-              "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Common\\Fanda.Common.csproj"
+              "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Common\\Fanda.Common.csproj",
+              "privateAssets": "all"
             },
             "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Data\\Fanda.Data.csproj": {
-              "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Data\\Fanda.Data.csproj"
+              "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Data\\Fanda.Data.csproj",
+              "privateAssets": "all"
             },
             "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.ViewModel\\Fanda.ViewModel.csproj": {
-              "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.ViewModel\\Fanda.ViewModel.csproj"
+              "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.ViewModel\\Fanda.ViewModel.csproj",
+              "privateAssets": "all"
             }
           }
         }

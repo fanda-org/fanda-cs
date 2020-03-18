@@ -1,8 +1,6 @@
-﻿using Fanda.Data.Access;
-using Fanda.Data.Context;
+﻿using Fanda.Data.Context;
 //using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using System;
@@ -13,36 +11,52 @@ namespace Fanda.Service.Data
     {
         public static void InitializeContext(this IServiceCollection services, string databaseType, string connectionString)
         {
-            services.AddDbContext<FandaContext>(options =>
+            switch (databaseType)
             {
-                switch (databaseType)
-                {
-                    case "MSSQL":
-                        options.UseSqlServer(connectionString, sqlopt =>
+                case "MSSQL":
+                    services.AddEntityFrameworkSqlServer()
+                        .AddDbContextPool<FandaContext>((serviceProvider, options) =>
                         {
-                            sqlopt.EnableRetryOnFailure();
-                            //sqlopt.UseRowNumberForPaging();
+                            options.UseSqlServer(connectionString, sqlopt =>
+                            {
+                                sqlopt.EnableRetryOnFailure();
+                                //sqlopt.UseRowNumberForPaging();
+                            })
+                            .UseInternalServiceProvider(serviceProvider);
+
+                            options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+                            //options.ConfigureWarnings(w => w.Throw(RelationalEventId.QueryClientEvaluationWarning));
+                            //options.ConfigureWarnings(w => w.Throw(CoreEventId.IncludeIgnoredWarning));
                         });
-                        break;
+                    break;
+                case "MYSQL":
+                    services.AddEntityFrameworkMySql()
+                        .AddDbContextPool<FandaContext>((serviceProvider, options) =>
+                        {
+                            options.UseMySql(connectionString, mysqlopt =>
+                            {
+                                mysqlopt.ServerVersion(new Version(15, 1), ServerType.MariaDb);
+                            })
+                            .UseInternalServiceProvider(serviceProvider);
 
-                    case "MYSQL":
-                        options.UseMySql(connectionString, mysqlOptions=> {
-                            mysqlOptions.ServerVersion(new Version(15, 1), ServerType.MariaDb);
+                            options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+                            //options.ConfigureWarnings(w => w.Throw(RelationalEventId.QueryClientEvaluationWarning));
+                            //options.ConfigureWarnings(w => w.Throw(CoreEventId.IncludeIgnoredWarning));
                         });
-                        break;
+                    break;
+                case "PGSQL":
+                    services.AddEntityFrameworkNpgsql()
+                        .AddDbContextPool<FandaContext>((serviceProvider, options) =>
+                        {
+                            options.UseNpgsql(connectionString)
+                            .UseInternalServiceProvider(serviceProvider);
 
-                    case "PGSQL":
-                        options.UseNpgsql(connectionString);
-                        break;
-
-                    default:
-                        throw new Exception("Unknown database type from appsettings");
-                }
-                //options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-                //options
-                //.ConfigureWarnings(w => w.Throw(RelationalEventId.QueryClientEvaluationWarning));
-                //.ConfigureWarnings(w => w.Throw(CoreEventId.IncludeIgnoredWarning));
-            });
+                            options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+                            //options.ConfigureWarnings(w => w.Throw(RelationalEventId.QueryClientEvaluationWarning));
+                            //options.ConfigureWarnings(w => w.Throw(CoreEventId.IncludeIgnoredWarning));
+                        });
+                    break;
+            }
 
             //services.AddIdentity<User, Role>(options =>
             //{

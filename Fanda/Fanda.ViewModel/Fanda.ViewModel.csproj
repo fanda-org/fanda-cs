@@ -29,6 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Fanda.Common\Fanda.Common.csproj" />
+    <ProjectReference Include="..\Fanda.Common\Fanda.Common.csproj" PrivateAssets="All"/>
   </ItemGroup>
 </Project>

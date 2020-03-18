@@ -2261,21 +2261,20 @@
           }
         }
       },
-      "DataTables.Queryable/1.0.0": {
-        "dependencies": {
-          "Microsoft.EntityFrameworkCore": "3.1.2"
-        },
-        "runtime": {
-          "DataTables.Queryable.dll": {}
-        }
-      },
       "Fanda.Common/1.0.0": {
         "dependencies": {
-          "DataTables.Queryable": "1.0.0",
           "Microsoft.AspNetCore.Mvc.ViewFeatures": "2.2.0"
         },
         "runtime": {
           "Fanda.Common.dll": {}
+        }
+      },
+      "DataTables.Queryable/1.0.0.0": {
+        "runtime": {
+          "DataTables.Queryable.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       }
     }
@@ -3595,13 +3594,13 @@
       "path": "system.xml.xpath.xmldocument/4.0.1",
       "hashPath": "system.xml.xpath.xmldocument.4.0.1.nupkg.sha512"
     },
-    "DataTables.Queryable/1.0.0": {
+    "Fanda.Common/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
     },
-    "Fanda.Common/1.0.0": {
-      "type": "project",
+    "DataTables.Queryable/1.0.0.0": {
+      "type": "reference",
       "serviceable": false,
       "sha512": ""
     }

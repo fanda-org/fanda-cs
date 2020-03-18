@@ -23,6 +23,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="Data\InitializeContext.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.2" />
@@ -34,9 +38,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Fanda.Common\Fanda.Common.csproj" />
-    <ProjectReference Include="..\Fanda.Data\Fanda.Data.csproj" />
-    <ProjectReference Include="..\Fanda.ViewModel\Fanda.ViewModel.csproj" />
+    <ProjectReference Include="..\Fanda.Common\Fanda.Common.csproj" PrivateAssets="All" />
+    <ProjectReference Include="..\Fanda.Data\Fanda.Data.csproj" PrivateAssets="All" />
+    <ProjectReference Include="..\Fanda.ViewModel\Fanda.ViewModel.csproj" PrivateAssets="All" />
   </ItemGroup>
 
   <!--<ItemGroup>

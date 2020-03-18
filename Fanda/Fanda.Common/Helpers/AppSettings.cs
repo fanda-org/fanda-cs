@@ -8,6 +8,7 @@
     }
     public class ConnectionStrings
     {
+        public string DefaultConnection { get; set; }
         public string MsSqlConnection { get; set; }
         public string MySqlConnection { get; set; }
         public string PgSqlConnection { get; set; }

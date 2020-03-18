@@ -6785,7 +6785,8 @@
         "netstandard2.1": {
           "projectReferences": {
             "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\DataTables.Queryable\\DataTables.Queryable.csproj": {
-              "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\DataTables.Queryable\\DataTables.Queryable.csproj"
+              "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\DataTables.Queryable\\DataTables.Queryable.csproj",
+              "privateAssets": "all"
             }
           }
         }

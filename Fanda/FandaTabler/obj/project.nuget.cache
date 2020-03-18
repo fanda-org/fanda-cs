@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "5VEl15nWARq24+IwsBQtO4YgeNPg14+ob5NdaSRtF3o/w6icguKbpjyvcR/yJqyiwO5IGT9NkJBnC22D9EXbBA==",
+  "dgSpecHash": "le4JbCMTcEMI+pp/x2Aoipqi3DzorF4VYoBO+TcpT0a7K+mjP6HZYN0tTxvgF30Zf6mMTdV8+DV7vRVKhvNjYw==",
   "success": true,
   "projectFilePath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\FandaTabler\\FandaTabler.csproj",
   "expectedPackageFiles": [
@@ -61,14 +61,10 @@
     "C:\\Users\\tbala\\.nuget\\packages\\microsoft.extensions.configuration\\3.1.2\\microsoft.extensions.configuration.3.1.2.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\3.1.2\\microsoft.extensions.configuration.abstractions.3.1.2.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\microsoft.extensions.configuration.binder\\3.1.2\\microsoft.extensions.configuration.binder.3.1.2.nupkg.sha512",
-    "C:\\Users\\tbala\\.nuget\\packages\\microsoft.extensions.configuration.fileextensions\\3.1.2\\microsoft.extensions.configuration.fileextensions.3.1.2.nupkg.sha512",
-    "C:\\Users\\tbala\\.nuget\\packages\\microsoft.extensions.configuration.json\\3.1.2\\microsoft.extensions.configuration.json.3.1.2.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\3.1.2\\microsoft.extensions.dependencyinjection.3.1.2.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\3.1.2\\microsoft.extensions.dependencyinjection.abstractions.3.1.2.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\microsoft.extensions.dependencymodel\\3.1.2\\microsoft.extensions.dependencymodel.3.1.2.nupkg.sha512",
-    "C:\\Users\\tbala\\.nuget\\packages\\microsoft.extensions.fileproviders.abstractions\\3.1.2\\microsoft.extensions.fileproviders.abstractions.3.1.2.nupkg.sha512",
-    "C:\\Users\\tbala\\.nuget\\packages\\microsoft.extensions.fileproviders.physical\\3.1.2\\microsoft.extensions.fileproviders.physical.3.1.2.nupkg.sha512",
-    "C:\\Users\\tbala\\.nuget\\packages\\microsoft.extensions.filesystemglobbing\\3.1.2\\microsoft.extensions.filesystemglobbing.3.1.2.nupkg.sha512",
+    "C:\\Users\\tbala\\.nuget\\packages\\microsoft.extensions.fileproviders.abstractions\\2.2.0\\microsoft.extensions.fileproviders.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\microsoft.extensions.hosting.abstractions\\2.2.0\\microsoft.extensions.hosting.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\microsoft.extensions.localization\\2.2.0\\microsoft.extensions.localization.2.2.0.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\microsoft.extensions.localization.abstractions\\2.2.0\\microsoft.extensions.localization.abstractions.2.2.0.nupkg.sha512",
