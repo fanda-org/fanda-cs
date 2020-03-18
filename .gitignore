@@ -18,15 +18,6 @@ Fanda/DataTables.Queryable/obj
 DataTables.Queryable/bin
 DataTables.Queryable/obj
 
-/Fanda/Fanda.Shared/bin
-/Fanda/Fanda.Shared/obj
-Fanda/Fanda.Shared/bin
-Fanda/Fanda.Shared/obj
-/Fanda.Shared/bin
-/Fanda.Shared/obj
-Fanda.Shared/bin
-Fanda.Shared/obj
-
 /Fanda/Fanda.Data/bin
 /Fanda/Fanda.Data/obj
 Fanda/Fanda.Data/bin
@@ -36,8 +27,17 @@ Fanda/Fanda.Data/obj
 Fanda.Data/bin
 Fanda.Data/obj
 
-/Fanda/Fanda.Service/bin
-/Fanda/Fanda.Service/obj
+/Fanda/Fanda.Dto/bin
+/Fanda/Fanda.Dto/obj
+Fanda/Fanda.Dto/bin
+Fanda/Fanda.Dto/obj
+/Fanda.Dto/bin
+/Fanda.Dto/obj
+Fanda.Dto/bin
+Fanda.Dto/obj
+
+./Fanda/Fanda.Service/bin
+./Fanda/Fanda.Service/obj
 Fanda/Fanda.Service/bin
 Fanda/Fanda.Service/obj
 /Fanda.Service/bin
@@ -45,5 +45,29 @@ Fanda/Fanda.Service/obj
 Fanda.Service/bin
 Fanda.Service/obj
 
-/Fanda/FandaCoreUI/bin
-/Fanda/FandaCoreUI/obj
+/Fanda/Fanda.Shared/bin
+/Fanda/Fanda.Shared/obj
+Fanda/Fanda.Shared/bin
+Fanda/Fanda.Shared/obj
+/Fanda.Shared/bin
+/Fanda.Shared/obj
+Fanda.Shared/bin
+Fanda.Shared/obj
+
+./Fanda/FandaCoreUI/bin
+./Fanda/FandaCoreUI/obj
+Fanda/FandaCoreUI/bin
+Fanda/FandaCoreUI/obj
+/FandaCoreUI/bin
+/FandaCoreUI/obj
+FandaCoreUI/bin
+FandaCoreUI/obj
+
+./Fanda/FandaTabler/bin
+./Fanda/FandaTabler/obj
+Fanda/FandaTabler/bin
+Fanda/FandaTabler/obj
+/FandaTabler/bin
+/FandaTabler/obj
+FandaTabler/bin
+FandaTabler/obj
