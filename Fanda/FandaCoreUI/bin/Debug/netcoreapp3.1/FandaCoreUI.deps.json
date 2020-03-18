@@ -3252,7 +3252,6 @@
       },
       "Fanda.Common/1.0.0": {
         "dependencies": {
-          "DataTables.Queryable": "1.0.0",
           "Microsoft.AspNetCore.Mvc.ViewFeatures": "2.2.0"
         },
         "runtime": {
@@ -3264,7 +3263,6 @@
       },
       "Fanda.Data/1.0.0": {
         "dependencies": {
-          "Fanda.Common": "1.0.0",
           "Microsoft.EntityFrameworkCore": "3.1.2",
           "Microsoft.EntityFrameworkCore.SqlServer": "3.1.2",
           "Microsoft.Extensions.Configuration": "3.1.2",
@@ -3283,9 +3281,6 @@
       "Fanda.Service/1.0.0": {
         "dependencies": {
           "AutoMapper": "9.0.0",
-          "Fanda.Common": "1.0.0",
-          "Fanda.Data": "1.0.0",
-          "Fanda.ViewModel": "1.0.0",
           "Microsoft.EntityFrameworkCore": "3.1.2",
           "Microsoft.EntityFrameworkCore.SqlServer": "3.1.2",
           "MySql.Data.EntityFrameworkCore": "8.0.19",
@@ -3303,7 +3298,6 @@
       },
       "Fanda.ViewModel/1.0.0": {
         "dependencies": {
-          "Fanda.Common": "1.0.0",
           "Sieve": "2.3.3"
         },
         "runtime": {
