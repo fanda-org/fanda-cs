@@ -400,10 +400,14 @@ D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Runtime.Caching.dll
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\DataTables.Queryable.dll
+D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\Fanda.Dto.dll
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\Fanda.Service.dll
+D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\Fanda.Shared.dll
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\Fanda.Data.dll
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\DataTables.Queryable.pdb
+D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\Fanda.Dto.pdb
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\Fanda.Service.pdb
+D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\Fanda.Shared.pdb
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\Fanda.Data.pdb
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\obj\Debug\netcoreapp3.1\FandaTabler.csprojAssemblyReference.cache
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\obj\Debug\netcoreapp3.1\FandaTabler.csproj.CoreCompileInputs.cache
@@ -449,7 +453,3 @@ D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\obj\Debug\netcoreapp3
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\obj\Debug\netcoreapp3.1\FandaTabler.dll
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\obj\Debug\netcoreapp3.1\FandaTabler.pdb
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\obj\Debug\netcoreapp3.1\FandaTabler.genruntimeconfig.cache
-D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\Fanda.Dto.dll
-D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\Fanda.Shared.dll
-D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\Fanda.Dto.pdb
-D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\Fanda.Shared.pdb
