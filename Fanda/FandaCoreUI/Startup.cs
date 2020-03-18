@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
-using Fanda.Common.Helpers;
-using Fanda.Data.Context;
-using Fanda.Service.Access;
-using Fanda.Service.Business;
-using Fanda.Service.Utility;
+using Fanda.Service;
+using Fanda.Service.Extensions;
+using Fanda.Shared.Config;
+using Fanda.Shared.Utility;
 //using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -23,11 +22,11 @@ namespace Fanda.Mvc
 {
     public class Startup
     {
-        private IWebHostEnvironment _env;
-        public Startup(IConfiguration configuration, IWebHostEnvironment env)
+        //private readonly IWebHostEnvironment _env;
+        public Startup(IConfiguration configuration/*, IWebHostEnvironment env*/)
         {
             Configuration = configuration;
-            _env = env;
+            //_env = env;
         }
 
         public IConfiguration Configuration { get; }
@@ -52,41 +51,42 @@ namespace Fanda.Mvc
             #region DbContext
             string databaseType = Configuration["DatabaseType"];
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<FandaContext>(options =>
-            {
-                switch (databaseType)
-                {
-                    case "MSSQL":
-                        options.UseSqlServer(connectionString, sqlopt =>
-                        {
-                            sqlopt.EnableRetryOnFailure();
-                            //sqlopt.UseRowNumberForPaging();
-                        });
-                        break;
+            services.InitializeContext(databaseType, connectionString);
+            //services.AddDbContext<FandaContext>(options =>
+            //{
+            //    switch (databaseType)
+            //    {
+            //        case "MSSQL":
+            //            options.UseSqlServer(connectionString, sqlopt =>
+            //            {
+            //                sqlopt.EnableRetryOnFailure();
+            //                //sqlopt.UseRowNumberForPaging();
+            //            });
+            //            break;
 
-                    case "MYSQL":
-                        options.UseMySql(connectionString, mysqlOptions =>
-                        {
-                            mysqlOptions.ServerVersion(new Version(15, 1), ServerType.MariaDb);
-                        });
-                        break;
+            //        case "MYSQL":
+            //            options.UseMySql(connectionString, mysqlOptions =>
+            //            {
+            //                mysqlOptions.ServerVersion(new Version(15, 1), ServerType.MariaDb);
+            //            });
+            //            break;
 
-                    case "PGSQL":
-                        options.UseNpgsql(connectionString);
-                        break;
+            //        case "PGSQL":
+            //            options.UseNpgsql(connectionString);
+            //            break;
 
-                    default:
-                        throw new Exception("Unknown database type from appsettings");
-                }
-                if (_env.IsDevelopment())
-                {
-                    options.EnableSensitiveDataLogging(true);
-                }
-                //options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-                //options
-                //.ConfigureWarnings(w => w.Throw(RelationalEventId.QueryClientEvaluationWarning));
-                //.ConfigureWarnings(w => w.Throw(CoreEventId.IncludeIgnoredWarning));
-            });
+            //        default:
+            //            throw new Exception("Unknown database type from appsettings");
+            //    }
+            //    if (_env.IsDevelopment())
+            //    {
+            //        options.EnableSensitiveDataLogging(true);
+            //    }
+            //    //options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            //    //options
+            //    //.ConfigureWarnings(w => w.Throw(RelationalEventId.QueryClientEvaluationWarning));
+            //    //.ConfigureWarnings(w => w.Throw(CoreEventId.IncludeIgnoredWarning));
+            //});
             #endregion
 
             #region Response compression

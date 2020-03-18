@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "IT7oA5PUOzTj63DYL9402B0TN+625cBIjc9GQvbManLi1vUi1mevjwZxONu7ynRH+8bdFisTtxjyef/q2KLo1g==",
+  "dgSpecHash": "NFwxhm/ojsF0z1BclqgsMSIbMprsf+eY4RfuwLUDffJtebjh3axeZDWSn7kM/J6pOgddlVpNOHn38XApgg0b6A==",
   "success": true,
   "projectFilePath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\FandaCoreUI\\FandaCoreUI.csproj",
   "expectedPackageFiles": [
@@ -116,6 +116,7 @@
     "C:\\Users\\tbala\\.nuget\\packages\\runtime.win-arm64.runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.win-arm64.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\runtime.win-x64.runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.win-x64.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\runtime.win-x86.runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.win-x86.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
+    "C:\\Users\\tbala\\.nuget\\packages\\sendgrid\\9.13.0\\sendgrid.9.13.0.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\ssh.net\\2016.1.0\\ssh.net.2016.1.0.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\sshnet.security.cryptography\\1.2.0\\sshnet.security.cryptography.1.2.0.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\system.appcontext\\4.3.0\\system.appcontext.4.3.0.nupkg.sha512",

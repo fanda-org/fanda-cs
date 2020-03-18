@@ -1,10 +1,9 @@
 ﻿using DataTables.Queryable;
-using Fanda.Common.Enums;
-using Fanda.Common.Extensions;
-using Fanda.Common.Models;
-using Fanda.Service.Business;
-using Fanda.ViewModel.Base;
-using Fanda.ViewModel.Business;
+using Fanda.Dto;
+using Fanda.Service;
+using Fanda.Shared.Enums;
+using Fanda.Shared.Models;
+using FandaCoreUI.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;

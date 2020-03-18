@@ -14,10 +14,11 @@ namespace Fanda.Service
     public interface IOrganizationService
     {
         IQueryable<OrganizationDto> GetAll();
-        Task<OrganizationDto> GetByIdAsync(string orgId);
+        Task<OrganizationDto> GetByIdAsync(string orgId, bool includes = false);
+        Task<OrganizationDto> GetByCodeAsync(string orgCode, bool includes = false);
         Task<OrganizationDto> SaveAsync(OrganizationDto orgVM);
         Task<bool> DeleteAsync(string orgId);
-        Task<OrganizationDto> ExistsAsync(string orgCode);
+        bool Exists(string orgCode);
         Task<bool> ChangeStatus(string orgId, bool active);
         string ErrorMessage { get; }
     }
@@ -43,7 +44,7 @@ namespace Fanda.Service
             return orgs;
         }
 
-        public async Task<OrganizationDto> GetByIdAsync(string orgId)
+        public async Task<OrganizationDto> GetByIdAsync(string orgId, bool includes = false)
         {
             if (string.IsNullOrEmpty(orgId))
                 throw new ArgumentNullException("orgId", "Org id is missing");
@@ -53,9 +54,46 @@ namespace Fanda.Service
                 .ProjectTo<OrganizationDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(o => o.OrgId == orgId);
 
-            if (org != null)
+            if (includes && org != null)
             {
                 Guid guid = new Guid(orgId);
+                org.Contacts = await _context.Organizations
+                    .AsNoTracking()
+                    .Where(m => m.OrgId == guid)
+                    .SelectMany(oc => oc.Contacts.Select(c => c.Contact))
+                    .ProjectTo<ContactDto>(_mapper.ConfigurationProvider)
+                    .ToListAsync();
+                org.Addresses = await _context.Organizations
+                    .AsNoTracking()
+                    .Where(m => m.OrgId == guid)
+                    .SelectMany(oa => oa.Addresses.Select(a => a.Address))
+                    .ProjectTo<AddressDto>(_mapper.ConfigurationProvider)
+                    .ToListAsync();
+                org.Banks = await _context.Organizations
+                    .AsNoTracking()
+                    .Where(m => m.OrgId == guid)
+                    .SelectMany(pb => pb.Banks.Select(a => a.BankAccount))
+                    .ProjectTo<BankAccountDto>(_mapper.ConfigurationProvider)
+                    .ToListAsync();
+                return org;
+            }
+
+            throw new KeyNotFoundException("Organization not found");
+        }
+
+        public async Task<OrganizationDto> GetByCodeAsync(string orgCode, bool includes = false)
+        {
+            if (string.IsNullOrEmpty(orgCode))
+                throw new ArgumentNullException("orgCode", "Org code is missing");
+
+            var org = await _context.Organizations
+                .AsNoTracking()
+                .ProjectTo<OrganizationDto>(_mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync(o => o.OrgCode == orgCode);
+
+            if (includes && org != null)
+            {
+                Guid guid = new Guid(orgCode);
                 org.Contacts = await _context.Organizations
                     .AsNoTracking()
                     .Where(m => m.OrgId == guid)
@@ -235,20 +273,10 @@ namespace Fanda.Service
             throw new KeyNotFoundException("Organization not found");
         }
 
-        public async Task<OrganizationDto> ExistsAsync(string orgCode)
+        public bool Exists(string id)
         {
-            OrganizationDto org = null;
-            if (!string.IsNullOrEmpty(orgCode))
-                org = await _context.Organizations
-                    .Select(o => new Organization
-                    {
-                        OrgId = o.OrgId,
-                        OrgCode = o.OrgCode,
-                        OrgName = o.OrgName
-                    })
-                    .ProjectTo<OrganizationDto>(_mapper.ConfigurationProvider)
-                    .FirstOrDefaultAsync(r => r.OrgCode == orgCode);
-            return org;
+            Guid guid = new Guid(id);
+            return _context.Organizations.Any(o => o.OrgId == guid);
         }
 
         public async Task<bool> ChangeStatus(string orgId, bool active)

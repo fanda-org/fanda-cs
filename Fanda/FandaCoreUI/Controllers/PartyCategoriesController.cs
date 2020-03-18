@@ -1,8 +1,8 @@
 ﻿using DataTables.Queryable;
-using Fanda.Common.Extensions;
-using Fanda.Common.Models;
-using Fanda.Service.Business;
-using Fanda.ViewModel.Business;
+using Fanda.Dto;
+using Fanda.Service;
+using Fanda.Shared.Models;
+using FandaCoreUI.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -21,16 +21,13 @@ namespace Fanda.Controllers
         }
 
         // GET: PartyCategories
-        public ActionResult Index()
-        {
-            return View();
-        }
+        public ActionResult Index() => View();
 
         [Produces("application/json")]
         public async Task<JsonResult> GetAll()
         {
             var orgId = HttpContext.Session.Get<OrganizationDto>("DemoOrg").OrgId.ToString();
-            var request = new DataTablesRequest<PartyDto>(
+            var request = new DataTablesRequest<PartyCategoryDto>(
                 Request.QueryString.Value
                 );
             var result = await _service
@@ -139,7 +136,7 @@ namespace Fanda.Controllers
         // POST: PartyCategories/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(PartyDto model)
+        public async Task<ActionResult> Edit(PartyCategoryDto model)
         {
             try
             {

@@ -8,7 +8,6 @@
   <ItemGroup>
     <Compile Remove="Areas\Identity\Services\**" />
     <Compile Remove="Data\**" />
-    <Compile Remove="Extensions\**" />
     <Compile Remove="Models\**" />
     <Compile Remove="ViewComponents\**" />
     <Compile Remove="Views\Parties\Components\**" />
@@ -16,7 +15,6 @@
     <Compile Remove="wwwroot\lib\**" />
     <Content Remove="Areas\Identity\Services\**" />
     <Content Remove="Data\**" />
-    <Content Remove="Extensions\**" />
     <Content Remove="Models\**" />
     <Content Remove="ViewComponents\**" />
     <Content Remove="Views\Parties\Components\**" />
@@ -24,7 +22,6 @@
     <Content Remove="wwwroot\lib\**" />
     <EmbeddedResource Remove="Areas\Identity\Services\**" />
     <EmbeddedResource Remove="Data\**" />
-    <EmbeddedResource Remove="Extensions\**" />
     <EmbeddedResource Remove="Models\**" />
     <EmbeddedResource Remove="ViewComponents\**" />
     <EmbeddedResource Remove="Views\Parties\Components\**" />
@@ -32,7 +29,6 @@
     <EmbeddedResource Remove="wwwroot\lib\**" />
     <None Remove="Areas\Identity\Services\**" />
     <None Remove="Data\**" />
-    <None Remove="Extensions\**" />
     <None Remove="Models\**" />
     <None Remove="ViewComponents\**" />
     <None Remove="Views\Parties\Components\**" />
@@ -65,7 +61,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataTables.Queryable\DataTables.Queryable.csproj" />
+    <ProjectReference Include="..\Fanda.Dto\Fanda.Dto.csproj" />
     <ProjectReference Include="..\Fanda.Service\Fanda.Service.csproj" />
+    <ProjectReference Include="..\Fanda.Shared\Fanda.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>

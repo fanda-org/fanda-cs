@@ -1,6 +1,6 @@
-﻿using Fanda.Common.Extensions;
-using Fanda.Common.Models;
-using Fanda.Service.Business;
+﻿using Fanda.Service;
+using Fanda.Shared.Models;
+using FandaCoreUI.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Linq;
@@ -39,15 +39,9 @@ namespace Fanda.Mvc.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+        public IActionResult Privacy() => View();
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        public IActionResult Error() => View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }

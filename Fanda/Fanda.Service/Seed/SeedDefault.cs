@@ -23,7 +23,7 @@ namespace Fanda.Service.Seed
         public async Task CreateFanda()
         {
             var service = _serviceProvider.GetRequiredService<IOrganizationService>();
-            var org = await service.ExistsAsync("FANDA");
+            var org = await service.GetByCodeAsync("FANDA");
             if (org == null)
             {
                 org = await service.SaveAsync(new OrganizationDto
@@ -42,7 +42,7 @@ namespace Fanda.Service.Seed
             }
 
             // create demo org
-            org = await service.ExistsAsync("DEMO");
+            org = await service.GetByCodeAsync("DEMO");
             if (org == null)
                 await service.SaveAsync(new OrganizationDto
                 {

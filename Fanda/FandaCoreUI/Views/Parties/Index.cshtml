@@ -2,8 +2,6 @@
     ViewData["Title"] = "Index";
 }
 @using System.Text;
-@using Fanda.Common.Enums;
-@using Fanda.Common.Extensions;
 
 @section Styles{
     @*<link href="~/lib/jquery-dataTables/css/dataTables.bootstrap4.min.css" rel="stylesheet" />*@
@@ -43,7 +41,7 @@
                         <a class="btn btn-outline-primary font-weight-bold btn-sm" role="button" data-toggle="tooltip" title="Refresh" href="#" onclick="$('#table').DataTable().ajax.reload();"><i class="icon-refresh"></i></a>
                         <a class="btn btn-primary dropdown-toggle my-dropdown my-tooltip btn-sm" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Create New"><i class="icon-note"></i> Create New</a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                            @foreach (var item in Fanda.Common.Enums.FandaEnums.GetPartyTypes())
+                            @foreach (var item in FandaEnums.GetPartyTypes())
                             {
                                 <a class="dropdown-item" href="@Url.Action("Create", new { contactType = item })">@item</a>
                             }

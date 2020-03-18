@@ -1679,6 +1679,18 @@
           }
         }
       },
+      "SendGrid/9.13.0": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "9.0.1"
+        },
+        "compile": {
+          "lib/netstandard2.0/SendGrid.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/SendGrid.dll": {}
+        }
+      },
       "SSH.NET/2016.1.0": {
         "type": "package",
         "dependencies": {
@@ -3661,6 +3673,19 @@
           "bin/placeholder/DataTables.Queryable.dll": {}
         }
       },
+      "Fanda.Dto/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.1",
+        "dependencies": {
+          "System.ComponentModel.Annotations": "4.7.0"
+        },
+        "compile": {
+          "bin/placeholder/Fanda.Dto.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Fanda.Dto.dll": {}
+        }
+      },
       "Fanda.Service/1.0.0": {
         "type": "project",
         "framework": ".NETStandard,Version=v2.1",
@@ -3678,6 +3703,20 @@
         },
         "runtime": {
           "bin/placeholder/Fanda.Service.dll": {}
+        }
+      },
+      "Fanda.Shared/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.1",
+        "dependencies": {
+          "Microsoft.Extensions.Options": "3.1.2",
+          "SendGrid": "9.13.0"
+        },
+        "compile": {
+          "bin/placeholder/Fanda.Shared.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Fanda.Shared.dll": {}
         }
       }
     }
@@ -6060,6 +6099,26 @@
         "runtimes/win-x86/native/sni.dll",
         "useSharedDesignerContext.txt",
         "version.txt"
+      ]
+    },
+    "SendGrid/9.13.0": {
+      "sha512": "ZkYkdZ/4KYdu6Ewrf8ZGSc8WIScVq8+CtPgf3tUlvVxtFKJ+zld0Ki6Nv4Z2Drt5qbK3TDmFNIRwiKXnrtVfTQ==",
+      "type": "package",
+      "path": "sendgrid/9.13.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net452/SendGrid.dll",
+        "lib/net452/SendGrid.pdb",
+        "lib/net452/SendGrid.xml",
+        "lib/netstandard1.3/SendGrid.dll",
+        "lib/netstandard1.3/SendGrid.pdb",
+        "lib/netstandard1.3/SendGrid.xml",
+        "lib/netstandard2.0/SendGrid.dll",
+        "lib/netstandard2.0/SendGrid.pdb",
+        "lib/netstandard2.0/SendGrid.xml",
+        "sendgrid.9.13.0.nupkg.sha512",
+        "sendgrid.nuspec"
       ]
     },
     "SSH.NET/2016.1.0": {
@@ -11107,10 +11166,20 @@
       "path": "../DataTables.Queryable/DataTables.Queryable.csproj",
       "msbuildProject": "../DataTables.Queryable/DataTables.Queryable.csproj"
     },
+    "Fanda.Dto/1.0.0": {
+      "type": "project",
+      "path": "../Fanda.Dto/Fanda.Dto.csproj",
+      "msbuildProject": "../Fanda.Dto/Fanda.Dto.csproj"
+    },
     "Fanda.Service/1.0.0": {
       "type": "project",
       "path": "../Fanda.Service/Fanda.Service.csproj",
       "msbuildProject": "../Fanda.Service/Fanda.Service.csproj"
+    },
+    "Fanda.Shared/1.0.0": {
+      "type": "project",
+      "path": "../Fanda.Shared/Fanda.Shared.csproj",
+      "msbuildProject": "../Fanda.Shared/Fanda.Shared.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -11118,7 +11187,9 @@
       "AutoMapper.Extensions.Microsoft.DependencyInjection >= 7.0.0",
       "BuildBundlerMinifier >= 3.2.435",
       "DataTables.Queryable >= 1.0.0",
+      "Fanda.Dto >= 1.0.0",
       "Fanda.Service >= 1.0.0",
+      "Fanda.Shared >= 1.0.0",
       "Microsoft.ApplicationInsights.AspNetCore >= 2.13.1",
       "Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation >= 3.1.2",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 3.1.1"
@@ -11157,8 +11228,14 @@
             "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\DataTables.Queryable\\DataTables.Queryable.csproj": {
               "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\DataTables.Queryable\\DataTables.Queryable.csproj"
             },
+            "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Dto\\Fanda.Dto.csproj": {
+              "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Dto\\Fanda.Dto.csproj"
+            },
             "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Service\\Fanda.Service.csproj": {
               "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Service\\Fanda.Service.csproj"
+            },
+            "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Shared\\Fanda.Shared.csproj": {
+              "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Shared\\Fanda.Shared.csproj"
             }
           }
         }
