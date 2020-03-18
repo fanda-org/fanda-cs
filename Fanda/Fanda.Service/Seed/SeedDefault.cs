@@ -1,10 +1,5 @@
-﻿using Fanda.Common.Helpers;
-using Fanda.Service.Access;
-using Fanda.Service.Business;
-using Fanda.Service.Commodity;
-using Fanda.ViewModel.Access;
-using Fanda.ViewModel.Business;
-using Fanda.ViewModel.Commodity;
+﻿using Fanda.Dto;
+using Fanda.Shared.Config;
 //using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -31,7 +26,7 @@ namespace Fanda.Service.Seed
             var org = await service.ExistsAsync("FANDA");
             if (org == null)
             {
-                org = await service.SaveAsync(new OrganizationViewModel
+                org = await service.SaveAsync(new OrganizationDto
                 {
                     OrgCode = "FANDA",
                     OrgName = "Fanda",
@@ -49,7 +44,7 @@ namespace Fanda.Service.Seed
             // create demo org
             org = await service.ExistsAsync("DEMO");
             if (org == null)
-                await service.SaveAsync(new OrganizationViewModel
+                await service.SaveAsync(new OrganizationDto
                 {
                     OrgCode = "DEMO",
                     OrgName = "Demo",
@@ -82,7 +77,7 @@ namespace Fanda.Service.Seed
                 var roleExist = await service.ExistsAsync(roleCode);
                 if (!roleExist)
                 {
-                    var model = new RoleViewModel
+                    var model = new RoleDto
                     {
                         Code = roleCode,
                         Name = roleName,
@@ -94,13 +89,13 @@ namespace Fanda.Service.Seed
             }
         }
 
-        private async Task<LocationViewModel> CreateLocations(OrganizationViewModel org)
+        private async Task<LocationDto> CreateLocations(OrganizationDto org)
         {
             var service = _serviceProvider.GetRequiredService<ILocationService>();
             var loc = await service.ExistsAsync("DEFAULT");
             if (loc == null)
             {
-                loc = new LocationViewModel
+                loc = new LocationDto
                 {
                     Code = "DEFAULT",
                     Name = "Default",
@@ -112,11 +107,11 @@ namespace Fanda.Service.Seed
             return loc;
         }
 
-        private async Task CreateUsers(OrganizationViewModel org, LocationViewModel loc)
+        private async Task CreateUsers(OrganizationDto org, LocationDto loc)
         {
             var service = _serviceProvider.GetRequiredService<IUserService>();
             // creating a super user who could maintain the web app
-            var superAdmin = new UserViewModel
+            var superAdmin = new UserDto
             {
                 UserName = _settings.FandaSettings.UserName,
                 Email = _settings.FandaSettings.UserEmail,
@@ -135,12 +130,12 @@ namespace Fanda.Service.Seed
         //    //throw new NotImplementedException();
         //}
 
-        private async Task CreateUnits(OrganizationViewModel org)
+        private async Task CreateUnits(OrganizationDto org)
         {
             var service = _serviceProvider.GetRequiredService<IUnitService>();
             if (!await service.ExistsAsync("DEFAULT"))
             {
-                var unit = new UnitViewModel
+                var unit = new UnitDto
                 {
                     Code = "DEFAULT",
                     Name = "Default",
@@ -150,12 +145,12 @@ namespace Fanda.Service.Seed
             }
         }
 
-        private async Task CreatePartyCategories(OrganizationViewModel org)
+        private async Task CreatePartyCategories(OrganizationDto org)
         {
             var service = _serviceProvider.GetRequiredService<IPartyCategoryService>();
             if (!service.ExistsAsync("DEFAULT").Result)
             {
-                await service.SaveAsync(org.OrgId, new PartyCategoryViewModel
+                await service.SaveAsync(org.OrgId, new PartyCategoryDto
                 {
                     Code = "DEFAULT",
                     Name = "Default",

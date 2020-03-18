@@ -1,11 +1,4 @@
-using Fanda.Data.Access;
-using Fanda.Data.Base;
-using Fanda.Data.Business;
-using Fanda.Data.Commodity;
-using Fanda.Data.Inventory;
-using Fanda.Data.Tracking;
-//using Microsoft.AspNetCore.Identity;
-//using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Fanda.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 

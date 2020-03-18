@@ -1,14 +1,7 @@
 ﻿using AutoMapper;
-using Fanda.Data.Access;
-using Fanda.Data.Base;
-using Fanda.Data.Business;
-using Fanda.Data.Commodity;
-using Fanda.Data.Inventory;
-using Fanda.ViewModel.Access;
-using Fanda.ViewModel.Base;
-using Fanda.ViewModel.Business;
-using Fanda.ViewModel.Commodity;
-using Fanda.ViewModel.Inventory;
+using Fanda.Data.Models;
+using Fanda.Dto;
+using Fanda.Shared.Enums;
 using System;
 using System.Linq;
 
@@ -18,15 +11,15 @@ namespace Fanda.Service.AutoMapperProfile
     {
         public AutoMapperProfile()
         {
-            CreateMap<User, RegisterViewModel>()
+            CreateMap<User, RegisterDto>()
                 .ForMember(vm => vm.Password, opt => opt.Ignore())
                 //.ForMember(vm => vm.ConfirmPassword, opt => opt.Ignore())
                 .ReverseMap();
-            CreateMap<Role, RoleViewModel>()
+            CreateMap<Role, RoleDto>()
                 .ForMember(vm => vm.RoleId, opt => opt.MapFrom(src => src.Id))
                 .ReverseMap()
                 .ForMember(x => x.Id, opt => opt.MapFrom(vm => vm.RoleId));
-            CreateMap<User, UserViewModel>()
+            CreateMap<User, UserDto>()
                 .ForMember(vm => vm.UserId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(vm => vm.Token, opt => opt.Ignore())
                 //.ForMember(vm => vm.Password, opt => opt.Ignore())
@@ -34,41 +27,41 @@ namespace Fanda.Service.AutoMapperProfile
                 .ReverseMap()
                 .ForMember(x => x.Id, opt => opt.MapFrom(vm => vm.UserId));
 
-            CreateMap<Location, LocationViewModel>()
+            CreateMap<Location, LocationDto>()
                 .ReverseMap();
-            CreateMap<Contact, ContactViewModel>()
+            CreateMap<Contact, ContactDto>()
                 .ForMember(vm => vm.IsDeleted, opt => opt.Ignore())
                 .ForMember(vm => vm.Index, opt => opt.Ignore())
                 .ReverseMap();
-            CreateMap<Address, AddressViewModel>()
+            CreateMap<Address, AddressDto>()
                 .ForMember(vm => vm.IsDeleted, opt => opt.Ignore())
                 .ForMember(vm => vm.Index, opt => opt.Ignore())
                 .ReverseMap();
-            CreateMap<PartyCategory, PartyCategoryViewModel>()
+            CreateMap<PartyCategory, PartyDto>()
                 .ReverseMap();
-            CreateMap<ProductCategory, ProductCategoryViewModel>()
+            CreateMap<ProductCategory, ProductCategoryDto>()
                 .ReverseMap();
-            CreateMap<Unit, UnitViewModel>()
+            CreateMap<Unit, UnitDto>()
                 .ReverseMap();
-            CreateMap<ProductBrand, ProductBrandViewModel>()
+            CreateMap<ProductBrand, ProductBrandDto>()
                 .ReverseMap();
-            CreateMap<ProductSegment, ProductSegmentViewModel>()
+            CreateMap<ProductSegment, ProductSegmentDto>()
                 .ReverseMap();
-            CreateMap<ProductVariety, ProductVarietyViewModel>()
+            CreateMap<ProductVariety, ProductVarietyDto>()
                 .ReverseMap();
-            CreateMap<ProductIngredient, ProductIngredientViewModel>()
+            CreateMap<ProductIngredient, ProductIngredientDto>()
                 .ReverseMap();
-            CreateMap<ProductPricing, ProductPricingViewModel>()
+            CreateMap<ProductPricing, ProductPricingDto>()
                 .ReverseMap();
-            CreateMap<ProductPricingRange, ProductPricingRangeViewModel>()
+            CreateMap<ProductPricingRange, ProductPricingRangeDto>()
                 .ReverseMap();
-            CreateMap<Product, ProductViewModel>()
+            CreateMap<Product, ProductDto>()
                 .ForMember(vm => vm.IsCompoundProduct, opt => opt.MapFrom(src => src.ParentIngredients.Any()))
                 .ForMember(vm => vm.Ingredients, opt => opt.MapFrom(src => src.ParentIngredients))
                 .ForMember(vm => vm.ProductPricings, opt => opt.MapFrom(src => src.ProductPricings))
                 .ReverseMap();
 
-            CreateMap<BankAccount, BankAccountViewModel>()
+            CreateMap<BankAccount, BankAccountDto>()
                 .ForMember(dest => dest.Owner, opt => opt.Ignore())
                 .ForMember(dest => dest.OwnerId, opt => opt.Ignore())
                 .ForMember(vm => vm.IsDeleted, opt => opt.Ignore())
@@ -82,7 +75,7 @@ namespace Fanda.Service.AutoMapperProfile
                         if (partyId != null && partyId != Guid.Empty)
                         {
                             dest.OwnerId = partyId;
-                            dest.Owner = Common.Enums.AccountOwner.Party;
+                            dest.Owner = AccountOwner.Party;
                         }
                     }
                     else if (src.OrgBanks != null && src.OrgBanks.Any())
@@ -91,7 +84,7 @@ namespace Fanda.Service.AutoMapperProfile
                         if (orgId != null && orgId != Guid.Empty)
                         {
                             dest.OwnerId = orgId;
-                            dest.Owner = Common.Enums.AccountOwner.Organization;
+                            dest.Owner = AccountOwner.Organization;
                         }
                     }
                 })
@@ -99,7 +92,7 @@ namespace Fanda.Service.AutoMapperProfile
                 .ForMember(x => x.AddressId, opt => opt.MapFrom(vm => vm.Address.AddressId))
                 .ForMember(x => x.ContactId, opt => opt.MapFrom(vm => vm.Contact.ContactId));
 
-            CreateMap<Organization, OrganizationViewModel>()
+            CreateMap<Organization, OrganizationDto>()
                 .ForPath(vm => vm.Contacts, opt => opt.MapFrom(src => src.Contacts.Select(c => c.Contact).ToList()))
                 .ForPath(s => s.Addresses, opt => opt.MapFrom(src => src.Addresses.Select(a => a.Address).ToList()))
                 .ForPath(vm => vm.Banks, opt => opt.MapFrom(src => src.Banks.Select(b => b.BankAccount).ToList()))
@@ -112,7 +105,7 @@ namespace Fanda.Service.AutoMapperProfile
                               OrgId = new Guid(orgVM.OrgId),
                               Organization = org,
                               ContactId = c.ContactId,
-                              Contact = context.Mapper.Map<ContactViewModel, Contact>(c)
+                              Contact = context.Mapper.Map<ContactDto, Contact>(c)
                           }).ToList();
                       }))
                 .ForMember(x => x.Addresses,
@@ -123,7 +116,7 @@ namespace Fanda.Service.AutoMapperProfile
                             OrgId = new Guid(orgVM.OrgId),
                             Organization = org,
                             AddressId = a.AddressId,
-                            Address = context.Mapper.Map<AddressViewModel, Address>(a)
+                            Address = context.Mapper.Map<AddressDto, Address>(a)
                         }).ToList();
                     }))
                 .ForMember(x => x.Banks,
@@ -134,11 +127,11 @@ namespace Fanda.Service.AutoMapperProfile
                             OrgId = new Guid(orgVM.OrgId),
                             Organization = org,
                             BankAcctId = b.BankAcctId,
-                            BankAccount = context.Mapper.Map<BankAccountViewModel, BankAccount>(b)
+                            BankAccount = context.Mapper.Map<BankAccountDto, BankAccount>(b)
                         }).ToList();
                     }));
 
-            CreateMap<Party, PartyViewModel>()
+            CreateMap<Party, PartyDto>()
                 .ForMember(vm => vm.CategoryName, opt => opt.MapFrom(src => src.Category.Name))
                 .ForPath(vm => vm.Contacts, m => m.MapFrom(s => s.Contacts.Select(pc => pc.Contact).ToList()))
                 .ForPath(vm => vm.Addresses, m => m.MapFrom(s => s.Addresses.Select(pa => pa.Address).ToList()))
@@ -153,7 +146,7 @@ namespace Fanda.Service.AutoMapperProfile
                             PartyId = new Guid(partyVM.PartyId),
                             Party = party,
                             ContactId = c.ContactId,
-                            Contact = context.Mapper.Map<ContactViewModel, Contact>(c)
+                            Contact = context.Mapper.Map<ContactDto, Contact>(c)
                         }).ToList();
                     }))
                 .ForMember(x => x.Addresses,
@@ -164,7 +157,7 @@ namespace Fanda.Service.AutoMapperProfile
                             PartyId = new Guid(partyVM.PartyId),
                             Party = party,
                             AddressId = a.AddressId,
-                            Address = context.Mapper.Map<AddressViewModel, Address>(a)
+                            Address = context.Mapper.Map<AddressDto, Address>(a)
                         }).ToList();
                     }))
                 .ForMember(x => x.Banks,
@@ -175,18 +168,18 @@ namespace Fanda.Service.AutoMapperProfile
                             PartyId = new Guid(partyVM.PartyId),
                             Party = party,
                             BankAcctId = b.BankAcctId,
-                            BankAccount = context.Mapper.Map<BankAccountViewModel, BankAccount>(b)
+                            BankAccount = context.Mapper.Map<BankAccountDto, BankAccount>(b)
                         }).ToList();
                     }));
 
-            CreateMap<InvoiceCategory, InvoiceCategoryViewModel>()
+            CreateMap<InvoiceCategory, InvoiceCategoryDto>()
                 .ReverseMap();
 
-            CreateMap<Stock, StockViewModel>()
+            CreateMap<Stock, StockDto>()
                 .ReverseMap();
-            CreateMap<InvoiceItem, InvoiceItemViewModel>()
+            CreateMap<InvoiceItem, InvoiceItemDto>()
                 .ReverseMap();
-            CreateMap<Invoice, InvoiceViewModel>()
+            CreateMap<Invoice, InvoiceDto>()
                 .ReverseMap();
         }
     }

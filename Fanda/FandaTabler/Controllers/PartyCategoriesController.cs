@@ -1,6 +1,6 @@
-﻿using Fanda.Common.Extensions;
-using Fanda.Service.Business;
-using Fanda.ViewModel.Business;
+﻿using Fanda.Dto;
+using Fanda.Service;
+using FandaTabler.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -25,11 +25,7 @@ namespace FandaTabler.Controllers
             _service = service;
         }
 
-        public ActionResult IndexEdit()
-        {
-
-            return View();
-        }
+        public ActionResult IndexEdit() => View();
 
         //// GET: PartyCategories
         //public ActionResult Index()
@@ -52,7 +48,7 @@ namespace FandaTabler.Controllers
                 //Married = string.IsNullOrEmpty(qFilter["Married"]) ? (bool?)null : bool.Parse(qFilter["Married"])
             };
 
-            var org = HttpContext.Session.Get<OrganizationViewModel>("CurrentOrg");
+            var org = HttpContext.Session.Get<OrganizationDto>("CurrentOrg");
             if (org != null)
             {
                 var data = await _service.GetAll(org.OrgId)
@@ -130,13 +126,13 @@ namespace FandaTabler.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Save(PartyCategoryViewModel model)
+        public async Task<ActionResult> Save(PartyCategoryDto model)
         {
             try
             {
                 if (!ModelState.IsValid)
                     return BadRequest();
-                var orgId = HttpContext.Session.Get<OrganizationViewModel>("CurrentOrg").OrgId;
+                var orgId = HttpContext.Session.Get<OrganizationDto>("CurrentOrg").OrgId;
                 model = await _service.SaveAsync(orgId, model);
                 return Ok(model); //Json(new { Success = true, Message = string.Empty }/*, JsonRequestBehavior.AllowGet*/);
             }
@@ -168,7 +164,7 @@ namespace FandaTabler.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Delete(PartyCategoryViewModel model)
+        public async Task<ActionResult> Delete(PartyDto model)
         {
             //try
             //{

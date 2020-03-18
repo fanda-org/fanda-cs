@@ -39,8 +39,8 @@ namespace Fanda.Controllers
         [Produces("application/json")]
         public async Task<JsonResult> GetAll()
         {
-            var orgId = HttpContext.Session.Get<OrganizationViewModel>("DemoOrg").OrgId.ToString();
-            var request = new DataTablesRequest<PartyViewModel>(
+            var orgId = HttpContext.Session.Get<OrganizationDto>("DemoOrg").OrgId.ToString();
+            var request = new DataTablesRequest<PartyDto>(
                 Request.QueryString.Value
                 );
             var result = await _service
@@ -76,7 +76,7 @@ namespace Fanda.Controllers
         // GET: Parties/Create
         public async Task<ActionResult> Create(string contactType)
         {
-            var party = new PartyViewModel { PartyType = (PartyType)Enum.Parse(typeof(PartyType), contactType, true), Active = true };
+            var party = new PartyDto { PartyType = (PartyType)Enum.Parse(typeof(PartyType), contactType, true), Active = true };
 
             TempData.Set("PartyCategories", await GetPartyCategories(party.CategoryId));
             ViewBag.Mode = "Create";
@@ -103,7 +103,7 @@ namespace Fanda.Controllers
         // POST: Parties/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(PartyViewModel model)
+        public async Task<ActionResult> Edit(PartyDto model)
         {
             try
             {
@@ -121,11 +121,11 @@ namespace Fanda.Controllers
                     .Where(c => !c.IsDeleted)
                     .ToList();
 
-                var orgId = HttpContext.Session.Get<OrganizationViewModel>("DemoOrg").OrgId.ToString();
+                var orgId = HttpContext.Session.Get<OrganizationDto>("DemoOrg").OrgId.ToString();
                 bool create = string.IsNullOrEmpty(model.PartyId);
                 await _service.SaveAsync(orgId, model);
                 if (create) // Create
-                    return PartialView("_partyEdit", new PartyViewModel { PartyType = model.PartyType });   //RedirectToAction(nameof(Create), new { contactType = model.PartyType });
+                    return PartialView("_partyEdit", new PartyDto { PartyType = model.PartyType });   //RedirectToAction(nameof(Create), new { contactType = model.PartyType });
                 else
                     return PartialView("_partyEdit");   //RedirectToAction(nameof(Index));
             }
@@ -193,7 +193,7 @@ namespace Fanda.Controllers
         [HttpPost]
         public ActionResult AddContact(int index)
         {
-            var newContact = new ContactViewModel { Index = index };
+            var newContact = new ContactDto { Index = index };
             ViewData.TemplateInfo.HtmlFieldPrefix = string.Format("Contacts[{0}]", index);
             return PartialView("~/Views/Shared/EditorTemplates/ContactViewModel.cshtml", newContact);
         }
@@ -205,7 +205,7 @@ namespace Fanda.Controllers
         private async Task<List<SelectListItem>> GetPartyCategories(string currentCategoryId)
         {
             //return await _categoryService.GetAll(OrgId).ToListAsync();
-            var orgId = HttpContext.Session.Get<OrganizationViewModel>("DemoOrg").OrgId.ToString();
+            var orgId = HttpContext.Session.Get<OrganizationDto>("DemoOrg").OrgId.ToString();
             var list = new List<SelectListItem>();
             foreach (var category in await _categoryService.GetAll(orgId).ToListAsync())
             {

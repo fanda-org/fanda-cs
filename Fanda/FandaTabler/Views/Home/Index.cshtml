@@ -3,8 +3,8 @@
 }
 
 @using Microsoft.AspNetCore.Http
-@using Fanda.Common.Extensions
-@using Fanda.ViewModel.Business
+@using FandaTabler.Extensions
+@using Fanda.Dto
 @inject IHttpContextAccessor HttpContextAccessor
 
 @section styles{
@@ -12,7 +12,7 @@
     <link href="~/assets/plugins/charts-c3/plugin.css" rel="stylesheet" />
     <script src="~/assets/plugins/charts-c3/plugin.js"></script>
 }
-@if (Context.Session.Get<OrganizationViewModel>("CurrentOrg") != null)
+@if (Context.Session.Get<OrganizationDto>("CurrentOrg") != null)
 {
     <div class="page-header">
         <h1 class="page-title">

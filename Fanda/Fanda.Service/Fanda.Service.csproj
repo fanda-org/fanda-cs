@@ -7,23 +7,22 @@
 
   <ItemGroup>
     <Compile Remove="Accounting\**" />
-    <Compile Remove="Data\**" />
+    <Compile Remove="Extensions\**" />
     <Compile Remove="Tracking\**" />
     <EmbeddedResource Remove="Accounting\**" />
-    <EmbeddedResource Remove="Data\**" />
+    <EmbeddedResource Remove="Extensions\**" />
     <EmbeddedResource Remove="Tracking\**" />
     <None Remove="Accounting\**" />
-    <None Remove="Data\**" />
+    <None Remove="Extensions\**" />
     <None Remove="Tracking\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Access\AccountService.cs" />
     <Compile Remove="IdentityServerConfig.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Data\InitializeContext.cs" />
+    <Compile Include="Extensions\InitializeContext.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,14 +32,13 @@
     <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.19" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.2" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.1" />
-    <PackageReference Include="Sendgrid" Version="9.13.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.6.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Fanda.Common\Fanda.Common.csproj" PrivateAssets="All" />
     <ProjectReference Include="..\Fanda.Data\Fanda.Data.csproj" PrivateAssets="All" />
-    <ProjectReference Include="..\Fanda.ViewModel\Fanda.ViewModel.csproj" PrivateAssets="All" />
+    <ProjectReference Include="..\Fanda.Dto\Fanda.Dto.csproj" PrivateAssets="All" />
+    <ProjectReference Include="..\Fanda.Shared\Fanda.Shared.csproj" PrivateAssets="All" />
   </ItemGroup>
 
   <!--<ItemGroup>

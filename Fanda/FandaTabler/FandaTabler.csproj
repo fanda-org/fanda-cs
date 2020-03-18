@@ -8,61 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="AutoMapper\**" />
-    <Compile Remove="Context\**" />
-    <Compile Remove="DataModels\**" />
-    <Compile Remove="DtoModels\**" />
-    <Compile Remove="Enums\**" />
-    <Compile Remove="Extensions\**" />
-    <Compile Remove="Migrations\**" />
-    <Compile Remove="Models\**" />
-    <Compile Remove="Seed\**" />
-    <Compile Remove="Services\**" />
-    <Content Remove="AutoMapper\**" />
-    <Content Remove="Context\**" />
-    <Content Remove="DataModels\**" />
-    <Content Remove="DtoModels\**" />
-    <Content Remove="Enums\**" />
-    <Content Remove="Extensions\**" />
-    <Content Remove="Migrations\**" />
-    <Content Remove="Models\**" />
-    <Content Remove="Seed\**" />
-    <Content Remove="Services\**" />
-    <EmbeddedResource Remove="AutoMapper\**" />
-    <EmbeddedResource Remove="Context\**" />
-    <EmbeddedResource Remove="DataModels\**" />
-    <EmbeddedResource Remove="DtoModels\**" />
-    <EmbeddedResource Remove="Enums\**" />
-    <EmbeddedResource Remove="Extensions\**" />
-    <EmbeddedResource Remove="Migrations\**" />
-    <EmbeddedResource Remove="Models\**" />
-    <EmbeddedResource Remove="Seed\**" />
-    <EmbeddedResource Remove="Services\**" />
-    <None Remove="AutoMapper\**" />
-    <None Remove="Context\**" />
-    <None Remove="DataModels\**" />
-    <None Remove="DtoModels\**" />
-    <None Remove="Enums\**" />
-    <None Remove="Extensions\**" />
-    <None Remove="Migrations\**" />
-    <None Remove="Models\**" />
-    <None Remove="Seed\**" />
-    <None Remove="Services\**" />
-  </ItemGroup>
-  
-  <!--<ItemGroup>
-    <FrameworkReference  Include="Microsoft.AspNetCore.App" />
-  </ItemGroup>-->
-  
-  <ItemGroup>
-    <Compile Remove="Helpers\AppSettings.cs" />
-    <Compile Remove="Helpers\PasswordStorage.cs" />
     <Compile Remove="IdentityServerConfig.cs" />
-    <Compile Remove="Utility\EmailSender.cs" />
-    <Compile Remove="Utility\ExceptionExtension.cs" />
-    <Compile Remove="Utility\PagedList.cs" />
-    <Compile Remove="Utility\PasswordStorage.cs" />
-    <Compile Remove="Utility\RegEx.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -132,25 +78,16 @@
   <ItemGroup>
     <PackageReference Include="BuildBundlerMinifier" Version="3.2.435" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.2">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.2" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" PrivateAssets="All" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
-    <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.19" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.2" />
-    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.1" />
     <PackageReference Include="SendGrid" Version="9.13.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataTables.Queryable\DataTables.Queryable.csproj" />
-    <ProjectReference Include="..\Fanda.Common\Fanda.Common.csproj" PrivateAssets="All"/>
+    <ProjectReference Include="..\DataTables.Queryable\DataTables.Queryable.csproj" PrivateAssets="All" />
+    <ProjectReference Include="..\Fanda.Dto\Fanda.Dto.csproj" PrivateAssets="All" />
     <ProjectReference Include="..\Fanda.Service\Fanda.Service.csproj" PrivateAssets="All" />
-    <ProjectReference Include="..\Fanda.ViewModel\Fanda.ViewModel.csproj" PrivateAssets="All" />
+    <ProjectReference Include="..\Fanda.Shared\Fanda.Shared.csproj" PrivateAssets="All" />
   </ItemGroup>
 
 </Project>

@@ -65,72 +65,6 @@
         }
       }
     },
-    "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Common\\Fanda.Common.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Common\\Fanda.Common.csproj",
-        "projectName": "Fanda.Common",
-        "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Common\\Fanda.Common.csproj",
-        "packagesPath": "C:\\Users\\tbala\\.nuget\\packages\\",
-        "outputPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Common\\obj\\",
-        "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
-        "configFilePaths": [
-          "C:\\Users\\tbala\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
-        ],
-        "originalTargetFrameworks": [
-          "netstandard2.1"
-        ],
-        "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {}
-        },
-        "frameworks": {
-          "netstandard2.1": {
-            "projectReferences": {
-              "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\DataTables.Queryable\\DataTables.Queryable.csproj": {
-                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\DataTables.Queryable\\DataTables.Queryable.csproj",
-                "privateAssets": "all"
-              }
-            }
-          }
-        },
-        "warningProperties": {
-          "warnAsError": [
-            "NU1605"
-          ]
-        }
-      },
-      "frameworks": {
-        "netstandard2.1": {
-          "dependencies": {
-            "Microsoft.AspNetCore.Mvc.ViewFeatures": {
-              "target": "Package",
-              "version": "[2.2.0, )"
-            }
-          },
-          "imports": [
-            "net461",
-            "net462",
-            "net47",
-            "net471",
-            "net472",
-            "net48"
-          ],
-          "assetTargetFallback": true,
-          "warn": true,
-          "frameworkReferences": {
-            "NETStandard.Library": {
-              "privateAssets": "all"
-            }
-          },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.200\\RuntimeIdentifierGraph.json"
-        }
-      }
-    },
     "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Data\\Fanda.Data.csproj": {
       "version": "1.0.0",
       "restore": {
@@ -157,8 +91,8 @@
         "frameworks": {
           "netstandard2.1": {
             "projectReferences": {
-              "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Common\\Fanda.Common.csproj": {
-                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Common\\Fanda.Common.csproj",
+              "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Shared\\Fanda.Shared.csproj": {
+                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Shared\\Fanda.Shared.csproj",
                 "privateAssets": "all"
               }
             }
@@ -233,6 +167,72 @@
         }
       }
     },
+    "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Dto\\Fanda.Dto.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Dto\\Fanda.Dto.csproj",
+        "projectName": "Fanda.Dto",
+        "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Dto\\Fanda.Dto.csproj",
+        "packagesPath": "C:\\Users\\tbala\\.nuget\\packages\\",
+        "outputPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Dto\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\tbala\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.1": {
+            "projectReferences": {
+              "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Shared\\Fanda.Shared.csproj": {
+                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Shared\\Fanda.Shared.csproj",
+                "privateAssets": "all"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.1": {
+          "dependencies": {
+            "System.ComponentModel.Annotations": {
+              "target": "Package",
+              "version": "[4.7.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "NETStandard.Library": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.200\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
     "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Service\\Fanda.Service.csproj": {
       "version": "1.0.0",
       "restore": {
@@ -259,16 +259,16 @@
         "frameworks": {
           "netstandard2.1": {
             "projectReferences": {
-              "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Common\\Fanda.Common.csproj": {
-                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Common\\Fanda.Common.csproj",
-                "privateAssets": "all"
-              },
               "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Data\\Fanda.Data.csproj": {
                 "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Data\\Fanda.Data.csproj",
                 "privateAssets": "all"
               },
-              "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.ViewModel\\Fanda.ViewModel.csproj": {
-                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.ViewModel\\Fanda.ViewModel.csproj",
+              "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Dto\\Fanda.Dto.csproj": {
+                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Dto\\Fanda.Dto.csproj",
+                "privateAssets": "all"
+              },
+              "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Shared\\Fanda.Shared.csproj": {
+                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Shared\\Fanda.Shared.csproj",
                 "privateAssets": "all"
               }
             }
@@ -307,10 +307,6 @@
               "target": "Package",
               "version": "[3.1.1, )"
             },
-            "Sendgrid": {
-              "target": "Package",
-              "version": "[9.13.0, )"
-            },
             "System.IdentityModel.Tokens.Jwt": {
               "target": "Package",
               "version": "[5.6.0, )"
@@ -335,14 +331,14 @@
         }
       }
     },
-    "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.ViewModel\\Fanda.ViewModel.csproj": {
+    "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Shared\\Fanda.Shared.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.ViewModel\\Fanda.ViewModel.csproj",
-        "projectName": "Fanda.ViewModel",
-        "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.ViewModel\\Fanda.ViewModel.csproj",
+        "projectUniqueName": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Shared\\Fanda.Shared.csproj",
+        "projectName": "Fanda.Shared",
+        "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Shared\\Fanda.Shared.csproj",
         "packagesPath": "C:\\Users\\tbala\\.nuget\\packages\\",
-        "outputPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.ViewModel\\obj\\",
+        "outputPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Shared\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -360,12 +356,7 @@
         },
         "frameworks": {
           "netstandard2.1": {
-            "projectReferences": {
-              "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Common\\Fanda.Common.csproj": {
-                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Common\\Fanda.Common.csproj",
-                "privateAssets": "all"
-              }
-            }
+            "projectReferences": {}
           }
         },
         "warningProperties": {
@@ -377,9 +368,13 @@
       "frameworks": {
         "netstandard2.1": {
           "dependencies": {
-            "Sieve": {
+            "Microsoft.Extensions.Options": {
               "target": "Package",
-              "version": "[2.3.3, )"
+              "version": "[3.1.2, )"
+            },
+            "SendGrid": {
+              "target": "Package",
+              "version": "[9.13.0, )"
             }
           },
           "imports": [
@@ -430,17 +425,8 @@
               "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\DataTables.Queryable\\DataTables.Queryable.csproj": {
                 "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\DataTables.Queryable\\DataTables.Queryable.csproj"
               },
-              "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Common\\Fanda.Common.csproj": {
-                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Common\\Fanda.Common.csproj"
-              },
-              "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Data\\Fanda.Data.csproj": {
-                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Data\\Fanda.Data.csproj"
-              },
               "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Service\\Fanda.Service.csproj": {
                 "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Service\\Fanda.Service.csproj"
-              },
-              "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.ViewModel\\Fanda.ViewModel.csproj": {
-                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.ViewModel\\Fanda.ViewModel.csproj"
               }
             }
           }

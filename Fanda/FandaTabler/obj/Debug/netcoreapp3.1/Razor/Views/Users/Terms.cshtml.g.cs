@@ -21,13 +21,13 @@ using FandaTabler;
 #nullable disable
 #nullable restore
 #line 2 "D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\Views\_ViewImports.cshtml"
-using Fanda.Common.Models;
+using Fanda.Shared.Models;
 
 #line default
 #line hidden
 #nullable disable
     [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"b514fa42e07c496ecd1179f412b081b9a6a6cf73", @"/Views/Users/Terms.cshtml")]
-    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"e0e38bee6975820d5e9760552f417be1ad342d8d", @"/Views/_ViewImports.cshtml")]
+    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"0849b3f2d364a6efd9b59eae165d5fd8b1d0120d", @"/Views/_ViewImports.cshtml")]
     public class Views_Users_Terms : global::Microsoft.AspNetCore.Mvc.Razor.RazorPage<dynamic>
     {
         private static readonly global::Microsoft.AspNetCore.Razor.TagHelpers.TagHelperAttribute __tagHelperAttribute_0 = new global::Microsoft.AspNetCore.Razor.TagHelpers.TagHelperAttribute("class", new global::Microsoft.AspNetCore.Html.HtmlString("card"), global::Microsoft.AspNetCore.Razor.TagHelpers.HtmlAttributeValueStyle.DoubleQuotes);

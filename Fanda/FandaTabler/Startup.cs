@@ -1,10 +1,8 @@
 using AutoMapper;
-using Fanda.Common.Helpers;
-using Fanda.Service.Access;
-using Fanda.Service.Business;
-using Fanda.Service.Commodity;
-using Fanda.Service.Data;
-using Fanda.Service.Utility;
+using Fanda.Service;
+using Fanda.Service.Extensions;
+using Fanda.Shared.Config;
+using Fanda.Shared.Utility;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.CookiePolicy;
@@ -15,14 +13,12 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Linq;
 using System.Text.Json.Serialization;
-
 namespace FandaTabler
 {
     public class Startup

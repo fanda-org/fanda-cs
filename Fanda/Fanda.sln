@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fanda.Service", "Fanda.Serv
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fanda.Data", "Fanda.Data\Fanda.Data.csproj", "{4BB505B2-BEB4-4FED-AAC5-68A753BDCB95}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fanda.Common", "Fanda.Common\Fanda.Common.csproj", "{22A5D35E-ED75-4BC7-AD46-C9BAC976F7C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fanda.Shared", "Fanda.Shared\Fanda.Shared.csproj", "{22A5D35E-ED75-4BC7-AD46-C9BAC976F7C3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fanda.ViewModel", "Fanda.ViewModel\Fanda.ViewModel.csproj", "{9C1A5085-3949-4065-8C45-0A95352F8E18}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fanda.Dto", "Fanda.Dto\Fanda.Dto.csproj", "{9C1A5085-3949-4065-8C45-0A95352F8E18}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FandaTabler", "FandaTabler\FandaTabler.csproj", "{75E0E57F-4A11-4ED2-8788-64F37FEE7A89}"
 EndProject

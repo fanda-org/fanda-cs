@@ -2,50 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <!--<RuntimeFrameworkVersion>2.1.2</RuntimeFrameworkVersion>-->
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Accounting\**" />
-    <Compile Remove="AutoMapperProfile\**" />
-    <Compile Remove="Enums\**" />
-    <Compile Remove="Migrations - Copy\**" />
-    <Compile Remove="Migrations\**" />
-    <Compile Remove="Seed\**" />
-    <Compile Remove="Services\**" />
-    <Compile Remove="Utility\**" />
-    <Compile Remove="ViewModels\**" />
-    <EmbeddedResource Remove="Accounting\**" />
-    <EmbeddedResource Remove="AutoMapperProfile\**" />
-    <EmbeddedResource Remove="Enums\**" />
-    <EmbeddedResource Remove="Migrations - Copy\**" />
-    <EmbeddedResource Remove="Migrations\**" />
-    <EmbeddedResource Remove="Seed\**" />
-    <EmbeddedResource Remove="Services\**" />
-    <EmbeddedResource Remove="Utility\**" />
-    <EmbeddedResource Remove="ViewModels\**" />
-    <None Remove="Accounting\**" />
-    <None Remove="AutoMapperProfile\**" />
-    <None Remove="Enums\**" />
-    <None Remove="Migrations - Copy\**" />
-    <None Remove="Migrations\**" />
-    <None Remove="Seed\**" />
-    <None Remove="Services\**" />
-    <None Remove="Utility\**" />
-    <None Remove="ViewModels\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Access\UserRole.cs" />
+    <Compile Remove="Context\DesignTimeDbContextFactory.cs" />
     <Compile Remove="Context\MsSqlDbContext.cs" />
     <Compile Remove="Context\MySqlDbContext.cs" />
     <Compile Remove="Context\PgSqlDbContext.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="Migrations\20200315005122_Initial.cs" />
-    <Compile Include="Migrations\20200315005122_Initial.designer.cs" />
-    <Compile Include="Migrations\FandaContextModelSnapshot.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -67,6 +30,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Fanda.Common\Fanda.Common.csproj" PrivateAssets="All"/>
+    <ProjectReference Include="..\Fanda.Shared\Fanda.Shared.csproj" PrivateAssets="All" />
   </ItemGroup>
 </Project>

@@ -1,8 +1,7 @@
-﻿using Fanda.Common.Extensions;
-using Fanda.Common.Models;
-using Fanda.Service.Business;
-using Fanda.ViewModel.Base;
-using Fanda.ViewModel.Business;
+﻿using Fanda.Dto;
+using Fanda.Service;
+using Fanda.Shared.Models;
+using FandaTabler.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -26,10 +25,7 @@ namespace FandaTabler.Controllers
         }
 
         // GET: Orgs
-        public ActionResult Index()
-        {
-            return View();
-        }
+        public ActionResult Index() => View();
 
         [Produces("application/json")]
         public async Task<JsonResult> GetAll()
@@ -98,7 +94,7 @@ namespace FandaTabler.Controllers
         // GET: Orgs/Create
         public IActionResult Create()
         {
-            var org = new OrganizationViewModel { Active = true };
+            var org = new OrganizationDto { Active = true };
 
             //TempData.Set("PartyCategories", await GetPartyCategories(party.CategoryId));
             ViewBag.Mode = "Create";
@@ -125,7 +121,7 @@ namespace FandaTabler.Controllers
         // POST: Orgs/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(OrganizationViewModel model)
+        public async Task<IActionResult> Edit(OrganizationDto model)
         {
             try
             {
@@ -143,11 +139,11 @@ namespace FandaTabler.Controllers
                     .Where(c => !c.IsDeleted)
                     .ToList();
 
-                var orgId = HttpContext.Session.Get<OrganizationViewModel>("CurrentOrg").OrgId;
+                var orgId = HttpContext.Session.Get<OrganizationDto>("CurrentOrg").OrgId;
                 bool create = string.IsNullOrEmpty(model.OrgId);
                 await _service.SaveAsync(model);
                 if (create) // Create
-                    return PartialView("_orgEdit", new OrganizationViewModel { Active = true });   //RedirectToAction(nameof(Create), new { contactType = model.PartyType });
+                    return PartialView("_orgEdit", new OrganizationDto { Active = true });   //RedirectToAction(nameof(Create), new { contactType = model.PartyType });
                 else
                     return PartialView("_orgEdit");   //RedirectToAction(nameof(Index));
             }
@@ -222,7 +218,7 @@ namespace FandaTabler.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult AddContact(int index)
         {
-            var newContact = new ContactViewModel { Index = index };
+            var newContact = new ContactDto { Index = index };
             ViewData.TemplateInfo.HtmlFieldPrefix = string.Format("Contacts[{0}]", index);
             return PartialView("~/Views/Shared/EditorTemplates/ContactViewModel.cshtml", newContact);
         }

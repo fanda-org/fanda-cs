@@ -1,6 +1,6 @@
-﻿using Fanda.Common.Helpers;
-using Fanda.Service.Access;
-using Fanda.ViewModel.Access;
+﻿using Fanda.Dto;
+using Fanda.Service;
+using Fanda.Shared.Helpers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -29,13 +29,13 @@ namespace FandaTabler.Controllers
         public IActionResult Login(string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
-            return View(new LoginViewModel());
+            return View(new LoginDto());
             //return Challenge(new AuthenticationProperties() { RedirectUri = "/Home/Index" });
         }
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Login([FromQuery] string returnUrl, [FromForm]LoginViewModel model)
+        public async Task<IActionResult> Login([FromQuery] string returnUrl, [FromForm]LoginDto model)
         {
             if (!ModelState.IsValid)
             {
@@ -133,12 +133,12 @@ namespace FandaTabler.Controllers
                !string.IsNullOrEmpty(page))
                 return RedirectToAction(page);
             else
-                return View(new RegisterViewModel());
+                return View(new RegisterDto());
         }
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Register([FromForm]RegisterViewModel model)
+        public async Task<IActionResult> Register([FromForm]RegisterDto model)
         {
             if (!ModelState.IsValid)
                 return View(model);
@@ -158,17 +158,11 @@ namespace FandaTabler.Controllers
 
         [AllowAnonymous]
         //[ResponseCache(Duration = 30)]
-        public IActionResult ConfirmEmail()
-        {
-            return View();
-        }
+        public IActionResult ConfirmEmail() => View();
 
         [AllowAnonymous]
         //[ResponseCache(Duration = 30)]
-        public IActionResult ForgotPassword()
-        {
-            return View();
-        }
+        public IActionResult ForgotPassword() => View();
 
         //[HttpGet]
         public async Task<IActionResult> GetAll(string orgId/*, bool? active*/)
@@ -185,7 +179,7 @@ namespace FandaTabler.Controllers
         }
 
         //[HttpPut("{id}")]
-        public async Task<IActionResult> Update(string orgId, [FromBody]UserViewModel model, string password)
+        public async Task<IActionResult> Update(string orgId, [FromBody]UserDto model, string password)
         {
             try
             {
@@ -209,9 +203,6 @@ namespace FandaTabler.Controllers
 
         [AllowAnonymous]
         //[ResponseCache(Duration = 300)]
-        public IActionResult Terms()
-        {
-            return View();
-        }
+        public IActionResult Terms() => View();
     }
 }

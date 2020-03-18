@@ -65,10 +65,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataTables.Queryable\DataTables.Queryable.csproj" />
-    <ProjectReference Include="..\Fanda.Common\Fanda.Common.csproj" />
-    <ProjectReference Include="..\Fanda.Data\Fanda.Data.csproj" />
     <ProjectReference Include="..\Fanda.Service\Fanda.Service.csproj" />
-    <ProjectReference Include="..\Fanda.ViewModel\Fanda.ViewModel.csproj" />
   </ItemGroup>
 
   <ItemGroup>

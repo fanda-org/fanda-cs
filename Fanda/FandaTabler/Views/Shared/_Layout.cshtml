@@ -1,10 +1,10 @@
 ﻿@using Microsoft.AspNetCore.Http
-@using Fanda.Common.Extensions
-@using Fanda.ViewModel.Business
+@using FandaTabler.Extensions
+@using Fanda.Dto
 @inject IHttpContextAccessor HttpContextAccessor
 
 @{
-    var org = Context.Session.Get<OrganizationViewModel>("CurrentOrg");
+    var org = Context.Session.Get<OrganizationDto>("CurrentOrg");
     string orgCode = "Fanda";
     string orgName = "Fanda";
     if (org != null)

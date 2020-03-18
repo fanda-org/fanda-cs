@@ -2,8 +2,8 @@
     ViewData["Title"] = "Index";
 }
 @using System.Text;
-@using Fanda.Common.Enums;
-@using Fanda.Common.Extensions;
+@using Fanda.Shared.Enums;
+@using Fanda.Shared.Extensions;
 
 @*<div class="page-header">
         <h1 class="page-title">
@@ -17,7 +17,7 @@
             <a class="btn btn-sm btn-outline-primary mr-1" role="button" data-toggle="tooltip" title="Refresh" href="#" onclick="$('#table').DataTable().ajax.reload();"><i class="fe fe-refresh-cw"></i></a>
             <a class="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-split my-dropdown my-tooltip" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Create New"><i class="fe fe-edit"></i> Create New</a>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                @foreach (var item in Fanda.Common.Enums.FandaEnums.GetPartyTypes())
+                @foreach (var item in Fanda.Shared.Enums.FandaEnums.GetPartyTypes())
                 {
                     <a class="btn dropdown-item" href="@Url.Action("Create", new { contactType = item })">@item</a>
                 }

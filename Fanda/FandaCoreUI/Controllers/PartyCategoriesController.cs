@@ -8,9 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
-//using Sieve.Models;
-//using Sieve.Services;
-
 namespace Fanda.Controllers
 {
     public class PartyCategoriesController : Controller
@@ -32,8 +29,8 @@ namespace Fanda.Controllers
         [Produces("application/json")]
         public async Task<JsonResult> GetAll()
         {
-            var orgId = HttpContext.Session.Get<OrganizationViewModel>("DemoOrg").OrgId.ToString();
-            var request = new DataTablesRequest<PartyCategoryViewModel>(
+            var orgId = HttpContext.Session.Get<OrganizationDto>("DemoOrg").OrgId.ToString();
+            var request = new DataTablesRequest<PartyDto>(
                 Request.QueryString.Value
                 );
             var result = await _service
@@ -118,7 +115,7 @@ namespace Fanda.Controllers
         // GET: PartyCategories/Create
         public ActionResult Create()
         {
-            var cat = new PartyCategoryViewModel { Active = true };
+            var cat = new PartyDto { Active = true };
             ViewBag.Mode = "Create";
             ViewBag.Readonly = false;
             return View("Edit", cat);
@@ -142,11 +139,11 @@ namespace Fanda.Controllers
         // POST: PartyCategories/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(PartyCategoryViewModel model)
+        public async Task<ActionResult> Edit(PartyDto model)
         {
             try
             {
-                var orgId = HttpContext.Session.Get<OrganizationViewModel>("DemoOrg").OrgId.ToString();
+                var orgId = HttpContext.Session.Get<OrganizationDto>("DemoOrg").OrgId.ToString();
                 bool create = string.IsNullOrEmpty(model.CategoryId);
                 await _service.SaveAsync(orgId, model);
                 if (create) // Create

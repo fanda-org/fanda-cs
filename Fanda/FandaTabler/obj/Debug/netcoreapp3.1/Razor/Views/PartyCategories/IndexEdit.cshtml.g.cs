@@ -21,13 +21,13 @@ using FandaTabler;
 #nullable disable
 #nullable restore
 #line 2 "D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\Views\_ViewImports.cshtml"
-using Fanda.Common.Models;
+using Fanda.Shared.Models;
 
 #line default
 #line hidden
 #nullable disable
     [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"e1485fc6cd4d92d3a243271d5d5f13ce7f441430", @"/Views/PartyCategories/IndexEdit.cshtml")]
-    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"e0e38bee6975820d5e9760552f417be1ad342d8d", @"/Views/_ViewImports.cshtml")]
+    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"0849b3f2d364a6efd9b59eae165d5fd8b1d0120d", @"/Views/_ViewImports.cshtml")]
     public class Views_PartyCategories_IndexEdit : global::Microsoft.AspNetCore.Mvc.Razor.RazorPage<dynamic>
     {
         private static readonly global::Microsoft.AspNetCore.Razor.TagHelpers.TagHelperAttribute __tagHelperAttribute_0 = new global::Microsoft.AspNetCore.Razor.TagHelpers.TagHelperAttribute("method", "post", global::Microsoft.AspNetCore.Razor.TagHelpers.HtmlAttributeValueStyle.DoubleQuotes);

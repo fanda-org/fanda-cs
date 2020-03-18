@@ -1,6 +1,6 @@
-﻿using Fanda.Common.Extensions;
-using Fanda.Common.Models;
-using Fanda.ViewModel.Business;
+﻿using Fanda.Dto;
+using Fanda.Shared.Models;
+using FandaTabler.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -18,7 +18,7 @@ namespace FandaTabler.Controllers
         //[ResponseCache(CacheProfileName = "Default")]
         public IActionResult Index()
         {
-            if (HttpContext.Session.Get<OrganizationViewModel>("CurrentOrg") == null)
+            if (HttpContext.Session.Get<OrganizationDto>("CurrentOrg") == null)
                 return RedirectToAction("Index", "Organizations");
             else
                 return View();
@@ -26,30 +26,18 @@ namespace FandaTabler.Controllers
 
         [AllowAnonymous]
         //[ResponseCache(CacheProfileName = "Default")]
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+        public IActionResult Privacy() => View();
 
         [AllowAnonymous]
         //[ResponseCache(CacheProfileName = "Default")]
-        public IActionResult Docs()
-        {
-            return View();
-        }
+        public IActionResult Docs() => View();
 
         [AllowAnonymous]
         //[ResponseCache(CacheProfileName = "Default")]
-        public IActionResult FAQ()
-        {
-            return View();
-        }
+        public IActionResult FAQ() => View();
 
         [AllowAnonymous]
         //[ResponseCache(CacheProfileName = "NoCache")]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        public IActionResult Error() => View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }

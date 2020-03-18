@@ -1,10 +1,6 @@
 D:\Development\Projects\dotnet\Fanda\src\Fanda\Fanda.Data\bin\Debug\netstandard2.1\Fanda.Data.deps.json
 D:\Development\Projects\dotnet\Fanda\src\Fanda\Fanda.Data\bin\Debug\netstandard2.1\Fanda.Data.dll
 D:\Development\Projects\dotnet\Fanda\src\Fanda\Fanda.Data\bin\Debug\netstandard2.1\Fanda.Data.pdb
-D:\Development\Projects\dotnet\Fanda\src\Fanda\Fanda.Data\bin\Debug\netstandard2.1\Fanda.Common.dll
-D:\Development\Projects\dotnet\Fanda\src\Fanda\Fanda.Data\bin\Debug\netstandard2.1\DataTables.Queryable.dll
-D:\Development\Projects\dotnet\Fanda\src\Fanda\Fanda.Data\bin\Debug\netstandard2.1\Fanda.Common.pdb
-D:\Development\Projects\dotnet\Fanda\src\Fanda\Fanda.Data\bin\Debug\netstandard2.1\DataTables.Queryable.pdb
 D:\Development\Projects\dotnet\Fanda\src\Fanda\Fanda.Data\obj\Debug\netstandard2.1\Fanda.Data.csprojAssemblyReference.cache
 D:\Development\Projects\dotnet\Fanda\src\Fanda\Fanda.Data\obj\Debug\netstandard2.1\Fanda.Data.csproj.CoreCompileInputs.cache
 D:\Development\Projects\dotnet\Fanda\src\Fanda\Fanda.Data\obj\Debug\netstandard2.1\Fanda.Data.AssemblyInfoInputs.cache
@@ -12,3 +8,5 @@ D:\Development\Projects\dotnet\Fanda\src\Fanda\Fanda.Data\obj\Debug\netstandard2
 D:\Development\Projects\dotnet\Fanda\src\Fanda\Fanda.Data\obj\Debug\netstandard2.1\Fanda.Data.csproj.CopyComplete
 D:\Development\Projects\dotnet\Fanda\src\Fanda\Fanda.Data\obj\Debug\netstandard2.1\Fanda.Data.dll
 D:\Development\Projects\dotnet\Fanda\src\Fanda\Fanda.Data\obj\Debug\netstandard2.1\Fanda.Data.pdb
+D:\Development\Projects\dotnet\Fanda\src\Fanda\Fanda.Data\bin\Debug\netstandard2.1\Fanda.Shared.dll
+D:\Development\Projects\dotnet\Fanda\src\Fanda\Fanda.Data\bin\Debug\netstandard2.1\Fanda.Shared.pdb
