@@ -1,6 +1,3 @@
-using System;
-using System.Linq;
-using System.Text.Json.Serialization;
 using AutoMapper;
 using Fanda.Common.Helpers;
 using Fanda.Data.Context;
@@ -19,13 +16,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using System;
+using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace FandaTabler
 {
