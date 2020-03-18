@@ -3,8 +3,8 @@
 ################################################################################
 
 *.suo
-/.vs
-/Fanda/.vscode
-/Fanda/Fanda/bin/Debug/netcoreapp2.2
-/Fanda/Fanda/node_modules
-/Fanda/Fanda/obj
+.vs
+.vscode
+bin/
+node_modules/
+obj/
