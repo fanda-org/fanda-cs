@@ -63,7 +63,8 @@ namespace FandaTabler.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Select([FromRoute]string id)
         {
-            var org = await _service.GetByIdAsync(id);
+            // ** TODO **
+            var org = await _service.GetByIdAsync(id/*, true*/);
             HttpContext.Session.Set("CurrentOrg", org);
             return RedirectToAction("Index", "Home");
         }

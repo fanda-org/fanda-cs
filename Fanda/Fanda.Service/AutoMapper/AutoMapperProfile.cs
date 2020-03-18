@@ -37,7 +37,7 @@ namespace Fanda.Service.AutoMapperProfile
                 .ForMember(vm => vm.IsDeleted, opt => opt.Ignore())
                 .ForMember(vm => vm.Index, opt => opt.Ignore())
                 .ReverseMap();
-            CreateMap<PartyCategory, PartyDto>()
+            CreateMap<PartyCategory, PartyCategoryDto>()
                 .ReverseMap();
             CreateMap<ProductCategory, ProductCategoryDto>()
                 .ReverseMap();

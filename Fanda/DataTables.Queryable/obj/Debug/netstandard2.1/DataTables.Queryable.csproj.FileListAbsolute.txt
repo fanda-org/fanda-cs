@@ -6,3 +6,4 @@ D:\Development\Projects\dotnet\Fanda\src\Fanda\DataTables.Queryable\obj\Debug\ne
 D:\Development\Projects\dotnet\Fanda\src\Fanda\DataTables.Queryable\obj\Debug\netstandard2.1\DataTables.Queryable.AssemblyInfo.cs
 D:\Development\Projects\dotnet\Fanda\src\Fanda\DataTables.Queryable\obj\Debug\netstandard2.1\DataTables.Queryable.dll
 D:\Development\Projects\dotnet\Fanda\src\Fanda\DataTables.Queryable\obj\Debug\netstandard2.1\DataTables.Queryable.pdb
+D:\Development\Projects\dotnet\Fanda\src\Fanda\DataTables.Queryable\obj\Debug\netstandard2.1\DataTables.Queryable.csprojAssemblyReference.cache

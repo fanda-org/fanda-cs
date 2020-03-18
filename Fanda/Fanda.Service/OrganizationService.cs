@@ -54,31 +54,31 @@ namespace Fanda.Service
                 .ProjectTo<OrganizationDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(o => o.OrgId == orgId);
 
-            if (includes && org != null)
-            {
-                Guid guid = new Guid(orgId);
-                org.Contacts = await _context.Organizations
-                    .AsNoTracking()
-                    .Where(m => m.OrgId == guid)
-                    .SelectMany(oc => oc.Contacts.Select(c => c.Contact))
-                    .ProjectTo<ContactDto>(_mapper.ConfigurationProvider)
-                    .ToListAsync();
-                org.Addresses = await _context.Organizations
-                    .AsNoTracking()
-                    .Where(m => m.OrgId == guid)
-                    .SelectMany(oa => oa.Addresses.Select(a => a.Address))
-                    .ProjectTo<AddressDto>(_mapper.ConfigurationProvider)
-                    .ToListAsync();
-                org.Banks = await _context.Organizations
-                    .AsNoTracking()
-                    .Where(m => m.OrgId == guid)
-                    .SelectMany(pb => pb.Banks.Select(a => a.BankAccount))
-                    .ProjectTo<BankAccountDto>(_mapper.ConfigurationProvider)
-                    .ToListAsync();
+            if (org == null)
+                throw new KeyNotFoundException("Organization not found");
+            if (org != null && !includes)
                 return org;
-            }
 
-            throw new KeyNotFoundException("Organization not found");
+            Guid guid = new Guid(orgId);
+            org.Contacts = await _context.Organizations
+                .AsNoTracking()
+                .Where(m => m.OrgId == guid)
+                .SelectMany(oc => oc.Contacts.Select(c => c.Contact))
+                .ProjectTo<ContactDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+            org.Addresses = await _context.Organizations
+                .AsNoTracking()
+                .Where(m => m.OrgId == guid)
+                .SelectMany(oa => oa.Addresses.Select(a => a.Address))
+                .ProjectTo<AddressDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+            org.Banks = await _context.Organizations
+                .AsNoTracking()
+                .Where(m => m.OrgId == guid)
+                .SelectMany(pb => pb.Banks.Select(a => a.BankAccount))
+                .ProjectTo<BankAccountDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+            return org;
         }
 
         public async Task<OrganizationDto> GetByCodeAsync(string orgCode, bool includes = false)
@@ -91,31 +91,32 @@ namespace Fanda.Service
                 .ProjectTo<OrganizationDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(o => o.OrgCode == orgCode);
 
-            if (includes && org != null)
-            {
-                Guid guid = new Guid(orgCode);
-                org.Contacts = await _context.Organizations
-                    .AsNoTracking()
-                    .Where(m => m.OrgId == guid)
-                    .SelectMany(oc => oc.Contacts.Select(c => c.Contact))
-                    .ProjectTo<ContactDto>(_mapper.ConfigurationProvider)
-                    .ToListAsync();
-                org.Addresses = await _context.Organizations
-                    .AsNoTracking()
-                    .Where(m => m.OrgId == guid)
-                    .SelectMany(oa => oa.Addresses.Select(a => a.Address))
-                    .ProjectTo<AddressDto>(_mapper.ConfigurationProvider)
-                    .ToListAsync();
-                org.Banks = await _context.Organizations
-                    .AsNoTracking()
-                    .Where(m => m.OrgId == guid)
-                    .SelectMany(pb => pb.Banks.Select(a => a.BankAccount))
-                    .ProjectTo<BankAccountDto>(_mapper.ConfigurationProvider)
-                    .ToListAsync();
+            if (org == null)
+                throw new KeyNotFoundException("Organization not found");
+            if (org != null && !includes)
                 return org;
-            }
 
-            throw new KeyNotFoundException("Organization not found");
+            Guid guid = new Guid(orgCode);
+            org.Contacts = await _context.Organizations
+                .AsNoTracking()
+                .Where(m => m.OrgId == guid)
+                .SelectMany(oc => oc.Contacts.Select(c => c.Contact))
+                .ProjectTo<ContactDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+            org.Addresses = await _context.Organizations
+                .AsNoTracking()
+                .Where(m => m.OrgId == guid)
+                .SelectMany(oa => oa.Addresses.Select(a => a.Address))
+                .ProjectTo<AddressDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+            org.Banks = await _context.Organizations
+                .AsNoTracking()
+                .Where(m => m.OrgId == guid)
+                .SelectMany(pb => pb.Banks.Select(a => a.BankAccount))
+                .ProjectTo<BankAccountDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+            return org;
+
         }
 
         public async Task<OrganizationDto> SaveAsync(OrganizationDto orgVM)
