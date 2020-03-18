@@ -1,17 +1,16 @@
-﻿using System;
+﻿using Fanda.Common.Extensions;
+using Fanda.Common.Models;
+using Fanda.Service.Business;
+using Fanda.ViewModel.Base;
+using Fanda.ViewModel.Business;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Fanda.Service.Business;
-using Fanda.Common.Extensions;
-using Fanda.ViewModel.Business;
-using Fanda.Common.Models;
-using System.Data.SqlClient;
-using Fanda.ViewModel.Base;
-using Microsoft.AspNetCore.Authorization;
-using System.Collections.Specialized;
 using System.Web;
-using Microsoft.EntityFrameworkCore;
 
 namespace FandaTabler.Controllers
 {

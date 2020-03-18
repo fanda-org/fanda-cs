@@ -1,6 +1,5 @@
 using AutoMapper;
 using Fanda.Common.Enums;
-using Fanda.Common.Utility;
 using Fanda.Data.Business;
 using Fanda.Data.Context;
 using Fanda.ViewModel.Business;

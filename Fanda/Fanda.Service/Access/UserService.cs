@@ -9,13 +9,9 @@ using Fanda.Service.Utility;
 using Fanda.ViewModel.Access;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Security.Claims;
-using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
@@ -240,9 +236,9 @@ namespace Fanda.Service.Access
             {
                 _context.Set<OrgUserRole>().Add(new OrgUserRole
                 {
-                    OrgId=new Guid(orgId),
-                    UserId=new Guid(user.UserId),
-                    Role=role
+                    OrgId = new Guid(orgId),
+                    UserId = new Guid(user.UserId),
+                    Role = role
                 });
                 await _context.SaveChangesAsync();
             }

@@ -1,15 +1,9 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
+﻿using Fanda.Common.Extensions;
 using Fanda.Common.Models;
-using Microsoft.AspNetCore.Authorization;
-using Fanda.Service.Business;
-using System.Linq;
-using Fanda.Common.Extensions;
-using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Fanda.ViewModel.Business;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace FandaTabler.Controllers
 {

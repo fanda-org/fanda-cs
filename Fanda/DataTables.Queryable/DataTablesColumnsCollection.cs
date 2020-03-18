@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace DataTables.Queryable
 {
@@ -52,7 +51,7 @@ namespace DataTables.Queryable
         public DataTablesColumn<T> this[string columnName]
         {
             get
-            {                
+            {
                 var column = this.FirstOrDefault(c => c.PropertyName == columnName);
                 if (column == null)
                     throw new ArgumentException($"Column \"{columnName}\" not found", nameof(columnName));

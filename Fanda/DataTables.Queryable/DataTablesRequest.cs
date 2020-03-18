@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -98,14 +97,14 @@ namespace DataTables.Queryable
         /// This constructor is useful with it's needed to create <see cref="DataTablesRequest{T}"/> from the Nancy's <a href="https://github.com/NancyFx/Nancy/blob/master/src/Nancy/Request.cs">Request.Form</a> data.
         /// </summary>
         /// <param name="form">Request form data</param>
-        public DataTablesRequest(IDictionary<string, object> form) 
+        public DataTablesRequest(IDictionary<string, object> form)
             : this(form.Aggregate(new NameValueCollection(), (k, v) => { k.Add(v.Key, v.Value.ToString()); return k; })) { }
 
         /// <summary>
         /// Creates new <see cref="DataTablesRequest{T}"/> from <see cref="Uri"/> instance.
         /// </summary>
         /// <param name="uri"><see cref="Uri"/> instance</param>
-        public DataTablesRequest(Uri uri) 
+        public DataTablesRequest(Uri uri)
             : this(uri.Query) { }
 
         /// <summary>
@@ -113,20 +112,20 @@ namespace DataTables.Queryable
         /// </summary>
         /// <param name="ajaxPostModel">Contains datatables parameters sent from client side when POST method is used.</param>
         public DataTablesRequest(DataTablesAjaxPostModel ajaxPostModel)
-            :this(ajaxPostModel.ToNameValueCollection()) {  }
+            : this(ajaxPostModel.ToNameValueCollection()) { }
 
         /// <summary>
         /// Creates new <see cref="DataTablesRequest{T}"/> from http query string.
         /// </summary>
         /// <param name="queryString"></param>
-        public DataTablesRequest(string queryString) 
+        public DataTablesRequest(string queryString)
             : this(HttpUtility.ParseQueryString(queryString)) { }
 
         /// <summary>
         /// Creates new <see cref="DataTablesRequest{T}"/> from <see cref="NameValueCollection"/> instance.
         /// </summary>
         /// <param name="query"></param>
-        public DataTablesRequest(NameValueCollection query) 
+        public DataTablesRequest(NameValueCollection query)
         {
             if (query == null)
                 throw new ArgumentNullException("Datatables query parameters collection is null.");
@@ -234,7 +233,7 @@ namespace DataTables.Queryable
                     if (column != null)
                     {
                         column.OrderingIndex = sortingIndex;
-                        column.OrderingDirection = query[$"order[{index}][dir]"] == "desc" ? 
+                        column.OrderingDirection = query[$"order[{index}][dir]"] == "desc" ?
                             ListSortDirection.Descending : ListSortDirection.Ascending;
                     }
                 }
@@ -253,7 +252,7 @@ namespace DataTables.Queryable
             if (parts.Length > 1)
             {
                 var propertyInfo = type.GetProperty(parts[0]);
-                if(propertyInfo == null)
+                if (propertyInfo == null)
                 {
                     return null;
                 }

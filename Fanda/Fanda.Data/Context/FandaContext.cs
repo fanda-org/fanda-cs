@@ -7,7 +7,6 @@ using Fanda.Data.Tracking;
 //using Microsoft.AspNetCore.Identity;
 //using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Linq;
 
 namespace Fanda.Data.Context
@@ -126,7 +125,7 @@ namespace Fanda.Data.Context
                 .Where(p => p.ClrType == typeof(decimal)))
             {
                 property.SetColumnType("decimal(16, 4)");
-                    //.Relational().ColumnType = "decimal(16, 4)";
+                //.Relational().ColumnType = "decimal(16, 4)";
             }
         }
     }

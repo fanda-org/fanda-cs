@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Fanda.Common.Extensions;
 using Fanda.Common.Models;
 using Fanda.Service.Business;
-using Fanda.Common.Extensions;
+using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
+using System.Linq;
 
 namespace Fanda.Mvc.Controllers
 {

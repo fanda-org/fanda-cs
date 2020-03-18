@@ -1,5 +1,4 @@
 ﻿using Fanda.Common.Helpers;
-using Fanda.Data.Access;
 using Fanda.Service.Access;
 using Fanda.Service.Business;
 using Fanda.Service.Commodity;
@@ -7,13 +6,9 @@ using Fanda.ViewModel.Access;
 using Fanda.ViewModel.Business;
 using Fanda.ViewModel.Commodity;
 //using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Fanda.Service.Seed
@@ -158,13 +153,14 @@ namespace Fanda.Service.Seed
         private async Task CreatePartyCategories(OrganizationViewModel org)
         {
             var service = _serviceProvider.GetRequiredService<IPartyCategoryService>();
-            if(!service.ExistsAsync("DEFAULT").Result)
+            if (!service.ExistsAsync("DEFAULT").Result)
             {
-                await service.SaveAsync(org.OrgId, new PartyCategoryViewModel {
-                    Code="DEFAULT",
-                    Name="Default",
-                    Description= "Default Category",
-                    Active=true
+                await service.SaveAsync(org.OrgId, new PartyCategoryViewModel
+                {
+                    Code = "DEFAULT",
+                    Name = "Default",
+                    Description = "Default Category",
+                    Active = true
                 });
             }
         }

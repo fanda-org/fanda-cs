@@ -73,7 +73,7 @@ namespace DataTables.Queryable
         /// Optional expression that specifies the different property which should be used if ordering by the column is required. 
         /// If no expression provided, the same property will be used for sorting as specified by <see cref="PropertyName"/> value.
         /// </summary>
-        public Expression<Func<T, object>> ColumnOrderingProperty { get; set; } 
+        public Expression<Func<T, object>> ColumnOrderingProperty { get; set; }
 
         /// <summary>
         /// Optional predicate expression that will be used to search by the searchable column when <see cref="DataTablesRequest{T}.GlobalSearchValue"/> is specified. 

@@ -1,8 +1,6 @@
-﻿using Fanda.Data.Access;
-using Fanda.Data.Context;
+﻿using Fanda.Data.Context;
 //using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using System;
@@ -26,7 +24,8 @@ namespace Fanda.Service.Data
                         break;
 
                     case "MYSQL":
-                        options.UseMySql(connectionString, mysqlOptions=> {
+                        options.UseMySql(connectionString, mysqlOptions =>
+                        {
                             mysqlOptions.ServerVersion(new Version(15, 1), ServerType.MariaDb);
                         });
                         break;

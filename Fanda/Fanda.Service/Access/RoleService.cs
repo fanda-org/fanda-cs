@@ -1,6 +1,5 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Fanda.Common.Utility;
 using Fanda.Data.Access;
 using Fanda.Data.Context;
 using Fanda.ViewModel.Access;
@@ -8,7 +7,6 @@ using Fanda.ViewModel.Access;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Fanda.Service.Access

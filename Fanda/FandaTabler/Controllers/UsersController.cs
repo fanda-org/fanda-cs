@@ -1,14 +1,13 @@
-﻿using System;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Fanda.Common.Helpers;
+﻿using Fanda.Common.Helpers;
 using Fanda.Service.Access;
 using Fanda.ViewModel.Access;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
+using System;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace FandaTabler.Controllers
 {

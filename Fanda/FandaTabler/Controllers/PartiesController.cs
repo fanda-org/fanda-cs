@@ -1,10 +1,10 @@
 ﻿using DataTables.Queryable;
 using Fanda.Common.Enums;
+using Fanda.Common.Extensions;
+using Fanda.Common.Models;
 using Fanda.Service.Business;
 using Fanda.ViewModel.Base;
 using Fanda.ViewModel.Business;
-using Fanda.Common.Extensions;
-using Fanda.Common.Models;
 //using Fanda.Common.Models.DataTables;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -13,11 +13,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace FandaTabler.Controllers
 {

@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Fanda.Data.Business;
+using Fanda.Data.Context;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Fanda.Data.Business;
-using Fanda.Data.Context;
 
 namespace Fanda.Controllers
 {

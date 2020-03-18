@@ -60,7 +60,7 @@ namespace DataTables.Queryable
                 return sourceProvider;
             }
         }
-        
+
         public IEnumerator<T> GetEnumerator()
         {
             return sourceQueryable.GetEnumerator();

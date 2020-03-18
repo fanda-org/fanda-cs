@@ -18,7 +18,6 @@ using Microsoft.Extensions.Hosting;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using System;
 using System.Linq;
-using System.Text.Json.Serialization;
 
 namespace Fanda.Mvc
 {

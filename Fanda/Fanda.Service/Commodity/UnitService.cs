@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Fanda.Common.Utility;
 using Fanda.Data.Commodity;
 using Fanda.Data.Context;
 using Fanda.ViewModel.Commodity;
@@ -92,9 +91,9 @@ namespace Fanda.Service.Commodity
         public async Task<bool> DeleteAsync(string unitId)
         {
             Unit unit = null;
-            if(!string.IsNullOrEmpty(unitId))
-            unit = await _context.Units
-                .FindAsync(unitId);
+            if (!string.IsNullOrEmpty(unitId))
+                unit = await _context.Units
+                    .FindAsync(unitId);
             if (unit != null)
             {
                 _context.Units.Remove(unit);

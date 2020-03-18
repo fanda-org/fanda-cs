@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataTables.Queryable
 {
@@ -133,7 +129,7 @@ namespace DataTables.Queryable
             model[$"search[value]"] = Search.Value;
             model[$"search[regex]"] = Search.Regex.ToString();
 
-            for (int i = 0; i< Columns.Count; i++)
+            for (int i = 0; i < Columns.Count; i++)
             {
                 model[$"columns[{i}][data]"] = Columns[i].Data;
                 model[$"columns[{i}][name]"] = Columns[i].Name;

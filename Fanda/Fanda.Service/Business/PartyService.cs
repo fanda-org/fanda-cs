@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Fanda.Common.Utility;
 using Fanda.Data.Business;
 using Fanda.Data.Context;
 using Fanda.ViewModel.Base;

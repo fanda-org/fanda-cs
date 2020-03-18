@@ -1,5 +1,3 @@
-using System;
-
 namespace Fanda.Common.Models
 {
     public class ErrorViewModel

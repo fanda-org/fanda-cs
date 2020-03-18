@@ -1,7 +1,5 @@
 ﻿using Fanda.Data.Access;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Fanda.Data.Business
 {
@@ -13,7 +11,7 @@ namespace Fanda.Data.Business
 
         //public Organization Organization { get; set; }
         //public User User { get; set; }
-        public OrgUser OrgUser { get;set; }
+        public OrgUser OrgUser { get; set; }
         public Role Role { get; set; }
     }
 }

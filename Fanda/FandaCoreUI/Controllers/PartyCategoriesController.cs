@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Threading.Tasks;
-using DataTables.Queryable;
+﻿using DataTables.Queryable;
 using Fanda.Common.Extensions;
 using Fanda.Common.Models;
 using Fanda.Service.Business;
 using Fanda.ViewModel.Business;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Primitives;
-using Newtonsoft.Json;
+using System;
+using System.Data.SqlClient;
+using System.Threading.Tasks;
 //using Sieve.Models;
 //using Sieve.Services;
 
