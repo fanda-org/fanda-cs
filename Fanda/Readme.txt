@@ -19,3 +19,6 @@ https://andrewlock.net/introduction-to-authentication-with-asp-net-core/
 
 Account confirmation and password recovery in ASP.NET Core - Send Email using SendGrid
 https://docs.microsoft.com/en-us/aspnet/core/security/authentication/accconfirm?view=aspnetcore-2.2&tabs=visual-studio
+
+Refit - REST
+LazyCache

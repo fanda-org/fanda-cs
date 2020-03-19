@@ -5,6 +5,6 @@
 *.suo
 .vs
 .vscode
-bin
-node_modules
-obj
+bin/
+node_modules/
+obj/

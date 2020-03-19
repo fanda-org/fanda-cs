@@ -317,9 +317,6 @@ D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaCoreUI\bin\Debug\netcoreapp3
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaCoreUI\bin\Debug\netcoreapp3.1\Microsoft.Extensions.PlatformAbstractions.dll
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaCoreUI\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Primitives.dll
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaCoreUI\bin\Debug\netcoreapp3.1\Microsoft.Identity.Client.dll
-D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaCoreUI\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.JsonWebTokens.dll
-D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaCoreUI\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Logging.dll
-D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaCoreUI\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Tokens.dll
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaCoreUI\bin\Debug\netcoreapp3.1\Microsoft.VisualStudio.Web.CodeGeneration.dll
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaCoreUI\bin\Debug\netcoreapp3.1\Microsoft.VisualStudio.Web.CodeGeneration.Contracts.dll
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaCoreUI\bin\Debug\netcoreapp3.1\Microsoft.VisualStudio.Web.CodeGeneration.Core.dll
@@ -348,7 +345,6 @@ D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaCoreUI\bin\Debug\netcoreapp3
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaCoreUI\bin\Debug\netcoreapp3.1\System.Composition.TypedParts.dll
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaCoreUI\bin\Debug\netcoreapp3.1\System.Configuration.ConfigurationManager.dll
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaCoreUI\bin\Debug\netcoreapp3.1\System.Diagnostics.PerformanceCounter.dll
-D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaCoreUI\bin\Debug\netcoreapp3.1\System.IdentityModel.Tokens.Jwt.dll
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaCoreUI\bin\Debug\netcoreapp3.1\System.Runtime.Caching.dll
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaCoreUI\bin\Debug\netcoreapp3.1\System.Security.Cryptography.ProtectedData.dll
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaCoreUI\bin\Debug\netcoreapp3.1\System.Text.Json.dll

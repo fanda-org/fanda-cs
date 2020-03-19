@@ -23,17 +23,14 @@ namespace Fanda.Data.Context
                     connectionString = configuration.GetConnectionString("MsSqlConnection");
                     builder.UseSqlServer(connectionString);
                     break;
-
                 case "MYSQL":
                     connectionString = configuration.GetConnectionString("MySqlConnection");
                     builder.UseMySql(connectionString);
                     break;
-
                 case "PGSQL":
                     connectionString = configuration.GetConnectionString("PgSqlConnection");
                     builder.UseNpgsql(connectionString);
                     break;
-
                 default:
                     throw new System.Exception("Unknown database type from appsettings");
             }

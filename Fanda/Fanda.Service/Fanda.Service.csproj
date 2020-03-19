@@ -1,28 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-    <!--<RuntimeFrameworkVersion>2.1.2</RuntimeFrameworkVersion>-->
+    <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Accounting\**" />
-    <Compile Remove="Extensions\**" />
-    <Compile Remove="Tracking\**" />
-    <EmbeddedResource Remove="Accounting\**" />
-    <EmbeddedResource Remove="Extensions\**" />
-    <EmbeddedResource Remove="Tracking\**" />
-    <None Remove="Accounting\**" />
-    <None Remove="Extensions\**" />
-    <None Remove="Tracking\**" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <Compile Remove="Extensions\Message.cs" />
+    <Compile Remove="Extensions\PagedList.cs" />
     <Compile Remove="IdentityServerConfig.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="Extensions\InitializeContext.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,7 +17,7 @@
     <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.19" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.2" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.1" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.6.0" />
+    <!--<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.6.0" />-->
   </ItemGroup>
 
   <ItemGroup>
