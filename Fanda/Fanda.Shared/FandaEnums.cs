@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace Fanda.Shared.Enums
+namespace Fanda.Shared
 {
     public static class FandaEnums
     {

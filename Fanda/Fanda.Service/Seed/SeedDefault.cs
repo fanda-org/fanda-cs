@@ -1,5 +1,5 @@
 ﻿using Fanda.Dto;
-using Fanda.Shared.Config;
+using Fanda.Shared;
 //using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;

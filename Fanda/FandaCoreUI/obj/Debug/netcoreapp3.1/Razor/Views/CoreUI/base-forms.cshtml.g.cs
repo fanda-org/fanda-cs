@@ -14,14 +14,14 @@ namespace AspNetCore
     using Microsoft.AspNetCore.Mvc.ViewFeatures;
 #nullable restore
 #line 1 "D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaCoreUI\Views\_ViewImports.cshtml"
-using Fanda.Mvc;
+using FandaCoreUI;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
 #line 2 "D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaCoreUI\Views\_ViewImports.cshtml"
-using Fanda.Shared.Models;
+using FandaCoreUI.Extensions;
 
 #line default
 #line hidden
@@ -35,27 +35,13 @@ using Fanda.Dto;
 #nullable disable
 #nullable restore
 #line 4 "D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaCoreUI\Views\_ViewImports.cshtml"
-using Fanda.Shared.Enums;
-
-#line default
-#line hidden
-#nullable disable
-#nullable restore
-#line 5 "D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaCoreUI\Views\_ViewImports.cshtml"
-using Fanda.Shared.Extensions;
-
-#line default
-#line hidden
-#nullable disable
-#nullable restore
-#line 6 "D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaCoreUI\Views\_ViewImports.cshtml"
-using FandaCoreUI.Extensions;
+using Fanda.Shared;
 
 #line default
 #line hidden
 #nullable disable
     [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"1d312bd0988ee5804de267a696393f5e87a6f071", @"/Views/CoreUI/base-forms.cshtml")]
-    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"19f07351583c639af577b61754b3ed16299ad254", @"/Views/_ViewImports.cshtml")]
+    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"f17fc0d007cc7338106c312cff473596613e7c1a", @"/Views/_ViewImports.cshtml")]
     public class Views_CoreUI_base_forms : global::Microsoft.AspNetCore.Mvc.Razor.RazorPage<dynamic>
     {
         private static readonly global::Microsoft.AspNetCore.Razor.TagHelpers.TagHelperAttribute __tagHelperAttribute_0 = new global::Microsoft.AspNetCore.Razor.TagHelpers.TagHelperAttribute("value", "0", global::Microsoft.AspNetCore.Razor.TagHelpers.HtmlAttributeValueStyle.DoubleQuotes);
@@ -132,7 +118,7 @@ using FandaCoreUI.Extensions;
             <select class=""form-control"" id=""ccmonth"">
   ");
             WriteLiteral("            ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07110189", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f0719795", async() => {
                 WriteLiteral("1");
             }
             );
@@ -146,7 +132,7 @@ using FandaCoreUI.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\n              ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07111155", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07110760", async() => {
                 WriteLiteral("2");
             }
             );
@@ -160,7 +146,7 @@ using FandaCoreUI.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\n              ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07112121", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07111726", async() => {
                 WriteLiteral("3");
             }
             );
@@ -174,7 +160,7 @@ using FandaCoreUI.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\n              ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07113087", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07112692", async() => {
                 WriteLiteral("4");
             }
             );
@@ -188,7 +174,7 @@ using FandaCoreUI.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\n              ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07114053", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07113658", async() => {
                 WriteLiteral("5");
             }
             );
@@ -202,7 +188,7 @@ using FandaCoreUI.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\n              ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07115019", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07114624", async() => {
                 WriteLiteral("6");
             }
             );
@@ -216,7 +202,7 @@ using FandaCoreUI.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\n              ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07115985", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07115590", async() => {
                 WriteLiteral("7");
             }
             );
@@ -230,7 +216,7 @@ using FandaCoreUI.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\n              ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07116951", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07116556", async() => {
                 WriteLiteral("8");
             }
             );
@@ -244,7 +230,7 @@ using FandaCoreUI.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\n              ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07117917", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07117522", async() => {
                 WriteLiteral("9");
             }
             );
@@ -258,7 +244,7 @@ using FandaCoreUI.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\n              ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07118883", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07118488", async() => {
                 WriteLiteral("10");
             }
             );
@@ -272,7 +258,7 @@ using FandaCoreUI.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\n              ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07119850", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07119455", async() => {
                 WriteLiteral("11");
             }
             );
@@ -286,7 +272,7 @@ using FandaCoreUI.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\n              ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07120817", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07120422", async() => {
                 WriteLiteral("12");
             }
             );
@@ -300,7 +286,7 @@ using FandaCoreUI.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\n            </select>\n          </div>\n          <div class=\"form-group col-sm-4\">\n            <label for=\"ccyear\">Year</label>\n            <select class=\"form-control\" id=\"ccyear\">\n              ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07121979", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07121584", async() => {
                 WriteLiteral("2014");
             }
             );
@@ -314,7 +300,7 @@ using FandaCoreUI.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\n              ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07122948", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07122553", async() => {
                 WriteLiteral("2015");
             }
             );
@@ -328,7 +314,7 @@ using FandaCoreUI.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\n              ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07123917", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07123522", async() => {
                 WriteLiteral("2016");
             }
             );
@@ -342,7 +328,7 @@ using FandaCoreUI.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\n              ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07124886", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07124491", async() => {
                 WriteLiteral("2017");
             }
             );
@@ -356,7 +342,7 @@ using FandaCoreUI.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\n              ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07125855", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07125460", async() => {
                 WriteLiteral("2018");
             }
             );
@@ -370,7 +356,7 @@ using FandaCoreUI.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\n              ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07126824", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07126429", async() => {
                 WriteLiteral("2019");
             }
             );
@@ -384,7 +370,7 @@ using FandaCoreUI.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\n              ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07127793", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07127398", async() => {
                 WriteLiteral("2020");
             }
             );
@@ -398,7 +384,7 @@ using FandaCoreUI.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\n              ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07128762", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07128367", async() => {
                 WriteLiteral("2021");
             }
             );
@@ -412,7 +398,7 @@ using FandaCoreUI.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\n              ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07129731", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07129336", async() => {
                 WriteLiteral("2022");
             }
             );
@@ -426,7 +412,7 @@ using FandaCoreUI.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\n              ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07130700", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07130305", async() => {
                 WriteLiteral("2023");
             }
             );
@@ -440,7 +426,7 @@ using FandaCoreUI.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\n              ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07131669", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07131274", async() => {
                 WriteLiteral("2024");
             }
             );
@@ -454,7 +440,7 @@ using FandaCoreUI.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\n              ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07132638", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07132243", async() => {
                 WriteLiteral("2025");
             }
             );
@@ -532,7 +518,7 @@ using FandaCoreUI.Extensions;
       </div>
       <div class=""card-body"">
         ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07135761", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07135366", async() => {
                 WriteLiteral(@"
           <div class=""form-group row"">
             <label class=""col-md-3 col-form-label"">Static</label>
@@ -575,7 +561,7 @@ using FandaCoreUI.Extensions;
             </div>
       ");
                 WriteLiteral("    </div>\n          <div class=\"form-group row\">\n            <label class=\"col-md-3 col-form-label\" for=\"select1\">Select</label>\n            <div class=\"col-md-9\">\n              <select id=\"select1\" name=\"select1\" class=\"form-control\">\n                ");
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07138512", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07138117", async() => {
                     WriteLiteral("Please select");
                 }
                 );
@@ -591,7 +577,7 @@ using FandaCoreUI.Extensions;
                 Write(__tagHelperExecutionContext.Output);
                 __tagHelperExecutionContext = __tagHelperScopeManager.End();
                 WriteLiteral("\n                ");
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07139757", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07139362", async() => {
                     WriteLiteral("Option #1");
                 }
                 );
@@ -607,7 +593,7 @@ using FandaCoreUI.Extensions;
                 Write(__tagHelperExecutionContext.Output);
                 __tagHelperExecutionContext = __tagHelperScopeManager.End();
                 WriteLiteral("\n                ");
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07140998", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07140603", async() => {
                     WriteLiteral("Option #2");
                 }
                 );
@@ -623,7 +609,7 @@ using FandaCoreUI.Extensions;
                 Write(__tagHelperExecutionContext.Output);
                 __tagHelperExecutionContext = __tagHelperScopeManager.End();
                 WriteLiteral("\n                ");
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07142239", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07141844", async() => {
                     WriteLiteral("Option #3");
                 }
                 );
@@ -647,7 +633,7 @@ using FandaCoreUI.Extensions;
             <div class=""col-md-9"">
               <select id=""select2"" name=""select2"" class=""form-control form-control-lg"">
                 ");
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07143802", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07143407", async() => {
                     WriteLiteral("Please select");
                 }
                 );
@@ -663,7 +649,7 @@ using FandaCoreUI.Extensions;
                 Write(__tagHelperExecutionContext.Output);
                 __tagHelperExecutionContext = __tagHelperScopeManager.End();
                 WriteLiteral("\n                ");
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07145047", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07144652", async() => {
                     WriteLiteral("Option #1");
                 }
                 );
@@ -679,7 +665,7 @@ using FandaCoreUI.Extensions;
                 Write(__tagHelperExecutionContext.Output);
                 __tagHelperExecutionContext = __tagHelperScopeManager.End();
                 WriteLiteral("\n                ");
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07146288", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07145893", async() => {
                     WriteLiteral("Option #2");
                 }
                 );
@@ -695,7 +681,7 @@ using FandaCoreUI.Extensions;
                 Write(__tagHelperExecutionContext.Output);
                 __tagHelperExecutionContext = __tagHelperScopeManager.End();
                 WriteLiteral("\n                ");
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07147529", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07147134", async() => {
                     WriteLiteral("Option #3");
                 }
                 );
@@ -719,7 +705,7 @@ using FandaCoreUI.Extensions;
             <div class=""col-md-9"">
               <select id=""select3"" name=""select3"" class=""form-control form-control-sm"">
                 ");
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07149092", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07148697", async() => {
                     WriteLiteral("Please select");
                 }
                 );
@@ -735,7 +721,7 @@ using FandaCoreUI.Extensions;
                 Write(__tagHelperExecutionContext.Output);
                 __tagHelperExecutionContext = __tagHelperScopeManager.End();
                 WriteLiteral("\n                ");
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07150337", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07149942", async() => {
                     WriteLiteral("Option #1");
                 }
                 );
@@ -751,7 +737,7 @@ using FandaCoreUI.Extensions;
                 Write(__tagHelperExecutionContext.Output);
                 __tagHelperExecutionContext = __tagHelperScopeManager.End();
                 WriteLiteral("\n                ");
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07151578", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07151183", async() => {
                     WriteLiteral("Option #2");
                 }
                 );
@@ -767,7 +753,7 @@ using FandaCoreUI.Extensions;
                 Write(__tagHelperExecutionContext.Output);
                 __tagHelperExecutionContext = __tagHelperScopeManager.End();
                 WriteLiteral("\n                ");
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07152819", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07152424", async() => {
                     WriteLiteral("Option #3");
                 }
                 );
@@ -791,7 +777,7 @@ using FandaCoreUI.Extensions;
             <div class=""col-md-9"">
               <select id=""disabledSelect"" class=""form-control"" disabled>
                 ");
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07154375", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07153980", async() => {
                     WriteLiteral("Please select");
                 }
                 );
@@ -807,7 +793,7 @@ using FandaCoreUI.Extensions;
                 Write(__tagHelperExecutionContext.Output);
                 __tagHelperExecutionContext = __tagHelperScopeManager.End();
                 WriteLiteral("\n                ");
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07155620", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07155225", async() => {
                     WriteLiteral("Option #1");
                 }
                 );
@@ -823,7 +809,7 @@ using FandaCoreUI.Extensions;
                 Write(__tagHelperExecutionContext.Output);
                 __tagHelperExecutionContext = __tagHelperScopeManager.End();
                 WriteLiteral("\n                ");
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07156861", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07156466", async() => {
                     WriteLiteral("Option #2");
                 }
                 );
@@ -839,7 +825,7 @@ using FandaCoreUI.Extensions;
                 Write(__tagHelperExecutionContext.Output);
                 __tagHelperExecutionContext = __tagHelperScopeManager.End();
                 WriteLiteral("\n                ");
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07158102", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07157707", async() => {
                     WriteLiteral("Option #3");
                 }
                 );
@@ -863,7 +849,7 @@ using FandaCoreUI.Extensions;
             <div class=""col-md-9"">
               <select id=""multiple-select"" name=""multiple-select"" class=""form-control"" size=""5"" multiple>
                 ");
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07159696", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07159301", async() => {
                     WriteLiteral("Option #1");
                 }
                 );
@@ -879,7 +865,7 @@ using FandaCoreUI.Extensions;
                 Write(__tagHelperExecutionContext.Output);
                 __tagHelperExecutionContext = __tagHelperScopeManager.End();
                 WriteLiteral("\n                ");
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07160937", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07160542", async() => {
                     WriteLiteral("Option #2");
                 }
                 );
@@ -895,7 +881,7 @@ using FandaCoreUI.Extensions;
                 Write(__tagHelperExecutionContext.Output);
                 __tagHelperExecutionContext = __tagHelperScopeManager.End();
                 WriteLiteral("\n                ");
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07162178", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07161783", async() => {
                     WriteLiteral("Option #3");
                 }
                 );
@@ -911,7 +897,7 @@ using FandaCoreUI.Extensions;
                 Write(__tagHelperExecutionContext.Output);
                 __tagHelperExecutionContext = __tagHelperScopeManager.End();
                 WriteLiteral("\n                ");
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07163419", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07163024", async() => {
                     WriteLiteral("Option #4");
                 }
                 );
@@ -927,7 +913,7 @@ using FandaCoreUI.Extensions;
                 Write(__tagHelperExecutionContext.Output);
                 __tagHelperExecutionContext = __tagHelperScopeManager.End();
                 WriteLiteral("\n                ");
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07164660", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07164265", async() => {
                     WriteLiteral("Option #5");
                 }
                 );
@@ -943,7 +929,7 @@ using FandaCoreUI.Extensions;
                 Write(__tagHelperExecutionContext.Output);
                 __tagHelperExecutionContext = __tagHelperScopeManager.End();
                 WriteLiteral("\n                ");
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07165901", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07165506", async() => {
                     WriteLiteral("Option #6");
                 }
                 );
@@ -959,7 +945,7 @@ using FandaCoreUI.Extensions;
                 Write(__tagHelperExecutionContext.Output);
                 __tagHelperExecutionContext = __tagHelperScopeManager.End();
                 WriteLiteral("\n                ");
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07167142", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07166747", async() => {
                     WriteLiteral("Option #7");
                 }
                 );
@@ -975,7 +961,7 @@ using FandaCoreUI.Extensions;
                 Write(__tagHelperExecutionContext.Output);
                 __tagHelperExecutionContext = __tagHelperScopeManager.End();
                 WriteLiteral("\n                ");
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07168383", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07167988", async() => {
                     WriteLiteral("Option #8");
                 }
                 );
@@ -991,7 +977,7 @@ using FandaCoreUI.Extensions;
                 Write(__tagHelperExecutionContext.Output);
                 __tagHelperExecutionContext = __tagHelperScopeManager.End();
                 WriteLiteral("\n                ");
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07169624", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07169229", async() => {
                     WriteLiteral("Option #9");
                 }
                 );
@@ -1007,7 +993,7 @@ using FandaCoreUI.Extensions;
                 Write(__tagHelperExecutionContext.Output);
                 __tagHelperExecutionContext = __tagHelperScopeManager.End();
                 WriteLiteral("\n                ");
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07170865", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07170470", async() => {
                     WriteLiteral("Option #10");
                 }
                 );
@@ -1167,7 +1153,7 @@ using FandaCoreUI.Extensions;
       </div>
       <div class=""card-body"">
         ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07179506", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07179111", async() => {
                 WriteLiteral(@"
           <div class=""form-group"">
             <label for=""exampleInputName2"">Name</label>
@@ -1215,7 +1201,7 @@ using FandaCoreUI.Extensions;
       </div>
       <div class=""card-body"">
         ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07182098", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07181703", async() => {
                 WriteLiteral(@"
           <div class=""form-group row"">
             <label class=""col-md-3 col-form-label"" for=""hf-email"">Email</label>
@@ -1267,7 +1253,7 @@ using FandaCoreUI.Extensions;
       </div>
       <div class=""card-body"">
         ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07185005", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07184610", async() => {
                 WriteLiteral(@"
           <div class=""form-group"">
             <label for=""nf-email"">Email</label>
@@ -1314,7 +1300,7 @@ using FandaCoreUI.Extensions;
       </div>
       <div class=""card-body"">
         ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07187631", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07187236", async() => {
                 WriteLiteral(@"
 
           <div class=""form-group row"">
@@ -1404,7 +1390,7 @@ using FandaCoreUI.Extensions;
       </div>
       <div class=""card-body"">
         ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07191753", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07191358", async() => {
                 WriteLiteral(@"
           <div class=""form-group row"">
             <label class=""col-sm-5 col-form-label"" for=""input-small"">Small Input</label>
@@ -1510,7 +1496,7 @@ using FandaCoreUI.Extensions;
     <div class=""card"">
       ");
             WriteLiteral("<div class=\"card-header\">\n        <strong>Icon/Text</strong>\n        Groups\n      </div>\n      <div class=\"card-body\">\n        ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07196738", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f07196343", async() => {
                 WriteLiteral(@"
           <div class=""form-group row"">
             <div class=""col-md-12"">
@@ -1590,7 +1576,7 @@ using FandaCoreUI.Extensions;
       </div>
       <div class=""card-body"">
         ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f071100574", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f071100179", async() => {
                 WriteLiteral(@"
           <div class=""form-group row"">
             <div class=""col-md-12"">
@@ -1670,7 +1656,7 @@ using FandaCoreUI.Extensions;
       </div>
       <div class=""card-body"">
         ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f071104514", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f071104119", async() => {
                 WriteLiteral(@"
           <div class=""form-group row"">
             <div class=""col-md-12"">
@@ -1791,7 +1777,7 @@ using FandaCoreUI.Extensions;
       </div>
       <div class=""card-body"">
         ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f071110888", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f071110493", async() => {
                 WriteLiteral(@"
           <div class=""form-group row"">
             <div class=""col-md-8"">
@@ -1873,7 +1859,7 @@ using FandaCoreUI.Extensions;
       </div>
       <div class=""card-body"">
         ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f071114952", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f071114557", async() => {
                 WriteLiteral(@"
           <div class=""form-group row"">
             <div class=""col-4"">
@@ -1954,7 +1940,7 @@ using FandaCoreUI.Extensions;
       </div>
       <div class=""card-body"">
         ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f071118903", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f071118508", async() => {
                 WriteLiteral(@"
           <div class=""form-group"">
             <div class=""input-group"">
@@ -2017,7 +2003,7 @@ using FandaCoreUI.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\n      </div>\n    </div>\n  </div>\n  <div class=\"col-sm-4\">\n    <div class=\"card\">\n      <div class=\"card-header\">\n        Example Form\n      </div>\n      <div class=\"card-body\">\n        ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f071122425", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f071122030", async() => {
                 WriteLiteral(@"
           <div class=""form-group"">
             <div class=""input-group"">
@@ -2071,7 +2057,7 @@ using FandaCoreUI.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\n      </div>\n    </div>\n  </div>\n  <div class=\"col-sm-4\">\n    <div class=\"card\">\n      <div class=\"card-header\">\n        Example Form\n      </div>\n      <div class=\"card-body\">\n        ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f071125616", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f071125221", async() => {
                 WriteLiteral(@"
           <div class=""form-group"">
             <div class=""input-group"">
@@ -2149,7 +2135,7 @@ using FandaCoreUI.Extensions;
       </div>
       <div class=""card-body collapse show"" id=""collapseExample"">
         ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f071129373", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1d312bd0988ee5804de267a696393f5e87a6f071128978", async() => {
                 WriteLiteral(@"
           <div class=""form-group"">
             <label class=""col-form-label"" for=""prependedInput"">Prepended text</label>

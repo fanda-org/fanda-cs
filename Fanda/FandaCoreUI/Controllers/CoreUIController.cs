@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Fanda.Mvc.Controllers
+namespace FandaCoreUI.Controllers
 {
     [Route("CoreUI")]
     public class CoreUIController : Controller

@@ -1,7 +1,7 @@
 ﻿using DataTables.Queryable;
 using Fanda.Dto;
 using Fanda.Service;
-using Fanda.Shared.Models;
+using Fanda.Shared;
 using FandaCoreUI.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

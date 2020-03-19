@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Fanda.Shared.Utility
+namespace Fanda.Shared
 {
     public static class PasswordStorage
     {

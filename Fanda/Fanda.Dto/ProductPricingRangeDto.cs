@@ -1,4 +1,4 @@
-﻿using Fanda.Shared.Enums;
+﻿using Fanda.Shared;
 using System;
 
 namespace Fanda.Dto

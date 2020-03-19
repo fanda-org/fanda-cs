@@ -1,4 +1,4 @@
-﻿namespace Fanda.Shared.Config
+﻿namespace Fanda.Shared
 {
     public class AppSettings
     {

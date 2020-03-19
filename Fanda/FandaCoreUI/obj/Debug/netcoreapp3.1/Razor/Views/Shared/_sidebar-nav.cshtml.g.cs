@@ -14,14 +14,14 @@ namespace AspNetCore
     using Microsoft.AspNetCore.Mvc.ViewFeatures;
 #nullable restore
 #line 1 "D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaCoreUI\Views\_ViewImports.cshtml"
-using Fanda.Mvc;
+using FandaCoreUI;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
 #line 2 "D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaCoreUI\Views\_ViewImports.cshtml"
-using Fanda.Shared.Models;
+using FandaCoreUI.Extensions;
 
 #line default
 #line hidden
@@ -35,27 +35,13 @@ using Fanda.Dto;
 #nullable disable
 #nullable restore
 #line 4 "D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaCoreUI\Views\_ViewImports.cshtml"
-using Fanda.Shared.Enums;
-
-#line default
-#line hidden
-#nullable disable
-#nullable restore
-#line 5 "D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaCoreUI\Views\_ViewImports.cshtml"
-using Fanda.Shared.Extensions;
-
-#line default
-#line hidden
-#nullable disable
-#nullable restore
-#line 6 "D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaCoreUI\Views\_ViewImports.cshtml"
-using FandaCoreUI.Extensions;
+using Fanda.Shared;
 
 #line default
 #line hidden
 #nullable disable
     [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"5f748781ddceaa314de47c605e94ba35d80916f9", @"/Views/Shared/_sidebar-nav.cshtml")]
-    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"19f07351583c639af577b61754b3ed16299ad254", @"/Views/_ViewImports.cshtml")]
+    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"f17fc0d007cc7338106c312cff473596613e7c1a", @"/Views/_ViewImports.cshtml")]
     public class Views_Shared__sidebar_nav : global::Microsoft.AspNetCore.Mvc.Razor.RazorPage<dynamic>
     {
         private static readonly global::Microsoft.AspNetCore.Razor.TagHelpers.TagHelperAttribute __tagHelperAttribute_0 = new global::Microsoft.AspNetCore.Razor.TagHelpers.TagHelperAttribute("class", new global::Microsoft.AspNetCore.Html.HtmlString("nav-link"), global::Microsoft.AspNetCore.Razor.TagHelpers.HtmlAttributeValueStyle.DoubleQuotes);
@@ -98,7 +84,7 @@ using FandaCoreUI.Extensions;
         public async override global::System.Threading.Tasks.Task ExecuteAsync()
         {
             WriteLiteral("<nav class=\"sidebar-nav\">\r\n    <ul class=\"nav\">\r\n        <li class=\"nav-item\">\r\n            ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "5f748781ddceaa314de47c605e94ba35d80916f98771", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "5f748781ddceaa314de47c605e94ba35d80916f98377", async() => {
                 WriteLiteral("\r\n                <i class=\"nav-icon icon-speedometer\"></i> Dashboard\r\n");
                 WriteLiteral("            ");
             }
@@ -126,7 +112,7 @@ using FandaCoreUI.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n        </li>\r\n\r\n        <li class=\"nav-title\">Transactions</li>\r\n        <li class=\"nav-item\">\r\n            ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "5f748781ddceaa314de47c605e94ba35d80916f911168", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "5f748781ddceaa314de47c605e94ba35d80916f910774", async() => {
                 WriteLiteral("\r\n                <i class=\"nav-icon icon-basket-loaded\"></i> Sales\r\n            ");
             }
             );
@@ -153,7 +139,7 @@ using FandaCoreUI.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n        </li>\r\n        <li class=\"nav-item\">\r\n            ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "5f748781ddceaa314de47c605e94ba35d80916f913472", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "5f748781ddceaa314de47c605e94ba35d80916f913078", async() => {
                 WriteLiteral("\r\n                <i class=\"nav-icon icon-bag\"></i> Purchases\r\n            ");
             }
             );
@@ -190,7 +176,7 @@ using FandaCoreUI.Extensions;
             <ul class=""nav-dropdown-items"">
                 <li class=""nav-item"">
                     ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "5f748781ddceaa314de47c605e94ba35d80916f916071", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "5f748781ddceaa314de47c605e94ba35d80916f915677", async() => {
                 WriteLiteral("\r\n                        <i class=\"nav-icon icon-puzzle\"></i> Goods and Services\r\n                    ");
             }
             );
@@ -217,7 +203,7 @@ using FandaCoreUI.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n                </li>\r\n                <li class=\"nav-item\">\r\n                    ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "5f748781ddceaa314de47c605e94ba35d80916f918421", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "5f748781ddceaa314de47c605e94ba35d80916f918027", async() => {
                 WriteLiteral("\r\n                        <i class=\"nav-icon icon-puzzle\"></i> Categories\r\n                    ");
             }
             );
@@ -244,7 +230,7 @@ using FandaCoreUI.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n                </li>\r\n                <li class=\"nav-item\">\r\n                    ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "5f748781ddceaa314de47c605e94ba35d80916f920763", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "5f748781ddceaa314de47c605e94ba35d80916f920369", async() => {
                 WriteLiteral("\r\n                        <i class=\"nav-icon icon-puzzle\"></i> Units\r\n                    ");
             }
             );
@@ -281,7 +267,7 @@ using FandaCoreUI.Extensions;
             <ul class=""nav-dropdown-items"">
                 <li class=""nav-item"">
                     ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "5f748781ddceaa314de47c605e94ba35d80916f923373", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "5f748781ddceaa314de47c605e94ba35d80916f922979", async() => {
                 WriteLiteral("\r\n                        <i class=\"nav-icon icon-cursor\"></i> Brands\r\n                    ");
             }
             );
@@ -308,7 +294,7 @@ using FandaCoreUI.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n                </li>\r\n                <li class=\"nav-item\">\r\n                    ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "5f748781ddceaa314de47c605e94ba35d80916f925711", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "5f748781ddceaa314de47c605e94ba35d80916f925317", async() => {
                 WriteLiteral("\r\n                        <i class=\"nav-icon icon-cursor\"></i> Segments\r\n                    ");
             }
             );
@@ -335,7 +321,7 @@ using FandaCoreUI.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n                </li>\r\n                <li class=\"nav-item\">\r\n                    ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "5f748781ddceaa314de47c605e94ba35d80916f928051", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "5f748781ddceaa314de47c605e94ba35d80916f927657", async() => {
                 WriteLiteral("\r\n                        <i class=\"nav-icon icon-cursor\"></i> Varieties\r\n                    ");
             }
             );
@@ -374,7 +360,7 @@ using FandaCoreUI.Extensions;
             <ul class=""nav-dropdown-items"">
                 <li class=""nav-item"">
                     ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "5f748781ddceaa314de47c605e94ba35d80916f930715", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "5f748781ddceaa314de47c605e94ba35d80916f930321", async() => {
                 WriteLiteral("\r\n                        <i class=\"nav-icon icon-credit-card\"></i> Business Contacts\r\n                    ");
             }
             );
@@ -395,7 +381,7 @@ using FandaCoreUI.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n                </li>\r\n                <li class=\"nav-item\">\r\n                    ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "5f748781ddceaa314de47c605e94ba35d80916f932557", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "5f748781ddceaa314de47c605e94ba35d80916f932163", async() => {
                 WriteLiteral("\r\n                        <i class=\"nav-icon icon-briefcase\"></i> Contact Categories\r\n                    ");
             }
             );
@@ -416,7 +402,7 @@ using FandaCoreUI.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n                </li>\r\n                <li class=\"nav-item\">\r\n                    ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "5f748781ddceaa314de47c605e94ba35d80916f934398", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "5f748781ddceaa314de47c605e94ba35d80916f934004", async() => {
                 WriteLiteral("\r\n                        <i class=\"nav-icon icon-wallet\"></i> Banks\r\n                    ");
             }
             );
@@ -454,7 +440,7 @@ using FandaCoreUI.Extensions;
             <ul class=""nav-dropdown-items"">
                 <li class=""nav-item"">
                     ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "5f748781ddceaa314de47c605e94ba35d80916f937064", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "5f748781ddceaa314de47c605e94ba35d80916f936670", async() => {
                 WriteLiteral("\r\n                        <i class=\"nav-icon icon-cursor\"></i> Sales Reports\r\n                    ");
             }
             );
@@ -481,7 +467,7 @@ using FandaCoreUI.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n                </li>\r\n                <li class=\"nav-item\">\r\n                    ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "5f748781ddceaa314de47c605e94ba35d80916f939409", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "5f748781ddceaa314de47c605e94ba35d80916f939015", async() => {
                 WriteLiteral("\r\n                        <i class=\"nav-icon icon-cursor\"></i> Purchase Reports\r\n                    ");
             }
             );
@@ -508,7 +494,7 @@ using FandaCoreUI.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n                </li>\r\n                <li class=\"nav-item\">\r\n                    ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "5f748781ddceaa314de47c605e94ba35d80916f941757", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "5f748781ddceaa314de47c605e94ba35d80916f941363", async() => {
                 WriteLiteral("\r\n                        <i class=\"nav-icon icon-cursor\"></i> Stock Reports\r\n                    ");
             }
             );
@@ -535,7 +521,7 @@ using FandaCoreUI.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n                </li>\r\n            </ul>\r\n        </li>\r\n\r\n        <li class=\"nav-item mt-auto\">\r\n            ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "5f748781ddceaa314de47c605e94ba35d80916f944138", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "5f748781ddceaa314de47c605e94ba35d80916f943744", async() => {
                 WriteLiteral("\r\n                <i class=\"nav-icon icon-wrench\"></i> Organization Setup\r\n            ");
             }
             );
@@ -562,7 +548,7 @@ using FandaCoreUI.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n        </li>\r\n        <li class=\"nav-item\">\r\n            ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "5f748781ddceaa314de47c605e94ba35d80916f946451", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "5f748781ddceaa314de47c605e94ba35d80916f946057", async() => {
                 WriteLiteral("\r\n                <i class=\"nav-icon icon-settings\"></i> Settings\r\n            ");
             }
             );

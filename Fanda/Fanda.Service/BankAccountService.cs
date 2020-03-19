@@ -2,7 +2,7 @@ using AutoMapper;
 using Fanda.Data.Context;
 using Fanda.Data.Models;
 using Fanda.Dto;
-using Fanda.Shared.Enums;
+using Fanda.Shared;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

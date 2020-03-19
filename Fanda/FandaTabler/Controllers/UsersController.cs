@@ -1,7 +1,7 @@
 ﻿using Fanda.Dto;
 using Fanda.Dto.ViewModels;
 using Fanda.Service;
-using Fanda.Shared.Helpers;
+using Fanda.Shared;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;

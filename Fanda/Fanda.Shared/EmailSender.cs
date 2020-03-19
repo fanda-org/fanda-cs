@@ -1,10 +1,9 @@
-﻿using Fanda.Shared.Config;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System.Threading.Tasks;
 
-namespace Fanda.Shared.Utility
+namespace Fanda.Shared
 {
     public interface IEmailSender
     {

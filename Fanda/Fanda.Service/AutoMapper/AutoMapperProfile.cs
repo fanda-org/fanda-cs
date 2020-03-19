@@ -2,7 +2,7 @@
 using Fanda.Data.Models;
 using Fanda.Dto;
 using Fanda.Dto.ViewModels;
-using Fanda.Shared.Enums;
+using Fanda.Shared;
 using System;
 using System.Linq;
 

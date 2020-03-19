@@ -1,4 +1,4 @@
-﻿namespace Fanda.Shared.Enums
+﻿namespace Fanda.Shared
 {
     public class EnumListItem
     {

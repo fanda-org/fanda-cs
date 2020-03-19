@@ -1,6 +1,6 @@
 using System;
 
-namespace Fanda.Shared.Extensions
+namespace Fanda.Shared
 {
     public static class ExceptionExtension
     {

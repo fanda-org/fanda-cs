@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
 using Fanda.Service;
 using Fanda.Service.Extensions;
-using Fanda.Shared.Config;
-using Fanda.Shared.Utility;
+using Fanda.Shared;
 //using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -14,11 +13,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
-using System;
 using System.Linq;
 
-namespace Fanda.Mvc
+namespace FandaCoreUI
 {
     public class Startup
     {

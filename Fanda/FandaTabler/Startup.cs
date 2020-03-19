@@ -1,8 +1,7 @@
 using AutoMapper;
 using Fanda.Service;
 using Fanda.Service.Extensions;
-using Fanda.Shared.Config;
-using Fanda.Shared.Utility;
+using Fanda.Shared;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.CookiePolicy;

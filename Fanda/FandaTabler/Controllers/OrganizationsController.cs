@@ -1,6 +1,6 @@
 ﻿using Fanda.Dto;
 using Fanda.Service;
-using Fanda.Shared.Models;
+using Fanda.Shared;
 using FandaTabler.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

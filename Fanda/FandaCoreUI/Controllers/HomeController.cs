@@ -1,11 +1,11 @@
 ﻿using Fanda.Service;
-using Fanda.Shared.Models;
+using Fanda.Shared;
 using FandaCoreUI.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Linq;
 
-namespace Fanda.Mvc.Controllers
+namespace FandaCoreUI.Controllers
 {
     public class HomeController : Controller
     {

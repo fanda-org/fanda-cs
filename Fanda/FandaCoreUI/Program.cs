@@ -1,5 +1,5 @@
 ﻿using Fanda.Service.Seed;
-using Fanda.Shared.Config;
+using Fanda.Shared;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -8,7 +8,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;
 
-namespace Fanda.Mvc
+namespace FandaCoreUI
 {
     public class Program
     {

@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 
-[assembly: HostingStartup(typeof(Fanda.Mvc.Areas.Identity.IdentityHostingStartup))]
+[assembly: HostingStartup(typeof(FandaCoreUI.Areas.Identity.IdentityHostingStartup))]
 
-namespace Fanda.Mvc.Areas.Identity
+namespace FandaCoreUI.Areas.Identity
 {
     public class IdentityHostingStartup : IHostingStartup
     {

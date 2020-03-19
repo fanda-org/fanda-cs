@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 
-namespace Fanda.Mvc.Areas.Identity.Pages.Account.Manage
+namespace FandaCoreUI.Areas.Identity.Pages.Account.Manage
 {
     public static class ManageNavPages
     {

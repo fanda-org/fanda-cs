@@ -1,5 +1,5 @@
 using Fanda.Service.Seed;
-using Fanda.Shared.Config;
+using Fanda.Shared;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
