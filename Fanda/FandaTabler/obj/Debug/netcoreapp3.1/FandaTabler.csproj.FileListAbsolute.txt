@@ -315,13 +315,10 @@ D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\MySql.Data.dll
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\Ubiety.Dns.Core.dll
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\MySql.Data.EntityFrameworkCore.dll
-D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\MySqlConnector.dll
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\Npgsql.dll
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\Npgsql.EntityFrameworkCore.PostgreSQL.dll
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\NuGet.Frameworks.dll
-D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\Pomelo.EntityFrameworkCore.MySql.dll
-D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\Pomelo.JsonObject.dll
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\SendGrid.dll
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\Renci.SshNet.dll
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\SshNet.Security.Cryptography.dll
@@ -449,3 +446,12 @@ D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\obj\Debug\netcoreapp3
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\obj\Debug\netcoreapp3.1\FandaTabler.dll
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\obj\Debug\netcoreapp3.1\FandaTabler.pdb
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\obj\Debug\netcoreapp3.1\FandaTabler.genruntimeconfig.cache
+D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\publish\web.config
+D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\publish\appsettings.Development.json
+D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\publish\appsettings.json
+D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\publish\bundleconfig.json
+D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\publish\FandaTabler.deps.json
+D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\publish\FandaTabler.runtimeconfig.json
+D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\publish\package.json
+D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\publish\wwwroot\assets\plugins\jquery-validation-unobtrusive\package.json
+D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\publish\wwwroot\assets\plugins\jquery-validation\package.json

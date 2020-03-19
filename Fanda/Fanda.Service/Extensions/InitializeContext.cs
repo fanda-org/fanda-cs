@@ -2,7 +2,8 @@
 //using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using MySql.Data.EntityFrameworkCore.Extensions;
+//using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using System;
 
 namespace Fanda.Service.Extensions
@@ -30,12 +31,12 @@ namespace Fanda.Service.Extensions
                         });
                     break;
                 case "MYSQL":
-                    services.AddEntityFrameworkMySql()
+                    services.AddEntityFrameworkMySQL() //.AddEntityFrameworkMySql()
                         .AddDbContextPool<FandaContext>((serviceProvider, options) =>
                         {
-                            options.UseMySql(connectionString, mysqlopt =>
+                            options.UseMySQL(connectionString, mysqlopt =>
                             {
-                                mysqlopt.ServerVersion(new Version(15, 1), ServerType.MariaDb);
+                                //mysqlopt.ServerVersion(new Version(15, 1), ServerType.MariaDb);
                             })
                             .UseInternalServiceProvider(serviceProvider);
 

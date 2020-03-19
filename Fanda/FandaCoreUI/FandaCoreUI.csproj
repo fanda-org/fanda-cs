@@ -60,10 +60,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataTables.Queryable\DataTables.Queryable.csproj" />
-    <ProjectReference Include="..\Fanda.Dto\Fanda.Dto.csproj" />
-    <ProjectReference Include="..\Fanda.Service\Fanda.Service.csproj" />
-    <ProjectReference Include="..\Fanda.Shared\Fanda.Shared.csproj" />
+    <ProjectReference Include="..\DataTables.Queryable\DataTables.Queryable.csproj" PrivateAssets="All" />
+    <ProjectReference Include="..\Fanda.Dto\Fanda.Dto.csproj" PrivateAssets="All" />
+    <ProjectReference Include="..\Fanda.Service\Fanda.Service.csproj" PrivateAssets="All" />
+    <ProjectReference Include="..\Fanda.Shared\Fanda.Shared.csproj" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>

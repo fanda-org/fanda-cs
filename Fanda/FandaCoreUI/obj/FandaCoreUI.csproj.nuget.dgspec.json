@@ -142,10 +142,6 @@
             "Npgsql.EntityFrameworkCore.PostgreSQL": {
               "target": "Package",
               "version": "[3.1.2, )"
-            },
-            "Pomelo.EntityFrameworkCore.MySql": {
-              "target": "Package",
-              "version": "[3.1.1, )"
             }
           },
           "imports": [
@@ -302,10 +298,6 @@
             "Npgsql.EntityFrameworkCore.PostgreSQL": {
               "target": "Package",
               "version": "[3.1.2, )"
-            },
-            "Pomelo.EntityFrameworkCore.MySql": {
-              "target": "Package",
-              "version": "[3.1.1, )"
             }
           },
           "imports": [
@@ -419,16 +411,20 @@
           "netcoreapp3.1": {
             "projectReferences": {
               "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\DataTables.Queryable\\DataTables.Queryable.csproj": {
-                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\DataTables.Queryable\\DataTables.Queryable.csproj"
+                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\DataTables.Queryable\\DataTables.Queryable.csproj",
+                "privateAssets": "all"
               },
               "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Dto\\Fanda.Dto.csproj": {
-                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Dto\\Fanda.Dto.csproj"
+                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Dto\\Fanda.Dto.csproj",
+                "privateAssets": "all"
               },
               "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Service\\Fanda.Service.csproj": {
-                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Service\\Fanda.Service.csproj"
+                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Service\\Fanda.Service.csproj",
+                "privateAssets": "all"
               },
               "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Shared\\Fanda.Shared.csproj": {
-                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Shared\\Fanda.Shared.csproj"
+                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Shared\\Fanda.Shared.csproj",
+                "privateAssets": "all"
               }
             }
           }

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "H5xEaQuXSnSDYGr87HOSNPAOrKbh9uNZOyrYAZYZiRSM+iRaMeHQqNzyIJs4GTIaJDSGH91p4zZeiliN7GfqJg==",
+  "dgSpecHash": "rXZyW2cSs+e3j1Y3ese1EPUPXzfG42dDCLzzhumQG776ODSI0iVuu0AKc91vUeeH+ryoaiI4liu2uXQuOu8xaw==",
   "success": true,
   "projectFilePath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\FandaTabler\\FandaTabler.csproj",
   "expectedPackageFiles": [
@@ -58,14 +58,11 @@
     "C:\\Users\\tbala\\.nuget\\packages\\microsoft.win32.systemevents\\4.6.0\\microsoft.win32.systemevents.4.6.0.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\mysql.data\\8.0.19\\mysql.data.8.0.19.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\mysql.data.entityframeworkcore\\8.0.19\\mysql.data.entityframeworkcore.8.0.19.nupkg.sha512",
-    "C:\\Users\\tbala\\.nuget\\packages\\mysqlconnector\\0.61.0\\mysqlconnector.0.61.0.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\netstandard.library\\1.6.1\\netstandard.library.1.6.1.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\newtonsoft.json\\11.0.2\\newtonsoft.json.11.0.2.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\npgsql\\4.1.3\\npgsql.4.1.3.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\npgsql.entityframeworkcore.postgresql\\3.1.2\\npgsql.entityframeworkcore.postgresql.3.1.2.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\nuget.frameworks\\4.7.0\\nuget.frameworks.4.7.0.nupkg.sha512",
-    "C:\\Users\\tbala\\.nuget\\packages\\pomelo.entityframeworkcore.mysql\\3.1.1\\pomelo.entityframeworkcore.mysql.3.1.1.nupkg.sha512",
-    "C:\\Users\\tbala\\.nuget\\packages\\pomelo.jsonobject\\2.2.1\\pomelo.jsonobject.2.2.1.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\runtime.fedora.24-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.fedora.24-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",

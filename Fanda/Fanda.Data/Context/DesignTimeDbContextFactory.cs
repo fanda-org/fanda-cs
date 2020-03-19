@@ -25,7 +25,7 @@ namespace Fanda.Data.Context
                     break;
                 case "MYSQL":
                     connectionString = configuration.GetConnectionString("MySqlConnection");
-                    builder.UseMySql(connectionString);
+                    builder.UseMySQL(connectionString);
                     break;
                 case "PGSQL":
                     connectionString = configuration.GetConnectionString("PgSqlConnection");
