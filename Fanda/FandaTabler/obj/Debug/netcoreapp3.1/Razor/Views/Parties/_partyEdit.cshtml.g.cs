@@ -35,27 +35,34 @@ using Fanda.Dto;
 #nullable disable
 #nullable restore
 #line 4 "D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\Views\_ViewImports.cshtml"
-using Fanda.Shared.Models;
+using Fanda.Dto.ViewModels;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
 #line 5 "D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\Views\_ViewImports.cshtml"
-using Fanda.Shared.Enums;
+using Fanda.Shared.Models;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
 #line 6 "D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\Views\_ViewImports.cshtml"
+using Fanda.Shared.Enums;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 7 "D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\Views\_ViewImports.cshtml"
 using Fanda.Shared.Extensions;
 
 #line default
 #line hidden
 #nullable disable
     [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"11dbb13898d28c84bff744dc0365a46972e6d50c", @"/Views/Parties/_partyEdit.cshtml")]
-    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"2eb0a75ad3ffcf70351b35bc37893e6ab1224c96", @"/Views/_ViewImports.cshtml")]
+    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"5105be3e84d8922a3afc0e26149b9dece54dfd7d", @"/Views/_ViewImports.cshtml")]
     public class Views_Parties__partyEdit : global::Microsoft.AspNetCore.Mvc.Razor.RazorPage<PartyDto>
     {
         private static readonly global::Microsoft.AspNetCore.Razor.TagHelpers.TagHelperAttribute __tagHelperAttribute_0 = new global::Microsoft.AspNetCore.Razor.TagHelpers.TagHelperAttribute("name", "_EditGeneral", global::Microsoft.AspNetCore.Razor.TagHelpers.HtmlAttributeValueStyle.DoubleQuotes);
@@ -159,7 +166,7 @@ Write(Html.HiddenFor(model => model.PartyId));
 <div class=""tab-content border-light mt-3"" id=""pills-tabContent"">
     <div class=""tab-pane fade show active"" id");
             WriteLiteral("=\"pills-general\" role=\"tabpanel\" aria-labelledby=\"pills-general-tab\">\r\n        ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("partial", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "11dbb13898d28c84bff744dc0365a46972e6d50c7546", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("partial", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "11dbb13898d28c84bff744dc0365a46972e6d50c7740", async() => {
             }
             );
             __Microsoft_AspNetCore_Mvc_TagHelpers_PartialTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.TagHelpers.PartialTagHelper>();

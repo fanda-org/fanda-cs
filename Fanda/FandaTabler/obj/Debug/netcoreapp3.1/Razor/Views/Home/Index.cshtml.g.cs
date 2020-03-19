@@ -35,20 +35,27 @@ using Fanda.Dto;
 #nullable disable
 #nullable restore
 #line 4 "D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\Views\_ViewImports.cshtml"
-using Fanda.Shared.Models;
+using Fanda.Dto.ViewModels;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
 #line 5 "D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\Views\_ViewImports.cshtml"
-using Fanda.Shared.Enums;
+using Fanda.Shared.Models;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
 #line 6 "D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\Views\_ViewImports.cshtml"
+using Fanda.Shared.Enums;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 7 "D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\Views\_ViewImports.cshtml"
 using Fanda.Shared.Extensions;
 
 #line default
@@ -62,7 +69,7 @@ using Microsoft.AspNetCore.Http;
 #line hidden
 #nullable disable
     [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"9d7db22ee2ae886d352396f3b3b8a354096617a7", @"/Views/Home/Index.cshtml")]
-    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"2eb0a75ad3ffcf70351b35bc37893e6ab1224c96", @"/Views/_ViewImports.cshtml")]
+    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"5105be3e84d8922a3afc0e26149b9dece54dfd7d", @"/Views/_ViewImports.cshtml")]
     public class Views_Home_Index : global::Microsoft.AspNetCore.Mvc.Razor.RazorPage<dynamic>
     {
         private static readonly global::Microsoft.AspNetCore.Razor.TagHelpers.TagHelperAttribute __tagHelperAttribute_0 = new global::Microsoft.AspNetCore.Razor.TagHelpers.TagHelperAttribute("href", new global::Microsoft.AspNetCore.Html.HtmlString("~/assets/plugins/charts-c3/plugin.css"), global::Microsoft.AspNetCore.Razor.TagHelpers.HtmlAttributeValueStyle.DoubleQuotes);
@@ -106,7 +113,7 @@ using Microsoft.AspNetCore.Http;
             WriteLiteral("\r\n");
             DefineSection("styles", async() => {
                 WriteLiteral("\r\n    <!-- c3.js Charts Plugin -->\r\n    ");
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("link", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "9d7db22ee2ae886d352396f3b3b8a354096617a76241", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("link", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "9d7db22ee2ae886d352396f3b3b8a354096617a76435", async() => {
                 }
                 );
                 __Microsoft_AspNetCore_Mvc_Razor_TagHelpers_UrlResolutionTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.Razor.TagHelpers.UrlResolutionTagHelper>();
@@ -121,7 +128,7 @@ using Microsoft.AspNetCore.Http;
                 Write(__tagHelperExecutionContext.Output);
                 __tagHelperExecutionContext = __tagHelperScopeManager.End();
                 WriteLiteral("\r\n    ");
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("script", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "9d7db22ee2ae886d352396f3b3b8a354096617a77419", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("script", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "9d7db22ee2ae886d352396f3b3b8a354096617a77613", async() => {
                 }
                 );
                 __Microsoft_AspNetCore_Mvc_Razor_TagHelpers_UrlResolutionTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.Razor.TagHelpers.UrlResolutionTagHelper>();
@@ -1637,7 +1644,7 @@ using Microsoft.AspNetCore.Http;
                                 <td><span class=""text-muted"">001401</span></td>
                 ");
             WriteLiteral("                <td>");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "9d7db22ee2ae886d352396f3b3b8a354096617a796031", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "9d7db22ee2ae886d352396f3b3b8a354096617a796225", async() => {
                 WriteLiteral("Design Works");
             }
             );
@@ -1682,7 +1689,7 @@ using Microsoft.AspNetCore.Http;
                             <tr>
                                 <td><span class=""text-muted"">001402</span></td>
                                 <td>");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "9d7db22ee2ae886d352396f3b3b8a354096617a798745", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "9d7db22ee2ae886d352396f3b3b8a354096617a798939", async() => {
                 WriteLiteral("UX Wireframes");
             }
             );
@@ -1727,7 +1734,7 @@ using Microsoft.AspNetCore.Http;
                             <tr>
                                 <td><span class=""text-muted"">001403</span></td>
                                 <td>");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "9d7db22ee2ae886d352396f3b3b8a354096617a7101454", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "9d7db22ee2ae886d352396f3b3b8a354096617a7101648", async() => {
                 WriteLiteral("New Dashboard");
             }
             );
@@ -1772,7 +1779,7 @@ using Microsoft.AspNetCore.Http;
                             <tr>
                                 <td><span class=""text-muted"">001404</span></td>
                                 <td>");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "9d7db22ee2ae886d352396f3b3b8a354096617a7104166", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "9d7db22ee2ae886d352396f3b3b8a354096617a7104360", async() => {
                 WriteLiteral("Landing Page");
             }
             );
@@ -1817,7 +1824,7 @@ using Microsoft.AspNetCore.Http;
                             <tr>
                                 <td><span class=""text-muted"">001405</span></td>
                                 <td>");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "9d7db22ee2ae886d352396f3b3b8a354096617a7106888", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "9d7db22ee2ae886d352396f3b3b8a354096617a7107082", async() => {
                 WriteLiteral("Marketing Templates");
             }
             );
@@ -1862,7 +1869,7 @@ using Microsoft.AspNetCore.Http;
                             <tr>
                                 <td><span class=""text-muted"">001406</span></td>
                                 <td>");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "9d7db22ee2ae886d352396f3b3b8a354096617a7109607", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "9d7db22ee2ae886d352396f3b3b8a354096617a7109801", async() => {
                 WriteLiteral("Sales Presentation");
             }
             );

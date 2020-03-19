@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Fanda.Dto
+namespace Fanda.Dto.ViewModels
 {
-    public class LoginDto
+    public class LoginViewModel
     {
         [Required]
         //[EmailAddress]

@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using Fanda.Data.Context;
 using Fanda.Data.Models;
 using Fanda.Dto;
+using Fanda.Dto.ViewModels;
 using Fanda.Shared.Helpers;
 using Fanda.Shared.Utility;
 using Microsoft.EntityFrameworkCore;
@@ -16,8 +17,8 @@ namespace Fanda.Service
 {
     public interface IUserService
     {
-        Task<UserDto> LoginAsync(LoginDto model);
-        Task<UserDto> RegisterAsync(RegisterDto model, string callbackUrl);
+        Task<UserDto> LoginAsync(LoginViewModel model);
+        Task<UserDto> RegisterAsync(RegisterViewModel model, string callbackUrl);
 
         Task<List<UserDto>> GetAllAsync(string orgId/*, bool? active*/);
         Task<UserDto> GetByIdAsync(string userId);
@@ -45,7 +46,7 @@ namespace Fanda.Service
 
         public string ErrorMessage { get; private set; }
 
-        public async Task<UserDto> LoginAsync(LoginDto model)
+        public async Task<UserDto> LoginAsync(LoginViewModel model)
         {
             UserDto userModel;
             {
@@ -68,7 +69,7 @@ namespace Fanda.Service
             return userModel;
         }
 
-        public async Task<UserDto> RegisterAsync(RegisterDto model, string callbackUrl)
+        public async Task<UserDto> RegisterAsync(RegisterViewModel model, string callbackUrl)
         {
             // validation
             if (string.IsNullOrWhiteSpace(model.Password))

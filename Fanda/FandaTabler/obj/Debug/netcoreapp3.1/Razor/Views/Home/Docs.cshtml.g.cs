@@ -35,27 +35,34 @@ using Fanda.Dto;
 #nullable disable
 #nullable restore
 #line 4 "D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\Views\_ViewImports.cshtml"
-using Fanda.Shared.Models;
+using Fanda.Dto.ViewModels;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
 #line 5 "D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\Views\_ViewImports.cshtml"
-using Fanda.Shared.Enums;
+using Fanda.Shared.Models;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
 #line 6 "D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\Views\_ViewImports.cshtml"
+using Fanda.Shared.Enums;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 7 "D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\Views\_ViewImports.cshtml"
 using Fanda.Shared.Extensions;
 
 #line default
 #line hidden
 #nullable disable
     [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"11708ddaf30fb1881032d910735c1fab13cb7bcc", @"/Views/Home/Docs.cshtml")]
-    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"2eb0a75ad3ffcf70351b35bc37893e6ab1224c96", @"/Views/_ViewImports.cshtml")]
+    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"5105be3e84d8922a3afc0e26149b9dece54dfd7d", @"/Views/_ViewImports.cshtml")]
     public class Views_Home_Docs : global::Microsoft.AspNetCore.Mvc.Razor.RazorPage<dynamic>
     {
         private static readonly global::Microsoft.AspNetCore.Razor.TagHelpers.TagHelperAttribute __tagHelperAttribute_0 = new global::Microsoft.AspNetCore.Razor.TagHelpers.TagHelperAttribute("href", new global::Microsoft.AspNetCore.Html.HtmlString("~/docs/alerts.html"), global::Microsoft.AspNetCore.Razor.TagHelpers.HtmlAttributeValueStyle.DoubleQuotes);
@@ -109,7 +116,7 @@ using Fanda.Shared.Extensions;
         <!-- Components -->
         <div class=""list-group list-group-transparent mb-0"">
             ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "11708ddaf30fb1881032d910735c1fab13cb7bcc8317", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "11708ddaf30fb1881032d910735c1fab13cb7bcc8511", async() => {
                 WriteLiteral("<span class=\"icon mr-3\"><i class=\"fe fe-alert-triangle\"></i></span>Alerts");
             }
             );
@@ -125,7 +132,7 @@ using Fanda.Shared.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n            ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "11708ddaf30fb1881032d910735c1fab13cb7bcc9558", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "11708ddaf30fb1881032d910735c1fab13cb7bcc9752", async() => {
                 WriteLiteral("<span class=\"icon mr-3\"><i class=\"fe fe-user\"></i></span>Avatars");
             }
             );
@@ -141,7 +148,7 @@ using Fanda.Shared.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n            ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "11708ddaf30fb1881032d910735c1fab13cb7bcc10790", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "11708ddaf30fb1881032d910735c1fab13cb7bcc10984", async() => {
                 WriteLiteral("<span class=\"icon mr-3\"><i class=\"fe fe-plus-square\"></i></span>Buttons");
             }
             );
@@ -157,7 +164,7 @@ using Fanda.Shared.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n            ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "11708ddaf30fb1881032d910735c1fab13cb7bcc12030", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "11708ddaf30fb1881032d910735c1fab13cb7bcc12224", async() => {
                 WriteLiteral("<span class=\"icon mr-3\"><i class=\"fe fe-feather\"></i></span>Colors");
             }
             );
@@ -173,7 +180,7 @@ using Fanda.Shared.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n            ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "11708ddaf30fb1881032d910735c1fab13cb7bcc13265", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "11708ddaf30fb1881032d910735c1fab13cb7bcc13459", async() => {
                 WriteLiteral("<span class=\"icon mr-3\"><i class=\"fe fe-image\"></i></span>Cards");
             }
             );
@@ -189,7 +196,7 @@ using Fanda.Shared.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n            ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "11708ddaf30fb1881032d910735c1fab13cb7bcc14497", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "11708ddaf30fb1881032d910735c1fab13cb7bcc14691", async() => {
                 WriteLiteral("<span class=\"icon mr-3\"><i class=\"fe fe-pie-chart\"></i></span>Charts");
             }
             );
@@ -205,7 +212,7 @@ using Fanda.Shared.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n            ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "11708ddaf30fb1881032d910735c1fab13cb7bcc15734", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "11708ddaf30fb1881032d910735c1fab13cb7bcc15928", async() => {
                 WriteLiteral("<span class=\"icon mr-3\"><i class=\"fe fe-check-square\"></i></span>Form components");
             }
             );
@@ -221,7 +228,7 @@ using Fanda.Shared.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n            ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "11708ddaf30fb1881032d910735c1fab13cb7bcc16983", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "11708ddaf30fb1881032d910735c1fab13cb7bcc17177", async() => {
                 WriteLiteral("<span class=\"icon mr-3\"><i class=\"fe fe-tag\"></i></span>Tags");
             }
             );
@@ -237,7 +244,7 @@ using Fanda.Shared.Extensions;
             Write(__tagHelperExecutionContext.Output);
             __tagHelperExecutionContext = __tagHelperScopeManager.End();
             WriteLiteral("\r\n            ");
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "11708ddaf30fb1881032d910735c1fab13cb7bcc18212", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "11708ddaf30fb1881032d910735c1fab13cb7bcc18406", async() => {
                 WriteLiteral("<span class=\"icon mr-3\"><i class=\"fe fe-type\"></i></span>Typography");
             }
             );

@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Fanda.Dto
+namespace Fanda.Dto.ViewModels
 {
-    public class RegisterDto
+    public class RegisterViewModel
     {
         [Required]
         [Display(Name = "User Name")]

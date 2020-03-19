@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Fanda.Data.Models;
 using Fanda.Dto;
+using Fanda.Dto.ViewModels;
 using Fanda.Shared.Enums;
 using System;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Fanda.Service.AutoMapperProfile
     {
         public AutoMapperProfile()
         {
-            CreateMap<User, RegisterDto>()
+            CreateMap<User, RegisterViewModel>()
                 .ForMember(vm => vm.Password, opt => opt.Ignore())
                 //.ForMember(vm => vm.ConfirmPassword, opt => opt.Ignore())
                 .ReverseMap();

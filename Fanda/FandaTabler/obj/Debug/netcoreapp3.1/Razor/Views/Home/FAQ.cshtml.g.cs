@@ -35,27 +35,34 @@ using Fanda.Dto;
 #nullable disable
 #nullable restore
 #line 4 "D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\Views\_ViewImports.cshtml"
-using Fanda.Shared.Models;
+using Fanda.Dto.ViewModels;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
 #line 5 "D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\Views\_ViewImports.cshtml"
-using Fanda.Shared.Enums;
+using Fanda.Shared.Models;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
 #line 6 "D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\Views\_ViewImports.cshtml"
+using Fanda.Shared.Enums;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 7 "D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\Views\_ViewImports.cshtml"
 using Fanda.Shared.Extensions;
 
 #line default
 #line hidden
 #nullable disable
     [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"41f0d314aaf491c43edd348285637975a78a1d81", @"/Views/Home/FAQ.cshtml")]
-    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"2eb0a75ad3ffcf70351b35bc37893e6ab1224c96", @"/Views/_ViewImports.cshtml")]
+    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"5105be3e84d8922a3afc0e26149b9dece54dfd7d", @"/Views/_ViewImports.cshtml")]
     public class Views_Home_FAQ : global::Microsoft.AspNetCore.Mvc.Razor.RazorPage<dynamic>
     {
         #pragma warning disable 1998

@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Fanda.Dto
+namespace Fanda.Dto.ViewModels
 {
-    public class ChangePasswordDto
+    public class ChangePasswordViewModel
     {
         [Required]
         [DataType(DataType.Password)]

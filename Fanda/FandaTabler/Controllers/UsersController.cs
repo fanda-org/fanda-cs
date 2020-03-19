@@ -1,4 +1,5 @@
 ﻿using Fanda.Dto;
+using Fanda.Dto.ViewModels;
 using Fanda.Service;
 using Fanda.Shared.Helpers;
 using Microsoft.AspNetCore.Authentication;
@@ -29,13 +30,13 @@ namespace FandaTabler.Controllers
         public IActionResult Login(string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
-            return View(new LoginDto());
+            return View(new LoginViewModel());
             //return Challenge(new AuthenticationProperties() { RedirectUri = "/Home/Index" });
         }
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Login([FromQuery] string returnUrl, [FromForm]LoginDto model)
+        public async Task<IActionResult> Login([FromQuery] string returnUrl, [FromForm]LoginViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -133,12 +134,12 @@ namespace FandaTabler.Controllers
                !string.IsNullOrEmpty(page))
                 return RedirectToAction(page);
             else
-                return View(new RegisterDto());
+                return View(new RegisterViewModel());
         }
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Register([FromForm]RegisterDto model)
+        public async Task<IActionResult> Register([FromForm]RegisterViewModel model)
         {
             if (!ModelState.IsValid)
                 return View(model);
