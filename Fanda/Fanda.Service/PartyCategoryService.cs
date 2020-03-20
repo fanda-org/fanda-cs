@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Fanda.Data;
 using Fanda.Data.Context;
-using Fanda.Data.Models;
 using Fanda.Dto;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -68,7 +68,7 @@ namespace Fanda.Service
             if (string.IsNullOrEmpty(orgId)/*orgId == null || orgId == Guid.Empty*/)
                 throw new ArgumentNullException("orgId", "Org id is missing");
 
-            PartyCategory category = _mapper.Map<PartyCategory>(model);
+            var category = _mapper.Map<PartyCategory>(model);
             category.Code = category.Code.ToUpper();
             category.OrgId = new Guid(orgId);
             if (category.CategoryId == Guid.Empty)

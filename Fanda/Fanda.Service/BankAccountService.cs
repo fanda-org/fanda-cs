@@ -1,6 +1,6 @@
 using AutoMapper;
+using Fanda.Data;
 using Fanda.Data.Context;
-using Fanda.Data.Models;
 using Fanda.Dto;
 using Fanda.Shared;
 using Microsoft.EntityFrameworkCore;

@@ -455,3 +455,12 @@ D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\publish\package.json
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\publish\wwwroot\assets\plugins\jquery-validation-unobtrusive\package.json
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\publish\wwwroot\assets\plugins\jquery-validation\package.json
+D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\publish\publish\web.config
+D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\publish\publish\appsettings.Development.json
+D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\publish\publish\appsettings.json
+D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\publish\publish\bundleconfig.json
+D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\publish\publish\FandaTabler.deps.json
+D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\publish\publish\FandaTabler.runtimeconfig.json
+D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\publish\publish\package.json
+D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\publish\publish\wwwroot\assets\plugins\jquery-validation-unobtrusive\package.json
+D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaTabler\bin\Debug\netcoreapp3.1\publish\publish\wwwroot\assets\plugins\jquery-validation\package.json

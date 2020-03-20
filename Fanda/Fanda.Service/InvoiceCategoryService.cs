@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Fanda.Data;
 using Fanda.Data.Context;
-using Fanda.Data.Models;
 using Fanda.Dto;
 using Microsoft.EntityFrameworkCore;
 using System;

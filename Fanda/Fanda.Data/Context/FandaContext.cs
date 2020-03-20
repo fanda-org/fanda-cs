@@ -1,4 +1,3 @@
-using Fanda.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 

@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using MySql.Data.EntityFrameworkCore.Extensions;
 //using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
-using System;
 
 namespace Fanda.Service.Extensions
 {
