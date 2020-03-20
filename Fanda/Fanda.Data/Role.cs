@@ -13,23 +13,7 @@ namespace Fanda.Data
         public DateTime DateCreated { get; set; }
         public DateTime? DateModified { get; set; }
         public bool Active { get; set; }
-        //public string IPAddress { get; set; }
-        //public virtual ICollection<UserRole> UserRoles { get; set; }
+
         public virtual ICollection<OrgUserRole> OrgUserRoles { get; set; }
-
-        public Role() : base()
-        {
-            DateCreated = DateTime.Now;
-            Active = true;
-        }
-
-        public Role(string roleCode, string roleName, string description) //: base(roleName)
-        {
-            Code = roleCode;
-            Name = roleName;
-            Description = description;
-            DateCreated = DateTime.Now;
-            Active = true;
-        }
     }
 }

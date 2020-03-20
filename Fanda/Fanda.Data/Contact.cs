@@ -13,8 +13,6 @@ namespace Fanda.Data
 
         public virtual BankAccount BankAccount { get; set; }
         public virtual ICollection<OrgContact> OrgContacts { get; set; }
-
-        //public virtual ICollection<BankContact> BankContacts { get; set; }
         public virtual ICollection<PartyContact> PartyContacts { get; set; }
     }
 }

@@ -19,7 +19,6 @@ namespace Fanda.Data
 
         public virtual ICollection<OrgContact> Contacts { get; set; }
         public virtual ICollection<OrgAddress> Addresses { get; set; }
-
         public virtual ICollection<OrgUser> Users { get; set; }
         public virtual ICollection<Location> Locations { get; set; }
         public virtual ICollection<OrgBank> Banks { get; set; }
@@ -31,8 +30,8 @@ namespace Fanda.Data
         public virtual ICollection<Unit> Units { get; set; }
         public virtual ICollection<ProductCategory> ProductCategories { get; set; }
         public virtual ICollection<Product> Products { get; set; }
-        public virtual ICollection<Invoice> Invoices { get; set; }
         public virtual ICollection<InvoiceCategory> InvoiceCategories { get; set; }
         public virtual ICollection<UnitConversion> UnitConversions { get; set; }
+        public virtual ICollection<AccountYear> AccountYears { get; set; }
     }
 }

@@ -230,67 +230,67 @@ namespace Fanda.Data.Context
     //    }
     //}
 
-    public class AuditTrailConfig : IEntityTypeConfiguration<AuditTrail>
-    {
-        public void Configure(EntityTypeBuilder<AuditTrail> builder)
-        {
-            // table
-            builder.ToTable("AuditTrails");
-            // key
-            builder.HasKey(at => at.AuditTrailId);
-            // columns
-            builder.Property(at => at.TableName)
-                .IsRequired()
-                .IsUnicode(false)
-                .HasMaxLength(32);
-            builder.Ignore(at => at.CurrentStatus);
-            builder.Property(at => at.CurrentStatusString)
-                .HasColumnName("CurrentStatus")
-                .IsRequired()
-                .IsUnicode(false)
-                .HasMaxLength(16);
-            // indexes
-            builder.HasIndex(at => new { at.TableName, at.RowId })
-                .IsUnique();
-            // foreign key
-            builder.HasOne(at => at.CreatedUser)
-                .WithMany(u => u.CreatedTrails)
-                .HasForeignKey(at => at.CreatedUserId)
-                .OnDelete(DeleteBehavior.Restrict);
-            builder.HasOne(at => at.ModifiedUser)
-                .WithMany(u => u.ModifiedTrails)
-                .HasForeignKey(at => at.ModifiedUserId)
-                .OnDelete(DeleteBehavior.Restrict);
-            builder.HasOne(at => at.DeletedUser)
-                .WithMany(u => u.DeletedTrails)
-                .HasForeignKey(at => at.DeletedUserId)
-                .OnDelete(DeleteBehavior.Restrict);
-            builder.HasOne(at => at.PrintedUser)
-                .WithMany(u => u.PrintedTrails)
-                .HasForeignKey(at => at.PrintedUserId)
-                .OnDelete(DeleteBehavior.Restrict);
-            builder.HasOne(at => at.ApprovedUser)
-                .WithMany(u => u.ApprovedTrails)
-                .HasForeignKey(at => at.ApprovedUserId)
-                .OnDelete(DeleteBehavior.Restrict);
-            builder.HasOne(at => at.RejectedUser)
-                .WithMany(u => u.RejectedTrails)
-                .HasForeignKey(at => at.RejectedUserId)
-                .OnDelete(DeleteBehavior.Restrict);
-            builder.HasOne(at => at.HoldUser)
-                .WithMany(u => u.HoldTrails)
-                .HasForeignKey(at => at.HoldUserId)
-                .OnDelete(DeleteBehavior.Restrict);
-            builder.HasOne(at => at.ActivatedUser)
-                .WithMany(u => u.ActivatedTrails)
-                .HasForeignKey(at => at.ActivatedUserId)
-                .OnDelete(DeleteBehavior.Restrict);
-            builder.HasOne(at => at.DeactivatedUser)
-                .WithMany(u => u.DeactivatedTrails)
-                .HasForeignKey(at => at.DeactivatedUserId)
-                .OnDelete(DeleteBehavior.Restrict);
-        }
-    }
+    //public class AuditTrailConfig : IEntityTypeConfiguration<AuditTrail>
+    //{
+    //    public void Configure(EntityTypeBuilder<AuditTrail> builder)
+    //    {
+    //        // table
+    //        builder.ToTable("AuditTrails");
+    //        // key
+    //        builder.HasKey(at => at.AuditTrailId);
+    //        // columns
+    //        builder.Property(at => at.TableName)
+    //            .IsRequired()
+    //            .IsUnicode(false)
+    //            .HasMaxLength(32);
+    //        builder.Ignore(at => at.CurrentStatus);
+    //        builder.Property(at => at.CurrentStatusString)
+    //            .HasColumnName("CurrentStatus")
+    //            .IsRequired()
+    //            .IsUnicode(false)
+    //            .HasMaxLength(16);
+    //        // indexes
+    //        builder.HasIndex(at => new { at.TableName, at.RowId })
+    //            .IsUnique();
+    //        // foreign key
+    //        builder.HasOne(at => at.CreatedUser)
+    //            .WithMany(u => u.CreatedTrails)
+    //            .HasForeignKey(at => at.CreatedUserId)
+    //            .OnDelete(DeleteBehavior.Restrict);
+    //        builder.HasOne(at => at.ModifiedUser)
+    //            .WithMany(u => u.ModifiedTrails)
+    //            .HasForeignKey(at => at.ModifiedUserId)
+    //            .OnDelete(DeleteBehavior.Restrict);
+    //        builder.HasOne(at => at.DeletedUser)
+    //            .WithMany(u => u.DeletedTrails)
+    //            .HasForeignKey(at => at.DeletedUserId)
+    //            .OnDelete(DeleteBehavior.Restrict);
+    //        builder.HasOne(at => at.PrintedUser)
+    //            .WithMany(u => u.PrintedTrails)
+    //            .HasForeignKey(at => at.PrintedUserId)
+    //            .OnDelete(DeleteBehavior.Restrict);
+    //        builder.HasOne(at => at.ApprovedUser)
+    //            .WithMany(u => u.ApprovedTrails)
+    //            .HasForeignKey(at => at.ApprovedUserId)
+    //            .OnDelete(DeleteBehavior.Restrict);
+    //        builder.HasOne(at => at.RejectedUser)
+    //            .WithMany(u => u.RejectedTrails)
+    //            .HasForeignKey(at => at.RejectedUserId)
+    //            .OnDelete(DeleteBehavior.Restrict);
+    //        builder.HasOne(at => at.HoldUser)
+    //            .WithMany(u => u.HoldTrails)
+    //            .HasForeignKey(at => at.HoldUserId)
+    //            .OnDelete(DeleteBehavior.Restrict);
+    //        builder.HasOne(at => at.ActivatedUser)
+    //            .WithMany(u => u.ActivatedTrails)
+    //            .HasForeignKey(at => at.ActivatedUserId)
+    //            .OnDelete(DeleteBehavior.Restrict);
+    //        builder.HasOne(at => at.DeactivatedUser)
+    //            .WithMany(u => u.DeactivatedTrails)
+    //            .HasForeignKey(at => at.DeactivatedUserId)
+    //            .OnDelete(DeleteBehavior.Restrict);
+    //    }
+    //}
 
     public class OrganizationConfig : IEntityTypeConfiguration<Organization>
     {
@@ -1027,12 +1027,12 @@ namespace Fanda.Data.Context
             //builder.Property(o => o.DateCreated).ValueGeneratedOnAdd();
             //builder.Property(o => o.DateModified).ValueGeneratedOnUpdate();
             // index
-            builder.HasIndex(i => new { i.InvoiceNumber, i.OrgId })
+            builder.HasIndex(i => new { i.InvoiceNumber, i.YearId })
                 .IsUnique();
             // foreign key
-            builder.HasOne(i => i.Organization)
+            builder.HasOne(i => i.AccountYear)
                 .WithMany(o => o.Invoices)
-                .HasForeignKey(i => i.OrgId)
+                .HasForeignKey(i => i.YearId)
                 .OnDelete(DeleteBehavior.Restrict);
             builder.HasOne(i => i.Party)
                 .WithMany(p => p.Invoices)

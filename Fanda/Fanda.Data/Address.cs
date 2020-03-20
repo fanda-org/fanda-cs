@@ -14,7 +14,6 @@ namespace Fanda.Data
         public string Country { get; set; }
         public string PostalCode { get; set; }
         public AddressType AddressType { get; set; }
-
         public string AddressTypeString
         {
             get { return AddressType.ToString(); }
@@ -23,8 +22,6 @@ namespace Fanda.Data
 
         public virtual BankAccount BankAccount { get; set; }
         public virtual ICollection<OrgAddress> OrgAddresses { get; set; }
-
-        //public virtual ICollection<BankAddress> BankAddresses { get; set; }
         public virtual ICollection<PartyAddress> PartyAddresses { get; set; }
     }
 }

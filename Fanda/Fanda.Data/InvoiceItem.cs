@@ -12,19 +12,14 @@ namespace Fanda.Data
         public decimal Qty { get; set; }
         public decimal UnitPrice { get; set; }
         public decimal Price { get; set; }
-
         public decimal DiscountPct { get; set; }
         public decimal DiscountAmt { get; set; }
-
         public decimal CentralGstPct { get; set; }
         public decimal CentralGstAmt { get; set; }
-
         public decimal StateGstPct { get; set; }
         public decimal StateGstAmt { get; set; }
-
         public decimal InterGstPct { get; set; }
         public decimal InterGstAmt { get; set; }
-
         //public decimal TaxPct { get; set; }
         //public decimal TaxAmt { get; set; }
         public decimal LineTotal { get; set; }

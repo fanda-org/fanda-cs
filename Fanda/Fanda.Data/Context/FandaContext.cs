@@ -15,7 +15,7 @@ namespace Fanda.Data.Context
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<BankAccount> BankAccounts { get; set; }
 
-        public DbSet<AuditTrail> AuditTrails { get; set; }
+        //public DbSet<AuditTrail> AuditTrails { get; set; }
 
         public DbSet<Organization> Organizations { get; set; }
         public DbSet<Location> Locations { get; set; }
@@ -45,7 +45,7 @@ namespace Fanda.Data.Context
             modelBuilder.ApplyConfiguration(new OrgUserRoleConfig());
             modelBuilder.ApplyConfiguration(new AddressConfig());
             modelBuilder.ApplyConfiguration(new ContactConfig());
-            modelBuilder.ApplyConfiguration(new AuditTrailConfig());
+            //modelBuilder.ApplyConfiguration(new AuditTrailConfig());
             modelBuilder.ApplyConfiguration(new BankAccountConfig());
             modelBuilder.ApplyConfiguration(new OrganizationConfig());
             modelBuilder.ApplyConfiguration(new OrgContactConfig());

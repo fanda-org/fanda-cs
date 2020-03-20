@@ -37,13 +37,13 @@ namespace Fanda.Service
 
         public string ErrorMessage { get; private set; }
 
-        public async Task<List<InvoiceDto>> GetAllAsync(Guid orgId)
+        public async Task<List<InvoiceDto>> GetAllAsync(Guid yearId)
         {
-            if (orgId == null || orgId == Guid.Empty)
-                throw new ArgumentNullException("orgId", "Org id is missing");
+            if (yearId == null || yearId == Guid.Empty)
+                throw new ArgumentNullException("yearId", "Year id is missing");
 
             var invoices = await _context.Invoices
-                .Where(p => p.OrgId == p.OrgId)
+                .Where(p => p.YearId == yearId)
                 .AsNoTracking()
                 //.ProjectTo<InvoiceViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
@@ -63,15 +63,15 @@ namespace Fanda.Service
             throw new KeyNotFoundException("Invoice not found");
         }
 
-        public async Task<InvoiceDto> SaveAsync(Guid orgId, InvoiceDto invoiceVM)
+        public async Task<InvoiceDto> SaveAsync(Guid yearId, InvoiceDto invoiceVM)
         {
-            if (orgId == null || orgId == Guid.Empty)
-                throw new ArgumentNullException("orgId", "Org id is missing");
+            if (yearId == null || yearId == Guid.Empty)
+                throw new ArgumentNullException("yearId", "Year id is missing");
 
             var invoice = _mapper.Map<Invoice>(invoiceVM);
             if (invoice.InvoiceId == Guid.Empty)
             {
-                invoice.OrgId = orgId;
+                invoice.YearId = yearId;
                 invoice.DateCreated = DateTime.Now;
                 invoice.DateModified = null;
                 _context.Invoices.Add(invoice);

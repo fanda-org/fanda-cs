@@ -11,13 +11,11 @@ namespace Fanda.Data
         public string BankShortName { get; set; }
         public string BankName { get; set; }
         public BankAccountType AccountType { get; set; }
-
         public string AccountTypeString
         {
             get { return AccountType.ToString(); }
             set { AccountType = (BankAccountType)Enum.Parse(typeof(BankAccountType), value, true); }
         }
-
         public string IfscCode { get; set; }
         public string MicrCode { get; set; }
         public string BranchCode { get; set; }
@@ -30,9 +28,6 @@ namespace Fanda.Data
 
         public virtual Contact Contact { get; set; }
         public virtual Address Address { get; set; }
-        //public virtual ICollection<BankContact> Contacts { get; set; }
-        //public virtual ICollection<BankAddress> Addresses { get; set; }
-
         public virtual ICollection<OrgBank> OrgBanks { get; set; }
         public virtual ICollection<PartyBank> PartyBanks { get; set; }
     }
