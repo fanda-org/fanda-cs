@@ -112,7 +112,7 @@ namespace Fanda.Controllers
         // GET: PartyCategories/Create
         public ActionResult Create()
         {
-            var party = new PartyDto();
+            var party = new PartyCategoryDto { Active = true };
             ViewBag.Mode = "Create";
             ViewBag.Readonly = false;
             return View("Edit", party);
