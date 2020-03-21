@@ -1,13 +1,11 @@
-﻿using System;
-
-namespace Fanda.Dto
+﻿namespace Fanda.Dto
 {
     public class ProductIngredientDto
     {
-        public Guid IngredientId { get; set; }
-        public Guid ParentProductId { get; set; }
-        public Guid ChildProductId { get; set; }
-        public Guid UnitId { get; set; }
+        public string Id { get; set; }
+        public string ParentProductId { get; set; }
+        public string ChildProductId { get; set; }
+        public string UnitId { get; set; }
         public decimal Qty { get; set; }
     }
 }

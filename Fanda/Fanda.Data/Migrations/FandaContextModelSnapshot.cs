@@ -28,28 +28,30 @@ namespace Fanda.Data.Migrations
                     b.Property<Guid>("OrgId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("OrganizationOrgId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("YearBegin")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("YearCode")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(16)")
+                        .HasMaxLength(16);
 
                     b.Property<DateTime>("YearEnd")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrganizationOrgId");
+                    b.HasIndex("OrgId");
 
-                    b.ToTable("AccountYear");
+                    b.HasIndex("YearCode", "OrgId")
+                        .IsUnique();
+
+                    b.ToTable("AccountYears");
                 });
 
             modelBuilder.Entity("Fanda.Data.Address", b =>
                 {
-                    b.Property<Guid>("AddressId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -67,11 +69,23 @@ namespace Fanda.Data.Migrations
                         .HasColumnType("nvarchar(25)")
                         .HasMaxLength(25);
 
+                    b.Property<string>("Attention")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(25)")
                         .HasMaxLength(25);
 
                     b.Property<string>("Country")
+                        .HasColumnType("nvarchar(25)")
+                        .HasMaxLength(25);
+
+                    b.Property<string>("Fax")
+                        .HasColumnType("nvarchar(25)")
+                        .HasMaxLength(25);
+
+                    b.Property<string>("Phone")
                         .HasColumnType("nvarchar(25)")
                         .HasMaxLength(25);
 
@@ -83,15 +97,14 @@ namespace Fanda.Data.Migrations
                         .HasColumnType("nvarchar(25)")
                         .HasMaxLength(25);
 
-                    b.HasKey("AddressId");
+                    b.HasKey("Id");
 
                     b.ToTable("Addresses");
                 });
 
-            modelBuilder.Entity("Fanda.Data.BankAccount", b =>
+            modelBuilder.Entity("Fanda.Data.Bank", b =>
                 {
-                    b.Property<Guid>("BankAcctId")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("LedgerId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("AccountNumber")
@@ -104,20 +117,8 @@ namespace Fanda.Data.Migrations
                         .HasColumnType("nvarchar(16)")
                         .HasMaxLength(16);
 
-                    b.Property<bool>("Active")
-                        .HasColumnType("bit");
-
                     b.Property<Guid?>("AddressId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("BankName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("BankShortName")
-                        .HasColumnType("nvarchar(15)")
-                        .HasMaxLength(15);
 
                     b.Property<string>("BranchCode")
                         .HasColumnType("nvarchar(16)")
@@ -130,21 +131,18 @@ namespace Fanda.Data.Migrations
                     b.Property<Guid?>("ContactId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DateModified")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("IfscCode")
                         .HasColumnType("nvarchar(16)")
                         .HasMaxLength(16);
+
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("bit");
 
                     b.Property<string>("MicrCode")
                         .HasColumnType("nvarchar(16)")
                         .HasMaxLength(16);
 
-                    b.HasKey("BankAcctId");
+                    b.HasKey("LedgerId");
 
                     b.HasIndex("AccountNumber")
                         .IsUnique();
@@ -157,86 +155,59 @@ namespace Fanda.Data.Migrations
                         .IsUnique()
                         .HasFilter("[ContactId] IS NOT NULL");
 
-                    b.ToTable("BankAccounts");
+                    b.ToTable("Banks");
                 });
 
             modelBuilder.Entity("Fanda.Data.Contact", b =>
                 {
-                    b.Property<Guid>("ContactId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("ContactEmail")
-                        .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
-
-                    b.Property<string>("ContactName")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("ContactPhone")
+                    b.Property<string>("Department")
                         .HasColumnType("nvarchar(25)")
                         .HasMaxLength(25);
 
-                    b.Property<string>("ContactTitle")
+                    b.Property<string>("Designation")
+                        .HasColumnType("nvarchar(25)")
+                        .HasMaxLength(25);
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.HasKey("ContactId");
+                    b.Property<bool>("IsPrimary")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("Mobile")
+                        .HasColumnType("nvarchar(25)")
+                        .HasMaxLength(25);
+
+                    b.Property<string>("Salutation")
+                        .HasColumnType("nvarchar(5)")
+                        .HasMaxLength(5);
+
+                    b.Property<string>("WorkPhone")
+                        .HasColumnType("nvarchar(25)")
+                        .HasMaxLength(25);
+
+                    b.HasKey("Id");
 
                     b.ToTable("Contacts");
                 });
 
-            modelBuilder.Entity("Fanda.Data.Device", b =>
-                {
-                    b.Property<Guid>("DeviceId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(16)")
-                        .HasMaxLength(16);
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DateModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
-
-                    b.Property<Guid?>("LocationId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.HasKey("DeviceId");
-
-                    b.HasIndex("LocationId");
-
-                    b.HasIndex("Code", "LocationId")
-                        .IsUnique()
-                        .HasFilter("[LocationId] IS NOT NULL");
-
-                    b.HasIndex("Name", "LocationId")
-                        .IsUnique()
-                        .HasFilter("[LocationId] IS NOT NULL");
-
-                    b.ToTable("Devices");
-                });
-
             modelBuilder.Entity("Fanda.Data.Invoice", b =>
                 {
-                    b.Property<Guid>("InvoiceId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -247,19 +218,21 @@ namespace Fanda.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DateCreated")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DateModified")
+                        .ValueGeneratedOnUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("DiscountAmt")
-                        .HasColumnType("decimal(16, 4)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("DiscountPct")
-                        .HasColumnType("decimal(16, 4)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("GrandTotal")
-                        .HasColumnType("decimal(16, 4)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("GstTreatmentString")
                         .HasColumnName("GstTreatment")
@@ -279,10 +252,10 @@ namespace Fanda.Data.Migrations
                         .HasMaxLength(16);
 
                     b.Property<decimal>("MiscAddAmt")
-                        .HasColumnType("decimal(16, 4)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("MiscAddDesc")
-                        .HasColumnType("decimal(16, 4)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(255)")
@@ -304,13 +277,13 @@ namespace Fanda.Data.Migrations
                         .HasMaxLength(16);
 
                     b.Property<decimal>("Subtotal")
-                        .HasColumnType("decimal(16, 4)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("TaxAmt")
-                        .HasColumnType("decimal(16, 4)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("TaxPct")
-                        .HasColumnType("decimal(16, 4)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("TaxPreferenceString")
                         .HasColumnName("TaxPreference")
@@ -320,7 +293,7 @@ namespace Fanda.Data.Migrations
                     b.Property<Guid>("YearId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("InvoiceId");
+                    b.HasKey("Id");
 
                     b.HasIndex("BuyerId");
 
@@ -339,7 +312,7 @@ namespace Fanda.Data.Migrations
 
             modelBuilder.Entity("Fanda.Data.InvoiceCategory", b =>
                 {
-                    b.Property<Guid>("CategoryId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -352,9 +325,11 @@ namespace Fanda.Data.Migrations
                         .HasMaxLength(16);
 
                     b.Property<DateTime>("DateCreated")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DateModified")
+                        .ValueGeneratedOnUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -369,7 +344,7 @@ namespace Fanda.Data.Migrations
                     b.Property<Guid>("OrgId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("CategoryId");
+                    b.HasKey("Id");
 
                     b.HasIndex("OrgId");
 
@@ -384,49 +359,48 @@ namespace Fanda.Data.Migrations
 
             modelBuilder.Entity("Fanda.Data.InvoiceItem", b =>
                 {
-                    b.Property<Guid>("InvItemId")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("InvoiceItemId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("InvoiceId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("CentralGstAmt")
-                        .HasColumnType("decimal(16, 4)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("CentralGstPct")
-                        .HasColumnType("decimal(16, 4)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
                     b.Property<decimal>("DiscountAmt")
-                        .HasColumnType("decimal(16, 4)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("DiscountPct")
-                        .HasColumnType("decimal(16, 4)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("InterGstAmt")
-                        .HasColumnType("decimal(16, 4)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("InterGstPct")
-                        .HasColumnType("decimal(16, 4)");
-
-                    b.Property<Guid>("InvoiceId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("LineTotal")
-                        .HasColumnType("decimal(16, 4)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(16, 4)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("Qty")
-                        .HasColumnType("decimal(16, 4)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("StateGstAmt")
-                        .HasColumnType("decimal(16, 4)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("StateGstPct")
-                        .HasColumnType("decimal(16, 4)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<Guid>("StockId")
                         .HasColumnType("uniqueidentifier");
@@ -435,9 +409,9 @@ namespace Fanda.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("UnitPrice")
-                        .HasColumnType("decimal(16, 4)");
+                        .HasColumnType("decimal(18,2)");
 
-                    b.HasKey("InvItemId");
+                    b.HasKey("InvoiceItemId", "InvoiceId");
 
                     b.HasIndex("InvoiceId");
 
@@ -448,31 +422,39 @@ namespace Fanda.Data.Migrations
                     b.ToTable("InvoiceItems");
                 });
 
-            modelBuilder.Entity("Fanda.Data.Location", b =>
+            modelBuilder.Entity("Fanda.Data.Ledger", b =>
                 {
-                    b.Property<Guid>("LocationId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(16)")
-                        .HasMaxLength(16);
-
                     b.Property<DateTime>("DateCreated")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DateModified")
+                        .ValueGeneratedOnUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
-                    b.Property<string>("Name")
+                    b.Property<bool>("IsSystem")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LedgerCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(16)")
+                        .HasMaxLength(16);
+
+                    b.Property<Guid>("LedgerGroupId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("LedgerName")
                         .IsRequired()
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
@@ -480,17 +462,108 @@ namespace Fanda.Data.Migrations
                     b.Property<Guid>("OrgId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("LocationId");
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LedgerGroupId");
 
                     b.HasIndex("OrgId");
 
-                    b.HasIndex("Code", "OrgId")
+                    b.HasIndex("ParentId");
+
+                    b.HasIndex("LedgerCode", "OrgId")
                         .IsUnique();
 
-                    b.HasIndex("Name", "OrgId")
+                    b.HasIndex("LedgerName", "OrgId")
                         .IsUnique();
 
-                    b.ToTable("Locations");
+                    b.ToTable("Ledgers");
+                });
+
+            modelBuilder.Entity("Fanda.Data.LedgerBalance", b =>
+                {
+                    b.Property<Guid>("LedgerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("YearId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("BalanceSign")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(1)")
+                        .HasMaxLength(1);
+
+                    b.Property<decimal>("OpeningBalance")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("LedgerId", "YearId");
+
+                    b.HasIndex("YearId");
+
+                    b.ToTable("LedgerBalances");
+                });
+
+            modelBuilder.Entity("Fanda.Data.LedgerGroup", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("DateCreated")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateModified")
+                        .ValueGeneratedOnUpdate()
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(255)")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("GroupCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(16)")
+                        .HasMaxLength(16);
+
+                    b.Property<string>("GroupName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("GroupTypeString")
+                        .IsRequired()
+                        .HasColumnName("GroupType")
+                        .HasColumnType("nvarchar(20)")
+                        .HasMaxLength(20);
+
+                    b.Property<bool>("IsSystem")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("OrgId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrgId");
+
+                    b.HasIndex("ParentId");
+
+                    b.HasIndex("GroupCode", "OrgId")
+                        .IsUnique();
+
+                    b.HasIndex("GroupName", "OrgId")
+                        .IsUnique();
+
+                    b.ToTable("LedgerGroups");
                 });
 
             modelBuilder.Entity("Fanda.Data.OrgAddress", b =>
@@ -505,22 +578,7 @@ namespace Fanda.Data.Migrations
 
                     b.HasIndex("AddressId");
 
-                    b.ToTable("OrgAddress");
-                });
-
-            modelBuilder.Entity("Fanda.Data.OrgBank", b =>
-                {
-                    b.Property<Guid>("OrgId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("BankAcctId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("OrgId", "BankAcctId");
-
-                    b.HasIndex("BankAcctId");
-
-                    b.ToTable("OrgBank");
+                    b.ToTable("OrgAddresses");
                 });
 
             modelBuilder.Entity("Fanda.Data.OrgContact", b =>
@@ -535,7 +593,7 @@ namespace Fanda.Data.Migrations
 
                     b.HasIndex("ContactId");
 
-                    b.ToTable("OrgContact");
+                    b.ToTable("OrgContacts");
                 });
 
             modelBuilder.Entity("Fanda.Data.OrgUser", b =>
@@ -550,7 +608,7 @@ namespace Fanda.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("OrgUser");
+                    b.ToTable("OrgUsers");
                 });
 
             modelBuilder.Entity("Fanda.Data.OrgUserRole", b =>
@@ -568,12 +626,12 @@ namespace Fanda.Data.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("OrgUserRole");
+                    b.ToTable("OrgUserRoles");
                 });
 
             modelBuilder.Entity("Fanda.Data.Organization", b =>
                 {
-                    b.Property<Guid>("OrgId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -581,9 +639,11 @@ namespace Fanda.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("DateCreated")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DateModified")
+                        .ValueGeneratedOnUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -616,7 +676,7 @@ namespace Fanda.Data.Migrations
                         .HasColumnType("nvarchar(25)")
                         .HasMaxLength(25);
 
-                    b.HasKey("OrgId");
+                    b.HasKey("Id");
 
                     b.HasIndex("OrgCode")
                         .IsUnique();
@@ -629,41 +689,18 @@ namespace Fanda.Data.Migrations
 
             modelBuilder.Entity("Fanda.Data.Party", b =>
                 {
-                    b.Property<Guid>("PartyId")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("LedgerId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("bit");
 
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(16)")
-                        .HasMaxLength(16);
-
                     b.Property<decimal>("CreditLimit")
-                        .HasColumnType("decimal(16, 4)");
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DateModified")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("GSTIN")
                         .HasColumnType("nvarchar(25)")
                         .HasMaxLength(25);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<Guid>("OrgId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("PAN")
                         .HasColumnType("nvarchar(25)")
@@ -687,17 +724,9 @@ namespace Fanda.Data.Migrations
                         .HasColumnType("nvarchar(25)")
                         .HasMaxLength(25);
 
-                    b.HasKey("PartyId");
+                    b.HasKey("LedgerId");
 
                     b.HasIndex("CategoryId");
-
-                    b.HasIndex("OrgId");
-
-                    b.HasIndex("Code", "OrgId")
-                        .IsUnique();
-
-                    b.HasIndex("Name", "OrgId")
-                        .IsUnique();
 
                     b.ToTable("Parties");
                 });
@@ -714,27 +743,12 @@ namespace Fanda.Data.Migrations
 
                     b.HasIndex("AddressId");
 
-                    b.ToTable("PartyAddress");
-                });
-
-            modelBuilder.Entity("Fanda.Data.PartyBank", b =>
-                {
-                    b.Property<Guid>("PartyId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("BankAcctId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("PartyId", "BankAcctId");
-
-                    b.HasIndex("BankAcctId");
-
-                    b.ToTable("PartyBank");
+                    b.ToTable("PartyAddresses");
                 });
 
             modelBuilder.Entity("Fanda.Data.PartyCategory", b =>
                 {
-                    b.Property<Guid>("CategoryId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -747,9 +761,11 @@ namespace Fanda.Data.Migrations
                         .HasMaxLength(16);
 
                     b.Property<DateTime>("DateCreated")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DateModified")
+                        .ValueGeneratedOnUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -764,7 +780,7 @@ namespace Fanda.Data.Migrations
                     b.Property<Guid>("OrgId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("CategoryId");
+                    b.HasKey("Id");
 
                     b.HasIndex("OrgId");
 
@@ -789,12 +805,12 @@ namespace Fanda.Data.Migrations
 
                     b.HasIndex("ContactId");
 
-                    b.ToTable("PartyContact");
+                    b.ToTable("PartyContacts");
                 });
 
             modelBuilder.Entity("Fanda.Data.Product", b =>
                 {
-                    b.Property<Guid>("ProductId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -808,7 +824,7 @@ namespace Fanda.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("CentralGstPct")
-                        .HasColumnType("decimal(16, 4)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -816,12 +832,14 @@ namespace Fanda.Data.Migrations
                         .HasMaxLength(16);
 
                     b.Property<decimal>("CostPrice")
-                        .HasColumnType("decimal(16, 4)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("DateCreated")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DateModified")
+                        .ValueGeneratedOnUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -829,7 +847,7 @@ namespace Fanda.Data.Migrations
                         .HasMaxLength(255);
 
                     b.Property<decimal>("InterGstPct")
-                        .HasColumnType("decimal(16, 4)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -848,10 +866,10 @@ namespace Fanda.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("SellingPrice")
-                        .HasColumnType("decimal(16, 4)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("StateGstPct")
-                        .HasColumnType("decimal(16, 4)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("TaxCode")
                         .HasColumnType("nvarchar(max)");
@@ -867,7 +885,7 @@ namespace Fanda.Data.Migrations
                     b.Property<Guid?>("VarietyId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("ProductId");
+                    b.HasKey("Id");
 
                     b.HasIndex("BrandId");
 
@@ -892,7 +910,7 @@ namespace Fanda.Data.Migrations
 
             modelBuilder.Entity("Fanda.Data.ProductBrand", b =>
                 {
-                    b.Property<Guid>("BrandId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -905,9 +923,11 @@ namespace Fanda.Data.Migrations
                         .HasMaxLength(16);
 
                     b.Property<DateTime>("DateCreated")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DateModified")
+                        .ValueGeneratedOnUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -922,7 +942,7 @@ namespace Fanda.Data.Migrations
                     b.Property<Guid>("OrgId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("BrandId");
+                    b.HasKey("Id");
 
                     b.HasIndex("OrgId");
 
@@ -937,7 +957,7 @@ namespace Fanda.Data.Migrations
 
             modelBuilder.Entity("Fanda.Data.ProductCategory", b =>
                 {
-                    b.Property<Guid>("CategoryId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -950,9 +970,11 @@ namespace Fanda.Data.Migrations
                         .HasMaxLength(16);
 
                     b.Property<DateTime>("DateCreated")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DateModified")
+                        .ValueGeneratedOnUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -970,7 +992,7 @@ namespace Fanda.Data.Migrations
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("CategoryId");
+                    b.HasKey("Id");
 
                     b.HasIndex("OrgId");
 
@@ -987,7 +1009,7 @@ namespace Fanda.Data.Migrations
 
             modelBuilder.Entity("Fanda.Data.ProductIngredient", b =>
                 {
-                    b.Property<Guid>("IngredientId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -998,26 +1020,25 @@ namespace Fanda.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Qty")
-                        .HasColumnType("decimal(16, 4)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<Guid>("UnitId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("IngredientId");
+                    b.HasKey("Id");
 
                     b.HasIndex("ChildProductId");
 
-                    b.HasIndex("UnitId");
+                    b.HasIndex("ParentProductId");
 
-                    b.HasIndex("ParentProductId", "ChildProductId")
-                        .IsUnique();
+                    b.HasIndex("UnitId");
 
                     b.ToTable("ProductIngredients");
                 });
 
             modelBuilder.Entity("Fanda.Data.ProductPricing", b =>
                 {
-                    b.Property<Guid>("PricingId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -1030,7 +1051,7 @@ namespace Fanda.Data.Migrations
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("PricingId");
+                    b.HasKey("Id");
 
                     b.HasIndex("InvoiceCategoryId");
 
@@ -1044,33 +1065,32 @@ namespace Fanda.Data.Migrations
             modelBuilder.Entity("Fanda.Data.ProductPricingRange", b =>
                 {
                     b.Property<Guid>("RangeId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("AdjustAmt")
-                        .HasColumnType("decimal(16, 4)");
-
-                    b.Property<decimal>("AdjustPct")
-                        .HasColumnType("decimal(16, 4)");
-
-                    b.Property<decimal>("FinalPrice")
-                        .HasColumnType("decimal(16, 4)");
-
-                    b.Property<decimal>("MaxQty")
-                        .HasColumnType("decimal(16, 4)");
-
-                    b.Property<decimal>("MinQty")
-                        .HasColumnType("decimal(16, 4)");
 
                     b.Property<Guid>("PricingId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("AdjustAmt")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("AdjustPct")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("FinalPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("MaxQty")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("MinQty")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("RoundOffOptionString")
                         .HasColumnName("RoundOffOption")
                         .HasColumnType("nvarchar(16)")
                         .HasMaxLength(16);
 
-                    b.HasKey("RangeId");
+                    b.HasKey("RangeId", "PricingId");
 
                     b.HasIndex("PricingId");
 
@@ -1079,7 +1099,7 @@ namespace Fanda.Data.Migrations
 
             modelBuilder.Entity("Fanda.Data.ProductSegment", b =>
                 {
-                    b.Property<Guid>("SegmentId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -1092,9 +1112,11 @@ namespace Fanda.Data.Migrations
                         .HasMaxLength(16);
 
                     b.Property<DateTime>("DateCreated")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DateModified")
+                        .ValueGeneratedOnUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -1109,7 +1131,7 @@ namespace Fanda.Data.Migrations
                     b.Property<Guid>("OrgId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("SegmentId");
+                    b.HasKey("Id");
 
                     b.HasIndex("OrgId");
 
@@ -1124,7 +1146,7 @@ namespace Fanda.Data.Migrations
 
             modelBuilder.Entity("Fanda.Data.ProductVariety", b =>
                 {
-                    b.Property<Guid>("VarietyId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -1137,9 +1159,11 @@ namespace Fanda.Data.Migrations
                         .HasMaxLength(16);
 
                     b.Property<DateTime>("DateCreated")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DateModified")
+                        .ValueGeneratedOnUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -1154,7 +1178,7 @@ namespace Fanda.Data.Migrations
                     b.Property<Guid>("OrgId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("VarietyId");
+                    b.HasKey("Id");
 
                     b.HasIndex("OrgId");
 
@@ -1182,9 +1206,11 @@ namespace Fanda.Data.Migrations
                         .HasMaxLength(16);
 
                     b.Property<DateTime>("DateCreated")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DateModified")
+                        .ValueGeneratedOnUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -1196,12 +1222,17 @@ namespace Fanda.Data.Migrations
                         .HasColumnType("nvarchar(25)")
                         .HasMaxLength(25);
 
+                    b.Property<Guid>("OrgId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("Code")
+                    b.HasIndex("OrgId");
+
+                    b.HasIndex("Code", "OrgId")
                         .IsUnique();
 
-                    b.HasIndex("Name")
+                    b.HasIndex("Name", "OrgId")
                         .IsUnique();
 
                     b.ToTable("Roles");
@@ -1209,7 +1240,7 @@ namespace Fanda.Data.Migrations
 
             modelBuilder.Entity("Fanda.Data.Stock", b =>
                 {
-                    b.Property<Guid>("StockId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -1227,12 +1258,12 @@ namespace Fanda.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("QtyOnHand")
-                        .HasColumnType("decimal(16, 4)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<Guid>("UnitId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("StockId");
+                    b.HasKey("Id");
 
                     b.HasIndex("ProductId");
 
@@ -1247,7 +1278,7 @@ namespace Fanda.Data.Migrations
 
             modelBuilder.Entity("Fanda.Data.Unit", b =>
                 {
-                    b.Property<Guid>("UnitId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -1260,9 +1291,11 @@ namespace Fanda.Data.Migrations
                         .HasMaxLength(16);
 
                     b.Property<DateTime>("DateCreated")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DateModified")
+                        .ValueGeneratedOnUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
@@ -1273,7 +1306,7 @@ namespace Fanda.Data.Migrations
                     b.Property<Guid>("OrgId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("UnitId");
+                    b.HasKey("Id");
 
                     b.HasIndex("OrgId");
 
@@ -1288,7 +1321,7 @@ namespace Fanda.Data.Migrations
 
             modelBuilder.Entity("Fanda.Data.UnitConversion", b =>
                 {
-                    b.Property<Guid>("ConversionId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -1299,7 +1332,7 @@ namespace Fanda.Data.Migrations
                         .HasColumnType("tinyint");
 
                     b.Property<decimal>("Factor")
-                        .HasColumnType("decimal(16, 4)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<Guid>("FromUnitId")
                         .HasColumnType("uniqueidentifier");
@@ -1314,7 +1347,7 @@ namespace Fanda.Data.Migrations
                     b.Property<Guid>("ToUnitId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("ConversionId");
+                    b.HasKey("Id");
 
                     b.HasIndex("FromUnitId");
 
@@ -1335,12 +1368,14 @@ namespace Fanda.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("DateCreated")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DateLastLogin")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DateModified")
+                        .ValueGeneratedOnUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
@@ -1356,14 +1391,12 @@ namespace Fanda.Data.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<Guid?>("LocationId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<byte[]>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
 
                     b.Property<byte[]>("PasswordSalt")
+                        .IsRequired()
                         .HasColumnType("varbinary(max)");
 
                     b.Property<string>("UserName")
@@ -1376,8 +1409,6 @@ namespace Fanda.Data.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.HasIndex("LocationId");
-
                     b.HasIndex("UserName")
                         .IsUnique();
 
@@ -1388,28 +1419,28 @@ namespace Fanda.Data.Migrations
                 {
                     b.HasOne("Fanda.Data.Organization", "Organization")
                         .WithMany("AccountYears")
-                        .HasForeignKey("OrganizationOrgId");
+                        .HasForeignKey("OrgId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("Fanda.Data.BankAccount", b =>
+            modelBuilder.Entity("Fanda.Data.Bank", b =>
                 {
                     b.HasOne("Fanda.Data.Address", "Address")
-                        .WithOne("BankAccount")
-                        .HasForeignKey("Fanda.Data.BankAccount", "AddressId")
+                        .WithOne("Bank")
+                        .HasForeignKey("Fanda.Data.Bank", "AddressId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Fanda.Data.Contact", "Contact")
-                        .WithOne("BankAccount")
-                        .HasForeignKey("Fanda.Data.BankAccount", "ContactId")
+                        .WithOne("Bank")
+                        .HasForeignKey("Fanda.Data.Bank", "ContactId")
                         .OnDelete(DeleteBehavior.Restrict);
-                });
 
-            modelBuilder.Entity("Fanda.Data.Device", b =>
-                {
-                    b.HasOne("Fanda.Data.Location", "Location")
-                        .WithMany("Devices")
-                        .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                    b.HasOne("Fanda.Data.Ledger", "Ledger")
+                        .WithOne("Bank")
+                        .HasForeignKey("Fanda.Data.Bank", "LedgerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Fanda.Data.Invoice", b =>
@@ -1468,13 +1499,53 @@ namespace Fanda.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Fanda.Data.Location", b =>
+            modelBuilder.Entity("Fanda.Data.Ledger", b =>
                 {
+                    b.HasOne("Fanda.Data.LedgerGroup", "LedgerGroup")
+                        .WithMany("Ledgers")
+                        .HasForeignKey("LedgerGroupId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Fanda.Data.Organization", "Organization")
-                        .WithMany("Locations")
+                        .WithMany("Ledgers")
                         .HasForeignKey("OrgId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("Fanda.Data.Ledger", "Parent")
+                        .WithMany("Children")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("Fanda.Data.LedgerBalance", b =>
+                {
+                    b.HasOne("Fanda.Data.Ledger", "Ledger")
+                        .WithMany("LedgerBalances")
+                        .HasForeignKey("LedgerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Fanda.Data.AccountYear", "AccountYear")
+                        .WithMany("LedgerBalances")
+                        .HasForeignKey("YearId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Fanda.Data.LedgerGroup", b =>
+                {
+                    b.HasOne("Fanda.Data.Organization", "Organization")
+                        .WithMany("LedgerGroups")
+                        .HasForeignKey("OrgId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Fanda.Data.LedgerGroup", "Parent")
+                        .WithMany("Children")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Fanda.Data.OrgAddress", b =>
@@ -1486,22 +1557,7 @@ namespace Fanda.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("Fanda.Data.Organization", "Organization")
-                        .WithMany("Addresses")
-                        .HasForeignKey("OrgId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Fanda.Data.OrgBank", b =>
-                {
-                    b.HasOne("Fanda.Data.BankAccount", "BankAccount")
-                        .WithMany("OrgBanks")
-                        .HasForeignKey("BankAcctId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Fanda.Data.Organization", "Organization")
-                        .WithMany("Banks")
+                        .WithMany("OrgAddresses")
                         .HasForeignKey("OrgId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1516,7 +1572,7 @@ namespace Fanda.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("Fanda.Data.Organization", "Organization")
-                        .WithMany("Contacts")
+                        .WithMany("OrgContacts")
                         .HasForeignKey("OrgId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1525,13 +1581,13 @@ namespace Fanda.Data.Migrations
             modelBuilder.Entity("Fanda.Data.OrgUser", b =>
                 {
                     b.HasOne("Fanda.Data.Organization", "Organization")
-                        .WithMany("Users")
+                        .WithMany("OrgUsers")
                         .HasForeignKey("OrgId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Fanda.Data.User", "User")
-                        .WithMany("Organizations")
+                        .WithMany("OrgUsers")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1560,9 +1616,9 @@ namespace Fanda.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Fanda.Data.Organization", "Organization")
-                        .WithMany("Parties")
-                        .HasForeignKey("OrgId")
+                    b.HasOne("Fanda.Data.Ledger", "Ledger")
+                        .WithOne("Party")
+                        .HasForeignKey("Fanda.Data.Party", "LedgerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
@@ -1576,22 +1632,7 @@ namespace Fanda.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("Fanda.Data.Party", "Party")
-                        .WithMany("Addresses")
-                        .HasForeignKey("PartyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Fanda.Data.PartyBank", b =>
-                {
-                    b.HasOne("Fanda.Data.BankAccount", "BankAccount")
-                        .WithMany("PartyBanks")
-                        .HasForeignKey("BankAcctId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Fanda.Data.Party", "Party")
-                        .WithMany("Banks")
+                        .WithMany("PartyAddresses")
                         .HasForeignKey("PartyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1615,7 +1656,7 @@ namespace Fanda.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("Fanda.Data.Party", "Party")
-                        .WithMany("Contacts")
+                        .WithMany("PartyContacts")
                         .HasForeignKey("PartyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1725,7 +1766,7 @@ namespace Fanda.Data.Migrations
                     b.HasOne("Fanda.Data.ProductPricing", "ProductPricing")
                         .WithMany("PricingRanges")
                         .HasForeignKey("PricingId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -1742,6 +1783,15 @@ namespace Fanda.Data.Migrations
                 {
                     b.HasOne("Fanda.Data.Organization", "Organization")
                         .WithMany("ProductVarieties")
+                        .HasForeignKey("OrgId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Fanda.Data.Role", b =>
+                {
+                    b.HasOne("Fanda.Data.Organization", "Organization")
+                        .WithMany("Roles")
                         .HasForeignKey("OrgId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -1790,14 +1840,6 @@ namespace Fanda.Data.Migrations
                         .HasForeignKey("ToUnitId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Fanda.Data.User", b =>
-                {
-                    b.HasOne("Fanda.Data.Location", "Location")
-                        .WithMany("Users")
-                        .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618
         }

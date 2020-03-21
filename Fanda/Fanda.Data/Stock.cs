@@ -5,7 +5,7 @@ namespace Fanda.Data
 {
     public class Stock
     {
-        public Guid StockId { get; set; }
+        public Guid Id { get; set; }
         public Guid ProductId { get; set; }
         public string BatchNumber { get; set; }
         public DateTime? MfgDate { get; set; }

@@ -9,10 +9,10 @@
     <Compile Remove="Context\MsSqlDbContext.cs" />
     <Compile Remove="Context\MySqlDbContext.cs" />
     <Compile Remove="Context\PgSqlDbContext.cs" />
-    <Compile Remove="Migrations\20200319020300_test.cs" />
-    <Compile Remove="Migrations\20200319020300_test.Designer.cs" />
-    <Compile Remove="Migrations\20200319040047_test.cs" />
-    <Compile Remove="Migrations\20200319040047_test.Designer.cs" />
+    <Compile Remove="Device.cs" />
+    <Compile Remove="Location.cs" />
+    <Compile Remove="OrgBank.cs" />
+    <Compile Remove="PartyBank.cs" />
   </ItemGroup>
 
   <ItemGroup>

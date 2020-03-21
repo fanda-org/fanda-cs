@@ -1,27 +1,16 @@
 using Fanda.Shared;
-using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Fanda.Dto
 {
-    public class BankAccountDto
+    public class BankDto
     {
-        public Guid BankAcctId { get; set; }
+        public string LedgerId { get; set; }
 
         [Display(Name = "Account No.")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Account No. is required")]
         [StringLength(25, ErrorMessage = "Maximum allowed length is 25")]
         public string AccountNumber { get; set; }
-
-        [Display(Name = "Short Name")]
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Short name is required")]
-        [StringLength(15, ErrorMessage = "Maximum allowed length is 15")]
-        public string BankShortName { get; set; }
-
-        [Display(Name = "Bank Name")]
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Bank name is required")]
-        [StringLength(50, ErrorMessage = "Maximum allowed length is 50")]
-        public string BankName { get; set; }
 
         [Display(Name = "Account Type")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Account Type is required")]
@@ -44,16 +33,15 @@ namespace Fanda.Dto
         [StringLength(50, ErrorMessage = "Maximum allowed length is 50")]
         public string BranchName { get; set; }
 
-        public bool Active { get; set; }
-        public DateTime DateCreated { get; set; }
-        public DateTime? DateModified { get; set; }
         public ContactDto Contact { get; set; }
         public AddressDto Address { get; set; }
 
-        public AccountOwner Owner { get; set; }
-        public Guid? OwnerId { get; set; }
+        public bool IsDefault { get; set; }
 
-        public bool IsDeleted { get; set; }
-        public int Index { get; set; }
+        //public AccountOwner Owner { get; set; }
+        //public Guid? OwnerId { get; set; }
+
+        //public bool IsDeleted { get; set; }
+        //public int Index { get; set; }
     }
 }

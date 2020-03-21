@@ -13,7 +13,9 @@ namespace Fanda.Data
         public DateTime DateCreated { get; set; }
         public DateTime? DateModified { get; set; }
         public bool Active { get; set; }
+        public Guid OrgId { get; set; }
 
+        public virtual Organization Organization { get; set; }
         public virtual ICollection<OrgUserRole> OrgUserRoles { get; set; }
     }
 }

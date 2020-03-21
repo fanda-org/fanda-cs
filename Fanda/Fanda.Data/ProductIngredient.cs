@@ -4,7 +4,7 @@ namespace Fanda.Data
 {
     public class ProductIngredient
     {
-        public Guid IngredientId { get; set; }
+        public Guid Id { get; set; }
         public Guid ParentProductId { get; set; }
         public Guid ChildProductId { get; set; }
         public Guid UnitId { get; set; }

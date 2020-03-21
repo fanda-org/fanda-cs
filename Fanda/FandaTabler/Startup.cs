@@ -272,11 +272,11 @@ namespace FandaTabler
 
             services.AddScoped<IOrganizationService, OrganizationService>();
             services.AddScoped<IRoleService, RoleService>();
-            services.AddScoped<ILocationService, LocationService>();
+            //services.AddScoped<ILocationService, LocationService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUnitService, UnitService>();
             services.AddScoped<IPartyCategoryService, PartyCategoryService>();
-            services.AddScoped<IPartyService, PartyService>();
+            //services.AddScoped<IPartyService, PartyService>();
 
             services.AddHttpContextAccessor();
             #endregion

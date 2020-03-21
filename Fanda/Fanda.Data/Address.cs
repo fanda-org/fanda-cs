@@ -6,13 +6,16 @@ namespace Fanda.Data
 {
     public class Address
     {
-        public Guid AddressId { get; set; }
+        public Guid Id { get; set; }
+        public string Attention { get; set; }
         public string AddressLine1 { get; set; }
         public string AddressLine2 { get; set; }
         public string City { get; set; }
         public string State { get; set; }
         public string Country { get; set; }
         public string PostalCode { get; set; }
+        public string Phone { set; get; }
+        public string Fax { set; get; }
         public AddressType AddressType { get; set; }
         public string AddressTypeString
         {
@@ -20,7 +23,7 @@ namespace Fanda.Data
             set { AddressType = (AddressType)Enum.Parse(typeof(AddressType), value, true); }
         }
 
-        public virtual BankAccount BankAccount { get; set; }
+        public virtual Bank Bank { get; set; }
         public virtual ICollection<OrgAddress> OrgAddresses { get; set; }
         public virtual ICollection<PartyAddress> PartyAddresses { get; set; }
     }

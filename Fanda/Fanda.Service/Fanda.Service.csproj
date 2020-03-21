@@ -5,9 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="BankService.cs" />
     <Compile Remove="Extensions\Message.cs" />
     <Compile Remove="Extensions\PagedList.cs" />
     <Compile Remove="IdentityServerConfig.cs" />
+    <Compile Remove="LocationService.cs" />
+    <Compile Remove="PartyService.cs" />
   </ItemGroup>
 
   <ItemGroup>

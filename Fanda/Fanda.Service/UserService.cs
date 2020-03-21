@@ -104,8 +104,8 @@ namespace Fanda.Service
                     .ProjectTo<UserDto>(_mapper.ConfigurationProvider);
             else
                 userQry = _context.Organizations //_userManager.Users
-                    .Where(o => o.OrgId == new Guid(orgId))
-                    .SelectMany(o => o.Users.Select(ou => ou.User))
+                    .Where(o => o.Id == new Guid(orgId))
+                    .SelectMany(o => o.OrgUsers.Select(ou => ou.User))
                     .ProjectTo<UserDto>(_mapper.ConfigurationProvider);
             var userList = await userQry
                 //.Where(u => u.Active == (active == null) ? u.Active : (bool)active)
@@ -122,7 +122,7 @@ namespace Fanda.Service
                 user = await _context.Users
                     .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
                     .AsNoTracking()
-                    .SingleOrDefaultAsync(u => u.UserId == userId);
+                    .SingleOrDefaultAsync(u => u.Id == userId);
             if (user != null)
                 return user;
             throw new KeyNotFoundException("User not found");
@@ -131,8 +131,8 @@ namespace Fanda.Service
         public async Task<UserDto> SaveAsync(string orgId, UserDto userVM, string password)
         {
             User user = null;
-            if (!string.IsNullOrEmpty(userVM.UserId))
-                user = await _context.Users.FindAsync(userVM.UserId.ToString());
+            if (!string.IsNullOrEmpty(userVM.Id))
+                user = await _context.Users.FindAsync(userVM.Id.ToString());
 
             if (user == null)
             {
@@ -222,16 +222,25 @@ namespace Fanda.Service
 
         public async Task AddToRoleAsync(string orgId, UserDto user, string roleName)
         {
-            var role = await _context.Roles.FirstOrDefaultAsync(r => r.Name == roleName);
-            if (role != null)
+            try
             {
-                _context.Set<OrgUserRole>().Add(new OrgUserRole
+                var role = await _context.Roles
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(r => r.Name == roleName);
+                if (role != null)
                 {
-                    OrgId = new Guid(orgId),
-                    UserId = new Guid(user.UserId),
-                    Role = role
-                });
-                await _context.SaveChangesAsync();
+                    _context.Set<OrgUserRole>().Add(new OrgUserRole
+                    {
+                        OrgId = new Guid(orgId),
+                        UserId = new Guid(user.Id),
+                        Role = role
+                    });
+                    await _context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException(ex.Message, ex);
             }
         }
 

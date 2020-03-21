@@ -161,7 +161,7 @@
                     {
                         targets: 0, data: 'Code',
                         render: function (code, type, row, meta) {
-                            var catId = row.CategoryId;
+                            var catId = row.Id;
                             var link = '@Url.Action("Details", new { id = "-1" })';
                             link = link.replace("-1", catId);
                             return '<a href=' + link + '>' + code + '</a>';
@@ -170,7 +170,7 @@
                     {
                         targets: 1, data: 'Name',
                         @*render: function (name, type, row, meta) {
-                            var catId = row.CategoryId;
+                            var catId = row.Id;
                             var link = '@Url.Action("Details", new { id = "-1" })';
                             link = link.replace("-1", catId);
                             return '<a href=' + link + '>' + name + '</a>';
@@ -189,26 +189,26 @@
                             //return data == 0 ? 'Inactive' : 'Active';
 
                             //return '<div class="custom-control custom-checkbox">' +
-                                //    '<input type="checkbox" ' + (active ? "checked" : "") + ' class="custom-control-input" id="chk-' + cat.CategoryId + '">' +
-                                //    '<label class="custom-control-label" style="cursor:pointer" for="chk-' + cat.CategoryId + '">&nbsp;</label>'
+                                //    '<input type="checkbox" ' + (active ? "checked" : "") + ' class="custom-control-input" id="chk-' + cat.Id + '">' +
+                                //    '<label class="custom-control-label" style="cursor:pointer" for="chk-' + cat.Id + '">&nbsp;</label>'
                                 //'</div>';
 
-                            //return '<input type="checkbox" id="chk-' + cat.CategoryId + '" ' + (active ? "checked" : "") + ' data-toggle="toggle" data-size="small" data-on="Active" data-off="Inactive" data-onstyle="primary" data-offstyle="secondary">';
+                            //return '<input type="checkbox" id="chk-' + cat.Id + '" ' + (active ? "checked" : "") + ' data-toggle="toggle" data-size="small" data-on="Active" data-off="Inactive" data-onstyle="primary" data-offstyle="secondary">';
                             //return '<div><label><input type="checkbox"><span class="slider"></span></label></div>';
 
                             //return '<div class="custom-switch custom-switch-xs">' +
-                            //    '<input class="custom-switch-input" id="chk-' + cat.CategoryId + '" ' + (active ? "checked" : "") + ' type="checkbox">' +
-                            //    '<label class="custom-switch-btn" for="chk-' + cat.CategoryId + '"></label>' +
+                            //    '<input class="custom-switch-input" id="chk-' + cat.Id + '" ' + (active ? "checked" : "") + ' type="checkbox">' +
+                            //    '<label class="custom-switch-btn" for="chk-' + cat.Id + '"></label>' +
                             //    '</div>';
 
                             return '<div class="custom-control custom-switch">' +
-                                '<input type="checkbox" class="custom-control-input" id="chk-' + cat.CategoryId + '" ' + (active ? "checked" : "") + ' type="checkbox">' +
-                                '<label class="custom-control-label" for="chk-' + cat.CategoryId + '"></label>' +
+                                '<input type="checkbox" class="custom-control-input" id="chk-' + cat.Id + '" ' + (active ? "checked" : "") + ' type="checkbox">' +
+                                '<label class="custom-control-label" for="chk-' + cat.Id + '"></label>' +
                             '</div>';
                         }
                     },
                     {
-                        targets: 4, data: 'CategoryId',
+                        targets: 4, data: 'Id',
                         render: function (id, type, row, meta) {
 
                             var editLink = '@Url.Action("Edit", new { id = "-1" })';

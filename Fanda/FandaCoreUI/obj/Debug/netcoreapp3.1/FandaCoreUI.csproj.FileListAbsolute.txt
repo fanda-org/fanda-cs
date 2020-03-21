@@ -486,10 +486,6 @@ D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaCoreUI\obj\Debug\netcoreapp3
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaCoreUI\obj\Debug\netcoreapp3.1\Razor\Views\Organizations\Details.cshtml.g.cs
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaCoreUI\obj\Debug\netcoreapp3.1\Razor\Views\Organizations\Edit.cshtml.g.cs
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaCoreUI\obj\Debug\netcoreapp3.1\Razor\Views\Organizations\Index.cshtml.g.cs
-D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaCoreUI\obj\Debug\netcoreapp3.1\Razor\Views\Parties\Edit.cshtml.g.cs
-D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaCoreUI\obj\Debug\netcoreapp3.1\Razor\Views\Parties\Index.cshtml.g.cs
-D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaCoreUI\obj\Debug\netcoreapp3.1\Razor\Views\Parties\_EditGeneral.cshtml.g.cs
-D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaCoreUI\obj\Debug\netcoreapp3.1\Razor\Views\Parties\_partyEdit.cshtml.g.cs
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaCoreUI\obj\Debug\netcoreapp3.1\Razor\Views\PartyCategories\Edit.cshtml.g.cs
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaCoreUI\obj\Debug\netcoreapp3.1\Razor\Views\PartyCategories\Index.cshtml.g.cs
 D:\Development\Projects\dotnet\Fanda\src\Fanda\FandaCoreUI\obj\Debug\netcoreapp3.1\Razor\Views\Shared\EditorTemplates\ContactViewModel.cshtml.g.cs

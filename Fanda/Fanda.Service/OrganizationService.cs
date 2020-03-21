@@ -15,10 +15,11 @@ namespace Fanda.Service
     {
         IQueryable<OrganizationDto> GetAll();
         Task<OrganizationDto> GetByIdAsync(string orgId, bool includes = false);
-        Task<OrganizationDto> GetByCodeAsync(string orgCode, bool includes = false);
-        Task<OrganizationDto> SaveAsync(OrganizationDto orgVM);
+        //Task<OrganizationDto> GetByCodeAsync(string orgCode, bool includes = false);
+        Task<OrganizationDto> SaveAsync(OrganizationDto dto);
         Task<bool> DeleteAsync(string orgId);
-        bool Exists(string orgCode);
+        bool ExistsById(string id);
+        bool ExistsByCode(string code);
         Task<bool> ChangeStatus(string orgId, bool active);
         string ErrorMessage { get; }
     }
@@ -52,7 +53,7 @@ namespace Fanda.Service
             var org = await _context.Organizations
                 .AsNoTracking()
                 .ProjectTo<OrganizationDto>(_mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync(o => o.OrgId == orgId);
+                .FirstOrDefaultAsync(o => o.Id == orgId);
 
             if (org == null)
                 throw new KeyNotFoundException("Organization not found");
@@ -62,67 +63,55 @@ namespace Fanda.Service
             Guid guid = new Guid(orgId);
             org.Contacts = await _context.Organizations
                 .AsNoTracking()
-                .Where(m => m.OrgId == guid)
-                .SelectMany(oc => oc.Contacts.Select(c => c.Contact))
+                .Where(m => m.Id == guid)
+                .SelectMany(oc => oc.OrgContacts.Select(c => c.Contact))
                 .ProjectTo<ContactDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
             org.Addresses = await _context.Organizations
                 .AsNoTracking()
-                .Where(m => m.OrgId == guid)
-                .SelectMany(oa => oa.Addresses.Select(a => a.Address))
+                .Where(m => m.Id == guid)
+                .SelectMany(oa => oa.OrgAddresses.Select(a => a.Address))
                 .ProjectTo<AddressDto>(_mapper.ConfigurationProvider)
-                .ToListAsync();
-            org.Banks = await _context.Organizations
-                .AsNoTracking()
-                .Where(m => m.OrgId == guid)
-                .SelectMany(pb => pb.Banks.Select(a => a.BankAccount))
-                .ProjectTo<BankAccountDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
             return org;
         }
 
-        public async Task<OrganizationDto> GetByCodeAsync(string orgCode, bool includes = false)
-        {
-            if (string.IsNullOrEmpty(orgCode))
-                throw new ArgumentNullException("orgCode", "Org code is missing");
+        //public async Task<OrganizationDto> GetByCodeAsync(string orgCode, bool includes = false)
+        //{
+        //    if (string.IsNullOrEmpty(orgCode))
+        //        throw new ArgumentNullException("orgCode", "Org code is missing");
 
-            var org = await _context.Organizations
-                .AsNoTracking()
-                .ProjectTo<OrganizationDto>(_mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync(o => o.OrgCode == orgCode);
+        //    var org = await _context.Organizations
+        //        .AsNoTracking()
+        //        .ProjectTo<OrganizationDto>(_mapper.ConfigurationProvider)
+        //        .FirstOrDefaultAsync(o => o.OrgCode == orgCode);
 
-            if (org == null)
-                throw new KeyNotFoundException("Organization not found");
-            if (org != null && !includes)
-                return org;
+        //    if (org == null)
+        //        throw new KeyNotFoundException("Organization not found");
+        //    if (org != null && !includes)
+        //        return org;
 
-            Guid guid = new Guid(orgCode);
-            org.Contacts = await _context.Organizations
-                .AsNoTracking()
-                .Where(m => m.OrgId == guid)
-                .SelectMany(oc => oc.Contacts.Select(c => c.Contact))
-                .ProjectTo<ContactDto>(_mapper.ConfigurationProvider)
-                .ToListAsync();
-            org.Addresses = await _context.Organizations
-                .AsNoTracking()
-                .Where(m => m.OrgId == guid)
-                .SelectMany(oa => oa.Addresses.Select(a => a.Address))
-                .ProjectTo<AddressDto>(_mapper.ConfigurationProvider)
-                .ToListAsync();
-            org.Banks = await _context.Organizations
-                .AsNoTracking()
-                .Where(m => m.OrgId == guid)
-                .SelectMany(pb => pb.Banks.Select(a => a.BankAccount))
-                .ProjectTo<BankAccountDto>(_mapper.ConfigurationProvider)
-                .ToListAsync();
-            return org;
+        //    Guid guid = new Guid(orgCode);
+        //    org.Contacts = await _context.Organizations
+        //        .AsNoTracking()
+        //        .Where(m => m.Id == guid)
+        //        .SelectMany(oc => oc.OrgContacts.Select(c => c.Contact))
+        //        .ProjectTo<ContactDto>(_mapper.ConfigurationProvider)
+        //        .ToListAsync();
+        //    org.Addresses = await _context.Organizations
+        //        .AsNoTracking()
+        //        .Where(m => m.Id == guid)
+        //        .SelectMany(oa => oa.OrgAddresses.Select(a => a.Address))
+        //        .ProjectTo<AddressDto>(_mapper.ConfigurationProvider)
+        //        .ToListAsync();
+        //    return org;
 
-        }
+        //}
 
         public async Task<OrganizationDto> SaveAsync(OrganizationDto orgVM)
         {
             var org = _mapper.Map<Organization>(orgVM);
-            if (org.OrgId == Guid.Empty)
+            if (org.Id == Guid.Empty)
             {
                 org.DateCreated = DateTime.Now;
                 org.DateModified = null;
@@ -131,10 +120,9 @@ namespace Fanda.Service
             else
             {
                 var dbOrg = await _context.Organizations
-                    .Where(o => o.OrgId == org.OrgId)
-                    .Include(o => o.Contacts).ThenInclude(oc => oc.Contact)
-                    .Include(o => o.Addresses).ThenInclude(oa => oa.Address)
-                    .Include(p => p.Banks).ThenInclude(pb => pb.BankAccount)
+                    .Where(o => o.Id == org.Id)
+                    .Include(o => o.OrgContacts).ThenInclude(oc => oc.Contact)
+                    .Include(o => o.OrgAddresses).ThenInclude(oa => oa.Address)
                     .FirstOrDefaultAsync();
                 if (dbOrg == null)
                 {
@@ -145,34 +133,27 @@ namespace Fanda.Service
                 else
                 {
                     // delete all contacts that no longer exists
-                    foreach (var dbOrgContact in dbOrg.Contacts)
+                    foreach (var dbOrgContact in dbOrg.OrgContacts)
                     {
                         var dbContact = dbOrgContact.Contact;
-                        if (org.Contacts.All(oc => oc.Contact.ContactId != dbContact.ContactId))
+                        if (org.OrgContacts.All(oc => oc.Contact.Id != dbContact.Id))
                             _context.Contacts.Remove(dbContact);
                     }
                     // delete all addresses that no longer exists
-                    foreach (var dbOrgAddress in dbOrg.Addresses)
+                    foreach (var dbOrgAddress in dbOrg.OrgAddresses)
                     {
                         var dbAddress = dbOrgAddress.Address;
-                        if (org.Addresses.All(oa => oa.Address.AddressId != dbAddress.AddressId))
+                        if (org.OrgAddresses.All(oa => oa.Address.Id != dbAddress.Id))
                             _context.Addresses.Remove(dbAddress);
-                    }
-                    // delete all banks that no longer exists
-                    foreach (var dbOrgBank in dbOrg.Banks)
-                    {
-                        var dbBank = dbOrgBank.BankAccount;
-                        if (org.Banks.All(pb => pb.BankAccount.BankAcctId != dbBank.BankAcctId))
-                            _context.BankAccounts.Remove(dbBank);
                     }
                     // copy current (incoming) values to db
                     org.DateModified = DateTime.Now;
                     _context.Entry(dbOrg).CurrentValues.SetValues(org);
 
                     #region Contacts
-                    var contactPairs = from curr in org.Contacts.Select(oc => oc.Contact)
-                                       join db in dbOrg.Contacts.Select(oc => oc.Contact)
-                                         on curr.ContactId equals db.ContactId into grp
+                    var contactPairs = from curr in org.OrgContacts.Select(oc => oc.Contact)
+                                       join db in dbOrg.OrgContacts.Select(oc => oc.Contact)
+                                         on curr.Id equals db.Id into grp
                                        from db in grp.DefaultIfEmpty()
                                        select new { curr, db };
                     foreach (var pair in contactPairs)
@@ -184,9 +165,9 @@ namespace Fanda.Service
                             //_context.Set<Contact>().Add(pair.curr);
                             _context.Set<OrgContact>().Add(new OrgContact
                             {
-                                OrgId = org.OrgId,
+                                OrgId = org.Id,
                                 Organization = org,
-                                ContactId = pair.curr.ContactId,
+                                ContactId = pair.curr.Id,
                                 Contact = pair.curr
                             });
                         }
@@ -194,9 +175,9 @@ namespace Fanda.Service
                     #endregion
 
                     #region Addresses
-                    var addressPairs = from curr in org.Addresses.Select(oa => oa.Address)
-                                       join db in dbOrg.Addresses.Select(oa => oa.Address)
-                                         on curr.AddressId equals db.AddressId into grp
+                    var addressPairs = from curr in org.OrgAddresses.Select(oa => oa.Address)
+                                       join db in dbOrg.OrgAddresses.Select(oa => oa.Address)
+                                         on curr.Id equals db.Id into grp
                                        from db in grp.DefaultIfEmpty()
                                        select new { curr, db };
                     foreach (var pair in addressPairs)
@@ -208,38 +189,14 @@ namespace Fanda.Service
                             //_context.Set<Address>().Add(pair.curr);
                             _context.Set<OrgAddress>().Add(new OrgAddress
                             {
-                                OrgId = org.OrgId,
+                                OrgId = org.Id,
                                 Organization = org,
-                                AddressId = pair.curr.AddressId,
+                                AddressId = pair.curr.Id,
                                 Address = pair.curr
                             });
                         }
                     }
                     #endregion
-
-                    #region Banks
-                    var bankPairs = from curr in org.Banks.Select(pb => pb.BankAccount)
-                                    join db in dbOrg.Banks.Select(pb => pb.BankAccount)
-                                      on curr.BankAcctId equals db.BankAcctId into grp
-                                    from db in grp.DefaultIfEmpty()
-                                    select new { curr, db };
-                    foreach (var pair in bankPairs)
-                    {
-                        if (pair.db != null)
-                            _context.Entry(pair.db).CurrentValues.SetValues(pair.curr);
-                        else
-                        {
-                            //_context.Set<Address>().Add(pair.curr);
-                            _context.Set<OrgBank>().Add(new OrgBank
-                            {
-                                OrgId = org.OrgId,
-                                Organization = org,
-                                BankAcctId = pair.curr.BankAcctId,
-                                BankAccount = pair.curr
-                            });
-                        }
-                    }
-                    #endregion Banks
                 }
             }
 
@@ -255,18 +212,15 @@ namespace Fanda.Service
 
             Guid guid = new Guid(orgId);
             var org = await _context.Organizations
-                .Include(o => o.Contacts).ThenInclude(oc => oc.Contact)
-                .Include(o => o.Addresses).ThenInclude(oa => oa.Address)
-                .Include(p => p.Banks).ThenInclude(pb => pb.BankAccount)
-                .SingleOrDefaultAsync(o => o.OrgId == guid);
+                .Include(o => o.OrgContacts).ThenInclude(oc => oc.Contact)
+                .Include(o => o.OrgAddresses).ThenInclude(oa => oa.Address)
+                .SingleOrDefaultAsync(o => o.Id == guid);
             if (org != null)
             {
-                foreach (var orgContact in org.Contacts)
+                foreach (var orgContact in org.OrgContacts)
                     _context.Contacts.Remove(orgContact.Contact);
-                foreach (var orgAddress in org.Addresses)
+                foreach (var orgAddress in org.OrgAddresses)
                     _context.Addresses.Remove(orgAddress.Address);
-                foreach (var orgBank in org.Banks)
-                    _context.BankAccounts.Remove(orgBank.BankAccount);
                 _context.Organizations.Remove(org);
                 await _context.SaveChangesAsync();
                 return true;
@@ -274,11 +228,13 @@ namespace Fanda.Service
             throw new KeyNotFoundException("Organization not found");
         }
 
-        public bool Exists(string id)
+        public bool ExistsById(string id)
         {
             Guid guid = new Guid(id);
-            return _context.Organizations.Any(o => o.OrgId == guid);
+            return _context.Organizations.Any(o => o.Id == guid);
         }
+
+        public bool ExistsByCode(string code) => _context.Organizations.Any(o => o.OrgCode == code);
 
         public async Task<bool> ChangeStatus(string orgId, bool active)
         {

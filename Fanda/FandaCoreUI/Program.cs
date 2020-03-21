@@ -65,7 +65,8 @@ namespace FandaCoreUI
                 var options = services.GetRequiredService<IOptions<AppSettings>>();
                 SeedDefault seed = new SeedDefault(serviceProvider, options);
 
-                await seed.CreateFanda();
+                await seed.CreateOrg("Fanda");
+                await seed.CreateOrg("Demo");
             }
             catch (Exception exception)
             {

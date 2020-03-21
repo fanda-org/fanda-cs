@@ -43,7 +43,7 @@ namespace Fanda.Service
             var parties = _context.Parties
                 .Include(p => p.Category)
                 .AsNoTracking()
-                .Where(p => p.OrgId == guid)
+                .Where(p => p.LedgerId == guid)
                 //.Where(p => p.Active == ((active == null) ? p.Active : active))
                 .ProjectTo<PartyDto>(_mapper.ConfigurationProvider);
             return parties;
@@ -78,7 +78,7 @@ namespace Fanda.Service
                     .AsNoTracking()
                     .Where(m => m.PartyId == guid)
                     .SelectMany(pb => pb.Banks.Select(a => a.BankAccount))
-                    .ProjectTo<BankAccountDto>(_mapper.ConfigurationProvider)
+                    .ProjectTo<BankDto>(_mapper.ConfigurationProvider)
                     .ToListAsync();
                 return party;
             }
@@ -133,7 +133,7 @@ namespace Fanda.Service
                     foreach (var dbPartyBank in dbParty.Banks)
                     {
                         var dbBank = dbPartyBank.BankAccount;
-                        if (party.Banks.All(pb => pb.BankAccount.BankAcctId != dbBank.BankAcctId))
+                        if (party.Banks.All(pb => pb.BankAccount.BankId != dbBank.BankId))
                             _context.BankAccounts.Remove(dbBank);
                     }
                     // copy current (incoming) values to db
@@ -191,7 +191,7 @@ namespace Fanda.Service
                     #region Banks
                     var bankPairs = from curr in party.Banks.Select(pb => pb.BankAccount)
                                     join db in dbParty.Banks.Select(pb => pb.BankAccount)
-                                      on curr.BankAcctId equals db.BankAcctId into grp
+                                      on curr.BankId equals db.BankId into grp
                                     from db in grp.DefaultIfEmpty()
                                     select new { curr, db };
                     foreach (var pair in bankPairs)
@@ -205,7 +205,7 @@ namespace Fanda.Service
                             {
                                 PartyId = party.PartyId,
                                 Party = party,
-                                BankAcctId = pair.curr.BankAcctId,
+                                BankAcctId = pair.curr.BankId,
                                 BankAccount = pair.curr
                             });
                         }

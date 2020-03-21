@@ -126,7 +126,7 @@ namespace FandaTabler.Controllers
         {
             try
             {
-                if (string.IsNullOrEmpty(model.OrgId))
+                if (string.IsNullOrEmpty(model.Id))
                     ViewBag.Mode = "Create";
                 else
                     ViewBag.Mode = "Edit";
@@ -140,8 +140,8 @@ namespace FandaTabler.Controllers
                     .Where(c => !c.IsDeleted)
                     .ToList();
 
-                var orgId = HttpContext.Session.Get<OrganizationDto>("CurrentOrg").OrgId;
-                bool create = string.IsNullOrEmpty(model.OrgId);
+                var orgId = HttpContext.Session.Get<OrganizationDto>("CurrentOrg").Id;
+                bool create = string.IsNullOrEmpty(model.Id);
                 await _service.SaveAsync(model);
                 if (create) // Create
                     return PartialView("_orgEdit", new OrganizationDto { Active = true });   //RedirectToAction(nameof(Create), new { contactType = model.PartyType });

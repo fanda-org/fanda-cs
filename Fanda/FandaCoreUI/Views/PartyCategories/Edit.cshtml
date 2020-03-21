@@ -34,7 +34,7 @@
             <span><i class="icon-briefcase"></i> Contact Category - @ViewBag.Mode</span>
         </div>
         <div class="card-body">
-            @Html.HiddenFor(model => model.CategoryId)
+            @Html.HiddenFor(model => model.Id)
             <div class="row">
                 @if (ViewData.ModelState.Values.Any() && ViewData.ModelState.ErrorCount > 0)
                 {
@@ -202,7 +202,7 @@
                             type: 'POST',
                             //dataType: 'json',
                             //contentType: dataType,
-                            data: { id: "@Model.CategoryId" },
+                            data: { id: "@Model.Id" },
                             success: function (data) {
                              if (data.ok) {
                                  console.log('Deleted successfully!');

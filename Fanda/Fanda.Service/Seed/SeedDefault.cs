@@ -20,41 +20,30 @@ namespace Fanda.Service.Seed
         }
 
         #region Fanda Org
-        public async Task CreateFanda()
+        public async Task CreateOrg(string orgName)
         {
             var service = _serviceProvider.GetRequiredService<IOrganizationService>();
-            var org = await service.GetByCodeAsync("FANDA");
-            if (org == null)
+            string orgCode = orgName.ToUpper();
+            if (!service.ExistsByCode(orgCode))
             {
-                org = await service.SaveAsync(new OrganizationDto
+                var org = await service.SaveAsync(new OrganizationDto
                 {
-                    OrgCode = "FANDA",
-                    OrgName = "Fanda",
-                    Description = "Fanda has default values",
+                    OrgCode = orgCode,
+                    OrgName = orgName,
+                    Description = $"{orgName} organization",
                     Active = true
                 });
 
-                await CreateRoles();
-                var loc = await CreateLocations(org);
-                await CreateUsers(org, loc);
+                await CreateRoles(org);
+                //var loc = await CreateLocations(org);
+                await CreateUsers(org);
                 await CreateUnits(org);
                 await CreatePartyCategories(org);
             }
-
-            // create demo org
-            org = await service.GetByCodeAsync("DEMO");
-            if (org == null)
-                await service.SaveAsync(new OrganizationDto
-                {
-                    OrgCode = "DEMO",
-                    OrgName = "Demo",
-                    Description = "Demo organization",
-                    Active = true
-                });
         }
         #endregion
 
-        private async Task CreateRoles()
+        private async Task CreateRoles(OrganizationDto org)
         {
             //adding customs roles
             var service = _serviceProvider.GetRequiredService<IRoleService>();
@@ -74,7 +63,7 @@ namespace Fanda.Service.Seed
                 string description = roleElement.Split(':')[1];
                 string roleCode = roleName.ToUpper();
                 // creating the roles and seeding them to the database
-                var roleExist = await service.ExistsAsync(roleCode);
+                var roleExist = service.ExistsAsync(roleCode);
                 if (!roleExist)
                 {
                     var model = new RoleDto
@@ -84,30 +73,30 @@ namespace Fanda.Service.Seed
                         Description = description,
                         Active = true
                     };
-                    await service.SaveAsync(model);
+                    await service.SaveAsync(org.Id, model);
                 }
             }
         }
 
-        private async Task<LocationDto> CreateLocations(OrganizationDto org)
-        {
-            var service = _serviceProvider.GetRequiredService<ILocationService>();
-            var loc = await service.ExistsAsync("DEFAULT");
-            if (loc == null)
-            {
-                loc = new LocationDto
-                {
-                    Code = "DEFAULT",
-                    Name = "Default",
-                    Description = "Default Location",
-                    Active = true
-                };
-                loc = await service.SaveAsync(org.OrgId, loc);
-            }
-            return loc;
-        }
+        //private async Task<LocationDto> CreateLocations(OrganizationDto org)
+        //{
+        //    var service = _serviceProvider.GetRequiredService<ILocationService>();
+        //    var loc = await service.ExistsAsync("DEFAULT");
+        //    if (loc == null)
+        //    {
+        //        loc = new LocationDto
+        //        {
+        //            Code = "DEFAULT",
+        //            Name = "Default",
+        //            Description = "Default Location",
+        //            Active = true
+        //        };
+        //        loc = await service.SaveAsync(org.OrgId, loc);
+        //    }
+        //    return loc;
+        //}
 
-        private async Task CreateUsers(OrganizationDto org, LocationDto loc)
+        private async Task CreateUsers(OrganizationDto org)
         {
             var service = _serviceProvider.GetRequiredService<IUserService>();
             // creating a super user who could maintain the web app
@@ -115,13 +104,13 @@ namespace Fanda.Service.Seed
             {
                 UserName = _settings.FandaSettings.UserName,
                 Email = _settings.FandaSettings.UserEmail,
-                LocationId = loc.LocationId,
+                //LocationId = loc.LocationId,
                 Active = true
             };
             if (!await service.ExistsAsync(superAdmin.UserName))
             {
-                var user = await service.SaveAsync(org.OrgId, superAdmin, _settings.FandaSettings.UserPassword);
-                await service.AddToRoleAsync(org.OrgId, user, "SuperAdmin");
+                var user = await service.SaveAsync(org.Id, superAdmin, _settings.FandaSettings.UserPassword);
+                await service.AddToRoleAsync(org.Id, user, "SuperAdmin");
             }
         }
 
@@ -141,7 +130,7 @@ namespace Fanda.Service.Seed
                     Name = "Default",
                     Active = true,
                 };
-                await service.SaveAsync(org.OrgId, unit);
+                await service.SaveAsync(org.Id, unit);
             }
         }
 
@@ -150,7 +139,7 @@ namespace Fanda.Service.Seed
             var service = _serviceProvider.GetRequiredService<IPartyCategoryService>();
             if (!service.ExistsAsync("DEFAULT").Result)
             {
-                await service.SaveAsync(org.OrgId, new PartyCategoryDto
+                await service.SaveAsync(org.Id, new PartyCategoryDto
                 {
                     Code = "DEFAULT",
                     Name = "Default",

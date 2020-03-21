@@ -36,12 +36,12 @@ namespace Fanda.Shared
     //    SuperAdmin = 16
     //}
 
-    public enum AccountOwner
-    {
-        None = 0,
-        Organization = 1,
-        Party = 2
-    }
+    //public enum AccountOwner
+    //{
+    //    None = 0,
+    //    Organization = 1,
+    //    Party = 2
+    //}
 
     public enum AddressType
     {
@@ -178,5 +178,13 @@ namespace Fanda.Shared
         NearestTo100 = 5,
         //Nearest500=5,
         //Nearest1000=6
+    }
+
+    public enum LedgerGroupType
+    {
+        Asset = 1,
+        Liability = 2,
+        Income = 3,
+        Expense = 4
     }
 }

@@ -2,7 +2,6 @@
 using Fanda.Data;
 using Fanda.Dto;
 using Fanda.Dto.ViewModels;
-using Fanda.Shared;
 using System;
 using System.Linq;
 
@@ -14,29 +13,29 @@ namespace Fanda.Service.AutoMapperProfile
         {
             CreateMap<User, RegisterViewModel>()
                 .ForMember(vm => vm.Password, opt => opt.Ignore())
-                //.ForMember(vm => vm.ConfirmPassword, opt => opt.Ignore())
+                .ForMember(vm => vm.ConfirmPassword, opt => opt.Ignore())
                 .ReverseMap();
             CreateMap<Role, RoleDto>()
-                .ForMember(vm => vm.RoleId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(vm => vm.Id, opt => opt.MapFrom(src => src.Id))
                 .ReverseMap()
-                .ForMember(x => x.Id, opt => opt.MapFrom(vm => vm.RoleId));
+                .ForMember(x => x.Id, opt => opt.MapFrom(vm => vm.Id));
             CreateMap<User, UserDto>()
-                .ForMember(vm => vm.UserId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(vm => vm.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(vm => vm.Token, opt => opt.Ignore())
+                .ForPath(vm => vm.Organizations, opt => opt.MapFrom(src => src.OrgUsers.Select(c => c.Organization).ToList()))
                 //.ForMember(vm => vm.Password, opt => opt.Ignore())
-                //.ForPath(vm => vm.Roles, opt => opt.MapFrom(src => src.Roles.Select(c => c.).ToList()))
                 .ReverseMap()
-                .ForMember(x => x.Id, opt => opt.MapFrom(vm => vm.UserId));
+                .ForMember(x => x.Id, opt => opt.MapFrom(vm => vm.Id));
 
-            CreateMap<Location, LocationDto>()
-                .ReverseMap();
+            //CreateMap<Location, LocationDto>()
+            //    .ReverseMap();
             CreateMap<Contact, ContactDto>()
                 .ForMember(vm => vm.IsDeleted, opt => opt.Ignore())
                 .ForMember(vm => vm.Index, opt => opt.Ignore())
                 .ReverseMap();
             CreateMap<Address, AddressDto>()
-                .ForMember(vm => vm.IsDeleted, opt => opt.Ignore())
-                .ForMember(vm => vm.Index, opt => opt.Ignore())
+                //.ForMember(vm => vm.IsDeleted, opt => opt.Ignore())
+                //.ForMember(vm => vm.Index, opt => opt.Ignore())
                 .ReverseMap();
             CreateMap<PartyCategory, PartyCategoryDto>()
                 .ReverseMap();
@@ -62,116 +61,117 @@ namespace Fanda.Service.AutoMapperProfile
                 .ForMember(vm => vm.ProductPricings, opt => opt.MapFrom(src => src.ProductPricings))
                 .ReverseMap();
 
-            CreateMap<BankAccount, BankAccountDto>()
-                .ForMember(dest => dest.Owner, opt => opt.Ignore())
-                .ForMember(dest => dest.OwnerId, opt => opt.Ignore())
-                .ForMember(vm => vm.IsDeleted, opt => opt.Ignore())
-                .ForMember(vm => vm.Index, opt => opt.Ignore())
-                .AfterMap((src, dest) =>
-                {
-                    //Guid partyId = Guid.Empty;
-                    if (src.PartyBanks != null && src.PartyBanks.Any())
-                    {
-                        var partyId = src.PartyBanks.FirstOrDefault().PartyId;
-                        if (partyId != null && partyId != Guid.Empty)
-                        {
-                            dest.OwnerId = partyId;
-                            dest.Owner = AccountOwner.Party;
-                        }
-                    }
-                    else if (src.OrgBanks != null && src.OrgBanks.Any())
-                    {
-                        var orgId = src.OrgBanks.FirstOrDefault().OrgId;
-                        if (orgId != null && orgId != Guid.Empty)
-                        {
-                            dest.OwnerId = orgId;
-                            dest.Owner = AccountOwner.Organization;
-                        }
-                    }
-                })
+            CreateMap<Bank, BankDto>()
+                //.ForMember(dest => dest.Owner, opt => opt.Ignore())
+                //.ForMember(dest => dest.OwnerId, opt => opt.Ignore())
+                //.ForMember(vm => vm.IsDeleted, opt => opt.Ignore())
+                //.ForMember(vm => vm.Index, opt => opt.Ignore())
+                //.AfterMap((src, dest) =>
+                //{
+                //    //Guid partyId = Guid.Empty;
+                //    if (src.PartyBanks != null && src.PartyBanks.Any())
+                //    {
+                //        var partyId = src.PartyBanks.FirstOrDefault().PartyId;
+                //        if (partyId != null && partyId != Guid.Empty)
+                //        {
+                //            dest.OwnerId = partyId;
+                //            dest.Owner = AccountOwner.Party;
+                //        }
+                //    }
+                //    else if (src.OrgBanks != null && src.OrgBanks.Any())
+                //    {
+                //        var orgId = src.OrgBanks.FirstOrDefault().OrgId;
+                //        if (orgId != null && orgId != Guid.Empty)
+                //        {
+                //            dest.OwnerId = orgId;
+                //            dest.Owner = AccountOwner.Organization;
+                //        }
+                //    }
+                //})
                 .ReverseMap()
-                .ForMember(x => x.AddressId, opt => opt.MapFrom(vm => vm.Address.AddressId))
-                .ForMember(x => x.ContactId, opt => opt.MapFrom(vm => vm.Contact.ContactId));
+                .ForMember(x => x.AddressId, opt => opt.MapFrom(vm => vm.Address.Id))
+                .ForMember(x => x.ContactId, opt => opt.MapFrom(vm => vm.Contact.Id));
 
             CreateMap<Organization, OrganizationDto>()
-                .ForPath(vm => vm.Contacts, opt => opt.MapFrom(src => src.Contacts.Select(c => c.Contact).ToList()))
-                .ForPath(s => s.Addresses, opt => opt.MapFrom(src => src.Addresses.Select(a => a.Address).ToList()))
-                .ForPath(vm => vm.Banks, opt => opt.MapFrom(src => src.Banks.Select(b => b.BankAccount).ToList()))
+                .ForPath(vm => vm.Users, opt => opt.MapFrom(src => src.OrgUsers.Select(ou => ou.User).ToList()))
+                .ForPath(vm => vm.Contacts, opt => opt.MapFrom(src => src.OrgContacts.Select(c => c.Contact).ToList()))
+                .ForPath(s => s.Addresses, opt => opt.MapFrom(src => src.OrgAddresses.Select(a => a.Address).ToList()))
+                //.ForPath(vm => vm.Banks, opt => opt.MapFrom(src => src.Banks.Select(b => b.BankAccount).ToList()))
                 .ReverseMap()
-                .ForMember(x => x.Contacts,
-                    src => src.MapFrom((orgVM, org, i, context) =>
+                .ForMember(x => x.OrgContacts,
+                    src => src.MapFrom((orgVM, org, oc, context) =>
                       {
                           return orgVM.Contacts?.Select(c => new OrgContact
                           {
-                              OrgId = new Guid(orgVM.OrgId),
+                              OrgId = new Guid(orgVM.Id),
                               Organization = org,
-                              ContactId = c.ContactId,
+                              ContactId = new Guid(c.Id),
                               Contact = context.Mapper.Map<ContactDto, Contact>(c)
                           }).ToList();
                       }))
-                .ForMember(x => x.Addresses,
-                    src => src.MapFrom((orgVM, org, i, context) =>
+                .ForMember(x => x.OrgAddresses,
+                    src => src.MapFrom((orgVM, org, oa, context) =>
                     {
                         return orgVM.Addresses?.Select(a => new OrgAddress
                         {
-                            OrgId = new Guid(orgVM.OrgId),
+                            OrgId = new Guid(orgVM.Id),
                             Organization = org,
-                            AddressId = a.AddressId,
+                            AddressId = new Guid(a.Id),
                             Address = context.Mapper.Map<AddressDto, Address>(a)
                         }).ToList();
-                    }))
-                .ForMember(x => x.Banks,
-                    src => src.MapFrom((orgVM, org, i, context) =>
-                    {
-                        return orgVM.Banks?.Select(b => new OrgBank
-                        {
-                            OrgId = new Guid(orgVM.OrgId),
-                            Organization = org,
-                            BankAcctId = b.BankAcctId,
-                            BankAccount = context.Mapper.Map<BankAccountDto, BankAccount>(b)
-                        }).ToList();
                     }));
+            //.ForMember(x => x.Banks,
+            //    src => src.MapFrom((orgVM, org, i, context) =>
+            //    {
+            //        return orgVM.Banks?.Select(b => new OrgBank
+            //        {
+            //            OrgId = new Guid(orgVM.OrgId),
+            //            Organization = org,
+            //            BankAcctId = b.BankAcctId,
+            //            BankAccount = context.Mapper.Map<BankDto, Bank>(b)
+            //        }).ToList();
+            //    }));
 
             CreateMap<Party, PartyDto>()
                 .ForMember(vm => vm.CategoryName, opt => opt.MapFrom(src => src.Category.Name))
-                .ForPath(vm => vm.Contacts, m => m.MapFrom(s => s.Contacts.Select(pc => pc.Contact).ToList()))
-                .ForPath(vm => vm.Addresses, m => m.MapFrom(s => s.Addresses.Select(pa => pa.Address).ToList()))
-                .ForPath(vm => vm.Banks, m => m.MapFrom(s => s.Banks.Select(pb => pb.BankAccount).ToList()))
+                .ForPath(vm => vm.Contacts, m => m.MapFrom(s => s.PartyContacts.Select(pc => pc.Contact).ToList()))
+                .ForPath(vm => vm.Addresses, m => m.MapFrom(s => s.PartyAddresses.Select(pa => pa.Address).ToList()))
+                //.ForPath(vm => vm.Banks, m => m.MapFrom(s => s.Banks.Select(pb => pb.BankAccount).ToList()))
                 .ReverseMap()
                 .ForMember(x => x.Category, opt => opt.Ignore())
-                .ForMember(x => x.Contacts,
+                .ForMember(x => x.PartyContacts,
                     src => src.MapFrom((partyVM, party, i, context) =>
                     {
                         return partyVM.Contacts?.Select(c => new PartyContact
                         {
-                            PartyId = new Guid(partyVM.PartyId),
+                            PartyId = new Guid(partyVM.LedgerId),
                             Party = party,
-                            ContactId = c.ContactId,
+                            ContactId = new Guid(c.Id),
                             Contact = context.Mapper.Map<ContactDto, Contact>(c)
                         }).ToList();
                     }))
-                .ForMember(x => x.Addresses,
+                .ForMember(x => x.PartyAddresses,
                     src => src.MapFrom((partyVM, party, i, context) =>
                     {
                         return partyVM.Addresses?.Select(a => new PartyAddress
                         {
-                            PartyId = new Guid(partyVM.PartyId),
+                            PartyId = new Guid(partyVM.LedgerId),
                             Party = party,
-                            AddressId = a.AddressId,
+                            AddressId = new Guid(a.Id),
                             Address = context.Mapper.Map<AddressDto, Address>(a)
                         }).ToList();
-                    }))
-                .ForMember(x => x.Banks,
-                    src => src.MapFrom((partyVM, party, i, context) =>
-                    {
-                        return partyVM.Banks?.Select(b => new PartyBank
-                        {
-                            PartyId = new Guid(partyVM.PartyId),
-                            Party = party,
-                            BankAcctId = b.BankAcctId,
-                            BankAccount = context.Mapper.Map<BankAccountDto, BankAccount>(b)
-                        }).ToList();
                     }));
+            //.ForMember(x => x.Banks,
+            //    src => src.MapFrom((partyVM, party, i, context) =>
+            //    {
+            //        return partyVM.Banks?.Select(b => new PartyBank
+            //        {
+            //            PartyId = new Guid(partyVM.PartyId),
+            //            Party = party,
+            //            BankAcctId = b.BankAcctId,
+            //            BankAccount = context.Mapper.Map<BankDto, Bank>(b)
+            //        }).ToList();
+            //    }));
 
             CreateMap<InvoiceCategory, InvoiceCategoryDto>()
                 .ReverseMap();

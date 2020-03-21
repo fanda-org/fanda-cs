@@ -13,13 +13,13 @@ namespace Fanda.Service
 {
     public interface IInvoiceService
     {
-        Task<List<InvoiceDto>> GetAllAsync(Guid orgId);
+        Task<List<InvoiceDto>> GetAllAsync(string yearId);
 
-        Task<InvoiceDto> GetByIdAsync(Guid invoiceId);
+        Task<InvoiceDto> GetByIdAsync(string invoiceId);
 
-        Task<InvoiceDto> SaveAsync(Guid orgId, InvoiceDto invoiceVM);
+        Task<InvoiceDto> SaveAsync(string yearId, InvoiceDto dto);
 
-        Task<bool> DeleteAsync(Guid invoiceId);
+        Task<bool> DeleteAsync(string invoiceId);
 
         string ErrorMessage { get; }
     }
@@ -37,25 +37,25 @@ namespace Fanda.Service
 
         public string ErrorMessage { get; private set; }
 
-        public async Task<List<InvoiceDto>> GetAllAsync(Guid yearId)
+        public async Task<List<InvoiceDto>> GetAllAsync(string yearId)
         {
-            if (yearId == null || yearId == Guid.Empty)
+            if (string.IsNullOrEmpty(yearId))
                 throw new ArgumentNullException("yearId", "Year id is missing");
 
             var invoices = await _context.Invoices
-                .Where(p => p.YearId == yearId)
+                .Where(p => p.YearId == new Guid(yearId))
                 .AsNoTracking()
                 //.ProjectTo<InvoiceViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
             return _mapper.Map<List<InvoiceDto>>(invoices);
         }
 
-        public async Task<InvoiceDto> GetByIdAsync(Guid invoiceId)
+        public async Task<InvoiceDto> GetByIdAsync(string invoiceId)
         {
             var invoice = await _context.Invoices
                 .ProjectTo<InvoiceDto>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
-                .SingleOrDefaultAsync(inv => inv.InvoiceId == invoiceId);
+                .SingleOrDefaultAsync(inv => inv.Id == invoiceId);
 
             if (invoice != null)
                 return invoice;
@@ -63,15 +63,15 @@ namespace Fanda.Service
             throw new KeyNotFoundException("Invoice not found");
         }
 
-        public async Task<InvoiceDto> SaveAsync(Guid yearId, InvoiceDto invoiceVM)
+        public async Task<InvoiceDto> SaveAsync(string yearId, InvoiceDto dto)
         {
-            if (yearId == null || yearId == Guid.Empty)
+            if (string.IsNullOrEmpty(yearId))
                 throw new ArgumentNullException("yearId", "Year id is missing");
 
-            var invoice = _mapper.Map<Invoice>(invoiceVM);
-            if (invoice.InvoiceId == Guid.Empty)
+            var invoice = _mapper.Map<Invoice>(dto);
+            if (invoice.Id == Guid.Empty)
             {
-                invoice.YearId = yearId;
+                invoice.YearId = new Guid(yearId);
                 invoice.DateCreated = DateTime.Now;
                 invoice.DateModified = null;
                 _context.Invoices.Add(invoice);
@@ -79,7 +79,7 @@ namespace Fanda.Service
             else
             {
                 var dbInvoice = await _context.Invoices
-                    .Where(i => i.InvoiceId == invoice.InvoiceId)
+                    .Where(i => i.Id == invoice.Id)
                     .Include(i => i.InvoiceItems).ThenInclude(ii => ii.Stock)
                     .SingleOrDefaultAsync();
                 if (dbInvoice == null)
@@ -94,14 +94,14 @@ namespace Fanda.Service
                     // delete all linet items that no longer exists
                     foreach (var dbLineItem in dbInvoice.InvoiceItems)
                     {
-                        if (invoice.InvoiceItems.All(ii => ii.InvItemId != dbLineItem.InvItemId))
+                        if (invoice.InvoiceItems.All(ii => ii.InvoiceItemId != dbLineItem.InvoiceItemId))
                             _context.Set<InvoiceItem>().Remove(dbLineItem);
                     }
                     // copy current (incoming) values to db
                     _context.Entry(dbInvoice).CurrentValues.SetValues(invoice);
                     var itemPairs = from curr in invoice.InvoiceItems//.Select(pi => pi.IngredientProduct)
                                     join db in dbInvoice.InvoiceItems//.Select(pi => pi.IngredientProduct)
-                                      on curr.InvItemId equals db.InvItemId into grp
+                                      on curr.InvoiceItemId equals db.InvoiceItemId into grp
                                     from db in grp.DefaultIfEmpty()
                                     select new { curr, db };
                     foreach (var pair in itemPairs)
@@ -114,11 +114,11 @@ namespace Fanda.Service
                 }
             }
             await _context.SaveChangesAsync();
-            invoiceVM = _mapper.Map<InvoiceDto>(invoice);
-            return invoiceVM;
+            dto = _mapper.Map<InvoiceDto>(invoice);
+            return dto;
         }
 
-        public async Task<bool> DeleteAsync(Guid invoiceId)
+        public async Task<bool> DeleteAsync(string invoiceId)
         {
             var invoice = await _context.Invoices
                 .FindAsync(invoiceId);

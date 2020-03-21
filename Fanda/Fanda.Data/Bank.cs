@@ -1,15 +1,12 @@
 using Fanda.Shared;
 using System;
-using System.Collections.Generic;
 
 namespace Fanda.Data
 {
-    public class BankAccount
+    public class Bank
     {
-        public Guid BankAcctId { get; set; }
+        public Guid LedgerId { get; set; }
         public string AccountNumber { get; set; }
-        public string BankShortName { get; set; }
-        public string BankName { get; set; }
         public BankAccountType AccountType { get; set; }
         public string AccountTypeString
         {
@@ -22,13 +19,10 @@ namespace Fanda.Data
         public string BranchName { get; set; }
         public Guid? ContactId { get; set; }
         public Guid? AddressId { get; set; }
-        public bool Active { get; set; }
-        public DateTime DateCreated { get; set; }
-        public DateTime? DateModified { get; set; }
+        public bool IsDefault { get; set; }
 
         public virtual Contact Contact { get; set; }
         public virtual Address Address { get; set; }
-        public virtual ICollection<OrgBank> OrgBanks { get; set; }
-        public virtual ICollection<PartyBank> PartyBanks { get; set; }
+        public virtual Ledger Ledger { get; set; }
     }
 }

@@ -6,8 +6,7 @@ namespace Fanda.Data
 {
     public class Invoice
     {
-        public Guid InvoiceId { get; set; }
-        public Guid YearId { get; set; }
+        public Guid Id { get; set; }
         public string InvoiceNumber { get; set; }
         public DateTime InvoiceDate { get; set; }
         public Guid CategoryId { get; set; }
@@ -51,6 +50,7 @@ namespace Fanda.Data
         public decimal GrandTotal { get; set; }
         public DateTime DateCreated { get; set; }
         public DateTime? DateModified { get; set; }
+        public Guid YearId { get; set; }
 
         // Virtual members
         public virtual AccountYear AccountYear { get; set; }

@@ -103,7 +103,7 @@
                     name: "orgCode", title: "Code", type: "text", width: 75, validate: "required",
                     itemTemplate: function (value, item) {
                         var url = '@Url.Action("Select", "Organizations", new { id = -1 })'; @*"/Organizations/Select/" + item.OrgId;*@
-                        url = url.replace('-1', item.orgId);
+                        url = url.replace('-1', item.id);
                         return $("<a href='" + url + "'>" + value + "</a>");
                     }
                 },

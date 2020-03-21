@@ -5,7 +5,7 @@ namespace Fanda.Data
 {
     public class Organization
     {
-        public Guid OrgId { get; set; }
+        public Guid Id { get; set; }
         public string OrgCode { get; set; }
         public string OrgName { get; set; }
         public string Description { get; set; }
@@ -17,21 +17,24 @@ namespace Fanda.Data
         public DateTime DateCreated { get; set; }
         public DateTime? DateModified { get; set; }
 
-        public virtual ICollection<OrgContact> Contacts { get; set; }
-        public virtual ICollection<OrgAddress> Addresses { get; set; }
-        public virtual ICollection<OrgUser> Users { get; set; }
-        public virtual ICollection<Location> Locations { get; set; }
-        public virtual ICollection<OrgBank> Banks { get; set; }
-        public virtual ICollection<PartyCategory> PartyCategories { get; set; }
+        public virtual ICollection<OrgContact> OrgContacts { get; set; }
+        public virtual ICollection<OrgAddress> OrgAddresses { get; set; }
+        public virtual ICollection<OrgUser> OrgUsers { get; set; }
+        public virtual ICollection<Role> Roles { get; set; }
+
+        public virtual ICollection<Product> Products { get; set; }
+        public virtual ICollection<ProductCategory> ProductCategories { get; set; }
         public virtual ICollection<ProductBrand> ProductBrands { get; set; }
         public virtual ICollection<ProductSegment> ProductSegments { get; set; }
         public virtual ICollection<ProductVariety> ProductVarieties { get; set; }
-        public virtual ICollection<Party> Parties { get; set; }
         public virtual ICollection<Unit> Units { get; set; }
-        public virtual ICollection<ProductCategory> ProductCategories { get; set; }
-        public virtual ICollection<Product> Products { get; set; }
-        public virtual ICollection<InvoiceCategory> InvoiceCategories { get; set; }
         public virtual ICollection<UnitConversion> UnitConversions { get; set; }
+
+        public virtual ICollection<PartyCategory> PartyCategories { get; set; }
+        public virtual ICollection<InvoiceCategory> InvoiceCategories { get; set; }
+
+        public virtual ICollection<Ledger> Ledgers { get; set; }
+        public virtual ICollection<LedgerGroup> LedgerGroups { get; set; }
         public virtual ICollection<AccountYear> AccountYears { get; set; }
     }
 }

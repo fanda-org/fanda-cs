@@ -1,31 +1,43 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Fanda.Dto
 {
     public class ContactDto
     {
-        public Guid ContactId { get; set; }
+        public string Id { get; set; }
 
-        [Display(Name = "Name")]
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Contact name is required")]
+        [Display(Name = "Salutation")]
+        [StringLength(5, ErrorMessage = "Maximum allowed length is 5")]
+        public string Salutation { get; set; }
+
+        [Display(Name = "First Name")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "First name is required")]
         [StringLength(50, ErrorMessage = "Maximum allowed length is 50")]
-        public string ContactName { get; set; }
+        public string FirstName { get; set; }
 
-        [Display(Name = "Title")]
-        //[Required(AllowEmptyStrings = false, ErrorMessage = "Contact title should not be empty")]
+        [Display(Name = "Last Name")]
         [StringLength(50, ErrorMessage = "Maximum allowed length is 50")]
-        public string ContactTitle { get; set; }
+        public string LastName { get; set; }
 
-        [Display(Name = "Phone")]
-        //[Required(AllowEmptyStrings = false, ErrorMessage = "Contact phone should not be empty")]
-        [StringLength(25, ErrorMessage = "Maximum allowed length is 25")]
-        public string ContactPhone { get; set; }
+        [Display(Name = "Designation")]
+        [StringLength(50, ErrorMessage = "Maximum allowed length is 50")]
+        public string Designation { get; set; }
+
+        [Display(Name = "Department")]
+        [StringLength(50, ErrorMessage = "Maximum allowed length is 50")]
+        public string Department { get; set; }
 
         [Display(Name = "Email")]
-        //[Required(AllowEmptyStrings = false, ErrorMessage = "Contact email should not be empty")]
-        [StringLength(255, ErrorMessage = "Maximum allowed length is 255")]
-        public string ContactEmail { get; set; }
+        [StringLength(100, ErrorMessage = "Maximum allowed length is 100")]
+        public string Email { get; set; }
+
+        [Display(Name = "Work Phone")]
+        [StringLength(25, ErrorMessage = "Maximum allowed length is 25")]
+        public string WorkPhone { get; set; }
+
+        [Display(Name = "Mobile")]
+        [StringLength(25, ErrorMessage = "Maximum allowed length is 25")]
+        public string Mobile { get; set; }
 
         public bool IsDeleted { get; set; }
         public int Index { get; set; }

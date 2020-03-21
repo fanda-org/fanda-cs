@@ -1,13 +1,11 @@
-﻿using System;
-
-namespace Fanda.Dto
+﻿namespace Fanda.Dto
 {
     public class InvoiceItemDto
     {
-        public Guid InvItemId { get; set; }
-        public Guid InvoiceId { get; set; }
+        public string InvoiceItemId { get; set; }
         public string Description { get; set; }
-        public Guid UnitId { get; set; }
+        //public string StockId { get; set; }
+        public string UnitId { get; set; }
         public decimal Qty { get; set; }
         public decimal UnitPrice { get; set; }
         public decimal Price { get; set; }

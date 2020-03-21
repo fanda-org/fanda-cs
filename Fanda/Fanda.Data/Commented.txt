@@ -1,0 +1,165 @@
+﻿//public class AuditTrailConfig : IEntityTypeConfiguration<AuditTrail>
+//{
+//    public void Configure(EntityTypeBuilder<AuditTrail> builder)
+//    {
+//        // table
+//        builder.ToTable("AuditTrails");
+//        // key
+//        builder.HasKey(at => at.AuditTrailId);
+//        // columns
+//        builder.Property(at => at.TableName)
+//            .IsRequired()
+//            .IsUnicode(false)
+//            .HasMaxLength(32);
+//        builder.Ignore(at => at.CurrentStatus);
+//        builder.Property(at => at.CurrentStatusString)
+//            .HasColumnName("CurrentStatus")
+//            .IsRequired()
+//            .IsUnicode(false)
+//            .HasMaxLength(16);
+//        // indexes
+//        builder.HasIndex(at => new { at.TableName, at.RowId })
+//            .IsUnique();
+//        // foreign key
+//        builder.HasOne(at => at.CreatedUser)
+//            .WithMany(u => u.CreatedTrails)
+//            .HasForeignKey(at => at.CreatedUserId)
+//            .OnDelete(DeleteBehavior.Restrict);
+//        builder.HasOne(at => at.ModifiedUser)
+//            .WithMany(u => u.ModifiedTrails)
+//            .HasForeignKey(at => at.ModifiedUserId)
+//            .OnDelete(DeleteBehavior.Restrict);
+//        builder.HasOne(at => at.DeletedUser)
+//            .WithMany(u => u.DeletedTrails)
+//            .HasForeignKey(at => at.DeletedUserId)
+//            .OnDelete(DeleteBehavior.Restrict);
+//        builder.HasOne(at => at.PrintedUser)
+//            .WithMany(u => u.PrintedTrails)
+//            .HasForeignKey(at => at.PrintedUserId)
+//            .OnDelete(DeleteBehavior.Restrict);
+//        builder.HasOne(at => at.ApprovedUser)
+//            .WithMany(u => u.ApprovedTrails)
+//            .HasForeignKey(at => at.ApprovedUserId)
+//            .OnDelete(DeleteBehavior.Restrict);
+//        builder.HasOne(at => at.RejectedUser)
+//            .WithMany(u => u.RejectedTrails)
+//            .HasForeignKey(at => at.RejectedUserId)
+//            .OnDelete(DeleteBehavior.Restrict);
+//        builder.HasOne(at => at.HoldUser)
+//            .WithMany(u => u.HoldTrails)
+//            .HasForeignKey(at => at.HoldUserId)
+//            .OnDelete(DeleteBehavior.Restrict);
+//        builder.HasOne(at => at.ActivatedUser)
+//            .WithMany(u => u.ActivatedTrails)
+//            .HasForeignKey(at => at.ActivatedUserId)
+//            .OnDelete(DeleteBehavior.Restrict);
+//        builder.HasOne(at => at.DeactivatedUser)
+//            .WithMany(u => u.DeactivatedTrails)
+//            .HasForeignKey(at => at.DeactivatedUserId)
+//            .OnDelete(DeleteBehavior.Restrict);
+//    }
+//}    
+
+//public class OrgBankConfig : IEntityTypeConfiguration<OrgBank>
+//{
+//    public void Configure(EntityTypeBuilder<OrgBank> builder)
+//    {
+//        // table
+//        builder.ToTable("OrgBanks");
+//        // key
+//        builder.HasKey(ou => new { ou.OrgId, ou.BankAcctId });
+//        // foreign key
+//        builder.HasOne(ou => ou.Organization)
+//            .WithMany(b => b.Banks)
+//            .HasForeignKey(ou => ou.OrgId)
+//            .OnDelete(DeleteBehavior.Cascade);
+//        builder.HasOne(ou => ou.BankAccount)
+//            .WithMany(c => c.OrgBanks)
+//            .HasForeignKey(ou => ou.BankAcctId)
+//            .OnDelete(DeleteBehavior.Cascade);
+//    }
+//}
+
+//public class LocationConfig : IEntityTypeConfiguration<Location>
+//{
+//    public void Configure(EntityTypeBuilder<Location> builder)
+//    {
+//        // table
+//        builder.ToTable("Locations");
+//        // key
+//        builder.HasKey(l => l.LocationId);
+//        // columns
+//        builder.Property(l => l.Code)
+//            .IsRequired()
+//            .HasMaxLength(16);
+//        builder.Property(l => l.Name)
+//            .IsRequired()
+//            .HasMaxLength(50);
+//        builder.Property(l => l.Description)
+//            .HasMaxLength(255);
+//        //builder.Property(o => o.DateCreated).ValueGeneratedOnAdd();
+//        //builder.Property(o => o.DateModified).ValueGeneratedOnUpdate();
+//        // index
+//        builder.HasIndex(l => new { l.Code, l.OrgId })
+//            .IsUnique();
+//        builder.HasIndex(l => new { l.Name, l.OrgId })
+//            .IsUnique();
+//        // foreign key
+//        builder.HasOne(l => l.Organization)
+//            .WithMany(o => o.Locations)
+//            .HasForeignKey(l => l.OrgId)
+//            .OnDelete(DeleteBehavior.Restrict);
+//    }
+//}
+
+//public class DeviceConfig : IEntityTypeConfiguration<Device>
+//{
+//    public void Configure(EntityTypeBuilder<Device> builder)
+//    {
+//        // table
+//        builder.ToTable("Devices");
+//        // key
+//        builder.HasKey(d => d.DeviceId);
+//        // columns
+//        builder.Property(d => d.Code)
+//            .IsRequired()
+//            .HasMaxLength(16);
+//        builder.Property(d => d.Name)
+//            .IsRequired()
+//            .HasMaxLength(50);
+//        builder.Property(l => l.Description)
+//            .HasMaxLength(255);
+//        //builder.Property(o => o.DateCreated).ValueGeneratedOnAdd();
+//        //builder.Property(o => o.DateModified).ValueGeneratedOnUpdate();
+//        // index
+//        builder.HasIndex(d => new { d.Code, d.LocationId })
+//            .IsUnique();
+//        builder.HasIndex(d => new { d.Name, d.LocationId })
+//            .IsUnique();
+//        // foreign key
+//        builder.HasOne(d => d.Location)
+//            .WithMany(l => l.Devices)
+//            .HasForeignKey(d => d.LocationId)
+//            .OnDelete(DeleteBehavior.Restrict);
+//    }
+//}
+
+//public class PartyBankConfig : IEntityTypeConfiguration<PartyBank>
+//{
+//    public void Configure(EntityTypeBuilder<PartyBank> builder)
+//    {
+//        // table
+//        builder.ToTable("PartyBanks");
+//        // key
+//        builder.HasKey(ou => new { ou.PartyId, ou.BankAcctId });
+//        // foreign key
+//        //builder.HasOne(ou => ou.Party)
+//        //    .WithMany(b => b.Banks)
+//        //    .HasForeignKey(ou => ou.PartyId)
+//        //    .OnDelete(DeleteBehavior.Cascade);
+//        //builder.HasOne(ou => ou.BankAccount)
+//        //    .WithMany(c => c.PartyBanks)
+//        //    .HasForeignKey(ou => ou.BankAcctId)
+//        //    .OnDelete(DeleteBehavior.Cascade);
+//    }
+//}

@@ -8,6 +8,6 @@ namespace Fanda.Data
         public Guid BankAcctId { get; set; }
 
         public virtual Organization Organization { get; set; }
-        public virtual BankAccount BankAccount { get; set; }
+        public virtual Bank BankAccount { get; set; }
     }
 }

@@ -5,7 +5,7 @@ namespace Fanda.Data
 {
     public class ProductPricing
     {
-        public Guid PricingId { get; set; }
+        public Guid Id { get; set; }
         public Guid ProductId { get; set; }
         public Guid? PartyCategoryId { get; set; }
         public Guid? InvoiceCategoryId { get; set; }

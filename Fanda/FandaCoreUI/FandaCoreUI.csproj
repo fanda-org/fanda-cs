@@ -10,39 +10,39 @@
     <Compile Remove="Data\**" />
     <Compile Remove="Models\**" />
     <Compile Remove="ViewComponents\**" />
-    <Compile Remove="Views\Parties\Components\**" />
+    <Compile Remove="Views\Parties\**" />
     <Compile Remove="wwwroot-lib\**" />
     <Compile Remove="wwwroot\lib\**" />
     <Content Remove="Areas\Identity\Services\**" />
     <Content Remove="Data\**" />
     <Content Remove="Models\**" />
     <Content Remove="ViewComponents\**" />
-    <Content Remove="Views\Parties\Components\**" />
+    <Content Remove="Views\Parties\**" />
     <Content Remove="wwwroot-lib\**" />
     <Content Remove="wwwroot\lib\**" />
     <EmbeddedResource Remove="Areas\Identity\Services\**" />
     <EmbeddedResource Remove="Data\**" />
     <EmbeddedResource Remove="Models\**" />
     <EmbeddedResource Remove="ViewComponents\**" />
-    <EmbeddedResource Remove="Views\Parties\Components\**" />
+    <EmbeddedResource Remove="Views\Parties\**" />
     <EmbeddedResource Remove="wwwroot-lib\**" />
     <EmbeddedResource Remove="wwwroot\lib\**" />
     <None Remove="Areas\Identity\Services\**" />
     <None Remove="Data\**" />
     <None Remove="Models\**" />
     <None Remove="ViewComponents\**" />
-    <None Remove="Views\Parties\Components\**" />
+    <None Remove="Views\Parties\**" />
     <None Remove="wwwroot-lib\**" />
     <None Remove="wwwroot\lib\**" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Remove="AppSettings.cs" />
+    <Compile Remove="Controllers\PartiesController.cs" />
     <Compile Remove="DesignTimeDbContextFactory.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="Views\Parties\_EditContacts.cshtml" />
     <Content Remove="Views\PartyCategories\Create.cshtml" />
     <Content Remove="Views\PartyCategories\Index2.cshtml" />
     <Content Remove="Views\PartyCategories\_breadcrumb-items.cshtml" />
@@ -60,9 +60,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataTables.Queryable\DataTables.Queryable.csproj" PrivateAssets="All" />
+    <ProjectReference Include="..\DataTables.Queryable\DataTables.Queryable.csproj" />
     <ProjectReference Include="..\Fanda.Dto\Fanda.Dto.csproj" PrivateAssets="All" />
-    <ProjectReference Include="..\Fanda.Service\Fanda.Service.csproj" PrivateAssets="All" />
+    <ProjectReference Include="..\Fanda.Service\Fanda.Service.csproj" />
     <ProjectReference Include="..\Fanda.Shared\Fanda.Shared.csproj" PrivateAssets="All" />
   </ItemGroup>
 
@@ -72,9 +72,6 @@
     </Content>
     <Content Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="Views\Parties\Edit.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Views\Shared\_breadcrumb-items.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>

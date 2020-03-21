@@ -55,7 +55,7 @@ namespace Fanda.Service
                 unit = await _context.Units
                 .ProjectTo<UnitDto>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
-                .SingleOrDefaultAsync(u => u.UnitId == unitId);
+                .SingleOrDefaultAsync(u => u.Id == unitId);
 
             if (unit != null)
                 return unit;
@@ -69,8 +69,8 @@ namespace Fanda.Service
                 throw new ArgumentNullException("OrgId", "Org id is missing");
 
             Unit unit = null;
-            if (!string.IsNullOrEmpty(model.UnitId))
-                unit = await _context.Units.FindAsync(model.UnitId);
+            if (!string.IsNullOrEmpty(model.Id))
+                unit = await _context.Units.FindAsync(model.Id);
             if (unit == null)
             {
                 model.DateCreated = DateTime.Now;

@@ -11,15 +11,15 @@ using System.Threading.Tasks;
 
 namespace Fanda.Service
 {
-    public interface IBankAccountService
+    public interface IBankService
     {
-        Task<List<BankAccountDto>> GetAllAsync(AccountOwner owner, Guid? id, bool? active);
+        Task<List<BankDto>> GetAllAsync(string id, bool? active);
 
-        Task<BankAccountDto> GetByIdAsync(Guid accountId);
+        Task<BankDto> GetByIdAsync(string ledgerId);
 
-        Task<BankAccountDto> SaveAsync(BankAccountDto accountVM);
+        Task<BankDto> SaveAsync(BankDto dto);
 
-        Task<bool> DeleteAsync(Guid accountId);
+        Task<bool> DeleteAsync(string ledgerId);
 
         string ErrorMessage { get; }
     }
@@ -37,9 +37,9 @@ namespace Fanda.Service
 
         public string ErrorMessage { get; private set; }
 
-        public async Task<List<BankAccountDto>> GetAllAsync(AccountOwner owner, Guid? id, bool? active)
+        public async Task<List<BankDto>> GetAllAsync(string id, bool? active)
         {
-            IQueryable<BankAccount> acctQry;
+            IQueryable<Bank> acctQry;
 
             if (owner == AccountOwner.Party && id != null && id != Guid.Empty)
                 acctQry = _context.Parties //_userManager.Users
@@ -52,7 +52,7 @@ namespace Fanda.Service
             else
                 acctQry = _context.BankAccounts;
 
-            var acctList = _mapper.Map<List<BankAccountDto>>(await acctQry
+            var acctList = _mapper.Map<List<BankDto>>(await acctQry
                 .Where(u => u.Active == (active == null) ? u.Active : (bool)active)
                 .AsNoTracking()
                 .ToListAsync());
@@ -62,10 +62,10 @@ namespace Fanda.Service
             return acctList;
         }
 
-        public async Task<BankAccountDto> GetByIdAsync(Guid accountId)
+        public async Task<BankDto> GetByIdAsync(Guid accountId)
         {
             var account = await _context.BankAccounts
-                .Where(ba => ba.BankAcctId == accountId)
+                .Where(ba => ba.BankId == accountId)
                 .Include(b => b.PartyBanks) //.ThenInclude(pb => pb.Party)
                 .Include(b => b.OrgBanks)   //.ThenInclude(ob => ob.Organization)
                 .Include(b => b.Contact)    //.ThenInclude(bc => bc.Contact)
@@ -75,28 +75,28 @@ namespace Fanda.Service
 
             if (account != null)
             {
-                var bavm = _mapper.Map<BankAccountDto>(account);
+                var bavm = _mapper.Map<BankDto>(account);
                 return bavm;
             }
             throw new KeyNotFoundException("Bank account not found");
         }
 
-        public async Task<BankAccountDto> SaveAsync(BankAccountDto accountVM)
+        public async Task<BankDto> SaveAsync(BankDto accountVM)
         {
             if (accountVM.Owner == AccountOwner.None || accountVM.OwnerId == null || accountVM.OwnerId == Guid.Empty)
                 throw new ArgumentNullException("Owner", "Owner not set");
 
-            BankAccount account;
+            Bank account;
             if (accountVM.BankAcctId == Guid.Empty /*accountDb == null*/)
             {
-                account = _mapper.Map<BankAccount>(accountVM);
+                account = _mapper.Map<Bank>(accountVM);
                 account.DateCreated = DateTime.Now;
                 account.DateModified = null;
                 _context.BankAccounts.Add(account);
                 if (accountVM.Owner == AccountOwner.Organization)
-                    _context.Set<OrgBank>().Add(new OrgBank { OrgId = (Guid)accountVM.OwnerId, BankAcctId = account.BankAcctId });
+                    _context.Set<OrgBank>().Add(new OrgBank { OrgId = (Guid)accountVM.OwnerId, BankAcctId = account.BankId });
                 else if (accountVM.Owner == AccountOwner.Party)
-                    _context.Set<PartyBank>().Add(new PartyBank { PartyId = (Guid)accountVM.OwnerId, BankAcctId = account.BankAcctId });
+                    _context.Set<PartyBank>().Add(new PartyBank { PartyId = (Guid)accountVM.OwnerId, BankAcctId = account.BankId });
             }
             else
             {
@@ -105,18 +105,18 @@ namespace Fanda.Service
                     .Include(b => b.PartyBanks)
                     .Include(b => b.Contact)
                     .Include(b => b.Address)
-                    .SingleOrDefaultAsync(ba => ba.BankAcctId == accountVM.BankAcctId);
+                    .SingleOrDefaultAsync(ba => ba.BankId == accountVM.BankAcctId);
                 if (account == null)
                 {
-                    account = _mapper.Map<BankAccount>(accountVM);
+                    account = _mapper.Map<Bank>(accountVM);
                     account.DateCreated = DateTime.Now;
                     account.DateModified = null;
                     _context.BankAccounts.Add(account);
 
                     if (accountVM.Owner == AccountOwner.Organization)
-                        _context.Set<OrgBank>().Add(new OrgBank { OrgId = (Guid)accountVM.OwnerId, BankAcctId = account.BankAcctId });
+                        _context.Set<OrgBank>().Add(new OrgBank { OrgId = (Guid)accountVM.OwnerId, BankAcctId = account.BankId });
                     else if (accountVM.Owner == AccountOwner.Party)
-                        _context.Set<PartyBank>().Add(new PartyBank { PartyId = (Guid)accountVM.OwnerId, BankAcctId = account.BankAcctId });
+                        _context.Set<PartyBank>().Add(new PartyBank { PartyId = (Guid)accountVM.OwnerId, BankAcctId = account.BankId });
                 }
                 else
                 {
@@ -130,7 +130,7 @@ namespace Fanda.Service
                 }
             }
             await _context.SaveChangesAsync();
-            return _mapper.Map<BankAccountDto>(account);
+            return _mapper.Map<BankDto>(account);
         }
 
         //private void UpdateContacts(BankAccount account, IEnumerable<ContactViewModel> contactsVM)
@@ -214,7 +214,7 @@ namespace Fanda.Service
                 .Include(ba => ba.PartyBanks)
                 .Include(ba => ba.Contact)
                 .Include(ba => ba.Address)
-                .SingleOrDefaultAsync(ba => ba.BankAcctId == accountId);
+                .SingleOrDefaultAsync(ba => ba.BankId == accountId);
             if (account != null)
             {
                 _context.Contacts.Remove(account.Contact);

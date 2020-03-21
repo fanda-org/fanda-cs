@@ -26,7 +26,7 @@ namespace Fanda.Controllers
         [Produces("application/json")]
         public async Task<JsonResult> GetAll()
         {
-            var orgId = HttpContext.Session.Get<OrganizationDto>("DemoOrg").OrgId.ToString();
+            var orgId = HttpContext.Session.Get<OrganizationDto>("DemoOrg").Id.ToString();
             var request = new DataTablesRequest<PartyCategoryDto>(
                 Request.QueryString.Value
                 );
@@ -112,10 +112,10 @@ namespace Fanda.Controllers
         // GET: PartyCategories/Create
         public ActionResult Create()
         {
-            var cat = new PartyDto { Active = true };
+            var party = new PartyDto();
             ViewBag.Mode = "Create";
             ViewBag.Readonly = false;
-            return View("Edit", cat);
+            return View("Edit", party);
         }
 
         // GET: PartyCategories/Edit/5
@@ -124,13 +124,13 @@ namespace Fanda.Controllers
             if (string.IsNullOrEmpty(id))
                 return NotFound();
 
-            var cat = await _service.GetByIdAsync(id);
-            if (cat == null)
+            var party = await _service.GetByIdAsync(id);
+            if (party == null)
                 return NotFound();
 
             ViewBag.Mode = "Edit";
             ViewBag.Readonly = false;
-            return View(cat);
+            return View(party);
         }
 
         // POST: PartyCategories/Edit/5
@@ -140,8 +140,8 @@ namespace Fanda.Controllers
         {
             try
             {
-                var orgId = HttpContext.Session.Get<OrganizationDto>("DemoOrg").OrgId.ToString();
-                bool create = string.IsNullOrEmpty(model.CategoryId);
+                var orgId = HttpContext.Session.Get<OrganizationDto>("DemoOrg").Id.ToString();
+                bool create = string.IsNullOrEmpty(model.Id);
                 await _service.SaveAsync(orgId, model);
                 if (create) // Create
                     return RedirectToAction(nameof(Create));
@@ -158,7 +158,7 @@ namespace Fanda.Controllers
                 else
                     ModelState.AddModelError("Error", ex.Message);
 
-                if (string.IsNullOrEmpty(model.CategoryId))
+                if (string.IsNullOrEmpty(model.Id))
                     ViewBag.Mode = "Create";
                 else
                     ViewBag.Mode = "Edit";

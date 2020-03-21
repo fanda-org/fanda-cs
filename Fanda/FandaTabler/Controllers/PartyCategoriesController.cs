@@ -51,7 +51,7 @@ namespace FandaTabler.Controllers
             var org = HttpContext.Session.Get<OrganizationDto>("CurrentOrg");
             if (org != null)
             {
-                var data = await _service.GetAll(org.OrgId)
+                var data = await _service.GetAll(org.Id)
                     .Where(c =>
                         (string.IsNullOrEmpty(filter.Code) || c.Code.ToLower().Contains(filter.Code.ToLower())) &&
                         (string.IsNullOrEmpty(filter.Name) || c.Name.ToLower().Contains(filter.Name.ToLower())) &&
@@ -132,7 +132,7 @@ namespace FandaTabler.Controllers
             {
                 if (!ModelState.IsValid)
                     return BadRequest();
-                var orgId = HttpContext.Session.Get<OrganizationDto>("CurrentOrg").OrgId;
+                var orgId = HttpContext.Session.Get<OrganizationDto>("CurrentOrg").Id;
                 model = await _service.SaveAsync(orgId, model);
                 return Ok(model); //Json(new { Success = true, Message = string.Empty }/*, JsonRequestBehavior.AllowGet*/);
             }

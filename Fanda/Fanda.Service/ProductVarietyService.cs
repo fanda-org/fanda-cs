@@ -13,13 +13,13 @@ namespace Fanda.Service
 {
     public interface IProductVarietyService
     {
-        Task<List<ProductVarietyDto>> GetAllAsync(Guid orgId, bool? active);
+        Task<List<ProductVarietyDto>> GetAllAsync(string orgId, bool? active);
 
-        Task<ProductVarietyDto> GetByIdAsync(Guid varietyId);
+        Task<ProductVarietyDto> GetByIdAsync(string varietyId);
 
-        Task<ProductVarietyDto> SaveAsync(Guid orgId, ProductVarietyDto varietyVM);
+        Task<ProductVarietyDto> SaveAsync(string orgId, ProductVarietyDto dto);
 
-        Task<bool> DeleteAsync(Guid varietyId);
+        Task<bool> DeleteAsync(string varietyId);
 
         string ErrorMessage { get; }
     }
@@ -37,9 +37,9 @@ namespace Fanda.Service
 
         public string ErrorMessage { get; private set; }
 
-        public async Task<List<ProductVarietyDto>> GetAllAsync(Guid orgId, bool? active)
+        public async Task<List<ProductVarietyDto>> GetAllAsync(string orgId, bool? active)
         {
-            if (orgId == null || orgId == Guid.Empty)
+            if (string.IsNullOrEmpty(orgId))
                 throw new ArgumentNullException("orgId", "Org id is missing");
 
             var varieties = await _context.ProductVarieties
@@ -51,12 +51,12 @@ namespace Fanda.Service
             return varieties;
         }
 
-        public async Task<ProductVarietyDto> GetByIdAsync(Guid varietyId)
+        public async Task<ProductVarietyDto> GetByIdAsync(string varietyId)
         {
             var variety = await _context.ProductVarieties
                 .ProjectTo<ProductVarietyDto>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
-                .SingleOrDefaultAsync(pc => pc.VarietyId == varietyId);
+                .SingleOrDefaultAsync(pc => pc.Id == varietyId);
 
             if (variety != null)
                 return variety;
@@ -64,15 +64,15 @@ namespace Fanda.Service
             throw new KeyNotFoundException("Product variety not found");
         }
 
-        public async Task<ProductVarietyDto> SaveAsync(Guid orgId, ProductVarietyDto varietyVM)
+        public async Task<ProductVarietyDto> SaveAsync(string orgId, ProductVarietyDto dto)
         {
-            if (orgId == null || orgId == Guid.Empty)
+            if (string.IsNullOrEmpty(orgId))
                 throw new ArgumentNullException("orgId", "Org id is missing");
 
-            var variety = _mapper.Map<ProductVariety>(varietyVM);
-            if (variety.VarietyId == Guid.Empty)
+            var variety = _mapper.Map<ProductVariety>(dto);
+            if (variety.Id == Guid.Empty)
             {
-                variety.OrgId = orgId;
+                variety.OrgId = new Guid(orgId);
                 variety.DateCreated = DateTime.Now;
                 variety.DateModified = null;
                 _context.ProductVarieties.Add(variety);
@@ -83,11 +83,11 @@ namespace Fanda.Service
                 _context.ProductVarieties.Update(variety);
             }
             await _context.SaveChangesAsync();
-            varietyVM = _mapper.Map<ProductVarietyDto>(variety);
-            return varietyVM;
+            dto = _mapper.Map<ProductVarietyDto>(variety);
+            return dto;
         }
 
-        public async Task<bool> DeleteAsync(Guid varietyId)
+        public async Task<bool> DeleteAsync(string varietyId)
         {
             var variety = await _context.ProductVarieties
                 .FindAsync(varietyId);

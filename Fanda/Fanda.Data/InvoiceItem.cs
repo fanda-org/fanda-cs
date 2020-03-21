@@ -4,7 +4,7 @@ namespace Fanda.Data
 {
     public class InvoiceItem
     {
-        public Guid InvItemId { get; set; }
+        public Guid InvoiceItemId { get; set; }
         public Guid InvoiceId { get; set; }
         public Guid StockId { get; set; }
         public string Description { get; set; }

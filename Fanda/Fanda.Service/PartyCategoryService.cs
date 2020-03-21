@@ -56,7 +56,7 @@ namespace Fanda.Service
             var category = await _context.PartyCategories
                 .AsNoTracking()
                 .ProjectTo<PartyCategoryDto>(_mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync(pc => pc.CategoryId == categoryId);
+                .FirstOrDefaultAsync(pc => pc.Id == categoryId);
             if (category != null)
                 return category;
 
@@ -71,7 +71,7 @@ namespace Fanda.Service
             var category = _mapper.Map<PartyCategory>(model);
             category.Code = category.Code.ToUpper();
             category.OrgId = new Guid(orgId);
-            if (category.CategoryId == Guid.Empty)
+            if (category.Id == Guid.Empty)
             {
                 category.DateCreated = DateTime.Now;
                 category.DateModified = null;

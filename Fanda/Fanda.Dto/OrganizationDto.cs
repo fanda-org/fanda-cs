@@ -10,11 +10,10 @@ namespace Fanda.Dto
         {
             Contacts = new HashSet<ContactDto>();
             Addresses = new HashSet<AddressDto>();
-            Banks = new HashSet<BankAccountDto>();
         }
 
         [Required]
-        public string OrgId { get; set; }
+        public string Id { get; set; }
 
         [StringLength(16)]
         public string OrgCode { get; set; }
@@ -34,8 +33,8 @@ namespace Fanda.Dto
         public DateTime DateCreated { get; set; }
         public DateTime? DateModified { get; set; }
 
-        public ICollection<ContactDto> Contacts { get; set; }
-        public ICollection<AddressDto> Addresses { get; set; }
-        public ICollection<BankAccountDto> Banks { get; set; }
+        public virtual ICollection<ContactDto> Contacts { get; set; }
+        public virtual ICollection<AddressDto> Addresses { get; set; }
+        public virtual ICollection<UserDto> Users { get; set; }
     }
 }

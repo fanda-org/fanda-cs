@@ -7,17 +7,18 @@ using Fanda.Dto;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Fanda.Service
 {
     public interface IRoleService
     {
-        Task<List<RoleDto>> GetAllAsync(/*bool? active*/);
+        Task<List<RoleDto>> GetAllAsync(string orgId, bool? active);
         Task<RoleDto> GetByIdAsync(string roleId);
-        Task SaveAsync(RoleDto roleVM);
+        Task SaveAsync(string orgId, RoleDto dto);
         Task<bool> DeleteAsync(string roleId);
-        Task<bool> ExistsAsync(string code);
+        bool ExistsAsync(string code);
 
         string ErrorMessage { get; }
     }
@@ -37,12 +38,16 @@ namespace Fanda.Service
 
         public string ErrorMessage { get; private set; }
 
-        public async Task<List<RoleDto>> GetAllAsync(/*bool? active*/)
+        public async Task<List<RoleDto>> GetAllAsync(string orgId, bool? active)
         {
+            if (string.IsNullOrEmpty(orgId))
+                throw new ArgumentNullException("orgId", "Org id is missing");
+
             var roles = await _context.Roles
-                .ProjectTo<RoleDto>(_mapper.ConfigurationProvider)
-                //.Where(r => r.Active == (active == null) ? r.Active : (bool)active)
+                .Where(p => p.OrgId == p.OrgId)
+                .Where(p => p.Active == ((active == null) ? p.Active : active))
                 .AsNoTracking()
+                .ProjectTo<RoleDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
             return roles;
         }
@@ -54,34 +59,37 @@ namespace Fanda.Service
                 role = await _context.Roles
                     .ProjectTo<RoleDto>(_mapper.ConfigurationProvider)
                     .AsNoTracking()
-                    .SingleOrDefaultAsync(r => r.RoleId == roleId);
+                    .SingleOrDefaultAsync(r => r.Id == roleId);
             if (role != null)
                 return role;
 
             throw new KeyNotFoundException("Role not found");
         }
 
-        public async Task SaveAsync(RoleDto model)
+        public async Task SaveAsync(string orgId, RoleDto dto)
         {
-            Role role = null;
-            if (!string.IsNullOrEmpty(model.RoleId))
-                role = await _context.Roles.FindAsync(model.RoleId);
-            if (role == null)
+            if (string.IsNullOrEmpty(orgId))
+                throw new ArgumentNullException("orgId", "Org id is missing");
+
+            //Role role = null;
+            //if (!string.IsNullOrEmpty(model.RoleId))
+            //    role = await _context.Roles.FindAsync(model.RoleId);
+            var role = _mapper.Map<Role>(dto);
+            if (role.Id == Guid.Empty)
             {
-                model.DateCreated = DateTime.Now;
-                model.DateModified = null;
-                role = _mapper.Map<Role>(model);
+                role.OrgId = new Guid(orgId);
+                role.DateCreated = DateTime.Now;
+                role.DateModified = null;
                 await _context.Roles.AddAsync(role);
             }
             else
             {
-                model.DateModified = DateTime.Now;
-                _mapper.Map(model, role);
+                role.DateModified = DateTime.Now;
                 _context.Roles.Update(role);
             }
             await _context.SaveChangesAsync();
-            //roleVM = _mapper.Map<RoleViewModel>(role);
-            //return roleVM;
+            //dto = _mapper.Map<RoleDto>(role);
+            //return dto;
         }
 
         public async Task<bool> DeleteAsync(string roleId)
@@ -97,12 +105,12 @@ namespace Fanda.Service
             throw new KeyNotFoundException("Role not found");
         }
 
-        public async Task<bool> ExistsAsync(string code)
+        public bool ExistsAsync(string code)
         {
-            Role role = null;
-            if (!string.IsNullOrEmpty(code))
-                role = await _context.Roles.FirstOrDefaultAsync(r => r.Code == code);
-            return role != null;
+            if (string.IsNullOrEmpty(code))
+                throw new ArgumentNullException("code", "Role code is missing");
+
+            return _context.Roles.Any(r => r.Code == code);
         }
     }
 }

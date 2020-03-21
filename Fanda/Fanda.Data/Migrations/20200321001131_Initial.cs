@@ -11,40 +11,48 @@ namespace Fanda.Data.Migrations
                 name: "Addresses",
                 columns: table => new
                 {
-                    AddressId = table.Column<Guid>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
+                    Attention = table.Column<string>(maxLength: 50, nullable: true),
                     AddressLine1 = table.Column<string>(maxLength: 100, nullable: true),
                     AddressLine2 = table.Column<string>(maxLength: 100, nullable: true),
                     City = table.Column<string>(maxLength: 25, nullable: true),
                     State = table.Column<string>(maxLength: 25, nullable: true),
                     Country = table.Column<string>(maxLength: 25, nullable: true),
                     PostalCode = table.Column<string>(maxLength: 10, nullable: true),
+                    Phone = table.Column<string>(maxLength: 25, nullable: true),
+                    Fax = table.Column<string>(maxLength: 25, nullable: true),
                     AddressType = table.Column<string>(maxLength: 25, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Addresses", x => x.AddressId);
+                    table.PrimaryKey("PK_Addresses", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Contacts",
                 columns: table => new
                 {
-                    ContactId = table.Column<Guid>(nullable: false),
-                    ContactName = table.Column<string>(maxLength: 50, nullable: true),
-                    ContactTitle = table.Column<string>(maxLength: 50, nullable: true),
-                    ContactPhone = table.Column<string>(maxLength: 25, nullable: true),
-                    ContactEmail = table.Column<string>(maxLength: 255, nullable: true)
+                    Id = table.Column<Guid>(nullable: false),
+                    Salutation = table.Column<string>(maxLength: 5, nullable: true),
+                    FirstName = table.Column<string>(maxLength: 50, nullable: false),
+                    LastName = table.Column<string>(maxLength: 50, nullable: true),
+                    Designation = table.Column<string>(maxLength: 25, nullable: true),
+                    Department = table.Column<string>(maxLength: 25, nullable: true),
+                    Email = table.Column<string>(maxLength: 100, nullable: true),
+                    WorkPhone = table.Column<string>(maxLength: 25, nullable: true),
+                    Mobile = table.Column<string>(maxLength: 25, nullable: true),
+                    IsPrimary = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Contacts", x => x.ContactId);
+                    table.PrimaryKey("PK_Contacts", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Organizations",
                 columns: table => new
                 {
-                    OrgId = table.Column<Guid>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     OrgCode = table.Column<string>(maxLength: 16, nullable: false),
                     OrgName = table.Column<string>(maxLength: 100, nullable: false),
                     Description = table.Column<string>(maxLength: 255, nullable: true),
@@ -58,7 +66,281 @@ namespace Fanda.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Organizations", x => x.OrgId);
+                    table.PrimaryKey("PK_Organizations", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    UserName = table.Column<string>(maxLength: 25, nullable: false),
+                    Email = table.Column<string>(maxLength: 255, nullable: false),
+                    PasswordHash = table.Column<byte[]>(nullable: false),
+                    PasswordSalt = table.Column<byte[]>(nullable: false),
+                    FirstName = table.Column<string>(maxLength: 50, nullable: true),
+                    LastName = table.Column<string>(maxLength: 50, nullable: true),
+                    DateLastLogin = table.Column<DateTime>(nullable: true),
+                    DateCreated = table.Column<DateTime>(nullable: false),
+                    DateModified = table.Column<DateTime>(nullable: true),
+                    Active = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AccountYears",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    OrgId = table.Column<Guid>(nullable: false),
+                    YearCode = table.Column<string>(maxLength: 16, nullable: false),
+                    YearBegin = table.Column<DateTime>(nullable: false),
+                    YearEnd = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AccountYears", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AccountYears_Organizations_OrgId",
+                        column: x => x.OrgId,
+                        principalTable: "Organizations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "InvoiceCategories",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Code = table.Column<string>(maxLength: 16, nullable: false),
+                    Name = table.Column<string>(maxLength: 16, nullable: false),
+                    Description = table.Column<string>(maxLength: 255, nullable: true),
+                    OrgId = table.Column<Guid>(nullable: false),
+                    Active = table.Column<bool>(nullable: false),
+                    DateCreated = table.Column<DateTime>(nullable: false),
+                    DateModified = table.Column<DateTime>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InvoiceCategories", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_InvoiceCategories_Organizations_OrgId",
+                        column: x => x.OrgId,
+                        principalTable: "Organizations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LedgerGroups",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    GroupCode = table.Column<string>(maxLength: 16, nullable: false),
+                    GroupName = table.Column<string>(maxLength: 50, nullable: false),
+                    Description = table.Column<string>(maxLength: 255, nullable: true),
+                    GroupType = table.Column<string>(maxLength: 20, nullable: false),
+                    ParentId = table.Column<Guid>(nullable: true),
+                    IsSystem = table.Column<bool>(nullable: false),
+                    OrgId = table.Column<Guid>(nullable: false),
+                    Active = table.Column<bool>(nullable: false),
+                    DateCreated = table.Column<DateTime>(nullable: false),
+                    DateModified = table.Column<DateTime>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LedgerGroups", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_LedgerGroups_Organizations_OrgId",
+                        column: x => x.OrgId,
+                        principalTable: "Organizations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_LedgerGroups_LedgerGroups_ParentId",
+                        column: x => x.ParentId,
+                        principalTable: "LedgerGroups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OrgAddresses",
+                columns: table => new
+                {
+                    OrgId = table.Column<Guid>(nullable: false),
+                    AddressId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrgAddresses", x => new { x.OrgId, x.AddressId });
+                    table.ForeignKey(
+                        name: "FK_OrgAddresses_Addresses_AddressId",
+                        column: x => x.AddressId,
+                        principalTable: "Addresses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_OrgAddresses_Organizations_OrgId",
+                        column: x => x.OrgId,
+                        principalTable: "Organizations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OrgContacts",
+                columns: table => new
+                {
+                    OrgId = table.Column<Guid>(nullable: false),
+                    ContactId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrgContacts", x => new { x.OrgId, x.ContactId });
+                    table.ForeignKey(
+                        name: "FK_OrgContacts_Contacts_ContactId",
+                        column: x => x.ContactId,
+                        principalTable: "Contacts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_OrgContacts_Organizations_OrgId",
+                        column: x => x.OrgId,
+                        principalTable: "Organizations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PartyCategories",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Code = table.Column<string>(maxLength: 16, nullable: false),
+                    Name = table.Column<string>(maxLength: 50, nullable: false),
+                    Description = table.Column<string>(maxLength: 255, nullable: true),
+                    OrgId = table.Column<Guid>(nullable: false),
+                    Active = table.Column<bool>(nullable: false),
+                    DateCreated = table.Column<DateTime>(nullable: false),
+                    DateModified = table.Column<DateTime>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PartyCategories", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PartyCategories_Organizations_OrgId",
+                        column: x => x.OrgId,
+                        principalTable: "Organizations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductBrands",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Code = table.Column<string>(maxLength: 16, nullable: false),
+                    Name = table.Column<string>(maxLength: 50, nullable: false),
+                    Description = table.Column<string>(maxLength: 255, nullable: true),
+                    OrgId = table.Column<Guid>(nullable: false),
+                    Active = table.Column<bool>(nullable: false),
+                    DateCreated = table.Column<DateTime>(nullable: false),
+                    DateModified = table.Column<DateTime>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductBrands", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductBrands_Organizations_OrgId",
+                        column: x => x.OrgId,
+                        principalTable: "Organizations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductCategories",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Code = table.Column<string>(maxLength: 16, nullable: false),
+                    Name = table.Column<string>(maxLength: 50, nullable: false),
+                    Description = table.Column<string>(maxLength: 255, nullable: true),
+                    ParentId = table.Column<Guid>(nullable: true),
+                    OrgId = table.Column<Guid>(nullable: false),
+                    Active = table.Column<bool>(nullable: false),
+                    DateCreated = table.Column<DateTime>(nullable: false),
+                    DateModified = table.Column<DateTime>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductCategories", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductCategories_Organizations_OrgId",
+                        column: x => x.OrgId,
+                        principalTable: "Organizations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ProductCategories_ProductCategories_ParentId",
+                        column: x => x.ParentId,
+                        principalTable: "ProductCategories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductSegments",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Code = table.Column<string>(maxLength: 16, nullable: false),
+                    Name = table.Column<string>(maxLength: 50, nullable: false),
+                    Description = table.Column<string>(maxLength: 255, nullable: true),
+                    OrgId = table.Column<Guid>(nullable: false),
+                    Active = table.Column<bool>(nullable: false),
+                    DateCreated = table.Column<DateTime>(nullable: false),
+                    DateModified = table.Column<DateTime>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductSegments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductSegments_Organizations_OrgId",
+                        column: x => x.OrgId,
+                        principalTable: "Organizations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductVarieties",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Code = table.Column<string>(maxLength: 16, nullable: false),
+                    Name = table.Column<string>(maxLength: 50, nullable: false),
+                    Description = table.Column<string>(maxLength: 255, nullable: true),
+                    OrgId = table.Column<Guid>(nullable: false),
+                    Active = table.Column<bool>(nullable: false),
+                    DateCreated = table.Column<DateTime>(nullable: false),
+                    DateModified = table.Column<DateTime>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductVarieties", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductVarieties_Organizations_OrgId",
+                        column: x => x.OrgId,
+                        principalTable: "Organizations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -71,269 +353,17 @@ namespace Fanda.Data.Migrations
                     Description = table.Column<string>(maxLength: 255, nullable: true),
                     DateCreated = table.Column<DateTime>(nullable: false),
                     DateModified = table.Column<DateTime>(nullable: true),
-                    Active = table.Column<bool>(nullable: false)
+                    Active = table.Column<bool>(nullable: false),
+                    OrgId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Roles", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "BankAccounts",
-                columns: table => new
-                {
-                    BankAcctId = table.Column<Guid>(nullable: false),
-                    AccountNumber = table.Column<string>(maxLength: 25, nullable: false),
-                    BankShortName = table.Column<string>(maxLength: 15, nullable: true),
-                    BankName = table.Column<string>(maxLength: 50, nullable: false),
-                    AccountType = table.Column<string>(maxLength: 16, nullable: true),
-                    IfscCode = table.Column<string>(maxLength: 16, nullable: true),
-                    MicrCode = table.Column<string>(maxLength: 16, nullable: true),
-                    BranchCode = table.Column<string>(maxLength: 16, nullable: true),
-                    BranchName = table.Column<string>(maxLength: 50, nullable: true),
-                    ContactId = table.Column<Guid>(nullable: true),
-                    AddressId = table.Column<Guid>(nullable: true),
-                    Active = table.Column<bool>(nullable: false),
-                    DateCreated = table.Column<DateTime>(nullable: false),
-                    DateModified = table.Column<DateTime>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BankAccounts", x => x.BankAcctId);
                     table.ForeignKey(
-                        name: "FK_BankAccounts_Addresses_AddressId",
-                        column: x => x.AddressId,
-                        principalTable: "Addresses",
-                        principalColumn: "AddressId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_BankAccounts_Contacts_ContactId",
-                        column: x => x.ContactId,
-                        principalTable: "Contacts",
-                        principalColumn: "ContactId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "InvoiceCategories",
-                columns: table => new
-                {
-                    CategoryId = table.Column<Guid>(nullable: false),
-                    OrgId = table.Column<Guid>(nullable: false),
-                    Code = table.Column<string>(maxLength: 16, nullable: false),
-                    Name = table.Column<string>(maxLength: 16, nullable: false),
-                    Description = table.Column<string>(maxLength: 255, nullable: true),
-                    Active = table.Column<bool>(nullable: false),
-                    DateCreated = table.Column<DateTime>(nullable: false),
-                    DateModified = table.Column<DateTime>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_InvoiceCategories", x => x.CategoryId);
-                    table.ForeignKey(
-                        name: "FK_InvoiceCategories_Organizations_OrgId",
+                        name: "FK_Roles_Organizations_OrgId",
                         column: x => x.OrgId,
                         principalTable: "Organizations",
-                        principalColumn: "OrgId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Locations",
-                columns: table => new
-                {
-                    LocationId = table.Column<Guid>(nullable: false),
-                    OrgId = table.Column<Guid>(nullable: false),
-                    Code = table.Column<string>(maxLength: 16, nullable: false),
-                    Name = table.Column<string>(maxLength: 50, nullable: false),
-                    Description = table.Column<string>(maxLength: 255, nullable: true),
-                    Active = table.Column<bool>(nullable: false),
-                    DateCreated = table.Column<DateTime>(nullable: false),
-                    DateModified = table.Column<DateTime>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Locations", x => x.LocationId);
-                    table.ForeignKey(
-                        name: "FK_Locations_Organizations_OrgId",
-                        column: x => x.OrgId,
-                        principalTable: "Organizations",
-                        principalColumn: "OrgId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "OrgAddress",
-                columns: table => new
-                {
-                    OrgId = table.Column<Guid>(nullable: false),
-                    AddressId = table.Column<Guid>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OrgAddress", x => new { x.OrgId, x.AddressId });
-                    table.ForeignKey(
-                        name: "FK_OrgAddress_Addresses_AddressId",
-                        column: x => x.AddressId,
-                        principalTable: "Addresses",
-                        principalColumn: "AddressId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_OrgAddress_Organizations_OrgId",
-                        column: x => x.OrgId,
-                        principalTable: "Organizations",
-                        principalColumn: "OrgId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "OrgContact",
-                columns: table => new
-                {
-                    OrgId = table.Column<Guid>(nullable: false),
-                    ContactId = table.Column<Guid>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OrgContact", x => new { x.OrgId, x.ContactId });
-                    table.ForeignKey(
-                        name: "FK_OrgContact_Contacts_ContactId",
-                        column: x => x.ContactId,
-                        principalTable: "Contacts",
-                        principalColumn: "ContactId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_OrgContact_Organizations_OrgId",
-                        column: x => x.OrgId,
-                        principalTable: "Organizations",
-                        principalColumn: "OrgId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "PartyCategories",
-                columns: table => new
-                {
-                    CategoryId = table.Column<Guid>(nullable: false),
-                    OrgId = table.Column<Guid>(nullable: false),
-                    Code = table.Column<string>(maxLength: 16, nullable: false),
-                    Name = table.Column<string>(maxLength: 50, nullable: false),
-                    Description = table.Column<string>(maxLength: 255, nullable: true),
-                    Active = table.Column<bool>(nullable: false),
-                    DateCreated = table.Column<DateTime>(nullable: false),
-                    DateModified = table.Column<DateTime>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PartyCategories", x => x.CategoryId);
-                    table.ForeignKey(
-                        name: "FK_PartyCategories_Organizations_OrgId",
-                        column: x => x.OrgId,
-                        principalTable: "Organizations",
-                        principalColumn: "OrgId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ProductBrands",
-                columns: table => new
-                {
-                    BrandId = table.Column<Guid>(nullable: false),
-                    OrgId = table.Column<Guid>(nullable: false),
-                    Code = table.Column<string>(maxLength: 16, nullable: false),
-                    Name = table.Column<string>(maxLength: 50, nullable: false),
-                    Description = table.Column<string>(maxLength: 255, nullable: true),
-                    Active = table.Column<bool>(nullable: false),
-                    DateCreated = table.Column<DateTime>(nullable: false),
-                    DateModified = table.Column<DateTime>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductBrands", x => x.BrandId);
-                    table.ForeignKey(
-                        name: "FK_ProductBrands_Organizations_OrgId",
-                        column: x => x.OrgId,
-                        principalTable: "Organizations",
-                        principalColumn: "OrgId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ProductCategories",
-                columns: table => new
-                {
-                    CategoryId = table.Column<Guid>(nullable: false),
-                    OrgId = table.Column<Guid>(nullable: false),
-                    Code = table.Column<string>(maxLength: 16, nullable: false),
-                    Name = table.Column<string>(maxLength: 50, nullable: false),
-                    Description = table.Column<string>(maxLength: 255, nullable: true),
-                    ParentId = table.Column<Guid>(nullable: true),
-                    Active = table.Column<bool>(nullable: false),
-                    DateCreated = table.Column<DateTime>(nullable: false),
-                    DateModified = table.Column<DateTime>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductCategories", x => x.CategoryId);
-                    table.ForeignKey(
-                        name: "FK_ProductCategories_Organizations_OrgId",
-                        column: x => x.OrgId,
-                        principalTable: "Organizations",
-                        principalColumn: "OrgId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ProductCategories_ProductCategories_ParentId",
-                        column: x => x.ParentId,
-                        principalTable: "ProductCategories",
-                        principalColumn: "CategoryId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ProductSegments",
-                columns: table => new
-                {
-                    SegmentId = table.Column<Guid>(nullable: false),
-                    OrgId = table.Column<Guid>(nullable: false),
-                    Code = table.Column<string>(maxLength: 16, nullable: false),
-                    Name = table.Column<string>(maxLength: 50, nullable: false),
-                    Description = table.Column<string>(maxLength: 255, nullable: true),
-                    Active = table.Column<bool>(nullable: false),
-                    DateCreated = table.Column<DateTime>(nullable: false),
-                    DateModified = table.Column<DateTime>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductSegments", x => x.SegmentId);
-                    table.ForeignKey(
-                        name: "FK_ProductSegments_Organizations_OrgId",
-                        column: x => x.OrgId,
-                        principalTable: "Organizations",
-                        principalColumn: "OrgId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ProductVarieties",
-                columns: table => new
-                {
-                    VarietyId = table.Column<Guid>(nullable: false),
-                    OrgId = table.Column<Guid>(nullable: false),
-                    Code = table.Column<string>(maxLength: 16, nullable: false),
-                    Name = table.Column<string>(maxLength: 50, nullable: false),
-                    Description = table.Column<string>(maxLength: 255, nullable: true),
-                    Active = table.Column<bool>(nullable: false),
-                    DateCreated = table.Column<DateTime>(nullable: false),
-                    DateModified = table.Column<DateTime>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductVarieties", x => x.VarietyId);
-                    table.ForeignKey(
-                        name: "FK_ProductVarieties_Organizations_OrgId",
-                        column: x => x.OrgId,
-                        principalTable: "Organizations",
-                        principalColumn: "OrgId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -341,135 +371,85 @@ namespace Fanda.Data.Migrations
                 name: "Units",
                 columns: table => new
                 {
-                    UnitId = table.Column<Guid>(nullable: false),
-                    OrgId = table.Column<Guid>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     Code = table.Column<string>(maxLength: 16, nullable: false),
                     Name = table.Column<string>(maxLength: 25, nullable: false),
+                    OrgId = table.Column<Guid>(nullable: false),
                     Active = table.Column<bool>(nullable: false),
                     DateCreated = table.Column<DateTime>(nullable: false),
                     DateModified = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Units", x => x.UnitId);
+                    table.PrimaryKey("PK_Units", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Units_Organizations_OrgId",
                         column: x => x.OrgId,
                         principalTable: "Organizations",
-                        principalColumn: "OrgId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrgBank",
+                name: "OrgUsers",
                 columns: table => new
                 {
                     OrgId = table.Column<Guid>(nullable: false),
-                    BankAcctId = table.Column<Guid>(nullable: false)
+                    UserId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrgBank", x => new { x.OrgId, x.BankAcctId });
+                    table.PrimaryKey("PK_OrgUsers", x => new { x.OrgId, x.UserId });
                     table.ForeignKey(
-                        name: "FK_OrgBank_BankAccounts_BankAcctId",
-                        column: x => x.BankAcctId,
-                        principalTable: "BankAccounts",
-                        principalColumn: "BankAcctId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_OrgBank_Organizations_OrgId",
+                        name: "FK_OrgUsers_Organizations_OrgId",
                         column: x => x.OrgId,
                         principalTable: "Organizations",
-                        principalColumn: "OrgId",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_OrgUsers_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Devices",
-                columns: table => new
-                {
-                    DeviceId = table.Column<Guid>(nullable: false),
-                    LocationId = table.Column<Guid>(nullable: true),
-                    Code = table.Column<string>(maxLength: 16, nullable: false),
-                    Name = table.Column<string>(maxLength: 50, nullable: false),
-                    Description = table.Column<string>(maxLength: 255, nullable: true),
-                    Active = table.Column<bool>(nullable: false),
-                    DateCreated = table.Column<DateTime>(nullable: false),
-                    DateModified = table.Column<DateTime>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Devices", x => x.DeviceId);
-                    table.ForeignKey(
-                        name: "FK_Devices_Locations_LocationId",
-                        column: x => x.LocationId,
-                        principalTable: "Locations",
-                        principalColumn: "LocationId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Users",
+                name: "Ledgers",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    UserName = table.Column<string>(maxLength: 25, nullable: false),
-                    Email = table.Column<string>(maxLength: 255, nullable: false),
-                    PasswordHash = table.Column<byte[]>(nullable: false),
-                    PasswordSalt = table.Column<byte[]>(nullable: true),
-                    FirstName = table.Column<string>(maxLength: 50, nullable: true),
-                    LastName = table.Column<string>(maxLength: 50, nullable: true),
-                    DateLastLogin = table.Column<DateTime>(nullable: true),
-                    DateCreated = table.Column<DateTime>(nullable: false),
-                    DateModified = table.Column<DateTime>(nullable: true),
-                    Active = table.Column<bool>(nullable: false),
-                    LocationId = table.Column<Guid>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Users_Locations_LocationId",
-                        column: x => x.LocationId,
-                        principalTable: "Locations",
-                        principalColumn: "LocationId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Parties",
-                columns: table => new
-                {
-                    PartyId = table.Column<Guid>(nullable: false),
+                    LedgerCode = table.Column<string>(maxLength: 16, nullable: false),
+                    LedgerName = table.Column<string>(maxLength: 50, nullable: false),
+                    Description = table.Column<string>(maxLength: 255, nullable: true),
+                    LedgerGroupId = table.Column<Guid>(nullable: false),
+                    ParentId = table.Column<Guid>(nullable: true),
+                    IsSystem = table.Column<bool>(nullable: false),
                     OrgId = table.Column<Guid>(nullable: false),
-                    Code = table.Column<string>(maxLength: 16, nullable: false),
-                    Name = table.Column<string>(maxLength: 50, nullable: false),
-                    CategoryId = table.Column<Guid>(nullable: false),
-                    RegdNum = table.Column<string>(maxLength: 25, nullable: true),
-                    PAN = table.Column<string>(maxLength: 25, nullable: true),
-                    TAN = table.Column<string>(maxLength: 25, nullable: true),
-                    GSTIN = table.Column<string>(maxLength: 25, nullable: true),
-                    PartyType = table.Column<string>(maxLength: 16, nullable: true),
-                    PaymentTerm = table.Column<string>(maxLength: 16, nullable: true),
-                    CreditLimit = table.Column<decimal>(type: "decimal(16, 4)", nullable: false),
                     Active = table.Column<bool>(nullable: false),
                     DateCreated = table.Column<DateTime>(nullable: false),
                     DateModified = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Parties", x => x.PartyId);
+                    table.PrimaryKey("PK_Ledgers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Parties_PartyCategories_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "PartyCategories",
-                        principalColumn: "CategoryId",
+                        name: "FK_Ledgers_LedgerGroups_LedgerGroupId",
+                        column: x => x.LedgerGroupId,
+                        principalTable: "LedgerGroups",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Parties_Organizations_OrgId",
+                        name: "FK_Ledgers_Organizations_OrgId",
                         column: x => x.OrgId,
                         principalTable: "Organizations",
-                        principalColumn: "OrgId",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Ledgers_Ledgers_ParentId",
+                        column: x => x.ParentId,
+                        principalTable: "Ledgers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -477,8 +457,7 @@ namespace Fanda.Data.Migrations
                 name: "Products",
                 columns: table => new
                 {
-                    ProductId = table.Column<Guid>(nullable: false),
-                    OrgId = table.Column<Guid>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     Code = table.Column<string>(maxLength: 16, nullable: false),
                     Name = table.Column<string>(maxLength: 50, nullable: false),
                     Description = table.Column<string>(maxLength: 255, nullable: true),
@@ -490,53 +469,54 @@ namespace Fanda.Data.Migrations
                     UnitId = table.Column<Guid>(nullable: false),
                     TaxCode = table.Column<string>(nullable: true),
                     TaxPreference = table.Column<string>(maxLength: 16, nullable: true),
-                    CentralGstPct = table.Column<decimal>(type: "decimal(16, 4)", nullable: false),
-                    StateGstPct = table.Column<decimal>(type: "decimal(16, 4)", nullable: false),
-                    InterGstPct = table.Column<decimal>(type: "decimal(16, 4)", nullable: false),
-                    CostPrice = table.Column<decimal>(type: "decimal(16, 4)", nullable: false),
-                    SellingPrice = table.Column<decimal>(type: "decimal(16, 4)", nullable: false),
+                    CentralGstPct = table.Column<decimal>(nullable: false),
+                    StateGstPct = table.Column<decimal>(nullable: false),
+                    InterGstPct = table.Column<decimal>(nullable: false),
+                    CostPrice = table.Column<decimal>(nullable: false),
+                    SellingPrice = table.Column<decimal>(nullable: false),
+                    OrgId = table.Column<Guid>(nullable: false),
                     Active = table.Column<bool>(nullable: false),
                     DateCreated = table.Column<DateTime>(nullable: false),
                     DateModified = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Products", x => x.ProductId);
+                    table.PrimaryKey("PK_Products", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Products_ProductBrands_BrandId",
                         column: x => x.BrandId,
                         principalTable: "ProductBrands",
-                        principalColumn: "BrandId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Products_ProductCategories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "ProductCategories",
-                        principalColumn: "CategoryId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Products_Organizations_OrgId",
                         column: x => x.OrgId,
                         principalTable: "Organizations",
-                        principalColumn: "OrgId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Products_ProductSegments_SegmentId",
                         column: x => x.SegmentId,
                         principalTable: "ProductSegments",
-                        principalColumn: "SegmentId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Products_Units_UnitId",
                         column: x => x.UnitId,
                         principalTable: "Units",
-                        principalColumn: "UnitId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Products_ProductVarieties_VarietyId",
                         column: x => x.VarietyId,
                         principalTable: "ProductVarieties",
-                        principalColumn: "VarietyId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -544,154 +524,230 @@ namespace Fanda.Data.Migrations
                 name: "UnitConversions",
                 columns: table => new
                 {
-                    ConversionId = table.Column<Guid>(nullable: false),
-                    OrgId = table.Column<Guid>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     FromUnitId = table.Column<Guid>(nullable: false),
                     ToUnitId = table.Column<Guid>(nullable: false),
                     CalcStep = table.Column<byte>(nullable: false),
                     Operator = table.Column<string>(nullable: false),
-                    Factor = table.Column<decimal>(type: "decimal(16, 4)", nullable: false),
-                    Active = table.Column<bool>(nullable: false)
+                    Factor = table.Column<decimal>(nullable: false),
+                    Active = table.Column<bool>(nullable: false),
+                    OrgId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UnitConversions", x => x.ConversionId);
+                    table.PrimaryKey("PK_UnitConversions", x => x.Id);
                     table.ForeignKey(
                         name: "FK_UnitConversions_Units_FromUnitId",
                         column: x => x.FromUnitId,
                         principalTable: "Units",
-                        principalColumn: "UnitId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_UnitConversions_Organizations_OrgId",
                         column: x => x.OrgId,
                         principalTable: "Organizations",
-                        principalColumn: "OrgId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_UnitConversions_Units_ToUnitId",
                         column: x => x.ToUnitId,
                         principalTable: "Units",
-                        principalColumn: "UnitId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AuditTrails",
-                columns: table => new
-                {
-                    AuditTrailId = table.Column<Guid>(nullable: false),
-                    TableName = table.Column<string>(unicode: false, maxLength: 32, nullable: false),
-                    RowId = table.Column<Guid>(nullable: false),
-                    CurrentStatus = table.Column<string>(unicode: false, maxLength: 16, nullable: false),
-                    CreatedUserId = table.Column<Guid>(nullable: false),
-                    DateCreated = table.Column<DateTime>(nullable: false),
-                    ModifiedUserId = table.Column<Guid>(nullable: true),
-                    DateModified = table.Column<DateTime>(nullable: true),
-                    DeletedUserId = table.Column<Guid>(nullable: true),
-                    DateDeleted = table.Column<DateTime>(nullable: true),
-                    PrintedUserId = table.Column<Guid>(nullable: true),
-                    DatePrinted = table.Column<DateTime>(nullable: true),
-                    ApprovedUserId = table.Column<Guid>(nullable: true),
-                    DateApproved = table.Column<DateTime>(nullable: true),
-                    RejectedUserId = table.Column<Guid>(nullable: true),
-                    DateRejected = table.Column<DateTime>(nullable: true),
-                    HoldUserId = table.Column<Guid>(nullable: true),
-                    DateHold = table.Column<DateTime>(nullable: true),
-                    ActivatedUserId = table.Column<Guid>(nullable: true),
-                    DateActivated = table.Column<DateTime>(nullable: true),
-                    DeactivatedUserId = table.Column<Guid>(nullable: true),
-                    DateDeactivated = table.Column<DateTime>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AuditTrails", x => x.AuditTrailId);
-                    table.ForeignKey(
-                        name: "FK_AuditTrails_Users_ActivatedUserId",
-                        column: x => x.ActivatedUserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_AuditTrails_Users_ApprovedUserId",
-                        column: x => x.ApprovedUserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_AuditTrails_Users_CreatedUserId",
-                        column: x => x.CreatedUserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_AuditTrails_Users_DeactivatedUserId",
-                        column: x => x.DeactivatedUserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_AuditTrails_Users_DeletedUserId",
-                        column: x => x.DeletedUserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_AuditTrails_Users_HoldUserId",
-                        column: x => x.HoldUserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_AuditTrails_Users_ModifiedUserId",
-                        column: x => x.ModifiedUserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_AuditTrails_Users_PrintedUserId",
-                        column: x => x.PrintedUserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_AuditTrails_Users_RejectedUserId",
-                        column: x => x.RejectedUserId,
-                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrgUser",
+                name: "OrgUserRoles",
                 columns: table => new
                 {
                     OrgId = table.Column<Guid>(nullable: false),
-                    UserId = table.Column<Guid>(nullable: false)
+                    UserId = table.Column<Guid>(nullable: false),
+                    RoleId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrgUser", x => new { x.OrgId, x.UserId });
+                    table.PrimaryKey("PK_OrgUserRoles", x => new { x.OrgId, x.UserId, x.RoleId });
                     table.ForeignKey(
-                        name: "FK_OrgUser_Organizations_OrgId",
-                        column: x => x.OrgId,
-                        principalTable: "Organizations",
-                        principalColumn: "OrgId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_OrgUser_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
+                        name: "FK_OrgUserRoles_Roles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "Roles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_OrgUserRoles_OrgUsers_OrgId_UserId",
+                        columns: x => new { x.OrgId, x.UserId },
+                        principalTable: "OrgUsers",
+                        principalColumns: new[] { "OrgId", "UserId" },
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Banks",
+                columns: table => new
+                {
+                    LedgerId = table.Column<Guid>(nullable: false),
+                    AccountNumber = table.Column<string>(maxLength: 25, nullable: false),
+                    AccountType = table.Column<string>(maxLength: 16, nullable: true),
+                    IfscCode = table.Column<string>(maxLength: 16, nullable: true),
+                    MicrCode = table.Column<string>(maxLength: 16, nullable: true),
+                    BranchCode = table.Column<string>(maxLength: 16, nullable: true),
+                    BranchName = table.Column<string>(maxLength: 50, nullable: true),
+                    ContactId = table.Column<Guid>(nullable: true),
+                    AddressId = table.Column<Guid>(nullable: true),
+                    IsDefault = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Banks", x => x.LedgerId);
+                    table.ForeignKey(
+                        name: "FK_Banks_Addresses_AddressId",
+                        column: x => x.AddressId,
+                        principalTable: "Addresses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Banks_Contacts_ContactId",
+                        column: x => x.ContactId,
+                        principalTable: "Contacts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Banks_Ledgers_LedgerId",
+                        column: x => x.LedgerId,
+                        principalTable: "Ledgers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Parties",
+                columns: table => new
+                {
+                    LedgerId = table.Column<Guid>(nullable: false),
+                    RegdNum = table.Column<string>(maxLength: 25, nullable: true),
+                    PAN = table.Column<string>(maxLength: 25, nullable: true),
+                    TAN = table.Column<string>(maxLength: 25, nullable: true),
+                    GSTIN = table.Column<string>(maxLength: 25, nullable: true),
+                    PartyType = table.Column<string>(maxLength: 16, nullable: true),
+                    PaymentTerm = table.Column<string>(maxLength: 16, nullable: true),
+                    CreditLimit = table.Column<decimal>(nullable: false),
+                    CategoryId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Parties", x => x.LedgerId);
+                    table.ForeignKey(
+                        name: "FK_Parties_PartyCategories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "PartyCategories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Parties_Ledgers_LedgerId",
+                        column: x => x.LedgerId,
+                        principalTable: "Ledgers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductIngredients",
+                columns: table => new
+                {
+                    ParentProductId = table.Column<Guid>(nullable: false),
+                    ChildProductId = table.Column<Guid>(nullable: false),
+                    UnitId = table.Column<Guid>(nullable: false),
+                    Qty = table.Column<decimal>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductIngredients", x => new { x.ParentProductId, x.ChildProductId });
+                    table.ForeignKey(
+                        name: "FK_ProductIngredients_Products_ChildProductId",
+                        column: x => x.ChildProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ProductIngredients_Products_ParentProductId",
+                        column: x => x.ParentProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProductIngredients_Units_UnitId",
+                        column: x => x.UnitId,
+                        principalTable: "Units",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductPricings",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    ProductId = table.Column<Guid>(nullable: false),
+                    PartyCategoryId = table.Column<Guid>(nullable: true),
+                    InvoiceCategoryId = table.Column<Guid>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductPricings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductPricings_InvoiceCategories_InvoiceCategoryId",
+                        column: x => x.InvoiceCategoryId,
+                        principalTable: "InvoiceCategories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ProductPricings_PartyCategories_PartyCategoryId",
+                        column: x => x.PartyCategoryId,
+                        principalTable: "PartyCategories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ProductPricings_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Stock",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    ProductId = table.Column<Guid>(nullable: false),
+                    BatchNumber = table.Column<string>(maxLength: 25, nullable: true),
+                    MfgDate = table.Column<DateTime>(nullable: true),
+                    ExpiryDate = table.Column<DateTime>(nullable: true),
+                    UnitId = table.Column<Guid>(nullable: false),
+                    QtyOnHand = table.Column<decimal>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Stock", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Stock_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Stock_Units_UnitId",
+                        column: x => x.UnitId,
+                        principalTable: "Units",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Invoices",
                 columns: table => new
                 {
-                    InvoiceId = table.Column<Guid>(nullable: false),
-                    OrgId = table.Column<Guid>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     InvoiceNumber = table.Column<string>(maxLength: 16, nullable: true),
                     InvoiceDate = table.Column<DateTime>(nullable: false),
                     CategoryId = table.Column<Guid>(nullable: false),
@@ -704,48 +760,49 @@ namespace Fanda.Data.Migrations
                     PartyRefNum = table.Column<string>(maxLength: 16, nullable: true),
                     PartyRefDate = table.Column<DateTime>(nullable: true),
                     BuyerId = table.Column<Guid>(nullable: true),
-                    Subtotal = table.Column<decimal>(type: "decimal(16, 4)", nullable: false),
-                    DiscountPct = table.Column<decimal>(type: "decimal(16, 4)", nullable: false),
-                    DiscountAmt = table.Column<decimal>(type: "decimal(16, 4)", nullable: false),
-                    TaxPct = table.Column<decimal>(type: "decimal(16, 4)", nullable: false),
-                    TaxAmt = table.Column<decimal>(type: "decimal(16, 4)", nullable: false),
-                    MiscAddDesc = table.Column<decimal>(type: "decimal(16, 4)", nullable: false),
-                    MiscAddAmt = table.Column<decimal>(type: "decimal(16, 4)", nullable: false),
-                    GrandTotal = table.Column<decimal>(type: "decimal(16, 4)", nullable: false),
+                    Subtotal = table.Column<decimal>(nullable: false),
+                    DiscountPct = table.Column<decimal>(nullable: false),
+                    DiscountAmt = table.Column<decimal>(nullable: false),
+                    TaxPct = table.Column<decimal>(nullable: false),
+                    TaxAmt = table.Column<decimal>(nullable: false),
+                    MiscAddDesc = table.Column<decimal>(nullable: false),
+                    MiscAddAmt = table.Column<decimal>(nullable: false),
+                    GrandTotal = table.Column<decimal>(nullable: false),
                     DateCreated = table.Column<DateTime>(nullable: false),
-                    DateModified = table.Column<DateTime>(nullable: true)
+                    DateModified = table.Column<DateTime>(nullable: true),
+                    YearId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Invoices", x => x.InvoiceId);
+                    table.PrimaryKey("PK_Invoices", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Invoices_Parties_BuyerId",
                         column: x => x.BuyerId,
                         principalTable: "Parties",
-                        principalColumn: "PartyId",
+                        principalColumn: "LedgerId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Invoices_InvoiceCategories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "InvoiceCategories",
-                        principalColumn: "CategoryId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Invoices_Organizations_OrgId",
-                        column: x => x.OrgId,
-                        principalTable: "Organizations",
-                        principalColumn: "OrgId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Invoices_Parties_PartyId",
                         column: x => x.PartyId,
                         principalTable: "Parties",
-                        principalColumn: "PartyId",
+                        principalColumn: "LedgerId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Invoices_AccountYears_YearId",
+                        column: x => x.YearId,
+                        principalTable: "AccountYears",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "PartyAddress",
+                name: "PartyAddresses",
                 columns: table => new
                 {
                     PartyId = table.Column<Guid>(nullable: false),
@@ -753,47 +810,23 @@ namespace Fanda.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PartyAddress", x => new { x.PartyId, x.AddressId });
+                    table.PrimaryKey("PK_PartyAddresses", x => new { x.PartyId, x.AddressId });
                     table.ForeignKey(
-                        name: "FK_PartyAddress_Addresses_AddressId",
+                        name: "FK_PartyAddresses_Addresses_AddressId",
                         column: x => x.AddressId,
                         principalTable: "Addresses",
-                        principalColumn: "AddressId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PartyAddress_Parties_PartyId",
+                        name: "FK_PartyAddresses_Parties_PartyId",
                         column: x => x.PartyId,
                         principalTable: "Parties",
-                        principalColumn: "PartyId",
+                        principalColumn: "LedgerId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "PartyBank",
-                columns: table => new
-                {
-                    PartyId = table.Column<Guid>(nullable: false),
-                    BankAcctId = table.Column<Guid>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PartyBank", x => new { x.PartyId, x.BankAcctId });
-                    table.ForeignKey(
-                        name: "FK_PartyBank_BankAccounts_BankAcctId",
-                        column: x => x.BankAcctId,
-                        principalTable: "BankAccounts",
-                        principalColumn: "BankAcctId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_PartyBank_Parties_PartyId",
-                        column: x => x.PartyId,
-                        principalTable: "Parties",
-                        principalColumn: "PartyId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "PartyContact",
+                name: "PartyContacts",
                 columns: table => new
                 {
                     PartyId = table.Column<Guid>(nullable: false),
@@ -801,137 +834,18 @@ namespace Fanda.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PartyContact", x => new { x.PartyId, x.ContactId });
+                    table.PrimaryKey("PK_PartyContacts", x => new { x.PartyId, x.ContactId });
                     table.ForeignKey(
-                        name: "FK_PartyContact_Contacts_ContactId",
+                        name: "FK_PartyContacts_Contacts_ContactId",
                         column: x => x.ContactId,
                         principalTable: "Contacts",
-                        principalColumn: "ContactId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_PartyContact_Parties_PartyId",
-                        column: x => x.PartyId,
-                        principalTable: "Parties",
-                        principalColumn: "PartyId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ProductIngredients",
-                columns: table => new
-                {
-                    IngredientId = table.Column<Guid>(nullable: false),
-                    ParentProductId = table.Column<Guid>(nullable: false),
-                    ChildProductId = table.Column<Guid>(nullable: false),
-                    UnitId = table.Column<Guid>(nullable: false),
-                    Qty = table.Column<decimal>(type: "decimal(16, 4)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductIngredients", x => x.IngredientId);
-                    table.ForeignKey(
-                        name: "FK_ProductIngredients_Products_ChildProductId",
-                        column: x => x.ChildProductId,
-                        principalTable: "Products",
-                        principalColumn: "ProductId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ProductIngredients_Products_ParentProductId",
-                        column: x => x.ParentProductId,
-                        principalTable: "Products",
-                        principalColumn: "ProductId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProductIngredients_Units_UnitId",
-                        column: x => x.UnitId,
-                        principalTable: "Units",
-                        principalColumn: "UnitId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ProductPricings",
-                columns: table => new
-                {
-                    PricingId = table.Column<Guid>(nullable: false),
-                    ProductId = table.Column<Guid>(nullable: false),
-                    PartyCategoryId = table.Column<Guid>(nullable: true),
-                    InvoiceCategoryId = table.Column<Guid>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductPricings", x => x.PricingId);
-                    table.ForeignKey(
-                        name: "FK_ProductPricings_InvoiceCategories_InvoiceCategoryId",
-                        column: x => x.InvoiceCategoryId,
-                        principalTable: "InvoiceCategories",
-                        principalColumn: "CategoryId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ProductPricings_PartyCategories_PartyCategoryId",
-                        column: x => x.PartyCategoryId,
-                        principalTable: "PartyCategories",
-                        principalColumn: "CategoryId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ProductPricings_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
-                        principalColumn: "ProductId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Stock",
-                columns: table => new
-                {
-                    StockId = table.Column<Guid>(nullable: false),
-                    ProductId = table.Column<Guid>(nullable: false),
-                    BatchNumber = table.Column<string>(maxLength: 25, nullable: true),
-                    MfgDate = table.Column<DateTime>(nullable: true),
-                    ExpiryDate = table.Column<DateTime>(nullable: true),
-                    UnitId = table.Column<Guid>(nullable: false),
-                    QtyOnHand = table.Column<decimal>(type: "decimal(16, 4)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Stock", x => x.StockId);
-                    table.ForeignKey(
-                        name: "FK_Stock_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
-                        principalColumn: "ProductId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Stock_Units_UnitId",
-                        column: x => x.UnitId,
-                        principalTable: "Units",
-                        principalColumn: "UnitId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "OrgUserRole",
-                columns: table => new
-                {
-                    OrgId = table.Column<Guid>(nullable: false),
-                    UserId = table.Column<Guid>(nullable: false),
-                    RoleId = table.Column<Guid>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OrgUserRole", x => new { x.OrgId, x.UserId, x.RoleId });
-                    table.ForeignKey(
-                        name: "FK_OrgUserRole_Roles_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "Roles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_OrgUserRole_OrgUser_OrgId_UserId",
-                        columns: x => new { x.OrgId, x.UserId },
-                        principalTable: "OrgUser",
-                        principalColumns: new[] { "OrgId", "UserId" },
+                        name: "FK_PartyContacts_Parties_PartyId",
+                        column: x => x.PartyId,
+                        principalTable: "Parties",
+                        principalColumn: "LedgerId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -941,158 +855,99 @@ namespace Fanda.Data.Migrations
                 {
                     RangeId = table.Column<Guid>(nullable: false),
                     PricingId = table.Column<Guid>(nullable: false),
-                    MinQty = table.Column<decimal>(type: "decimal(16, 4)", nullable: false),
-                    MaxQty = table.Column<decimal>(type: "decimal(16, 4)", nullable: false),
-                    AdjustPct = table.Column<decimal>(type: "decimal(16, 4)", nullable: false),
-                    AdjustAmt = table.Column<decimal>(type: "decimal(16, 4)", nullable: false),
+                    MinQty = table.Column<decimal>(nullable: false),
+                    MaxQty = table.Column<decimal>(nullable: false),
+                    AdjustPct = table.Column<decimal>(nullable: false),
+                    AdjustAmt = table.Column<decimal>(nullable: false),
                     RoundOffOption = table.Column<string>(maxLength: 16, nullable: true),
-                    FinalPrice = table.Column<decimal>(type: "decimal(16, 4)", nullable: false)
+                    FinalPrice = table.Column<decimal>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductPricingRanges", x => x.RangeId);
+                    table.PrimaryKey("PK_ProductPricingRanges", x => new { x.RangeId, x.PricingId });
                     table.ForeignKey(
                         name: "FK_ProductPricingRanges_ProductPricings_PricingId",
                         column: x => x.PricingId,
                         principalTable: "ProductPricings",
-                        principalColumn: "PricingId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "InvoiceItems",
                 columns: table => new
                 {
-                    InvItemId = table.Column<Guid>(nullable: false),
+                    InvoiceItemId = table.Column<Guid>(nullable: false),
                     InvoiceId = table.Column<Guid>(nullable: false),
                     StockId = table.Column<Guid>(nullable: false),
                     Description = table.Column<string>(maxLength: 255, nullable: true),
                     UnitId = table.Column<Guid>(nullable: false),
-                    Qty = table.Column<decimal>(type: "decimal(16, 4)", nullable: false),
-                    UnitPrice = table.Column<decimal>(type: "decimal(16, 4)", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(16, 4)", nullable: false),
-                    DiscountPct = table.Column<decimal>(type: "decimal(16, 4)", nullable: false),
-                    DiscountAmt = table.Column<decimal>(type: "decimal(16, 4)", nullable: false),
-                    CentralGstPct = table.Column<decimal>(type: "decimal(16, 4)", nullable: false),
-                    CentralGstAmt = table.Column<decimal>(type: "decimal(16, 4)", nullable: false),
-                    StateGstPct = table.Column<decimal>(type: "decimal(16, 4)", nullable: false),
-                    StateGstAmt = table.Column<decimal>(type: "decimal(16, 4)", nullable: false),
-                    InterGstPct = table.Column<decimal>(type: "decimal(16, 4)", nullable: false),
-                    InterGstAmt = table.Column<decimal>(type: "decimal(16, 4)", nullable: false),
-                    LineTotal = table.Column<decimal>(type: "decimal(16, 4)", nullable: false)
+                    Qty = table.Column<decimal>(nullable: false),
+                    UnitPrice = table.Column<decimal>(nullable: false),
+                    Price = table.Column<decimal>(nullable: false),
+                    DiscountPct = table.Column<decimal>(nullable: false),
+                    DiscountAmt = table.Column<decimal>(nullable: false),
+                    CentralGstPct = table.Column<decimal>(nullable: false),
+                    CentralGstAmt = table.Column<decimal>(nullable: false),
+                    StateGstPct = table.Column<decimal>(nullable: false),
+                    StateGstAmt = table.Column<decimal>(nullable: false),
+                    InterGstPct = table.Column<decimal>(nullable: false),
+                    InterGstAmt = table.Column<decimal>(nullable: false),
+                    LineTotal = table.Column<decimal>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_InvoiceItems", x => x.InvItemId);
+                    table.PrimaryKey("PK_InvoiceItems", x => new { x.InvoiceItemId, x.InvoiceId });
                     table.ForeignKey(
                         name: "FK_InvoiceItems_Invoices_InvoiceId",
                         column: x => x.InvoiceId,
                         principalTable: "Invoices",
-                        principalColumn: "InvoiceId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_InvoiceItems_Stock_StockId",
                         column: x => x.StockId,
                         principalTable: "Stock",
-                        principalColumn: "StockId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_InvoiceItems_Units_UnitId",
                         column: x => x.UnitId,
                         principalTable: "Units",
-                        principalColumn: "UnitId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AuditTrails_ActivatedUserId",
-                table: "AuditTrails",
-                column: "ActivatedUserId");
+                name: "IX_AccountYears_OrgId",
+                table: "AccountYears",
+                column: "OrgId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AuditTrails_ApprovedUserId",
-                table: "AuditTrails",
-                column: "ApprovedUserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AuditTrails_CreatedUserId",
-                table: "AuditTrails",
-                column: "CreatedUserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AuditTrails_DeactivatedUserId",
-                table: "AuditTrails",
-                column: "DeactivatedUserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AuditTrails_DeletedUserId",
-                table: "AuditTrails",
-                column: "DeletedUserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AuditTrails_HoldUserId",
-                table: "AuditTrails",
-                column: "HoldUserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AuditTrails_ModifiedUserId",
-                table: "AuditTrails",
-                column: "ModifiedUserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AuditTrails_PrintedUserId",
-                table: "AuditTrails",
-                column: "PrintedUserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AuditTrails_RejectedUserId",
-                table: "AuditTrails",
-                column: "RejectedUserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AuditTrails_TableName_RowId",
-                table: "AuditTrails",
-                columns: new[] { "TableName", "RowId" },
+                name: "IX_AccountYears_YearCode_OrgId",
+                table: "AccountYears",
+                columns: new[] { "YearCode", "OrgId" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_BankAccounts_AccountNumber",
-                table: "BankAccounts",
+                name: "IX_Banks_AccountNumber",
+                table: "Banks",
                 column: "AccountNumber",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_BankAccounts_AddressId",
-                table: "BankAccounts",
+                name: "IX_Banks_AddressId",
+                table: "Banks",
                 column: "AddressId",
                 unique: true,
                 filter: "[AddressId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BankAccounts_ContactId",
-                table: "BankAccounts",
+                name: "IX_Banks_ContactId",
+                table: "Banks",
                 column: "ContactId",
                 unique: true,
                 filter: "[ContactId] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Devices_LocationId",
-                table: "Devices",
-                column: "LocationId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Devices_Code_LocationId",
-                table: "Devices",
-                columns: new[] { "Code", "LocationId" },
-                unique: true,
-                filter: "[LocationId] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Devices_Name_LocationId",
-                table: "Devices",
-                columns: new[] { "Name", "LocationId" },
-                unique: true,
-                filter: "[LocationId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_InvoiceCategories_OrgId",
@@ -1137,42 +992,74 @@ namespace Fanda.Data.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Invoices_OrgId",
-                table: "Invoices",
-                column: "OrgId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Invoices_PartyId",
                 table: "Invoices",
                 column: "PartyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Invoices_InvoiceNumber_OrgId",
+                name: "IX_Invoices_YearId",
                 table: "Invoices",
-                columns: new[] { "InvoiceNumber", "OrgId" },
+                column: "YearId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Invoices_InvoiceNumber_YearId",
+                table: "Invoices",
+                columns: new[] { "InvoiceNumber", "YearId" },
                 unique: true,
                 filter: "[InvoiceNumber] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Locations_OrgId",
-                table: "Locations",
+                name: "IX_LedgerGroups_OrgId",
+                table: "LedgerGroups",
                 column: "OrgId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Locations_Code_OrgId",
-                table: "Locations",
-                columns: new[] { "Code", "OrgId" },
+                name: "IX_LedgerGroups_ParentId",
+                table: "LedgerGroups",
+                column: "ParentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LedgerGroups_GroupCode_OrgId",
+                table: "LedgerGroups",
+                columns: new[] { "GroupCode", "OrgId" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Locations_Name_OrgId",
-                table: "Locations",
-                columns: new[] { "Name", "OrgId" },
+                name: "IX_LedgerGroups_GroupName_OrgId",
+                table: "LedgerGroups",
+                columns: new[] { "GroupName", "OrgId" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrgAddress_AddressId",
-                table: "OrgAddress",
+                name: "IX_Ledgers_LedgerGroupId",
+                table: "Ledgers",
+                column: "LedgerGroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Ledgers_OrgId",
+                table: "Ledgers",
+                column: "OrgId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Ledgers_ParentId",
+                table: "Ledgers",
+                column: "ParentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Ledgers_LedgerCode_OrgId",
+                table: "Ledgers",
+                columns: new[] { "LedgerCode", "OrgId" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Ledgers_LedgerName_OrgId",
+                table: "Ledgers",
+                columns: new[] { "LedgerName", "OrgId" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrgAddresses_AddressId",
+                table: "OrgAddresses",
                 column: "AddressId");
 
             migrationBuilder.CreateIndex(
@@ -1188,24 +1075,19 @@ namespace Fanda.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrgBank_BankAcctId",
-                table: "OrgBank",
-                column: "BankAcctId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OrgContact_ContactId",
-                table: "OrgContact",
+                name: "IX_OrgContacts_ContactId",
+                table: "OrgContacts",
                 column: "ContactId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrgUser_UserId",
-                table: "OrgUser",
-                column: "UserId");
+                name: "IX_OrgUserRoles_RoleId",
+                table: "OrgUserRoles",
+                column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrgUserRole_RoleId",
-                table: "OrgUserRole",
-                column: "RoleId");
+                name: "IX_OrgUsers_UserId",
+                table: "OrgUsers",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Parties_CategoryId",
@@ -1213,31 +1095,9 @@ namespace Fanda.Data.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Parties_OrgId",
-                table: "Parties",
-                column: "OrgId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Parties_Code_OrgId",
-                table: "Parties",
-                columns: new[] { "Code", "OrgId" },
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Parties_Name_OrgId",
-                table: "Parties",
-                columns: new[] { "Name", "OrgId" },
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PartyAddress_AddressId",
-                table: "PartyAddress",
+                name: "IX_PartyAddresses_AddressId",
+                table: "PartyAddresses",
                 column: "AddressId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PartyBank_BankAcctId",
-                table: "PartyBank",
-                column: "BankAcctId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PartyCategories_OrgId",
@@ -1257,8 +1117,8 @@ namespace Fanda.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_PartyContact_ContactId",
-                table: "PartyContact",
+                name: "IX_PartyContacts_ContactId",
+                table: "PartyContacts",
                 column: "ContactId");
 
             migrationBuilder.CreateIndex(
@@ -1309,12 +1169,6 @@ namespace Fanda.Data.Migrations
                 name: "IX_ProductIngredients_UnitId",
                 table: "ProductIngredients",
                 column: "UnitId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductIngredients_ParentProductId_ChildProductId",
-                table: "ProductIngredients",
-                columns: new[] { "ParentProductId", "ChildProductId" },
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductPricingRanges_PricingId",
@@ -1413,15 +1267,20 @@ namespace Fanda.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Roles_Code",
+                name: "IX_Roles_OrgId",
                 table: "Roles",
-                column: "Code",
+                column: "OrgId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Roles_Code_OrgId",
+                table: "Roles",
+                columns: new[] { "Code", "OrgId" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Roles_Name",
+                name: "IX_Roles_Name_OrgId",
                 table: "Roles",
-                column: "Name",
+                columns: new[] { "Name", "OrgId" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -1480,11 +1339,6 @@ namespace Fanda.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_LocationId",
-                table: "Users",
-                column: "LocationId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Users_UserName",
                 table: "Users",
                 column: "UserName",
@@ -1494,34 +1348,25 @@ namespace Fanda.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AuditTrails");
-
-            migrationBuilder.DropTable(
-                name: "Devices");
+                name: "Banks");
 
             migrationBuilder.DropTable(
                 name: "InvoiceItems");
 
             migrationBuilder.DropTable(
-                name: "OrgAddress");
+                name: "OrgAddresses");
 
             migrationBuilder.DropTable(
-                name: "OrgBank");
+                name: "OrgContacts");
 
             migrationBuilder.DropTable(
-                name: "OrgContact");
+                name: "OrgUserRoles");
 
             migrationBuilder.DropTable(
-                name: "OrgUserRole");
+                name: "PartyAddresses");
 
             migrationBuilder.DropTable(
-                name: "PartyAddress");
-
-            migrationBuilder.DropTable(
-                name: "PartyBank");
-
-            migrationBuilder.DropTable(
-                name: "PartyContact");
+                name: "PartyContacts");
 
             migrationBuilder.DropTable(
                 name: "ProductIngredients");
@@ -1542,10 +1387,13 @@ namespace Fanda.Data.Migrations
                 name: "Roles");
 
             migrationBuilder.DropTable(
-                name: "OrgUser");
+                name: "OrgUsers");
 
             migrationBuilder.DropTable(
-                name: "BankAccounts");
+                name: "Addresses");
+
+            migrationBuilder.DropTable(
+                name: "Contacts");
 
             migrationBuilder.DropTable(
                 name: "ProductPricings");
@@ -1554,13 +1402,10 @@ namespace Fanda.Data.Migrations
                 name: "Parties");
 
             migrationBuilder.DropTable(
+                name: "AccountYears");
+
+            migrationBuilder.DropTable(
                 name: "Users");
-
-            migrationBuilder.DropTable(
-                name: "Addresses");
-
-            migrationBuilder.DropTable(
-                name: "Contacts");
 
             migrationBuilder.DropTable(
                 name: "InvoiceCategories");
@@ -1572,7 +1417,7 @@ namespace Fanda.Data.Migrations
                 name: "PartyCategories");
 
             migrationBuilder.DropTable(
-                name: "Locations");
+                name: "Ledgers");
 
             migrationBuilder.DropTable(
                 name: "ProductBrands");
@@ -1588,6 +1433,9 @@ namespace Fanda.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "ProductVarieties");
+
+            migrationBuilder.DropTable(
+                name: "LedgerGroups");
 
             migrationBuilder.DropTable(
                 name: "Organizations");

@@ -189,7 +189,7 @@ namespace FandaCoreUI
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IOrganizationService, OrganizationService>();
             services.AddScoped<IPartyCategoryService, PartyCategoryService>();
-            services.AddScoped<IPartyService, PartyService>();
+            //services.AddScoped<IPartyService, PartyService>();
 
             services.AddHttpContextAccessor();
             #endregion

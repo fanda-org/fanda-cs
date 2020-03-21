@@ -13,13 +13,13 @@ namespace Fanda.Service
 {
     public interface IProductBrandService
     {
-        Task<List<ProductBrandDto>> GetAllAsync(Guid orgId, bool? active);
+        Task<List<ProductBrandDto>> GetAllAsync(string orgId, bool? active);
 
-        Task<ProductBrandDto> GetByIdAsync(Guid brandId);
+        Task<ProductBrandDto> GetByIdAsync(string brandId);
 
-        Task<ProductBrandDto> SaveAsync(Guid orgId, ProductBrandDto brandVM);
+        Task<ProductBrandDto> SaveAsync(string orgId, ProductBrandDto dto);
 
-        Task<bool> DeleteAsync(Guid brandId);
+        Task<bool> DeleteAsync(string brandId);
 
         string ErrorMessage { get; }
     }
@@ -37,9 +37,9 @@ namespace Fanda.Service
 
         public string ErrorMessage { get; private set; }
 
-        public async Task<List<ProductBrandDto>> GetAllAsync(Guid orgId, bool? active)
+        public async Task<List<ProductBrandDto>> GetAllAsync(string orgId, bool? active)
         {
-            if (orgId == null || orgId == Guid.Empty)
+            if (string.IsNullOrEmpty(orgId))
                 throw new ArgumentNullException("orgId", "Org id is missing");
 
             var brands = await _context.ProductBrands
@@ -51,12 +51,12 @@ namespace Fanda.Service
             return brands;
         }
 
-        public async Task<ProductBrandDto> GetByIdAsync(Guid brandId)
+        public async Task<ProductBrandDto> GetByIdAsync(string brandId)
         {
             var brand = await _context.ProductBrands
                 .ProjectTo<ProductBrandDto>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
-                .SingleOrDefaultAsync(pc => pc.BrandId == brandId);
+                .SingleOrDefaultAsync(pc => pc.Id == brandId);
 
             if (brand != null)
                 return brand;
@@ -64,15 +64,15 @@ namespace Fanda.Service
             throw new KeyNotFoundException("Product brand not found");
         }
 
-        public async Task<ProductBrandDto> SaveAsync(Guid orgId, ProductBrandDto brandVM)
+        public async Task<ProductBrandDto> SaveAsync(string orgId, ProductBrandDto dto)
         {
-            if (orgId == null || orgId == Guid.Empty)
+            if (string.IsNullOrEmpty(orgId))
                 throw new ArgumentNullException("orgId", "Org id is missing");
 
-            var brand = _mapper.Map<ProductBrand>(brandVM);
-            if (brand.BrandId == Guid.Empty)
+            var brand = _mapper.Map<ProductBrand>(dto);
+            if (brand.Id == Guid.Empty)
             {
-                brand.OrgId = orgId;
+                brand.OrgId = new Guid(orgId);
                 brand.DateCreated = DateTime.Now;
                 brand.DateModified = null;
                 _context.ProductBrands.Add(brand);
@@ -83,11 +83,11 @@ namespace Fanda.Service
                 _context.ProductBrands.Update(brand);
             }
             await _context.SaveChangesAsync();
-            brandVM = _mapper.Map<ProductBrandDto>(brand);
-            return brandVM;
+            dto = _mapper.Map<ProductBrandDto>(brand);
+            return dto;
         }
 
-        public async Task<bool> DeleteAsync(Guid brandId)
+        public async Task<bool> DeleteAsync(string brandId)
         {
             var brand = await _context.ProductBrands
                 .FindAsync(brandId);

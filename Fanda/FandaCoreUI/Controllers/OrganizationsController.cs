@@ -39,10 +39,7 @@ namespace Fanda.Controllers
         }
 
         // GET: Organizations/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
+        public IActionResult Create() => View();
 
         // POST: Organizations/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -86,7 +83,7 @@ namespace Fanda.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, [Bind("OrgId,OrgCode,OrgName,Description,RegdNum,PAN,TAN,GSTIN,Active,DateCreated,DateModified")] OrganizationDto dto)
         {
-            if (id != dto.OrgId)
+            if (id != dto.Id)
             {
                 return NotFound();
             }
@@ -101,7 +98,7 @@ namespace Fanda.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!OrganizationExists(dto.OrgId))
+                    if (!OrganizationExists(dto.Id))
                     {
                         return NotFound();
                     }
@@ -146,9 +143,6 @@ namespace Fanda.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool OrganizationExists(string id)
-        {
-            return _service.Exists(id); //_context.Organizations.Any(e => e.OrgId == id);
-        }
+        private bool OrganizationExists(string id) => _service.ExistsById(id);
     }
 }

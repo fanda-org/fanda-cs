@@ -13,13 +13,13 @@ namespace Fanda.Service
 {
     public interface IProductService
     {
-        Task<List<ProductDto>> GetAllAsync(Guid orgId, bool? active);
+        Task<List<ProductDto>> GetAllAsync(string orgId, bool? active);
 
-        Task<ProductDto> GetByIdAsync(Guid productId);
+        Task<ProductDto> GetByIdAsync(string productId);
 
-        Task<ProductDto> SaveAsync(Guid orgId, ProductDto productVM);
+        Task<ProductDto> SaveAsync(string orgId, ProductDto dto);
 
-        Task<bool> DeleteAsync(Guid productId);
+        Task<bool> DeleteAsync(string productId);
 
         string ErrorMessage { get; }
     }
@@ -37,9 +37,9 @@ namespace Fanda.Service
 
         public string ErrorMessage { get; private set; }
 
-        public async Task<List<ProductDto>> GetAllAsync(Guid orgId, bool? active)
+        public async Task<List<ProductDto>> GetAllAsync(string orgId, bool? active)
         {
-            if (orgId == null || orgId == Guid.Empty)
+            if (string.IsNullOrEmpty(orgId))
                 throw new ArgumentNullException("orgId", "Org id is missing");
 
             var products = await _context.Products
@@ -51,14 +51,14 @@ namespace Fanda.Service
             return _mapper.Map<List<ProductDto>>(products);
         }
 
-        public async Task<ProductDto> GetByIdAsync(Guid productId)
+        public async Task<ProductDto> GetByIdAsync(string productId)
         {
             var product = await _context.Products
                 //.Include(p => p.ProductIngredients)
                 //.Include(p => p.ProductPricings).ThenInclude(pr => pr.PricingRanges)
                 .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
-                .SingleOrDefaultAsync(pc => pc.ProductId == productId);
+                .SingleOrDefaultAsync(pc => pc.Id == productId);
 
             if (product != null)
                 return product; //_mapper.Map<ProductViewModel>(product);
@@ -66,14 +66,14 @@ namespace Fanda.Service
             throw new KeyNotFoundException("Product not found");
         }
 
-        public async Task<ProductDto> SaveAsync(Guid orgId, ProductDto productVM)
+        public async Task<ProductDto> SaveAsync(string orgId, ProductDto dto)
         {
-            if (orgId == null || orgId == Guid.Empty)
+            if (string.IsNullOrEmpty(orgId))
                 throw new ArgumentNullException("orgId", "Org id is missing");
 
-            var product = _mapper.Map<Product>(productVM);
-            product.OrgId = orgId;
-            if (product.ProductId == Guid.Empty)
+            var product = _mapper.Map<Product>(dto);
+            product.OrgId = new Guid(orgId);
+            if (product.Id == Guid.Empty)
             {
                 product.DateCreated = DateTime.Now;
                 product.DateModified = null;
@@ -82,7 +82,7 @@ namespace Fanda.Service
             else
             {
                 var dbProd = await _context.Products
-                    .Where(p => p.ProductId == product.ProductId)
+                    .Where(p => p.Id == product.Id)
                     .Include(p => p.ParentIngredients)
                     .Include(p => p.ProductPricings).ThenInclude(pr => pr.PricingRanges)
                     .SingleOrDefaultAsync();
@@ -98,19 +98,19 @@ namespace Fanda.Service
                     // delete all ingredients that no longer exists
                     foreach (var dbIngredient in dbProd.ParentIngredients)
                     {
-                        if (product.ParentIngredients.All(pi => pi.IngredientId != dbIngredient.IngredientId))
+                        if (product.ParentIngredients.All(pi => pi.Id != dbIngredient.Id))
                             _context.Set<ProductIngredient>().Remove(dbIngredient);
                     }
                     foreach (var dbPricing in dbProd.ProductPricings)
                     {
-                        if (product.ProductPricings.All(pp => pp.PricingId != dbPricing.PricingId))
+                        if (product.ProductPricings.All(pp => pp.Id != dbPricing.Id))
                             _context.Set<ProductPricing>().Remove(dbPricing);
                     }
                     // copy current (incoming) values to db
                     _context.Entry(dbProd).CurrentValues.SetValues(product);
                     var ingredientPairs = from curr in product.ParentIngredients//.Select(pi => pi.IngredientProduct)
                                           join db in dbProd.ParentIngredients//.Select(pi => pi.IngredientProduct)
-                                            on curr.IngredientId equals db.IngredientId into grp
+                                            on curr.Id equals db.Id into grp
                                           from db in grp.DefaultIfEmpty()
                                           select new { curr, db };
                     foreach (var pair in ingredientPairs)
@@ -122,7 +122,7 @@ namespace Fanda.Service
                     }
                     var pricingPairs = from curr in product.ProductPricings//.Select(pi => pi.IngredientProduct)
                                        join db in dbProd.ProductPricings//.Select(pi => pi.IngredientProduct)
-                                         on curr.PricingId equals db.PricingId into grp
+                                         on curr.Id equals db.Id into grp
                                        from db in grp.DefaultIfEmpty()
                                        select new { curr, db };
                     foreach (var pair in pricingPairs)
@@ -135,11 +135,11 @@ namespace Fanda.Service
                 }
             }
             await _context.SaveChangesAsync();
-            productVM = _mapper.Map<ProductDto>(product);
-            return productVM;
+            dto = _mapper.Map<ProductDto>(product);
+            return dto;
         }
 
-        public async Task<bool> DeleteAsync(Guid productId)
+        public async Task<bool> DeleteAsync(string productId)
         {
             var product = await _context.Products
                 .FindAsync(productId);

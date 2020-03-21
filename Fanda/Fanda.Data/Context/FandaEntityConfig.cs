@@ -3,126 +3,50 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Fanda.Data.Context
 {
-    public class RoleConfig : IEntityTypeConfiguration<Role>
-    {
-        public void Configure(EntityTypeBuilder<Role> builder)
-        {
-            // table
-            builder.ToTable("Roles");
-
-            // key
-            //builder.HasKey(r => r.Id);
-
-            // columns
-            builder.Property(r => r.Code)
-                .IsRequired()
-                .HasMaxLength(16);
-            builder.Property(r => r.Name)
-                .IsRequired()
-                .HasMaxLength(25);
-            builder.Property(r => r.Description)
-                .HasMaxLength(255);
-            //builder.Property(o => o.DateCreated).ValueGeneratedOnAdd();
-            //builder.Property(o => o.DateModified).ValueGeneratedOnUpdate();
-            // index
-            builder.HasIndex(r => r.Code)
-                .IsUnique();
-            builder.HasIndex(r => r.Name)
-                .IsUnique();
-        }
-    }
-
-    public class UserConfig : IEntityTypeConfiguration<User>
-    {
-        public void Configure(EntityTypeBuilder<User> builder)
-        {
-            // table
-            builder.ToTable("Users");
-
-            // key
-            //builder.HasKey(u => u.Id);
-
-            // columns
-            builder.Property(u => u.UserName)
-                .IsRequired()
-                .HasMaxLength(25);
-            builder.Property(u => u.Email)
-                .IsRequired()
-                .HasMaxLength(255);
-            builder.Property(u => u.FirstName)
-                .IsRequired(false)
-                .HasMaxLength(50);
-            builder.Property(u => u.LastName)
-                .IsRequired(false)
-                .HasMaxLength(50);
-            builder.Property(u => u.PasswordHash)
-                .IsRequired(true);
-            //builder.Property(o => o.DateCreated).ValueGeneratedOnAdd();
-            //builder.Property(o => o.DateModified).ValueGeneratedOnUpdate();
-            // index
-            builder.HasIndex(u => u.UserName)
-                .IsUnique();
-            builder.HasIndex(u => u.Email)
-                .IsUnique();
-            // foreign keys
-            builder.HasOne(ou => ou.Location)
-                .WithMany(l => l.Users)
-                .HasForeignKey(ou => ou.LocationId)
-                .OnDelete(DeleteBehavior.Restrict);
-            //builder.HasOne(u => u.Role)
-            //    .WithMany(r => r.Users)
-            //    .HasForeignKey(u => u.RoleId)
-            //    .OnDelete(DeleteBehavior.Restrict);
-        }
-    }
-
-    //public class UserRoleConfig : IEntityTypeConfiguration<UserRole>
-    //{
-    //    public void Configure(EntityTypeBuilder<UserRole> builder)
-    //    {
-    //        // table
-    //        builder.ToTable("UserRole");
-    //        // key
-    //        builder.HasKey(ur => new { ur.UserId, ur.RoleId });
-    //        // foreign keys
-    //        builder.HasOne<User>(ur => ur.User)
-    //            .WithMany(u => u.UserRoles)
-    //            .HasForeignKey(ur => ur.UserId);
-    //        builder.HasOne<Role>(ur => ur.Role)
-    //            .WithMany(r => r.UserRoles)
-    //            .HasForeignKey(ur => ur.RoleId);
-    //    }
-    //}
-
+    #region Global - Contact and Address
     public class ContactConfig : IEntityTypeConfiguration<Contact>
     {
         public void Configure(EntityTypeBuilder<Contact> builder)
         {
             // table
             builder.ToTable("Contacts");
+
             // key
-            builder.HasKey(c => c.ContactId);
+            builder.HasKey(c => c.Id);
+
             // columns
-            builder.Property(c => c.ContactName)
+            builder.Property(c => c.Salutation)
+                .HasMaxLength(5);
+            builder.Property(c => c.FirstName)
+                .IsRequired()
                 .HasMaxLength(50);
-            builder.Property(c => c.ContactTitle)
+            builder.Property(c => c.LastName)
                 .HasMaxLength(50);
-            builder.Property(c => c.ContactPhone)
+            builder.Property(c => c.Email)
+                .HasMaxLength(100);
+            builder.Property(c => c.WorkPhone)
                 .HasMaxLength(25);
-            builder.Property(c => c.ContactEmail)
-                .HasMaxLength(255);
+            builder.Property(c => c.Mobile)
+                .HasMaxLength(25);
+            builder.Property(c => c.Designation)
+                .HasMaxLength(25);
+            builder.Property(c => c.Department)
+                .HasMaxLength(25);
         }
     }
-
     public class AddressConfig : IEntityTypeConfiguration<Address>
     {
         public void Configure(EntityTypeBuilder<Address> builder)
         {
             // table
             builder.ToTable("Addresses");
+
             // key
-            builder.HasKey(a => a.AddressId);
+            builder.HasKey(a => a.Id);
+
             // columns
+            builder.Property(a => a.Attention)
+                .HasMaxLength(50);
             builder.Property(a => a.AddressLine1)
                 .HasMaxLength(100);
             builder.Property(a => a.AddressLine2)
@@ -135,171 +59,71 @@ namespace Fanda.Data.Context
                 .HasMaxLength(25);
             builder.Property(a => a.PostalCode)
                 .HasMaxLength(10);
+            builder.Property(a => a.Phone)
+                .HasMaxLength(25);
+            builder.Property(a => a.Fax)
+                .HasMaxLength(25);
             builder.Ignore(a => a.AddressType);
             builder.Property(a => a.AddressTypeString)
+                .IsRequired()
                 .HasColumnName("AddressType")
-                .HasMaxLength(25)
-                .IsRequired();
+                .HasMaxLength(25);
+
         }
     }
+    #endregion
 
-    public class BankAccountConfig : IEntityTypeConfiguration<BankAccount>
+    #region User
+    public class UserConfig : IEntityTypeConfiguration<User>
     {
-        public void Configure(EntityTypeBuilder<BankAccount> builder)
+        public void Configure(EntityTypeBuilder<User> builder)
         {
             // table
-            builder.ToTable("BankAccounts");
+            builder.ToTable("Users");
+
             // key
-            builder.HasKey(b => b.BankAcctId);
+            builder.HasKey(u => u.Id);
+
             // columns
-            builder.Property(b => b.AccountNumber)
+            builder.Property(u => u.UserName)
                 .IsRequired()
                 .HasMaxLength(25);
-            builder.Property(b => b.BankShortName)
-                .IsRequired(false)
-                .HasMaxLength(15);
-            builder.Property(b => b.BankName)
+            builder.Property(u => u.Email)
                 .IsRequired()
+                .HasMaxLength(255);
+            builder.Property(u => u.FirstName)
                 .HasMaxLength(50);
-            builder.Ignore(b => b.AccountType);
-            builder.Property(b => b.AccountTypeString)
-                .HasColumnName("AccountType")
-                .HasMaxLength(16);
-            builder.Property(b => b.IfscCode)
-                .HasMaxLength(16);
-            builder.Property(b => b.MicrCode)
-                .HasMaxLength(16);
-            builder.Property(b => b.BranchCode)
-                .HasMaxLength(16);
-            builder.Property(b => b.BranchName)
+            builder.Property(u => u.LastName)
                 .HasMaxLength(50);
-            //builder.Property(b => b.DateCreated).ValueGeneratedOnAdd();
-            //builder.Property(b => b.DateModified).ValueGeneratedOnUpdate();
+            builder.Property(u => u.PasswordHash)
+                .IsRequired(true);
+            builder.Property(u => u.PasswordSalt)
+                .IsRequired(true);
+            builder.Property(o => o.DateCreated).ValueGeneratedOnAdd();
+            builder.Property(o => o.DateModified).ValueGeneratedOnUpdate();
+
             // index
-            builder.HasIndex(p => p.AccountNumber)
+            builder.HasIndex(u => u.UserName)
                 .IsUnique();
-            // foreign key
-            builder.HasOne(b => b.Contact)
-                .WithOne(c => c.BankAccount)
-                .HasForeignKey<BankAccount>(a => a.ContactId)
-                .OnDelete(DeleteBehavior.Restrict);
-            builder.HasOne(b => b.Address)
-                .WithOne(a => a.BankAccount)
-                .HasForeignKey<BankAccount>(a => a.AddressId)
-                .OnDelete(DeleteBehavior.Restrict);
+            builder.HasIndex(u => u.Email)
+                .IsUnique();
         }
     }
+    #endregion
 
-    //public class BankContactConfig : IEntityTypeConfiguration<BankContact>
-    //{
-    //    public void Configure(EntityTypeBuilder<BankContact> builder)
-    //    {
-    //        // table
-    //        builder.ToTable("BankContact");
-    //        // key
-    //        builder.HasKey(oc => new { oc.BankId, oc.ContactId });
-    //        // foreign key
-    //        builder.HasOne(oc => oc.Bank)
-    //            .WithMany(b => b.Contacts)
-    //            .HasForeignKey(oc => oc.BankId)
-    //            .OnDelete(DeleteBehavior.Cascade);
-    //        builder.HasOne(oc => oc.Contact)
-    //            .WithMany(c => c.BankContacts)
-    //            .HasForeignKey(oc => oc.ContactId)
-    //            .OnDelete(DeleteBehavior.Cascade);
-    //    }
-    //}
+    #region Organization
 
-    //public class BankAddressConfig : IEntityTypeConfiguration<BankAddress>
-    //{
-    //    public void Configure(EntityTypeBuilder<BankAddress> builder)
-    //    {
-    //        // table
-    //        builder.ToTable("BankAddress");
-    //        // key
-    //        builder.HasKey(oa => new { oa.BankId, oa.AddressId });
-    //        // foreign key
-    //        builder.HasOne(oa => oa.Bank)
-    //            .WithMany(b => b.Addresses)
-    //            .HasForeignKey(oa => oa.BankId)
-    //            .OnDelete(DeleteBehavior.Cascade);
-    //        builder.HasOne(oa => oa.Address)
-    //            .WithMany(c => c.BankAddresses)
-    //            .HasForeignKey(oa => oa.AddressId)
-    //            .OnDelete(DeleteBehavior.Cascade);
-    //    }
-    //}
-
-    //public class AuditTrailConfig : IEntityTypeConfiguration<AuditTrail>
-    //{
-    //    public void Configure(EntityTypeBuilder<AuditTrail> builder)
-    //    {
-    //        // table
-    //        builder.ToTable("AuditTrails");
-    //        // key
-    //        builder.HasKey(at => at.AuditTrailId);
-    //        // columns
-    //        builder.Property(at => at.TableName)
-    //            .IsRequired()
-    //            .IsUnicode(false)
-    //            .HasMaxLength(32);
-    //        builder.Ignore(at => at.CurrentStatus);
-    //        builder.Property(at => at.CurrentStatusString)
-    //            .HasColumnName("CurrentStatus")
-    //            .IsRequired()
-    //            .IsUnicode(false)
-    //            .HasMaxLength(16);
-    //        // indexes
-    //        builder.HasIndex(at => new { at.TableName, at.RowId })
-    //            .IsUnique();
-    //        // foreign key
-    //        builder.HasOne(at => at.CreatedUser)
-    //            .WithMany(u => u.CreatedTrails)
-    //            .HasForeignKey(at => at.CreatedUserId)
-    //            .OnDelete(DeleteBehavior.Restrict);
-    //        builder.HasOne(at => at.ModifiedUser)
-    //            .WithMany(u => u.ModifiedTrails)
-    //            .HasForeignKey(at => at.ModifiedUserId)
-    //            .OnDelete(DeleteBehavior.Restrict);
-    //        builder.HasOne(at => at.DeletedUser)
-    //            .WithMany(u => u.DeletedTrails)
-    //            .HasForeignKey(at => at.DeletedUserId)
-    //            .OnDelete(DeleteBehavior.Restrict);
-    //        builder.HasOne(at => at.PrintedUser)
-    //            .WithMany(u => u.PrintedTrails)
-    //            .HasForeignKey(at => at.PrintedUserId)
-    //            .OnDelete(DeleteBehavior.Restrict);
-    //        builder.HasOne(at => at.ApprovedUser)
-    //            .WithMany(u => u.ApprovedTrails)
-    //            .HasForeignKey(at => at.ApprovedUserId)
-    //            .OnDelete(DeleteBehavior.Restrict);
-    //        builder.HasOne(at => at.RejectedUser)
-    //            .WithMany(u => u.RejectedTrails)
-    //            .HasForeignKey(at => at.RejectedUserId)
-    //            .OnDelete(DeleteBehavior.Restrict);
-    //        builder.HasOne(at => at.HoldUser)
-    //            .WithMany(u => u.HoldTrails)
-    //            .HasForeignKey(at => at.HoldUserId)
-    //            .OnDelete(DeleteBehavior.Restrict);
-    //        builder.HasOne(at => at.ActivatedUser)
-    //            .WithMany(u => u.ActivatedTrails)
-    //            .HasForeignKey(at => at.ActivatedUserId)
-    //            .OnDelete(DeleteBehavior.Restrict);
-    //        builder.HasOne(at => at.DeactivatedUser)
-    //            .WithMany(u => u.DeactivatedTrails)
-    //            .HasForeignKey(at => at.DeactivatedUserId)
-    //            .OnDelete(DeleteBehavior.Restrict);
-    //    }
-    //}
-
+    #region Organization, Contact, Address, Role, User
     public class OrganizationConfig : IEntityTypeConfiguration<Organization>
     {
         public void Configure(EntityTypeBuilder<Organization> builder)
         {
             // table
             builder.ToTable("Organizations");
+
             // key
-            builder.HasKey(o => o.OrgId);
+            builder.HasKey(o => o.Id);
+
             // columns
             builder.Property(o => o.OrgCode)
                 .IsRequired()
@@ -317,12 +141,13 @@ namespace Fanda.Data.Context
                 .HasMaxLength(25);
             builder.Property(o => o.GSTIN)
                 .HasMaxLength(25);
-            //builder.Property(o => o.DateCreated)
-            //    .HasDefaultValueSql("getdate()")
-            //    .ValueGeneratedOnAdd();
-            //builder.Property(o => o.DateModified)
-            //    .HasDefaultValueSql("getdate()")
-            //    .ValueGeneratedOnUpdate();
+            builder.Property(o => o.DateCreated)
+                //.HasDefaultValueSql("getdate()")
+                .ValueGeneratedOnAdd();
+            builder.Property(o => o.DateModified)
+                //.HasDefaultValueSql("getdate()")
+                .ValueGeneratedOnUpdate();
+
             // index
             builder.HasIndex(o => o.OrgCode)
                 .IsUnique();
@@ -330,18 +155,19 @@ namespace Fanda.Data.Context
                 .IsUnique();
         }
     }
-
     public class OrgContactConfig : IEntityTypeConfiguration<OrgContact>
     {
         public void Configure(EntityTypeBuilder<OrgContact> builder)
         {
             // table
-            builder.ToTable("OrgContact");
+            builder.ToTable("OrgContacts");
+
             // key
             builder.HasKey(oc => new { oc.OrgId, oc.ContactId });
+
             // foreign key
             builder.HasOne(oc => oc.Organization)
-                .WithMany(b => b.Contacts)
+                .WithMany(b => b.OrgContacts)
                 .HasForeignKey(oc => oc.OrgId)
                 .OnDelete(DeleteBehavior.Cascade);
             builder.HasOne(oc => oc.Contact)
@@ -350,18 +176,19 @@ namespace Fanda.Data.Context
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }
-
     public class OrgAddressConfig : IEntityTypeConfiguration<OrgAddress>
     {
         public void Configure(EntityTypeBuilder<OrgAddress> builder)
         {
             // table
-            builder.ToTable("OrgAddress");
+            builder.ToTable("OrgAddresses");
+
             // key
             builder.HasKey(oa => new { oa.OrgId, oa.AddressId });
+
             // foreign key
             builder.HasOne(oa => oa.Organization)
-                .WithMany(b => b.Addresses)
+                .WithMany(b => b.OrgAddresses)
                 .HasForeignKey(oa => oa.OrgId)
                 .OnDelete(DeleteBehavior.Cascade);
             builder.HasOne(oa => oa.Address)
@@ -370,279 +197,95 @@ namespace Fanda.Data.Context
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }
-
     public class OrgUserConfig : IEntityTypeConfiguration<OrgUser>
     {
         public void Configure(EntityTypeBuilder<OrgUser> builder)
         {
             // table
-            builder.ToTable("OrgUser");
+            builder.ToTable("OrgUsers");
+
             // key
             builder.HasKey(ou => new { ou.OrgId, ou.UserId });
+
             // foreign key
             builder.HasOne(ou => ou.Organization)
-                .WithMany(b => b.Users)
+                .WithMany(b => b.OrgUsers)
                 .HasForeignKey(ou => ou.OrgId)
                 .OnDelete(DeleteBehavior.Cascade);
             builder.HasOne(ou => ou.User)
-                .WithMany(c => c.Organizations)
+                .WithMany(c => c.OrgUsers)
                 .HasForeignKey(ou => ou.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }
+    public class RoleConfig : IEntityTypeConfiguration<Role>
+    {
+        public void Configure(EntityTypeBuilder<Role> builder)
+        {
+            // table
+            builder.ToTable("Roles");
 
+            // key
+            builder.HasKey(r => r.Id);
+
+            // columns
+            builder.Property(r => r.Code)
+                .IsRequired()
+                .HasMaxLength(16);
+            builder.Property(r => r.Name)
+                .IsRequired()
+                .HasMaxLength(25);
+            builder.Property(r => r.Description)
+                .HasMaxLength(255);
+
+            builder.Property(o => o.DateCreated).ValueGeneratedOnAdd();
+            builder.Property(o => o.DateModified).ValueGeneratedOnUpdate();
+
+            // index
+            builder.HasIndex(r => new { r.Code, r.OrgId })
+                .IsUnique();
+            builder.HasIndex(r => new { r.Name, r.OrgId })
+                .IsUnique();
+
+            // foreign key
+            builder.HasOne(r => r.Organization)
+                .WithMany(o => o.Roles)
+                .HasForeignKey(r => r.OrgId)
+                .OnDelete(DeleteBehavior.Restrict);
+        }
+    }
     public class OrgUserRoleConfig : IEntityTypeConfiguration<OrgUserRole>
     {
         public void Configure(EntityTypeBuilder<OrgUserRole> builder)
         {
             // table
-            builder.ToTable("OrgUserRole");
+            builder.ToTable("OrgUserRoles");
+
             // key
-            builder.HasKey(our => new { our.OrgId, our.UserId, our.RoleId });
+            builder.HasKey(o => new { o.OrgId, o.UserId, o.RoleId });
+
             // foreign key
-            builder.HasOne<OrgUser>(our => our.OrgUser)
-                .WithMany(ou => ou.OrgUserRoles)
-                .HasForeignKey(our => new { our.OrgId, our.UserId });
-            builder.HasOne<Role>(our => our.Role)
+            builder.HasOne<OrgUser>(o => o.OrgUser)
+                .WithMany(u => u.OrgUserRoles)
+                .HasForeignKey(o => new { o.OrgId, o.UserId });
+            builder.HasOne<Role>(o => o.Role)
                 .WithMany(r => r.OrgUserRoles)
-                .HasForeignKey(our => our.RoleId);
+                .HasForeignKey(o => o.RoleId);
         }
     }
+    #endregion
 
-    public class OrgBankConfig : IEntityTypeConfiguration<OrgBank>
-    {
-        public void Configure(EntityTypeBuilder<OrgBank> builder)
-        {
-            // table
-            builder.ToTable("OrgBank");
-            // key
-            builder.HasKey(ou => new { ou.OrgId, ou.BankAcctId });
-            // foreign key
-            builder.HasOne(ou => ou.Organization)
-                .WithMany(b => b.Banks)
-                .HasForeignKey(ou => ou.OrgId)
-                .OnDelete(DeleteBehavior.Cascade);
-            builder.HasOne(ou => ou.BankAccount)
-                .WithMany(c => c.OrgBanks)
-                .HasForeignKey(ou => ou.BankAcctId)
-                .OnDelete(DeleteBehavior.Cascade);
-        }
-    }
-
-    public class LocationConfig : IEntityTypeConfiguration<Location>
-    {
-        public void Configure(EntityTypeBuilder<Location> builder)
-        {
-            // table
-            builder.ToTable("Locations");
-            // key
-            builder.HasKey(l => l.LocationId);
-            // columns
-            builder.Property(l => l.Code)
-                .IsRequired()
-                .HasMaxLength(16);
-            builder.Property(l => l.Name)
-                .IsRequired()
-                .HasMaxLength(50);
-            builder.Property(l => l.Description)
-                .HasMaxLength(255);
-            //builder.Property(o => o.DateCreated).ValueGeneratedOnAdd();
-            //builder.Property(o => o.DateModified).ValueGeneratedOnUpdate();
-            // index
-            builder.HasIndex(l => new { l.Code, l.OrgId })
-                .IsUnique();
-            builder.HasIndex(l => new { l.Name, l.OrgId })
-                .IsUnique();
-            // foreign key
-            builder.HasOne(l => l.Organization)
-                .WithMany(o => o.Locations)
-                .HasForeignKey(l => l.OrgId)
-                .OnDelete(DeleteBehavior.Restrict);
-        }
-    }
-
-    public class DeviceConfig : IEntityTypeConfiguration<Device>
-    {
-        public void Configure(EntityTypeBuilder<Device> builder)
-        {
-            // table
-            builder.ToTable("Devices");
-            // key
-            builder.HasKey(d => d.DeviceId);
-            // columns
-            builder.Property(d => d.Code)
-                .IsRequired()
-                .HasMaxLength(16);
-            builder.Property(d => d.Name)
-                .IsRequired()
-                .HasMaxLength(50);
-            builder.Property(l => l.Description)
-                .HasMaxLength(255);
-            //builder.Property(o => o.DateCreated).ValueGeneratedOnAdd();
-            //builder.Property(o => o.DateModified).ValueGeneratedOnUpdate();
-            // index
-            builder.HasIndex(d => new { d.Code, d.LocationId })
-                .IsUnique();
-            builder.HasIndex(d => new { d.Name, d.LocationId })
-                .IsUnique();
-            // foreign key
-            builder.HasOne(d => d.Location)
-                .WithMany(l => l.Devices)
-                .HasForeignKey(d => d.LocationId)
-                .OnDelete(DeleteBehavior.Restrict);
-        }
-    }
-
-    public class PartyCategoryConfig : IEntityTypeConfiguration<PartyCategory>
-    {
-        public void Configure(EntityTypeBuilder<PartyCategory> builder)
-        {
-            // table
-            builder.ToTable("PartyCategories");
-            // key
-            builder.HasKey(pc => pc.CategoryId);
-            // columns
-            builder.Property(pc => pc.Code)
-                .IsRequired()
-                .HasMaxLength(16);
-            builder.Property(pc => pc.Name)
-                .IsRequired()
-                .HasMaxLength(50);
-            builder.Property(pc => pc.Description)
-                .HasMaxLength(255);
-            //builder.Property(pc => pc.DateCreated).ValueGeneratedOnAdd();
-            //builder.Property(pc => pc.DateModified).ValueGeneratedOnUpdate();
-            // index
-            builder.HasIndex(pc => new { pc.Code, pc.OrgId })
-                .IsUnique();
-            builder.HasIndex(pc => new { pc.Name, pc.OrgId })
-                .IsUnique();
-            // foreign key
-            builder.HasOne(pc => pc.Organization)
-                .WithMany(o => o.PartyCategories)
-                .HasForeignKey(pc => pc.OrgId)
-                .OnDelete(DeleteBehavior.Restrict);
-        }
-    }
-
-    public class PartyConfig : IEntityTypeConfiguration<Party>
-    {
-        public void Configure(EntityTypeBuilder<Party> builder)
-        {
-            // table
-            builder.ToTable("Parties");
-            // key
-            builder.HasKey(c => c.PartyId);
-            // columns
-            builder.Property(c => c.Code)
-                .IsRequired()
-                .HasMaxLength(16);
-            builder.Property(c => c.Name)
-                .IsRequired()
-                .HasMaxLength(50);
-            builder.Ignore(pc => pc.PartyType);
-            builder.Property(pc => pc.PartyTypeString)
-                .HasColumnName("PartyType")
-                .HasMaxLength(16);
-            builder.Property(o => o.RegdNum)
-                .HasMaxLength(25);
-            builder.Property(o => o.PAN)
-                .HasMaxLength(25);
-            builder.Property(o => o.TAN)
-                .HasMaxLength(25);
-            builder.Property(o => o.GSTIN)
-                .HasMaxLength(25);
-            builder.Ignore(s => s.PaymentTerm);
-            builder.Property(s => s.PaymentTermString)
-                .HasColumnName("PaymentTerm")
-                .HasMaxLength(16);
-            //builder.Property(p => p.DateCreated).ValueGeneratedOnAdd();
-            //builder.Property(p => p.DateModified).ValueGeneratedOnUpdate();
-            // index
-            builder.HasIndex(c => new { c.Code, c.OrgId })
-                .IsUnique();
-            builder.HasIndex(c => new { c.Name, c.OrgId })
-                .IsUnique();
-            // foreign key
-            builder.HasOne(p => p.Organization)
-                .WithMany(o => o.Parties)
-                .HasForeignKey(p => p.OrgId)
-                .OnDelete(DeleteBehavior.Restrict);
-            builder.HasOne(p => p.Category)
-                .WithMany(pc => pc.Parties)
-                .HasForeignKey(p => p.CategoryId)
-                .OnDelete(DeleteBehavior.Restrict);
-        }
-    }
-
-    public class PartyContactConfig : IEntityTypeConfiguration<PartyContact>
-    {
-        public void Configure(EntityTypeBuilder<PartyContact> builder)
-        {
-            // table
-            builder.ToTable("PartyContact");
-            // key
-            builder.HasKey(oc => new { oc.PartyId, oc.ContactId });
-            // foreign key
-            builder.HasOne(oc => oc.Party)
-                .WithMany(b => b.Contacts)
-                .HasForeignKey(oc => oc.PartyId)
-                .OnDelete(DeleteBehavior.Cascade);
-            builder.HasOne(oc => oc.Contact)
-                .WithMany(c => c.PartyContacts)
-                .HasForeignKey(oc => oc.ContactId)
-                .OnDelete(DeleteBehavior.Cascade);
-        }
-    }
-
-    public class PartyAddressConfig : IEntityTypeConfiguration<PartyAddress>
-    {
-        public void Configure(EntityTypeBuilder<PartyAddress> builder)
-        {
-            // table
-            builder.ToTable("PartyAddress");
-            // key
-            builder.HasKey(oa => new { oa.PartyId, oa.AddressId });
-            // foreign key
-            builder.HasOne(oa => oa.Party)
-                .WithMany(b => b.Addresses)
-                .HasForeignKey(oa => oa.PartyId)
-                .OnDelete(DeleteBehavior.Cascade);
-            builder.HasOne(oa => oa.Address)
-                .WithMany(c => c.PartyAddresses)
-                .HasForeignKey(oa => oa.AddressId)
-                .OnDelete(DeleteBehavior.Cascade);
-        }
-    }
-
-    public class PartyBankConfig : IEntityTypeConfiguration<PartyBank>
-    {
-        public void Configure(EntityTypeBuilder<PartyBank> builder)
-        {
-            // table
-            builder.ToTable("PartyBank");
-            // key
-            builder.HasKey(ou => new { ou.PartyId, ou.BankAcctId });
-            // foreign key
-            builder.HasOne(ou => ou.Party)
-                .WithMany(b => b.Banks)
-                .HasForeignKey(ou => ou.PartyId)
-                .OnDelete(DeleteBehavior.Cascade);
-            builder.HasOne(ou => ou.BankAccount)
-                .WithMany(c => c.PartyBanks)
-                .HasForeignKey(ou => ou.BankAcctId)
-                .OnDelete(DeleteBehavior.Cascade);
-        }
-    }
-
+    #region Unit and Unit conversion
     public class UnitConfig : IEntityTypeConfiguration<Unit>
     {
         public void Configure(EntityTypeBuilder<Unit> builder)
         {
             // table
             builder.ToTable("Units");
+
             // key
-            builder.HasKey(u => u.UnitId);
+            builder.HasKey(u => u.Id);
+
             // columns
             builder.Property(u => u.Code)
                 .IsRequired()
@@ -650,13 +293,15 @@ namespace Fanda.Data.Context
             builder.Property(u => u.Name)
                 .IsRequired()
                 .HasMaxLength(25);
-            //builder.Property(u => u.DateCreated).ValueGeneratedOnAdd();
-            //builder.Property(u => u.DateModified).ValueGeneratedOnUpdate();
+            builder.Property(u => u.DateCreated).ValueGeneratedOnAdd();
+            builder.Property(u => u.DateModified).ValueGeneratedOnUpdate();
+
             // index
             builder.HasIndex(p => new { p.Code, p.OrgId })
                 .IsUnique();
             builder.HasIndex(p => new { p.Name, p.OrgId })
                 .IsUnique();
+
             // foreign key
             builder.HasOne(u => u.Organization)
                 .WithMany(o => o.Units)
@@ -664,17 +309,19 @@ namespace Fanda.Data.Context
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }
-
     public class UnitConversionConfig : IEntityTypeConfiguration<UnitConversion>
     {
         public void Configure(EntityTypeBuilder<UnitConversion> builder)
         {
             // table
             builder.ToTable("UnitConversions");
+
             // key
-            builder.HasKey(u => u.ConversionId);
+            builder.HasKey(u => u.Id);
+
             // columns
             // index
+
             // foreign key
             builder.HasOne(uc => uc.Organization)
                 .WithMany(o => o.UnitConversions)
@@ -690,15 +337,19 @@ namespace Fanda.Data.Context
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }
+    #endregion
 
+    #region Product
     public class ProductCategoryConfig : IEntityTypeConfiguration<ProductCategory>
     {
         public void Configure(EntityTypeBuilder<ProductCategory> builder)
         {
             // table
             builder.ToTable("ProductCategories");
+
             // key
-            builder.HasKey(u => u.CategoryId);
+            builder.HasKey(u => u.Id);
+
             // columns
             builder.Property(u => u.Code)
                 .IsRequired()
@@ -708,13 +359,15 @@ namespace Fanda.Data.Context
                 .HasMaxLength(50);
             builder.Property(u => u.Description)
                 .HasMaxLength(255);
-            //builder.Property(pc => pc.DateCreated).ValueGeneratedOnAdd();
-            //builder.Property(pc => pc.DateModified).ValueGeneratedOnUpdate();
+            builder.Property(pc => pc.DateCreated).ValueGeneratedOnAdd();
+            builder.Property(pc => pc.DateModified).ValueGeneratedOnUpdate();
+
             // index
             builder.HasIndex(p => new { p.Code, p.OrgId })
                 .IsUnique();
             builder.HasIndex(p => new { p.Name, p.OrgId })
                 .IsUnique();
+
             // foreign key
             builder.HasOne(pc => pc.Organization)
                 .WithMany(o => o.ProductCategories)
@@ -726,15 +379,16 @@ namespace Fanda.Data.Context
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }
-
     public class ProductBrandConfig : IEntityTypeConfiguration<ProductBrand>
     {
         public void Configure(EntityTypeBuilder<ProductBrand> builder)
         {
             // table
             builder.ToTable("ProductBrands");
+
             // key
-            builder.HasKey(u => u.BrandId);
+            builder.HasKey(u => u.Id);
+
             // columns
             builder.Property(u => u.Code)
                 .IsRequired()
@@ -744,13 +398,15 @@ namespace Fanda.Data.Context
                 .HasMaxLength(50);
             builder.Property(u => u.Description)
                 .HasMaxLength(255);
-            //builder.Property(b => b.DateCreated).ValueGeneratedOnAdd();
-            //builder.Property(b => b.DateModified).ValueGeneratedOnUpdate();
+            builder.Property(b => b.DateCreated).ValueGeneratedOnAdd();
+            builder.Property(b => b.DateModified).ValueGeneratedOnUpdate();
+
             // index
             builder.HasIndex(p => new { p.Code, p.OrgId })
                 .IsUnique();
             builder.HasIndex(p => new { p.Name, p.OrgId })
                 .IsUnique();
+
             // foreign key
             builder.HasOne(pc => pc.Organization)
                 .WithMany(o => o.ProductBrands)
@@ -758,15 +414,16 @@ namespace Fanda.Data.Context
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }
-
     public class ProductSegmentConfig : IEntityTypeConfiguration<ProductSegment>
     {
         public void Configure(EntityTypeBuilder<ProductSegment> builder)
         {
             // table
             builder.ToTable("ProductSegments");
+
             // key
-            builder.HasKey(u => u.SegmentId);
+            builder.HasKey(u => u.Id);
+
             // columns
             builder.Property(u => u.Code)
                 .IsRequired()
@@ -776,13 +433,15 @@ namespace Fanda.Data.Context
                 .HasMaxLength(50);
             builder.Property(u => u.Description)
                 .HasMaxLength(255);
-            //builder.Property(s => s.DateCreated).ValueGeneratedOnAdd();
-            //builder.Property(s => s.DateModified).ValueGeneratedOnUpdate();
+            builder.Property(s => s.DateCreated).ValueGeneratedOnAdd();
+            builder.Property(s => s.DateModified).ValueGeneratedOnUpdate();
+
             // index
             builder.HasIndex(p => new { p.Code, p.OrgId })
                 .IsUnique();
             builder.HasIndex(p => new { p.Name, p.OrgId })
                 .IsUnique();
+
             // foreign key
             builder.HasOne(pc => pc.Organization)
                 .WithMany(o => o.ProductSegments)
@@ -790,15 +449,16 @@ namespace Fanda.Data.Context
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }
-
     public class ProductVarietyConfig : IEntityTypeConfiguration<ProductVariety>
     {
         public void Configure(EntityTypeBuilder<ProductVariety> builder)
         {
             // table
             builder.ToTable("ProductVarieties");
+
             // key
-            builder.HasKey(u => u.VarietyId);
+            builder.HasKey(u => u.Id);
+
             // columns
             builder.Property(u => u.Code)
                 .IsRequired()
@@ -808,13 +468,15 @@ namespace Fanda.Data.Context
                 .HasMaxLength(50);
             builder.Property(u => u.Description)
                 .HasMaxLength(255);
-            //builder.Property(v => v.DateCreated).ValueGeneratedOnAdd();
-            //builder.Property(v => v.DateModified).ValueGeneratedOnUpdate();
+            builder.Property(v => v.DateCreated).ValueGeneratedOnAdd();
+            builder.Property(v => v.DateModified).ValueGeneratedOnUpdate();
+
             // index
             builder.HasIndex(p => new { p.Code, p.OrgId })
                 .IsUnique();
             builder.HasIndex(p => new { p.Name, p.OrgId })
                 .IsUnique();
+
             // foreign key
             builder.HasOne(pc => pc.Organization)
                 .WithMany(o => o.ProductVarieties)
@@ -822,15 +484,95 @@ namespace Fanda.Data.Context
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }
+    public class ProductIngredientConfig : IEntityTypeConfiguration<ProductIngredient>
+    {
+        public void Configure(EntityTypeBuilder<ProductIngredient> builder)
+        {
+            // table
+            builder.ToTable("ProductIngredients");
 
+            // key
+            builder.HasKey(i => i.Id);
+
+            // index
+
+            // foreign key
+            builder.HasOne(i => i.ParentProduct)
+                .WithMany(p => p.ParentIngredients)
+                .HasForeignKey(i => i.ParentProductId)
+                .OnDelete(DeleteBehavior.Cascade);
+            builder.HasOne(i => i.ChildProduct)
+                .WithMany(p => p.ChildIngredients)
+                .HasForeignKey(i => i.ChildProductId)
+                .OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(i => i.Unit)
+                .WithMany(u => u.ProductIngredients)
+                .HasForeignKey(i => i.UnitId)
+                .OnDelete(DeleteBehavior.Restrict);
+        }
+    }
+    public class ProductPricingConfig : IEntityTypeConfiguration<ProductPricing>
+    {
+        public void Configure(EntityTypeBuilder<ProductPricing> builder)
+        {
+            // table
+            builder.ToTable("ProductPricings");
+
+            // key
+            builder.HasKey(pp => pp.Id);
+
+            // columns
+
+            // foreign key
+            builder.HasOne(pp => pp.Product)
+                .WithMany(p => p.ProductPricings)
+                .HasForeignKey(pp => pp.ProductId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(pp => pp.PartyCategory)
+                .WithMany(pc => pc.ProductPricings)
+                .HasForeignKey(pp => pp.PartyCategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(pp => pp.InvoiceCategory)
+                .WithMany(ic => ic.ProductPricings)
+                .HasForeignKey(pp => pp.InvoiceCategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
+        }
+    }
+    public class ProductPrincingRangeConfig : IEntityTypeConfiguration<ProductPricingRange>
+    {
+        public void Configure(EntityTypeBuilder<ProductPricingRange> builder)
+        {
+            // table
+            builder.ToTable("ProductPricingRanges");
+
+            // key
+            builder.HasKey(r => new { r.RangeId, r.PricingId });
+
+            // columns
+            builder.Ignore(r => r.RoundOffOption);
+            builder.Property(r => r.RoundOffOptionString)
+                .HasColumnName("RoundOffOption")
+                .HasMaxLength(16);
+
+            // foreign key
+            builder.HasOne(r => r.ProductPricing)
+                .WithMany(pp => pp.PricingRanges)
+                .HasForeignKey(r => r.PricingId)
+                .OnDelete(DeleteBehavior.Restrict);
+        }
+    }
     public class ProductConfig : IEntityTypeConfiguration<Product>
     {
         public void Configure(EntityTypeBuilder<Product> builder)
         {
             // table
             builder.ToTable("Products");
+
             // key
-            builder.HasKey(u => u.ProductId);
+            builder.HasKey(u => u.Id);
+
             // columns
             builder.Property(u => u.Code)
                 .IsRequired()
@@ -848,13 +590,15 @@ namespace Fanda.Data.Context
             builder.Property(p => p.TaxPreferenceString)
                 .HasColumnName("TaxPreference")
                 .HasMaxLength(16);
-            //builder.Property(p => p.DateCreated).ValueGeneratedOnAdd();
-            //builder.Property(p => p.DateModified).ValueGeneratedOnUpdate();
+            builder.Property(p => p.DateCreated).ValueGeneratedOnAdd();
+            builder.Property(p => p.DateModified).ValueGeneratedOnUpdate();
+
             // index
             builder.HasIndex(p => new { p.Code, p.OrgId })
                 .IsUnique();
             builder.HasIndex(p => new { p.Name, p.OrgId })
                 .IsUnique();
+
             // foreign key
             builder.HasOne(p => p.Organization)
                 .WithMany(o => o.Products)
@@ -882,81 +626,299 @@ namespace Fanda.Data.Context
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }
+    #endregion
 
-    public class ProductIngredientConfig : IEntityTypeConfiguration<ProductIngredient>
+    #region Ledger
+    public class LedgerGroupConfig : IEntityTypeConfiguration<LedgerGroup>
     {
-        public void Configure(EntityTypeBuilder<ProductIngredient> builder)
+        public void Configure(EntityTypeBuilder<LedgerGroup> builder)
         {
             // table
-            builder.ToTable("ProductIngredients");
-            // key
-            builder.HasKey(i => i.IngredientId);
-            // index
-            builder.HasIndex(i => new { i.ParentProductId, i.ChildProductId })
-                .IsUnique();
-            // foreign key
-            builder.HasOne(i => i.ParentProduct)
-                .WithMany(p => p.ParentIngredients)
-                .HasForeignKey(i => i.ParentProductId)
-                .OnDelete(DeleteBehavior.Cascade);
-            builder.HasOne(i => i.ChildProduct)
-                .WithMany(p => p.ChildIngredients)
-                .HasForeignKey(i => i.ChildProductId)
-                .OnDelete(DeleteBehavior.Restrict);
-            builder.HasOne(i => i.Unit)
-                .WithMany(u => u.ProductIngredients)
-                .HasForeignKey(i => i.UnitId)
-                .OnDelete(DeleteBehavior.Restrict);
-        }
-    }
+            builder.ToTable("LedgerGroups");
 
-    public class ProductPricingConfig : IEntityTypeConfiguration<ProductPricing>
-    {
-        public void Configure(EntityTypeBuilder<ProductPricing> builder)
-        {
-            // table
-            builder.ToTable("ProductPricings");
             // key
-            builder.HasKey(pp => pp.PricingId);
+            builder.HasKey(u => u.Id);
+
             // columns
-            //builder.Ignore(pp => pp.InvoiceCategory);
-            //builder.Property(pp => pp.InvoiceCategoryString)
-            //    .HasColumnName("InvoiceCategory")
-            //    .HasMaxLength(16);
-            // foreign key
-            builder.HasOne(pp => pp.Product)
-                .WithMany(p => p.ProductPricings)
-                .HasForeignKey(pp => pp.ProductId)
-                .OnDelete(DeleteBehavior.Cascade);
-            builder.HasOne(pp => pp.PartyCategory)
-                .WithMany(pc => pc.ProductPricings)
-                .HasForeignKey(pp => pp.PartyCategoryId)
-                .OnDelete(DeleteBehavior.Restrict);
-            builder.HasOne(pp => pp.InvoiceCategory)
-                .WithMany(ic => ic.ProductPricings)
-                .HasForeignKey(pp => pp.InvoiceCategoryId)
-                .OnDelete(DeleteBehavior.Restrict);
-        }
-    }
-
-    public class ProductPrincingRangeConfig : IEntityTypeConfiguration<ProductPricingRange>
-    {
-        public void Configure(EntityTypeBuilder<ProductPricingRange> builder)
-        {
-            // table
-            builder.ToTable("ProductPricingRanges");
-            // key
-            builder.HasKey(r => r.RangeId);
-            // columns
-            builder.Ignore(r => r.RoundOffOption);
-            builder.Property(r => r.RoundOffOptionString)
-                .HasColumnName("RoundOffOption")
+            builder.Property(u => u.GroupCode)
+                .IsRequired()
                 .HasMaxLength(16);
+            builder.Property(u => u.GroupName)
+                .IsRequired()
+                .HasMaxLength(50);
+            builder.Property(u => u.Description)
+                .HasMaxLength(255);
+            builder.Ignore(g => g.GroupType);
+            builder.Property(g => g.GroupTypeString)
+                .HasColumnName("GroupType")
+                .IsRequired()
+                .HasMaxLength(20);
+            builder.Property(u => u.DateCreated).ValueGeneratedOnAdd();
+            builder.Property(u => u.DateModified).ValueGeneratedOnUpdate();
+
+            // index
+            builder.HasIndex(g => new { g.GroupCode, g.OrgId })
+                .IsUnique();
+            builder.HasIndex(g => new { g.GroupName, g.OrgId })
+                .IsUnique();
+
             // foreign key
-            builder.HasOne(r => r.ProductPricing)
-                .WithMany(pp => pp.PricingRanges)
-                .HasForeignKey(r => r.PricingId)
+            builder.HasOne(g => g.Parent)
+                .WithMany(p => p.Children)
+                .HasForeignKey(g => g.ParentId)
+                .OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(u => u.Organization)
+                .WithMany(o => o.LedgerGroups)
+                .HasForeignKey(u => u.OrgId)
+                .OnDelete(DeleteBehavior.Restrict);
+        }
+    }
+    public class LedgerConfig : IEntityTypeConfiguration<Ledger>
+    {
+        public void Configure(EntityTypeBuilder<Ledger> builder)
+        {
+            // table
+            builder.ToTable("Ledgers");
+
+            // key
+            builder.HasKey(l => l.Id);
+
+            // columns
+            builder.Property(u => u.LedgerCode)
+                .IsRequired()
+                .HasMaxLength(16);
+            builder.Property(u => u.LedgerName)
+                .IsRequired()
+                .HasMaxLength(50);
+            builder.Property(u => u.Description)
+                .HasMaxLength(255);
+            builder.Property(pc => pc.DateCreated).ValueGeneratedOnAdd();
+            builder.Property(pc => pc.DateModified).ValueGeneratedOnUpdate();
+
+            // index
+            builder.HasIndex(p => new { p.LedgerCode, p.OrgId })
+                .IsUnique();
+            builder.HasIndex(p => new { p.LedgerName, p.OrgId })
+                .IsUnique();
+
+            // foreign key
+            builder.HasOne(pc => pc.Organization)
+                .WithMany(o => o.Ledgers)
+                .HasForeignKey(pc => pc.OrgId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(pc => pc.LedgerGroup)
+                .WithMany(o => o.Ledgers)
+                .HasForeignKey(pc => pc.LedgerGroupId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(pc => pc.Parent)
+                .WithMany(p => p.Children)
+                .HasForeignKey(pc => pc.ParentId)
+                .OnDelete(DeleteBehavior.Restrict);
+        }
+    }
+    #endregion
+
+    #region Party
+    public class PartyCategoryConfig : IEntityTypeConfiguration<PartyCategory>
+    {
+        public void Configure(EntityTypeBuilder<PartyCategory> builder)
+        {
+            // table
+            builder.ToTable("PartyCategories");
+
+            // key
+            builder.HasKey(pc => pc.Id);
+
+            // columns
+            builder.Property(pc => pc.Code)
+                .IsRequired()
+                .HasMaxLength(16);
+            builder.Property(pc => pc.Name)
+                .IsRequired()
+                .HasMaxLength(50);
+            builder.Property(pc => pc.Description)
+                .HasMaxLength(255);
+            builder.Property(pc => pc.DateCreated).ValueGeneratedOnAdd();
+            builder.Property(pc => pc.DateModified).ValueGeneratedOnUpdate();
+
+            // index
+            builder.HasIndex(pc => new { pc.Code, pc.OrgId })
+                .IsUnique();
+            builder.HasIndex(pc => new { pc.Name, pc.OrgId })
+                .IsUnique();
+
+            // foreign key
+            builder.HasOne(pc => pc.Organization)
+                .WithMany(o => o.PartyCategories)
+                .HasForeignKey(pc => pc.OrgId)
+                .OnDelete(DeleteBehavior.Restrict);
+        }
+    }
+    public class PartyConfig : IEntityTypeConfiguration<Party>
+    {
+        public void Configure(EntityTypeBuilder<Party> builder)
+        {
+            // table
+            builder.ToTable("Parties");
+
+            // key
+            builder.HasKey(c => c.LedgerId);
+
+            // columns
+            builder.Ignore(pc => pc.PartyType);
+            builder.Property(pc => pc.PartyTypeString)
+                .HasColumnName("PartyType")
+                .HasMaxLength(16);
+            builder.Property(o => o.RegdNum)
+                .HasMaxLength(25);
+            builder.Property(o => o.PAN)
+                .HasMaxLength(25);
+            builder.Property(o => o.TAN)
+                .HasMaxLength(25);
+            builder.Property(o => o.GSTIN)
+                .HasMaxLength(25);
+            builder.Ignore(s => s.PaymentTerm);
+            builder.Property(s => s.PaymentTermString)
+                .HasColumnName("PaymentTerm")
+                .HasMaxLength(16);
+
+            // index
+
+            // foreign key
+            builder.HasOne(p => p.Ledger)
+                .WithOne(o => o.Party)
+                .HasForeignKey<Party>(p => p.LedgerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(p => p.Category)
+                .WithMany(pc => pc.Parties)
+                .HasForeignKey(p => p.CategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
+        }
+    }
+    public class PartyContactConfig : IEntityTypeConfiguration<PartyContact>
+    {
+        public void Configure(EntityTypeBuilder<PartyContact> builder)
+        {
+            // table
+            builder.ToTable("PartyContacts");
+
+            // key
+            builder.HasKey(oc => new { oc.PartyId, oc.ContactId });
+
+            // foreign key
+            builder.HasOne(oc => oc.Party)
+                .WithMany(b => b.PartyContacts)
+                .HasForeignKey(oc => oc.PartyId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(oc => oc.Contact)
+                .WithMany(c => c.PartyContacts)
+                .HasForeignKey(oc => oc.ContactId)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
+    }
+    public class PartyAddressConfig : IEntityTypeConfiguration<PartyAddress>
+    {
+        public void Configure(EntityTypeBuilder<PartyAddress> builder)
+        {
+            // table
+            builder.ToTable("PartyAddresses");
+
+            // key
+            builder.HasKey(oa => new { oa.PartyId, oa.AddressId });
+
+            // foreign key
+            builder.HasOne(oa => oa.Party)
+                .WithMany(b => b.PartyAddresses)
+                .HasForeignKey(oa => oa.PartyId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(oa => oa.Address)
+                .WithMany(c => c.PartyAddresses)
+                .HasForeignKey(oa => oa.AddressId)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
+    }
+    #endregion
+
+    public class BankConfig : IEntityTypeConfiguration<Bank>
+    {
+        public void Configure(EntityTypeBuilder<Bank> builder)
+        {
+            // table
+            builder.ToTable("Banks");
+
+            // key
+            builder.HasKey(b => b.LedgerId);
+
+            // columns
+            builder.Property(b => b.AccountNumber)
+                .IsRequired()
+                .HasMaxLength(25);
+            builder.Ignore(b => b.AccountType);
+            builder.Property(b => b.AccountTypeString)
+                .HasColumnName("AccountType")
+                .HasMaxLength(16);
+            builder.Property(b => b.IfscCode)
+                .HasMaxLength(16);
+            builder.Property(b => b.MicrCode)
+                .HasMaxLength(16);
+            builder.Property(b => b.BranchCode)
+                .HasMaxLength(16);
+            builder.Property(b => b.BranchName)
+                .HasMaxLength(50);
+
+            // index
+            builder.HasIndex(p => p.AccountNumber)
+                .IsUnique();
+
+            // foreign key
+            builder.HasOne(b => b.Ledger)
+                .WithOne(c => c.Bank)
+                .HasForeignKey<Bank>(a => a.LedgerId)
+                .OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(b => b.Contact)
+                .WithOne(c => c.Bank)
+                .HasForeignKey<Bank>(a => a.ContactId)
+                .OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(b => b.Address)
+                .WithOne(a => a.Bank)
+                .HasForeignKey<Bank>(a => a.AddressId)
+                .OnDelete(DeleteBehavior.Restrict);
+        }
+    }
+
+    public class AccountYearConfig : IEntityTypeConfiguration<AccountYear>
+    {
+        public void Configure(EntityTypeBuilder<AccountYear> builder)
+        {
+            // table
+            builder.ToTable("AccountYears");
+
+            // key
+            builder.HasKey(u => u.Id);
+
+            // columns
+            builder.Property(u => u.YearCode)
+                .IsRequired()
+                .HasMaxLength(16);
+            builder.Property(u => u.YearBegin)
+                .IsRequired();
+            builder.Property(u => u.YearEnd)
+                .IsRequired();
+
+            // index
+            builder.HasIndex(p => new { p.YearCode, p.OrgId })
+                .IsUnique();
+
+            // foreign key
+            builder.HasOne(u => u.Organization)
+                .WithMany(o => o.AccountYears)
+                .HasForeignKey(u => u.OrgId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 
@@ -966,8 +928,10 @@ namespace Fanda.Data.Context
         {
             // table
             builder.ToTable("InvoiceCategories");
+
             // key
-            builder.HasKey(ic => ic.CategoryId);
+            builder.HasKey(ic => ic.Id);
+
             // columns
             builder.Property(ic => ic.Code)
                 .IsRequired()
@@ -977,13 +941,15 @@ namespace Fanda.Data.Context
                 .HasMaxLength(16);
             builder.Property(ic => ic.Description)
                 .HasMaxLength(255);
-            //builder.Property(c => c.DateCreated).ValueGeneratedOnAdd();
-            //builder.Property(c => c.DateModified).ValueGeneratedOnUpdate();
+            builder.Property(c => c.DateCreated).ValueGeneratedOnAdd();
+            builder.Property(c => c.DateModified).ValueGeneratedOnUpdate();
+
             // index
             builder.HasIndex(ic => new { ic.Code, ic.OrgId })
                 .IsUnique();
             builder.HasIndex(ic => new { ic.Name, ic.OrgId })
                 .IsUnique();
+
             // foreign key
             builder.HasOne(ic => ic.Organization)
                 .WithMany(o => o.InvoiceCategories)
@@ -991,15 +957,48 @@ namespace Fanda.Data.Context
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }
+    #endregion
 
+    #region Accounting Year
+    public class LedgerBalanceConfig : IEntityTypeConfiguration<LedgerBalance>
+    {
+        public void Configure(EntityTypeBuilder<LedgerBalance> builder)
+        {
+            // table
+            builder.ToTable("LedgerBalances");
+
+            // key
+            builder.HasKey(u => new { u.LedgerId, u.YearId });
+
+            // columns
+            builder.Property(u => u.BalanceSign)
+                .IsRequired()
+                .HasMaxLength(1);
+
+            // index
+
+            // foreign key
+            builder.HasOne(u => u.Ledger)
+                .WithMany(o => o.LedgerBalances)
+                .HasForeignKey(u => u.LedgerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(u => u.AccountYear)
+                .WithMany(o => o.LedgerBalances)
+                .HasForeignKey(u => u.YearId)
+                .OnDelete(DeleteBehavior.Restrict);
+        }
+    }
     public class InvoiceConfig : IEntityTypeConfiguration<Invoice>
     {
         public void Configure(EntityTypeBuilder<Invoice> builder)
         {
             // table
             builder.ToTable("Invoices");
+
             // key
-            builder.HasKey(i => i.InvoiceId);
+            builder.HasKey(i => i.Id);
+
             // columns
             builder.Property(i => i.InvoiceNumber)
                 .HasMaxLength(16);
@@ -1024,81 +1023,95 @@ namespace Fanda.Data.Context
                 .HasColumnName("TaxPreference")
                 .HasMaxLength(16);
 
-            //builder.Property(o => o.DateCreated).ValueGeneratedOnAdd();
-            //builder.Property(o => o.DateModified).ValueGeneratedOnUpdate();
+            builder.Property(o => o.DateCreated).ValueGeneratedOnAdd();
+            builder.Property(o => o.DateModified).ValueGeneratedOnUpdate();
+
             // index
             builder.HasIndex(i => new { i.InvoiceNumber, i.YearId })
                 .IsUnique();
+
             // foreign key
             builder.HasOne(i => i.AccountYear)
                 .WithMany(o => o.Invoices)
                 .HasForeignKey(i => i.YearId)
                 .OnDelete(DeleteBehavior.Restrict);
+
             builder.HasOne(i => i.Party)
                 .WithMany(p => p.Invoices)
                 .HasForeignKey(i => i.PartyId)
                 .OnDelete(DeleteBehavior.Restrict);
+
             builder.HasOne(i => i.Category)
                 .WithMany(ic => ic.Invoices)
                 .HasForeignKey(i => i.CategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
+
             builder.HasOne(i => i.Buyer)
                 .WithMany(b => b.BuyerInvoices)
                 .HasForeignKey(i => i.BuyerId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }
-
     public class InvoiceItemConfig : IEntityTypeConfiguration<InvoiceItem>
     {
         public void Configure(EntityTypeBuilder<InvoiceItem> builder)
         {
             // table
             builder.ToTable("InvoiceItems");
+
             // key
-            builder.HasKey(i => i.InvItemId);
+            builder.HasKey(i => new { i.InvoiceItemId, i.InvoiceId });
+
             // columns
             builder.Property(i => i.Description)
                 .HasMaxLength(255);
+
             // foreign key
             builder.HasOne(ii => ii.Invoice)
                 .WithMany(i => i.InvoiceItems)
                 .HasForeignKey(ii => ii.InvoiceId)
                 .OnDelete(DeleteBehavior.Cascade);
+
             builder.HasOne(ii => ii.Stock)
                 .WithMany(i => i.InvoiceItems)
                 .HasForeignKey(ii => ii.StockId)
                 .OnDelete(DeleteBehavior.Restrict);
+
             builder.HasOne(ii => ii.Unit)
                 .WithMany(u => u.InvoiceItems)
                 .HasForeignKey(ii => ii.UnitId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }
-
     public class StockConfig : IEntityTypeConfiguration<Stock>
     {
         public void Configure(EntityTypeBuilder<Stock> builder)
         {
             // table
             builder.ToTable("Stock");
+
             // key
-            builder.HasKey(s => s.StockId);
+            builder.HasKey(s => s.Id);
+
             // columns
             builder.Property(s => s.BatchNumber)
                 .HasMaxLength(25);
+
             // index
             builder.HasIndex(s => new { s.BatchNumber, s.ProductId })
                 .IsUnique();
+
             // foreign key
             builder.HasOne(s => s.Product)
                 .WithMany(p => p.Stocks)
                 .HasForeignKey(s => s.ProductId)
                 .OnDelete(DeleteBehavior.Restrict);
+
             builder.HasOne(s => s.Unit)
                 .WithMany(u => u.Stocks)
                 .HasForeignKey(s => s.UnitId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }
+    #endregion
 }
