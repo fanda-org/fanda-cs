@@ -18,7 +18,7 @@ namespace Fanda.Service
         Task<RoleDto> GetByIdAsync(string roleId);
         Task SaveAsync(string orgId, RoleDto dto);
         Task<bool> DeleteAsync(string roleId);
-        bool ExistsAsync(string code);
+        bool Exists(string orgId, string code);
 
         string ErrorMessage { get; }
     }
@@ -105,12 +105,16 @@ namespace Fanda.Service
             throw new KeyNotFoundException("Role not found");
         }
 
-        public bool ExistsAsync(string code)
+        public bool Exists(string orgId, string code)
         {
+            if (string.IsNullOrEmpty(orgId))
+                throw new ArgumentNullException("orgId", "Org id is missing");
+
             if (string.IsNullOrEmpty(code))
                 throw new ArgumentNullException("code", "Role code is missing");
 
-            return _context.Roles.Any(r => r.Code == code);
+            Guid guid = new Guid(orgId);
+            return _context.Roles.Any(r => r.Code == code && r.OrgId == guid);
         }
     }
 }

@@ -180,12 +180,12 @@ namespace FandaTabler.Controllers
         }
 
         //[HttpPut("{id}")]
-        public async Task<IActionResult> Update(string orgId, [FromBody]UserDto model, string password)
+        public async Task<IActionResult> Update([FromBody]UserDto model, string password)
         {
             try
             {
                 // save 
-                await _userService.SaveAsync(orgId, model, password);
+                await _userService.SaveAsync(model, password);
                 return Ok();
             }
             catch (AppException ex)

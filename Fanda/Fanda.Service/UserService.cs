@@ -6,6 +6,7 @@ using Fanda.Dto;
 using Fanda.Dto.ViewModels;
 using Fanda.Shared;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,10 +22,13 @@ namespace Fanda.Service
 
         Task<List<UserDto>> GetAllAsync(string orgId/*, bool? active*/);
         Task<UserDto> GetByIdAsync(string userId);
-        Task<UserDto> SaveAsync(string orgId, UserDto userVM, string password);
+        Task<UserDto> GetByNameAsync(string userName);
+        Task<UserDto> SaveAsync(UserDto userVM, string password);
         Task<bool> DeleteAsync(string orgId, string userId);
-        Task<bool> ExistsAsync(string userName);
-        Task AddToRoleAsync(string orgId, UserDto user, string roleName);
+        bool Exists(string userName);
+
+        Task AddToOrgAsync(string orgId, string userId);
+        Task AddToRoleAsync(string orgId, string userId, string roleName);
 
         string ErrorMessage { get; }
     }
@@ -34,13 +38,15 @@ namespace Fanda.Service
         private readonly FandaContext _context;
         private readonly IMapper _mapper;
         private readonly IEmailSender _emailSender;
+        private readonly ILogger<UserService> _logger;
 
         public UserService(FandaContext context, IMapper mapper,
-            IEmailSender emailSender)
+            IEmailSender emailSender, ILogger<UserService> logger)
         {
             _context = context;
             _mapper = mapper;
             _emailSender = emailSender;
+            _logger = logger;
         }
 
         public string ErrorMessage { get; private set; }
@@ -85,7 +91,7 @@ namespace Fanda.Service
                 user.PasswordHash = passwordHash;
                 user.PasswordSalt = passwordSalt;
 
-                _context.Users.Add(user);
+                await _context.Users.AddAsync(user);
                 await _context.SaveChangesAsync();
                 userModel = _mapper.Map<UserDto>(user);
             }
@@ -119,74 +125,71 @@ namespace Fanda.Service
         {
             UserDto user = null;
             if (!string.IsNullOrEmpty(userId))
+            {
                 user = await _context.Users
-                    .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
                     .AsNoTracking()
+                    .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
                     .SingleOrDefaultAsync(u => u.Id == userId);
-            if (user != null)
-                return user;
-            throw new KeyNotFoundException("User not found");
+            }
+            return user;
         }
 
-        public async Task<UserDto> SaveAsync(string orgId, UserDto userVM, string password)
+        public async Task<UserDto> GetByNameAsync(string userName)
         {
-            User user = null;
-            if (!string.IsNullOrEmpty(userVM.Id))
-                user = await _context.Users.FindAsync(userVM.Id.ToString());
+            UserDto user = null;
+            if (!string.IsNullOrEmpty(userName))
+            {
+                user = await _context.Users
+                    .AsNoTracking()
+                    .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
+                    .SingleOrDefaultAsync(u => u.UserName == userName);
+            }
+            return user;
+        }
 
+        public async Task<UserDto> SaveAsync(UserDto dto, string password)
+        {
+            if (string.IsNullOrWhiteSpace(password))
+                throw new ArgumentNullException("password", "Password is missing");
+
+            PasswordStorage.CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
+
+            User user = null;
+            if (!string.IsNullOrEmpty(dto.Id))
+                user = await _context.Users.FindAsync(dto.Id);
+
+            //var user = _mapper.Map<User>(dto);
             if (user == null)
             {
-                userVM.DateCreated = DateTime.Now;
-                userVM.DateModified = null;
-                user = _mapper.Map<User>(userVM);
+                user = _mapper.Map<User>(dto);
                 user.DateCreated = DateTime.Now;
-
-                // update password if it was entered
-                if (!string.IsNullOrWhiteSpace(password))
-                {
-                    PasswordStorage.CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
-
-                    user.PasswordHash = passwordHash;
-                    user.PasswordSalt = passwordSalt;
-                }
+                user.DateModified = null;
+                user.PasswordHash = passwordHash;
+                user.PasswordSalt = passwordSalt;
+                //user.OrgUsers.Add(new OrgUser
+                //{
+                //    OrgId = new Guid(orgId),
+                //    User = user
+                //});
 
                 await _context.Users.AddAsync(user);
             }
             else
             {
-                if (userVM.UserName != user.UserName)
-                {
-                    // username has changed so check if the new username is already taken
-                    if (_context.Users.Any(x => x.UserName == userVM.UserName))
-                        throw new AppException("Username " + userVM.UserName + " is already taken");
-                }
-
-                userVM.DateModified = DateTime.Now;
-                _mapper.Map(userVM, user);
+                user = _mapper.Map<User>(dto);
+                //if (dto.UserName != user.UserName)
+                //{
+                //    // username has changed so check if the new username is already taken
+                //    if (_context.Users.Any(x => x.UserName == dto.UserName))
+                //        throw new AppException("Username " + dto.UserName + " is already taken");
+                //}
                 user.DateModified = DateTime.Now;
-
-                // update password if it was entered
-                if (!string.IsNullOrWhiteSpace(password))
-                {
-                    PasswordStorage.CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
-
-                    user.PasswordHash = passwordHash;
-                    user.PasswordSalt = passwordSalt;
-                }
+                user.PasswordHash = passwordHash;
+                user.PasswordSalt = passwordSalt;
 
                 _context.Users.Update(user);
             }
-            if (!string.IsNullOrEmpty(orgId))
-            {
-                var orgUserDb = await _context.Set<OrgUser>()
-                    .FirstOrDefaultAsync(ou => ou.OrgId == new Guid(orgId) && ou.UserId == user.Id);
-                if (orgUserDb == null)
-                {
-                    orgUserDb = new OrgUser { OrgId = new Guid(orgId), UserId = user.Id };
-                    _context.Set<OrgUser>().Add(orgUserDb);
-                }
-            }
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return _mapper.Map<UserDto>(user);
         }
 
@@ -212,35 +215,58 @@ namespace Fanda.Service
             throw new KeyNotFoundException("User not found");
         }
 
-        public async Task<bool> ExistsAsync(string userName)
-        {
-            User user = null;
-            if (!string.IsNullOrEmpty(userName))
-                user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == userName);
-            return user != null;
-        }
+        public bool Exists(string userName) => _context.Users.Any(u => u.UserName == userName);
 
-        public async Task AddToRoleAsync(string orgId, UserDto user, string roleName)
+        public async Task AddToOrgAsync(string orgId, string userId)
         {
             try
             {
+                var orgGuid = new Guid(orgId);
+                var userGuid = new Guid(userId);
+
+                var orgUserDb = await _context.Set<OrgUser>()
+                    .FirstOrDefaultAsync(ou => ou.OrgId == orgGuid && ou.UserId == userGuid);
+                if (orgUserDb == null)
+                {
+                    orgUserDb = new OrgUser
+                    {
+                        OrgId = orgGuid,
+                        UserId = userGuid
+                    };
+                    await _context.Set<OrgUser>().AddAsync(orgUserDb);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
+        }
+
+        public async Task AddToRoleAsync(string orgId, string userId, string roleName)
+        {
+            try
+            {
+                Guid orgGuid = new Guid(orgId);
+                Guid userGuid = new Guid(userId);
+
                 var role = await _context.Roles
                     .AsNoTracking()
-                    .FirstOrDefaultAsync(r => r.Name == roleName);
+                    .FirstOrDefaultAsync(r => r.Name == roleName && r.OrgId == orgGuid);
                 if (role != null)
                 {
-                    _context.Set<OrgUserRole>().Add(new OrgUserRole
+                    await _context.Set<OrgUserRole>().AddAsync(new OrgUserRole
                     {
-                        OrgId = new Guid(orgId),
-                        UserId = new Guid(user.Id),
-                        Role = role
+                        OrgId = orgGuid,
+                        UserId = userGuid,
+                        RoleId = role.Id
                     });
                     await _context.SaveChangesAsync();
                 }
             }
             catch (Exception ex)
             {
-                throw new ApplicationException(ex.Message, ex);
+                _logger.LogError(ex, ex.Message);
             }
         }
 

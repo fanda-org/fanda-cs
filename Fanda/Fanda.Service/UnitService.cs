@@ -17,7 +17,7 @@ namespace Fanda.Service
         Task<UnitDto> GetByIdAsync(string unitId);
         Task SaveAsync(string orgId, UnitDto model);
         Task<bool> DeleteAsync(string unitId);
-        Task<bool> ExistsAsync(string unitCode);
+        bool Exists(string orgId, string unitCode);
 
         string ErrorMessage { get; }
     }
@@ -103,12 +103,10 @@ namespace Fanda.Service
             throw new KeyNotFoundException("Unit not found");
         }
 
-        public async Task<bool> ExistsAsync(string unitCode)
+        public bool Exists(string orgId, string unitCode)
         {
-            Unit unit = null;
-            if (!string.IsNullOrEmpty(unitCode))
-                unit = await _context.Units.FirstOrDefaultAsync(u => u.Code == unitCode);
-            return unit != null;
+            Guid orgGuid = new Guid(orgId);
+            return _context.Units.Any(u => u.Code == unitCode && u.OrgId == orgGuid);
         }
     }
 }

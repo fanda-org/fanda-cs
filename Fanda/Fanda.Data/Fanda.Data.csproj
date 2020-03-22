@@ -11,6 +11,10 @@
     <Compile Remove="Context\PgSqlDbContext.cs" />
     <Compile Remove="Device.cs" />
     <Compile Remove="Location.cs" />
+    <Compile Remove="Migrations\20200322041815_Initial.cs" />
+    <Compile Remove="Migrations\20200322041815_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20200322043242_Initial.cs" />
+    <Compile Remove="Migrations\20200322043242_Initial.Designer.cs" />
     <Compile Remove="OrgBank.cs" />
     <Compile Remove="PartyBank.cs" />
   </ItemGroup>

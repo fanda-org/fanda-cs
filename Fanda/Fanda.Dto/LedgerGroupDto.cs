@@ -15,8 +15,5 @@ namespace Fanda.Dto
         public bool Active { get; set; }
         public DateTime DateCreated { get; set; }
         public DateTime? DateModified { get; set; }
-
-        //public virtual LedgerGroupDto Parent { get; set; }
-        //public virtual ICollection<LedgerGroupDto> Children { get; set; }
     }
 }

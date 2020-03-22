@@ -40,12 +40,12 @@ namespace Fanda.Data
         public DateTime DateCreated { get; set; }
         public DateTime? DateModified { get; set; }
 
-        public virtual Organization Organization { get; set; }
         public virtual ProductCategory Category { get; set; }
         public virtual ProductBrand Brand { get; set; }
         public virtual ProductSegment Segment { get; set; }
         public virtual ProductVariety Variety { get; set; }
         public virtual Unit Unit { get; set; }
+        public virtual Organization Organization { get; set; }
         public virtual ICollection<Stock> Stocks { get; set; }
         public virtual ICollection<ProductPricing> ProductPricings { get; set; }
         public virtual ICollection<ProductIngredient> ParentIngredients { get; set; }   // ProductIngredient.ProductId

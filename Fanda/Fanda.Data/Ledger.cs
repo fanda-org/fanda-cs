@@ -17,10 +17,10 @@ namespace Fanda.Data
         public DateTime DateCreated { get; set; }
         public DateTime? DateModified { get; set; }
 
-        public virtual Organization Organization { get; set; }
         public virtual LedgerGroup LedgerGroup { get; set; }
         public virtual Ledger Parent { get; set; }
         public virtual ICollection<Ledger> Children { get; set; }
+        public virtual Organization Organization { get; set; }
         public virtual Bank Bank { get; set; }
         public virtual Party Party { get; set; }
         public virtual ICollection<LedgerBalance> LedgerBalances { get; set; }

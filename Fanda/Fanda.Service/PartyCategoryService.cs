@@ -18,7 +18,7 @@ namespace Fanda.Service
         Task<PartyCategoryDto> SaveAsync(string orgId, PartyCategoryDto model);
         Task<bool> DeleteAsync(string categoryId);
         Task<bool> ChangeStatus(string categoryId, bool active);
-        Task<bool> ExistsAsync(string categoryCode);
+        bool Exists(string orgId, string categoryCode);
 
         string ErrorMessage { get; }
     }
@@ -121,12 +121,10 @@ namespace Fanda.Service
             throw new KeyNotFoundException("Party category not found");
         }
 
-        public async Task<bool> ExistsAsync(string categoryCode)
+        public bool Exists(string orgId, string categoryCode)
         {
-            PartyCategory cat = null;
-            if (!string.IsNullOrEmpty(categoryCode))
-                cat = await _context.PartyCategories.FirstOrDefaultAsync(pc => pc.Code == categoryCode);
-            return cat != null;
+            Guid orgGuid = new Guid(orgId);
+            return _context.PartyCategories.Any(pc => pc.Code == categoryCode && pc.OrgId == orgGuid);
         }
     }
 }

@@ -43,6 +43,8 @@ namespace Fanda.Service.AutoMapperProfile
                 .ReverseMap();
             CreateMap<Unit, UnitDto>()
                 .ReverseMap();
+            CreateMap<UnitConversion, UnitConversionDto>()
+                .ReverseMap();
             CreateMap<ProductBrand, ProductBrandDto>()
                 .ReverseMap();
             CreateMap<ProductSegment, ProductSegmentDto>()

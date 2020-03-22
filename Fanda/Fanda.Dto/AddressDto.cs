@@ -32,6 +32,12 @@ namespace Fanda.Dto
         [StringLength(10, ErrorMessage = "Maximum allowed length is 10")]
         public string PostalCode { get; set; }
 
+        [StringLength(25, ErrorMessage = "Maximum allowed length is 25")]
+        public string Phone { get; set; }
+
+        [StringLength(25, ErrorMessage = "Maximum allowed length is 25")]
+        public string Fax { get; set; }
+
         //public bool IsDeleted { get; set; }
         //public int Index { get; set; }
     }

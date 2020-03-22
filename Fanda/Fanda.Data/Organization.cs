@@ -28,7 +28,6 @@ namespace Fanda.Data
         public virtual ICollection<ProductSegment> ProductSegments { get; set; }
         public virtual ICollection<ProductVariety> ProductVarieties { get; set; }
         public virtual ICollection<Unit> Units { get; set; }
-        public virtual ICollection<UnitConversion> UnitConversions { get; set; }
 
         public virtual ICollection<PartyCategory> PartyCategories { get; set; }
         public virtual ICollection<InvoiceCategory> InvoiceCategories { get; set; }

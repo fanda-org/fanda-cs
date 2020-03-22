@@ -22,15 +22,15 @@ namespace Fanda.Data.Context
                 .HasMaxLength(50);
             builder.Property(c => c.LastName)
                 .HasMaxLength(50);
+            builder.Property(c => c.Designation)
+                .HasMaxLength(25);
+            builder.Property(c => c.Department)
+                .HasMaxLength(25);
             builder.Property(c => c.Email)
                 .HasMaxLength(100);
             builder.Property(c => c.WorkPhone)
                 .HasMaxLength(25);
             builder.Property(c => c.Mobile)
-                .HasMaxLength(25);
-            builder.Property(c => c.Designation)
-                .HasMaxLength(25);
-            builder.Property(c => c.Department)
                 .HasMaxLength(25);
         }
     }
@@ -68,7 +68,6 @@ namespace Fanda.Data.Context
                 .IsRequired()
                 .HasColumnName("AddressType")
                 .HasMaxLength(25);
-
         }
     }
     #endregion
@@ -91,14 +90,14 @@ namespace Fanda.Data.Context
             builder.Property(u => u.Email)
                 .IsRequired()
                 .HasMaxLength(255);
-            builder.Property(u => u.FirstName)
-                .HasMaxLength(50);
-            builder.Property(u => u.LastName)
-                .HasMaxLength(50);
             builder.Property(u => u.PasswordHash)
                 .IsRequired(true);
             builder.Property(u => u.PasswordSalt)
                 .IsRequired(true);
+            builder.Property(u => u.FirstName)
+                .HasMaxLength(50);
+            builder.Property(u => u.LastName)
+                .HasMaxLength(50);
             builder.Property(o => o.DateCreated).ValueGeneratedOnAdd();
             builder.Property(o => o.DateModified).ValueGeneratedOnUpdate();
 
@@ -191,6 +190,7 @@ namespace Fanda.Data.Context
                 .WithMany(b => b.OrgAddresses)
                 .HasForeignKey(oa => oa.OrgId)
                 .OnDelete(DeleteBehavior.Cascade);
+
             builder.HasOne(oa => oa.Address)
                 .WithMany(c => c.OrgAddresses)
                 .HasForeignKey(oa => oa.AddressId)
@@ -237,7 +237,6 @@ namespace Fanda.Data.Context
                 .HasMaxLength(25);
             builder.Property(r => r.Description)
                 .HasMaxLength(255);
-
             builder.Property(o => o.DateCreated).ValueGeneratedOnAdd();
             builder.Property(o => o.DateModified).ValueGeneratedOnUpdate();
 
@@ -265,12 +264,14 @@ namespace Fanda.Data.Context
             builder.HasKey(o => new { o.OrgId, o.UserId, o.RoleId });
 
             // foreign key
-            builder.HasOne<OrgUser>(o => o.OrgUser)
+            builder.HasOne(o => o.OrgUser)
                 .WithMany(u => u.OrgUserRoles)
-                .HasForeignKey(o => new { o.OrgId, o.UserId });
-            builder.HasOne<Role>(o => o.Role)
+                .HasForeignKey(o => new { o.OrgId, o.UserId })
+                .OnDelete(DeleteBehavior.Cascade);
+            builder.HasOne(o => o.Role)
                 .WithMany(r => r.OrgUserRoles)
-                .HasForeignKey(o => o.RoleId);
+                .HasForeignKey(o => o.RoleId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
     #endregion
@@ -293,6 +294,8 @@ namespace Fanda.Data.Context
             builder.Property(u => u.Name)
                 .IsRequired()
                 .HasMaxLength(25);
+            builder.Property(u => u.Description)
+                .HasMaxLength(255);
             builder.Property(u => u.DateCreated).ValueGeneratedOnAdd();
             builder.Property(u => u.DateModified).ValueGeneratedOnUpdate();
 
@@ -317,20 +320,18 @@ namespace Fanda.Data.Context
             builder.ToTable("UnitConversions");
 
             // key
-            builder.HasKey(u => u.Id);
+            builder.HasKey(u => new { u.FromUnitId, u.ToUnitId });
 
             // columns
+
             // index
 
             // foreign key
-            builder.HasOne(uc => uc.Organization)
-                .WithMany(o => o.UnitConversions)
-                .HasForeignKey(uc => uc.OrgId)
-                .OnDelete(DeleteBehavior.Restrict);
             builder.HasOne(uc => uc.FromUnit)
                 .WithMany(u => u.FromUnitConversions)
                 .HasForeignKey(uc => uc.FromUnitId)
                 .OnDelete(DeleteBehavior.Restrict);
+
             builder.HasOne(uc => uc.ToUnit)
                 .WithMany(u => u.ToUnitConversions)
                 .HasForeignKey(uc => uc.ToUnitId)
@@ -492,19 +493,23 @@ namespace Fanda.Data.Context
             builder.ToTable("ProductIngredients");
 
             // key
-            builder.HasKey(i => i.Id);
+            builder.HasKey(p => new { p.ParentProductId, p.ChildProductId, p.UnitId });
 
             // index
+            //builder.HasIndex(p => new { p.ParentProductId, p.ChildProductId, p.UnitId })
+            //    .IsUnique();
 
             // foreign key
             builder.HasOne(i => i.ParentProduct)
                 .WithMany(p => p.ParentIngredients)
                 .HasForeignKey(i => i.ParentProductId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
+
             builder.HasOne(i => i.ChildProduct)
                 .WithMany(p => p.ChildIngredients)
                 .HasForeignKey(i => i.ChildProductId)
                 .OnDelete(DeleteBehavior.Restrict);
+
             builder.HasOne(i => i.Unit)
                 .WithMany(u => u.ProductIngredients)
                 .HasForeignKey(i => i.UnitId)
@@ -522,6 +527,10 @@ namespace Fanda.Data.Context
             builder.HasKey(pp => pp.Id);
 
             // columns
+
+            // index
+            builder.HasIndex(pp => new { pp.ProductId, pp.PartyCategoryId, pp.InvoiceCategoryId })
+                .IsUnique();
 
             // foreign key
             builder.HasOne(pp => pp.Product)
@@ -560,7 +569,7 @@ namespace Fanda.Data.Context
             builder.HasOne(r => r.ProductPricing)
                 .WithMany(pp => pp.PricingRanges)
                 .HasForeignKey(r => r.PricingId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
     public class ProductConfig : IEntityTypeConfiguration<Product>
@@ -600,10 +609,6 @@ namespace Fanda.Data.Context
                 .IsUnique();
 
             // foreign key
-            builder.HasOne(p => p.Organization)
-                .WithMany(o => o.Products)
-                .HasForeignKey(p => p.OrgId)
-                .OnDelete(DeleteBehavior.Restrict);
             builder.HasOne(p => p.Category)
                 .WithMany(pc => pc.Products)
                 .HasForeignKey(p => p.CategoryId)
@@ -623,6 +628,10 @@ namespace Fanda.Data.Context
             builder.HasOne(p => p.Variety)
                 .WithMany(b => b.Products)
                 .HasForeignKey(p => p.VarietyId)
+                .OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(p => p.Organization)
+                .WithMany(o => o.Products)
+                .HasForeignKey(p => p.OrgId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }
@@ -667,6 +676,7 @@ namespace Fanda.Data.Context
                 .WithMany(p => p.Children)
                 .HasForeignKey(g => g.ParentId)
                 .OnDelete(DeleteBehavior.Restrict);
+
             builder.HasOne(u => u.Organization)
                 .WithMany(o => o.LedgerGroups)
                 .HasForeignKey(u => u.OrgId)
@@ -790,7 +800,7 @@ namespace Fanda.Data.Context
             builder.HasOne(p => p.Ledger)
                 .WithOne(o => o.Party)
                 .HasForeignKey<Party>(p => p.LedgerId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(p => p.Category)
                 .WithMany(pc => pc.Parties)
@@ -879,11 +889,13 @@ namespace Fanda.Data.Context
             builder.HasOne(b => b.Ledger)
                 .WithOne(c => c.Bank)
                 .HasForeignKey<Bank>(a => a.LedgerId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
+
             builder.HasOne(b => b.Contact)
                 .WithOne(c => c.Bank)
                 .HasForeignKey<Bank>(a => a.ContactId)
                 .OnDelete(DeleteBehavior.Restrict);
+            
             builder.HasOne(b => b.Address)
                 .WithOne(a => a.Bank)
                 .HasForeignKey<Bank>(a => a.AddressId)
@@ -981,12 +993,12 @@ namespace Fanda.Data.Context
             builder.HasOne(u => u.Ledger)
                 .WithMany(o => o.LedgerBalances)
                 .HasForeignKey(u => u.LedgerId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(u => u.AccountYear)
                 .WithMany(o => o.LedgerBalances)
                 .HasForeignKey(u => u.YearId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
     public class InvoiceConfig : IEntityTypeConfiguration<Invoice>

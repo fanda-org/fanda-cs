@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-using System;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Fanda.Data.Migrations
 {
@@ -95,10 +95,10 @@ namespace Fanda.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    OrgId = table.Column<Guid>(nullable: false),
                     YearCode = table.Column<string>(maxLength: 16, nullable: false),
                     YearBegin = table.Column<DateTime>(nullable: false),
-                    YearEnd = table.Column<DateTime>(nullable: false)
+                    YearEnd = table.Column<DateTime>(nullable: false),
+                    OrgId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -351,10 +351,10 @@ namespace Fanda.Data.Migrations
                     Name = table.Column<string>(maxLength: 25, nullable: false),
                     Code = table.Column<string>(maxLength: 16, nullable: false),
                     Description = table.Column<string>(maxLength: 255, nullable: true),
+                    OrgId = table.Column<Guid>(nullable: false),
                     DateCreated = table.Column<DateTime>(nullable: false),
                     DateModified = table.Column<DateTime>(nullable: true),
-                    Active = table.Column<bool>(nullable: false),
-                    OrgId = table.Column<Guid>(nullable: false)
+                    Active = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -374,6 +374,7 @@ namespace Fanda.Data.Migrations
                     Id = table.Column<Guid>(nullable: false),
                     Code = table.Column<string>(maxLength: 16, nullable: false),
                     Name = table.Column<string>(maxLength: 25, nullable: false),
+                    Description = table.Column<string>(maxLength: 255, nullable: true),
                     OrgId = table.Column<Guid>(nullable: false),
                     Active = table.Column<bool>(nullable: false),
                     DateCreated = table.Column<DateTime>(nullable: false),
@@ -521,42 +522,6 @@ namespace Fanda.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UnitConversions",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    FromUnitId = table.Column<Guid>(nullable: false),
-                    ToUnitId = table.Column<Guid>(nullable: false),
-                    CalcStep = table.Column<byte>(nullable: false),
-                    Operator = table.Column<string>(nullable: false),
-                    Factor = table.Column<decimal>(nullable: false),
-                    Active = table.Column<bool>(nullable: false),
-                    OrgId = table.Column<Guid>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UnitConversions", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_UnitConversions_Units_FromUnitId",
-                        column: x => x.FromUnitId,
-                        principalTable: "Units",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_UnitConversions_Organizations_OrgId",
-                        column: x => x.OrgId,
-                        principalTable: "Organizations",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_UnitConversions_Units_ToUnitId",
-                        column: x => x.ToUnitId,
-                        principalTable: "Units",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "OrgUserRoles",
                 columns: table => new
                 {
@@ -616,7 +581,33 @@ namespace Fanda.Data.Migrations
                         column: x => x.LedgerId,
                         principalTable: "Ledgers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LedgerBalances",
+                columns: table => new
+                {
+                    LedgerId = table.Column<Guid>(nullable: false),
+                    YearId = table.Column<Guid>(nullable: false),
+                    OpeningBalance = table.Column<decimal>(nullable: false),
+                    BalanceSign = table.Column<string>(maxLength: 1, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LedgerBalances", x => new { x.LedgerId, x.YearId });
+                    table.ForeignKey(
+                        name: "FK_LedgerBalances_Ledgers_LedgerId",
+                        column: x => x.LedgerId,
+                        principalTable: "Ledgers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_LedgerBalances_AccountYears_YearId",
+                        column: x => x.YearId,
+                        principalTable: "AccountYears",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -647,7 +638,7 @@ namespace Fanda.Data.Migrations
                         column: x => x.LedgerId,
                         principalTable: "Ledgers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -661,7 +652,7 @@ namespace Fanda.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductIngredients", x => new { x.ParentProductId, x.ChildProductId });
+                    table.PrimaryKey("PK_ProductIngredients", x => new { x.ParentProductId, x.ChildProductId, x.UnitId });
                     table.ForeignKey(
                         name: "FK_ProductIngredients_Products_ChildProductId",
                         column: x => x.ChildProductId,
@@ -673,7 +664,7 @@ namespace Fanda.Data.Migrations
                         column: x => x.ParentProductId,
                         principalTable: "Products",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ProductIngredients_Units_UnitId",
                         column: x => x.UnitId,
@@ -768,9 +759,9 @@ namespace Fanda.Data.Migrations
                     MiscAddDesc = table.Column<decimal>(nullable: false),
                     MiscAddAmt = table.Column<decimal>(nullable: false),
                     GrandTotal = table.Column<decimal>(nullable: false),
+                    YearId = table.Column<Guid>(nullable: false),
                     DateCreated = table.Column<DateTime>(nullable: false),
-                    DateModified = table.Column<DateTime>(nullable: true),
-                    YearId = table.Column<Guid>(nullable: false)
+                    DateModified = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -870,7 +861,7 @@ namespace Fanda.Data.Migrations
                         column: x => x.PricingId,
                         principalTable: "ProductPricings",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -1007,6 +998,11 @@ namespace Fanda.Data.Migrations
                 columns: new[] { "InvoiceNumber", "YearId" },
                 unique: true,
                 filter: "[InvoiceNumber] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LedgerBalances_YearId",
+                table: "LedgerBalances",
+                column: "YearId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_LedgerGroups_OrgId",
@@ -1186,9 +1182,11 @@ namespace Fanda.Data.Migrations
                 column: "PartyCategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductPricings_ProductId",
+                name: "IX_ProductPricings_ProductId_PartyCategoryId_InvoiceCategoryId",
                 table: "ProductPricings",
-                column: "ProductId");
+                columns: new[] { "ProductId", "PartyCategoryId", "InvoiceCategoryId" },
+                unique: true,
+                filter: "[PartyCategoryId] IS NOT NULL AND [InvoiceCategoryId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_BrandId",
@@ -1301,21 +1299,6 @@ namespace Fanda.Data.Migrations
                 filter: "[BatchNumber] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UnitConversions_FromUnitId",
-                table: "UnitConversions",
-                column: "FromUnitId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UnitConversions_OrgId",
-                table: "UnitConversions",
-                column: "OrgId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UnitConversions_ToUnitId",
-                table: "UnitConversions",
-                column: "ToUnitId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Units_OrgId",
                 table: "Units",
                 column: "OrgId");
@@ -1354,6 +1337,9 @@ namespace Fanda.Data.Migrations
                 name: "InvoiceItems");
 
             migrationBuilder.DropTable(
+                name: "LedgerBalances");
+
+            migrationBuilder.DropTable(
                 name: "OrgAddresses");
 
             migrationBuilder.DropTable(
@@ -1373,9 +1359,6 @@ namespace Fanda.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "ProductPricingRanges");
-
-            migrationBuilder.DropTable(
-                name: "UnitConversions");
 
             migrationBuilder.DropTable(
                 name: "Invoices");

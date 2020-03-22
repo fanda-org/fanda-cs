@@ -5,6 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using MySql.Data.EntityFrameworkCore.Extensions;
 //using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
+// DbContextOptionsBuilder.EnableSensitiveDataLogging
+
 namespace Fanda.Service.Extensions
 {
     public static class InitializeContextExtensions
@@ -14,46 +16,56 @@ namespace Fanda.Service.Extensions
             switch (databaseType)
             {
                 case "MSSQL":
+                    //services.AddDbContext<FandaContext>(options =>
+                    //{
+                    //    options.UseSqlServer(connectionString);
+                    //});
                     services.AddEntityFrameworkSqlServer()
                         .AddDbContextPool<FandaContext>((serviceProvider, options) =>
                         {
-                            options.UseSqlServer(connectionString, sqlopt =>
+                            options.UseSqlServer(connectionString, sqlOptions =>
                             {
-                                sqlopt.EnableRetryOnFailure();
+                                sqlOptions.EnableRetryOnFailure();
                                 //sqlopt.UseRowNumberForPaging();
                             })
                             .UseInternalServiceProvider(serviceProvider);
 
                             options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-                            //options.ConfigureWarnings(w => w.Throw(RelationalEventId.QueryClientEvaluationWarning));
-                            //options.ConfigureWarnings(w => w.Throw(CoreEventId.IncludeIgnoredWarning));
+                            options.EnableDetailedErrors();
+                            options.EnableSensitiveDataLogging();
+                            options.EnableServiceProviderCaching();
                         });
                     break;
                 case "MYSQL":
                     services.AddEntityFrameworkMySQL() //.AddEntityFrameworkMySql()
                         .AddDbContextPool<FandaContext>((serviceProvider, options) =>
                         {
-                            options.UseMySQL(connectionString, mysqlopt =>
+                            options.UseMySQL(connectionString, mysqlOptions =>
                             {
-                                //mysqlopt.ServerVersion(new Version(15, 1), ServerType.MariaDb);
+                                //mysqlOptions.ServerVersion(new Version(15, 1), ServerType.MariaDb);
                             })
                             .UseInternalServiceProvider(serviceProvider);
 
                             options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-                            //options.ConfigureWarnings(w => w.Throw(RelationalEventId.QueryClientEvaluationWarning));
-                            //options.ConfigureWarnings(w => w.Throw(CoreEventId.IncludeIgnoredWarning));
+                            options.EnableDetailedErrors();
+                            options.EnableSensitiveDataLogging();
+                            options.EnableServiceProviderCaching();
                         });
                     break;
                 case "PGSQL":
                     services.AddEntityFrameworkNpgsql()
                         .AddDbContextPool<FandaContext>((serviceProvider, options) =>
                         {
-                            options.UseNpgsql(connectionString)
+                            options.UseNpgsql(connectionString, pgsqlOptions =>
+                            {
+                                pgsqlOptions.EnableRetryOnFailure();
+                            })
                             .UseInternalServiceProvider(serviceProvider);
 
                             options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-                            //options.ConfigureWarnings(w => w.Throw(RelationalEventId.QueryClientEvaluationWarning));
-                            //options.ConfigureWarnings(w => w.Throw(CoreEventId.IncludeIgnoredWarning));
+                            options.EnableDetailedErrors();
+                            options.EnableSensitiveDataLogging();
+                            options.EnableServiceProviderCaching();
                         });
                     break;
             }

@@ -2,7 +2,7 @@
 
 namespace Fanda.Data
 {
-    public class UnitConversion
+    public class UnitConversionDto
     {
         //public Guid Id { get; set; }
         public Guid FromUnitId { get; set; }
@@ -11,8 +11,5 @@ namespace Fanda.Data
         public char Operator { get; set; }
         public decimal Factor { get; set; }
         public bool Active { get; set; }
-
-        public virtual Unit FromUnit { get; set; }
-        public virtual Unit ToUnit { get; set; }
     }
 }

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Fanda.Data.Migrations
 {
     [DbContext(typeof(FandaContext))]
-    [Migration("20200321001131_Initial")]
+    [Migration("20200322044057_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -482,6 +482,29 @@ namespace Fanda.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Ledgers");
+                });
+
+            modelBuilder.Entity("Fanda.Data.LedgerBalance", b =>
+                {
+                    b.Property<Guid>("LedgerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("YearId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("BalanceSign")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(1)")
+                        .HasMaxLength(1);
+
+                    b.Property<decimal>("OpeningBalance")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("LedgerId", "YearId");
+
+                    b.HasIndex("YearId");
+
+                    b.ToTable("LedgerBalances");
                 });
 
             modelBuilder.Entity("Fanda.Data.LedgerGroup", b =>
@@ -994,13 +1017,13 @@ namespace Fanda.Data.Migrations
                     b.Property<Guid>("ChildProductId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<decimal>("Qty")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<Guid>("UnitId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("ParentProductId", "ChildProductId");
+                    b.Property<decimal>("Qty")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("ParentProductId", "ChildProductId", "UnitId");
 
                     b.HasIndex("ChildProductId");
 
@@ -1030,7 +1053,9 @@ namespace Fanda.Data.Migrations
 
                     b.HasIndex("PartyCategoryId");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("ProductId", "PartyCategoryId", "InvoiceCategoryId")
+                        .IsUnique()
+                        .HasFilter("[PartyCategoryId] IS NOT NULL AND [InvoiceCategoryId] IS NOT NULL");
 
                     b.ToTable("ProductPricings");
                 });
@@ -1271,6 +1296,10 @@ namespace Fanda.Data.Migrations
                         .ValueGeneratedOnUpdate()
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(255)")
+                        .HasMaxLength(255);
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(25)")
@@ -1290,45 +1319,6 @@ namespace Fanda.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Units");
-                });
-
-            modelBuilder.Entity("Fanda.Data.UnitConversion", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("bit");
-
-                    b.Property<byte>("CalcStep")
-                        .HasColumnType("tinyint");
-
-                    b.Property<decimal>("Factor")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid>("FromUnitId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Operator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(1)");
-
-                    b.Property<Guid>("OrgId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ToUnitId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FromUnitId");
-
-                    b.HasIndex("OrgId");
-
-                    b.HasIndex("ToUnitId");
-
-                    b.ToTable("UnitConversions");
                 });
 
             modelBuilder.Entity("Fanda.Data.User", b =>
@@ -1412,7 +1402,7 @@ namespace Fanda.Data.Migrations
                     b.HasOne("Fanda.Data.Ledger", "Ledger")
                         .WithOne("Bank")
                         .HasForeignKey("Fanda.Data.Bank", "LedgerId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -1490,6 +1480,21 @@ namespace Fanda.Data.Migrations
                         .WithMany("Children")
                         .HasForeignKey("ParentId")
                         .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("Fanda.Data.LedgerBalance", b =>
+                {
+                    b.HasOne("Fanda.Data.Ledger", "Ledger")
+                        .WithMany("LedgerBalances")
+                        .HasForeignKey("LedgerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Fanda.Data.AccountYear", "AccountYear")
+                        .WithMany("LedgerBalances")
+                        .HasForeignKey("YearId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Fanda.Data.LedgerGroup", b =>
@@ -1577,7 +1582,7 @@ namespace Fanda.Data.Migrations
                     b.HasOne("Fanda.Data.Ledger", "Ledger")
                         .WithOne("Party")
                         .HasForeignKey("Fanda.Data.Party", "LedgerId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -1690,7 +1695,7 @@ namespace Fanda.Data.Migrations
                     b.HasOne("Fanda.Data.Product", "ParentProduct")
                         .WithMany("ParentIngredients")
                         .HasForeignKey("ParentProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Fanda.Data.Unit", "Unit")
@@ -1724,7 +1729,7 @@ namespace Fanda.Data.Migrations
                     b.HasOne("Fanda.Data.ProductPricing", "ProductPricing")
                         .WithMany("PricingRanges")
                         .HasForeignKey("PricingId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -1775,27 +1780,6 @@ namespace Fanda.Data.Migrations
                     b.HasOne("Fanda.Data.Organization", "Organization")
                         .WithMany("Units")
                         .HasForeignKey("OrgId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Fanda.Data.UnitConversion", b =>
-                {
-                    b.HasOne("Fanda.Data.Unit", "FromUnit")
-                        .WithMany("FromUnitConversions")
-                        .HasForeignKey("FromUnitId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Fanda.Data.Organization", "Organization")
-                        .WithMany("UnitConversions")
-                        .HasForeignKey("OrgId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Fanda.Data.Unit", "ToUnit")
-                        .WithMany("ToUnitConversions")
-                        .HasForeignKey("ToUnitId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });

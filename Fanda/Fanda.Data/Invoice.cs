@@ -48,15 +48,15 @@ namespace Fanda.Data
         public decimal MiscAddDesc { get; set; }
         public decimal MiscAddAmt { get; set; }
         public decimal GrandTotal { get; set; }
-        public DateTime DateCreated { get; set; }
-        public DateTime? DateModified { get; set; }
         public Guid YearId { get; set; }
+        public DateTime DateCreated { get; set; }
+        public DateTime? DateModified { get; set; }        
 
-        // Virtual members
-        public virtual AccountYear AccountYear { get; set; }
+        // Virtual members        
         public virtual InvoiceCategory Category { get; set; }
         public virtual Party Party { get; set; }
         public virtual Party Buyer { get; set; }
+        public virtual AccountYear AccountYear { get; set; }
         public virtual ICollection<InvoiceItem> InvoiceItems { get; set; }
     }
 }

@@ -16,7 +16,8 @@ namespace FandaTabler
         public static async Task Main(string[] args)
         {
             var host = CreateWebHostBuilder(args).Build();
-            await CreateAndRunTasks(host);
+            await CreateAndRunTasks(host,"Fanda");
+            await CreateAndRunTasks(host, "Demo");
             host.Run();
         }
 
@@ -35,24 +36,25 @@ namespace FandaTabler
                 });
         }
 
-        private static async Task CreateAndRunTasks(IHost host)
+        private static async Task CreateAndRunTasks(IHost host, string orgName)
         {
-            using var scope = host.Services.CreateScope();
-            var services = scope.ServiceProvider;
-            try
+            using (var scope = host.Services.CreateScope())
             {
-                var serviceProvider = services.GetRequiredService<IServiceProvider>();
-                //var configuration = services.GetRequiredService<IConfiguration>();
-                var options = services.GetRequiredService<IOptions<AppSettings>>();
-                SeedDefault seed = new SeedDefault(serviceProvider, options);
+                var services = scope.ServiceProvider;
+                try
+                {
+                    var serviceProvider = services.GetRequiredService<IServiceProvider>();
+                    //var configuration = services.GetRequiredService<IConfiguration>();
+                    var options = services.GetRequiredService<IOptions<AppSettings>>();
 
-                await seed.CreateOrg("Fanda");
-                await seed.CreateOrg("Demo");
-            }
-            catch (Exception exception)
-            {
-                var logger = services.GetRequiredService<ILogger<Program>>();
-                logger.LogError(exception, "An error occurred while seeding a database at startup");
+                    SeedDefault seed = new SeedDefault(serviceProvider, options);
+                    await seed.CreateOrgAsync(orgName);
+                }
+                catch (Exception ex)
+                {
+                    var logger = services.GetRequiredService<ILogger<Program>>();
+                    logger.LogError(ex, ex.Message);
+                }
             }
         }
 

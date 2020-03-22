@@ -15,7 +15,7 @@ namespace Fanda.Data.Context
         public DbSet<Role> Roles { get; set; }
 
         public DbSet<Unit> Units { get; set; }
-        public DbSet<UnitConversion> UnitConversions { get; set; }
+        //public DbSet<UnitConversion> UnitConversions { get; set; }
         public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<ProductBrand> ProductBrands { get; set; }
         public DbSet<ProductSegment> ProductSegments { get; set; }

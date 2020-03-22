@@ -23,9 +23,9 @@ namespace Fanda.Data
         public DateTime DateCreated { get; set; }
         public DateTime? DateModified { get; set; }
 
-        public virtual Organization Organization { get; set; }
         public virtual LedgerGroup Parent { get; set; }
         public virtual ICollection<LedgerGroup> Children { get; set; }
+        public virtual Organization Organization { get; set; }
         public virtual ICollection<Ledger> Ledgers { get; set; }
     }
 }

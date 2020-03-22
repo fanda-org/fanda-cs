@@ -11,7 +11,6 @@ namespace Fanda.Dto
             Contacts = new HashSet<ContactDto>();
             Addresses = new HashSet<AddressDto>();
         }
-
         public string LedgerId { get; set; }
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please select contact category")]

@@ -15,9 +15,9 @@ namespace Fanda.Data
         public DateTime DateCreated { get; set; }
         public DateTime? DateModified { get; set; }
 
-        public virtual Organization Organization { get; set; }
         public virtual ProductCategory Parent { get; set; }
         public virtual ICollection<ProductCategory> Children { get; set; }
+        public virtual Organization Organization { get; set; }
         public virtual ICollection<Product> Products { get; set; }
     }
 }

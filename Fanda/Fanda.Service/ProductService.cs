@@ -98,7 +98,7 @@ namespace Fanda.Service
                     // delete all ingredients that no longer exists
                     foreach (var dbIngredient in dbProd.ParentIngredients)
                     {
-                        if (product.ParentIngredients.All(pi => pi.Id != dbIngredient.Id))
+                        if (product.ParentIngredients.All(pi => pi.ParentProductId != dbIngredient.ParentProductId && pi.ChildProductId != dbIngredient.ChildProductId))
                             _context.Set<ProductIngredient>().Remove(dbIngredient);
                     }
                     foreach (var dbPricing in dbProd.ProductPricings)
@@ -110,7 +110,8 @@ namespace Fanda.Service
                     _context.Entry(dbProd).CurrentValues.SetValues(product);
                     var ingredientPairs = from curr in product.ParentIngredients//.Select(pi => pi.IngredientProduct)
                                           join db in dbProd.ParentIngredients//.Select(pi => pi.IngredientProduct)
-                                            on curr.Id equals db.Id into grp
+                                            on new { curr.ParentProductId, curr.ChildProductId } equals
+                                            new { db.ParentProductId, db.ChildProductId } into grp
                                           from db in grp.DefaultIfEmpty()
                                           select new { curr, db };
                     foreach (var pair in ingredientPairs)

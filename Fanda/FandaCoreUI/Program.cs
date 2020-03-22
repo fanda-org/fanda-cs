@@ -15,7 +15,7 @@ namespace FandaCoreUI
         public static async Task Main(string[] args)
         {
             var webHost = CreateWebHostBuilder(args).Build();
-            await CreateAndRunTasks(webHost);
+            await CreateAndRunTasks(webHost, "Fanda");
             webHost.Run();
 
             //using (var scope = webHost.Services.CreateScope())
@@ -54,24 +54,25 @@ namespace FandaCoreUI
                 //webBuilder.UseApplicationInsights();
             });
 
-        private static async Task CreateAndRunTasks(IHost host)
+        private static async Task CreateAndRunTasks(IHost host, string orgName)
         {
-            using var scope = host.Services.CreateScope();
-            var services = scope.ServiceProvider;
-            try
+            using (var scope = host.Services.CreateScope())
             {
-                var serviceProvider = services.GetRequiredService<IServiceProvider>();
-                //var configuration = services.GetRequiredService<IConfiguration>();
-                var options = services.GetRequiredService<IOptions<AppSettings>>();
-                SeedDefault seed = new SeedDefault(serviceProvider, options);
+                var services = scope.ServiceProvider;
+                try
+                {
+                    var serviceProvider = services.GetRequiredService<IServiceProvider>();
+                    //var configuration = services.GetRequiredService<IConfiguration>();
+                    var options = services.GetRequiredService<IOptions<AppSettings>>();
+                    SeedDefault seed = new SeedDefault(serviceProvider, options);
 
-                await seed.CreateOrg("Fanda");
-                await seed.CreateOrg("Demo");
-            }
-            catch (Exception exception)
-            {
-                var logger = services.GetRequiredService<ILogger<Program>>();
-                logger.LogError(exception, "An error occurred while seeding a database at startup");
+                    await seed.CreateOrgAsync(orgName);
+                }
+                catch (Exception exception)
+                {
+                    var logger = services.GetRequiredService<ILogger<Program>>();
+                    logger.LogError(exception, "An error occurred while seeding a database at startup");
+                }
             }
         }
     }

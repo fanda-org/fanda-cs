@@ -16,11 +16,5 @@ namespace Fanda.Dto
         public DateTime DateCreated { get; set; }
         public DateTime? DateModified { get; set; }
         public virtual LedgerBalanceDto LedgerBalance { get; set; }
-
-        //public virtual LedgerGroupDto LedgerGroup { get; set; }
-        //public virtual LedgerDto Parent { get; set; }
-        //public virtual ICollection<LedgerDto> Children { get; set; }
-        //public virtual BankDto Bank { get; set; }
-        //public virtual PartyDto Party { get; set; }
     }
 }
