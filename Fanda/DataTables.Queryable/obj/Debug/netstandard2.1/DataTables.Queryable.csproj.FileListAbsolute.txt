@@ -1,9 +1,0 @@
-D:\Development\Projects\dotnet\Fanda\src\Fanda\DataTables.Queryable\bin\Debug\netstandard2.1\DataTables.Queryable.deps.json
-D:\Development\Projects\dotnet\Fanda\src\Fanda\DataTables.Queryable\bin\Debug\netstandard2.1\DataTables.Queryable.dll
-D:\Development\Projects\dotnet\Fanda\src\Fanda\DataTables.Queryable\bin\Debug\netstandard2.1\DataTables.Queryable.pdb
-D:\Development\Projects\dotnet\Fanda\src\Fanda\DataTables.Queryable\obj\Debug\netstandard2.1\DataTables.Queryable.csprojAssemblyReference.cache
-D:\Development\Projects\dotnet\Fanda\src\Fanda\DataTables.Queryable\obj\Debug\netstandard2.1\DataTables.Queryable.csproj.CoreCompileInputs.cache
-D:\Development\Projects\dotnet\Fanda\src\Fanda\DataTables.Queryable\obj\Debug\netstandard2.1\DataTables.Queryable.AssemblyInfoInputs.cache
-D:\Development\Projects\dotnet\Fanda\src\Fanda\DataTables.Queryable\obj\Debug\netstandard2.1\DataTables.Queryable.AssemblyInfo.cs
-D:\Development\Projects\dotnet\Fanda\src\Fanda\DataTables.Queryable\obj\Debug\netstandard2.1\DataTables.Queryable.dll
-D:\Development\Projects\dotnet\Fanda\src\Fanda\DataTables.Queryable\obj\Debug\netstandard2.1\DataTables.Queryable.pdb
