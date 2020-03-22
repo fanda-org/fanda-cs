@@ -39,9 +39,11 @@ namespace Fanda.Service
         public IQueryable<PartyCategoryDto> GetAll(Guid orgId /*, bool? active*/)
         {
             if (orgId == null || orgId == Guid.Empty)
+            {
                 throw new ArgumentNullException("orgId", "Org id is missing");
+            }
 
-            var categories = _context.PartyCategories
+            IQueryable<PartyCategoryDto> categories = _context.PartyCategories
                 //.Where(p => p.Active == ((active == null) ? p.Active : active))
                 .AsNoTracking()
                 .Where(p => p.OrgId == orgId)
@@ -52,12 +54,14 @@ namespace Fanda.Service
 
         public async Task<PartyCategoryDto> GetByIdAsync(Guid categoryId)
         {
-            var category = await _context.PartyCategories
+            PartyCategoryDto category = await _context.PartyCategories
                 .AsNoTracking()
                 .ProjectTo<PartyCategoryDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(pc => pc.Id == categoryId);
             if (category != null)
+            {
                 return category;
+            }
 
             throw new KeyNotFoundException("Party category not found");
         }
@@ -65,9 +69,11 @@ namespace Fanda.Service
         public async Task<PartyCategoryDto> SaveAsync(Guid orgId, PartyCategoryDto model)
         {
             if (orgId == null || orgId == Guid.Empty)
+            {
                 throw new ArgumentNullException("orgId", "Org id is missing");
+            }
 
-            var category = _mapper.Map<PartyCategory>(model);
+            PartyCategory category = _mapper.Map<PartyCategory>(model);
             category.Code = category.Code.ToUpper();
             category.OrgId = orgId;
             if (category.Id == Guid.Empty)
@@ -89,9 +95,11 @@ namespace Fanda.Service
         public async Task<bool> DeleteAsync(Guid categoryId)
         {
             if (categoryId == null || categoryId == Guid.Empty)
+            {
                 throw new ArgumentNullException("categoryId", "Category id is missing");
+            }
 
-            var category = await _context.PartyCategories
+            PartyCategory category = await _context.PartyCategories
                 .FindAsync(categoryId);
             if (category != null)
             {
@@ -105,9 +113,11 @@ namespace Fanda.Service
         public async Task<bool> ChangeStatus(Guid categoryId, bool active)
         {
             if (categoryId == null || categoryId == Guid.Empty)
+            {
                 throw new ArgumentNullException("categoryId", "Category id is missing");
+            }
 
-            var category = await _context.PartyCategories
+            PartyCategory category = await _context.PartyCategories
                 .FindAsync(categoryId);
             if (category != null)
             {

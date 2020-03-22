@@ -41,9 +41,11 @@ namespace Fanda.Service
         public async Task<List<RoleDto>> GetAllAsync(Guid orgId, bool? active)
         {
             if (orgId == null || orgId == Guid.Empty)
+            {
                 throw new ArgumentNullException("orgId", "Org id is missing");
+            }
 
-            var roles = await _context.Roles
+            List<RoleDto> roles = await _context.Roles
                 .Where(p => p.OrgId == p.OrgId)
                 .Where(p => p.Active == ((active == null) ? p.Active : active))
                 .AsNoTracking()
@@ -56,12 +58,17 @@ namespace Fanda.Service
         {
             RoleDto role = null;
             if (roleId == null || roleId == Guid.Empty)
+            {
                 role = await _context.Roles
                     .ProjectTo<RoleDto>(_mapper.ConfigurationProvider)
                     .AsNoTracking()
                     .SingleOrDefaultAsync(r => r.Id == roleId);
+            }
+
             if (role != null)
+            {
                 return role;
+            }
 
             throw new KeyNotFoundException("Role not found");
         }
@@ -69,12 +76,14 @@ namespace Fanda.Service
         public async Task SaveAsync(Guid orgId, RoleDto dto)
         {
             if (orgId == null || orgId == Guid.Empty)
+            {
                 throw new ArgumentNullException("orgId", "Org id is missing");
+            }
 
             //Role role = null;
             //if (!string.IsNullOrEmpty(model.RoleId))
             //    role = await _context.Roles.FindAsync(model.RoleId);
-            var role = _mapper.Map<Role>(dto);
+            Role role = _mapper.Map<Role>(dto);
             if (role.Id == Guid.Empty)
             {
                 role.OrgId = orgId;
@@ -96,7 +105,10 @@ namespace Fanda.Service
         {
             Role role = null;
             if (roleId == null || roleId == Guid.Empty)
+            {
                 role = await _context.Roles.FindAsync(roleId);
+            }
+
             if (role != null)
             {
                 _context.Roles.Remove(role);
@@ -108,10 +120,14 @@ namespace Fanda.Service
         public bool Exists(Guid orgId, string code)
         {
             if (orgId == null || orgId == Guid.Empty)
+            {
                 throw new ArgumentNullException("orgId", "Org id is missing");
+            }
 
             if (string.IsNullOrEmpty(code))
+            {
                 throw new ArgumentNullException("code", "Role code is missing");
+            }
 
             return _context.Roles.Any(r => r.Code == code && r.OrgId == orgId);
         }

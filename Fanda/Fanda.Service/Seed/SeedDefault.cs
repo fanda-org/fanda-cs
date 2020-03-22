@@ -27,12 +27,12 @@ namespace Fanda.Service.Seed
         {
             try
             {
-                var service = _provider.GetRequiredService<IOrganizationService>();
+                IOrganizationService service = _provider.GetRequiredService<IOrganizationService>();
 
                 string orgCode = orgName.ToUpper();
                 if (!service.ExistsByCode(orgCode))
                 {
-                    var org = await service.SaveAsync(new OrganizationDto
+                    OrganizationDto org = await service.SaveAsync(new OrganizationDto
                     {
                         OrgCode = orgCode,
                         OrgName = orgName,
@@ -58,7 +58,7 @@ namespace Fanda.Service.Seed
         {
             try
             {
-                var service = _provider.GetRequiredService<IRoleService>();
+                IRoleService service = _provider.GetRequiredService<IRoleService>();
 
                 //adding customs roles
                 string[] rolesArray = {
@@ -70,7 +70,7 @@ namespace Fanda.Service.Seed
                     };
 
 
-                foreach (var roleElement in rolesArray)
+                foreach (string roleElement in rolesArray)
                 {
                     string roleName = roleElement.Split(':')[0];
                     string description = roleElement.Split(':')[1];
@@ -118,7 +118,7 @@ namespace Fanda.Service.Seed
         {
             try
             {
-                var service = _provider.GetRequiredService<IUserService>();
+                IUserService service = _provider.GetRequiredService<IUserService>();
 
                 // creating a super user who could maintain the web app
                 var superAdmin = new UserDto
@@ -128,7 +128,7 @@ namespace Fanda.Service.Seed
                     //LocationId = loc.LocationId,
                     Active = true
                 };
-                var user = await service.GetByNameAsync(superAdmin.UserName);
+                UserDto user = await service.GetByNameAsync(superAdmin.UserName);
                 if (user == null)
                 {
                     user = await service.SaveAsync(superAdmin, _settings.FandaSettings.UserPassword);
@@ -151,7 +151,7 @@ namespace Fanda.Service.Seed
         {
             try
             {
-                var service = _provider.GetRequiredService<IUnitService>();
+                IUnitService service = _provider.GetRequiredService<IUnitService>();
                 if (!service.Exists(org.Id, "DEFAULT"))
                 {
                     var unit = new UnitDto
@@ -173,7 +173,7 @@ namespace Fanda.Service.Seed
         {
             try
             {
-                var service = _provider.GetRequiredService<IPartyCategoryService>();
+                IPartyCategoryService service = _provider.GetRequiredService<IPartyCategoryService>();
                 if (!service.Exists(org.Id, "DEFAULT"))
                 {
                     await service.SaveAsync(org.Id, new PartyCategoryDto

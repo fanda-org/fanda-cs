@@ -42,9 +42,11 @@ namespace FandaCoreUI.Extensions
             public override async Task ExecuteResultAsync(ActionContext context)
             {
                 if (context == null)
+                {
                     throw new ArgumentNullException("context");
+                }
 
-                var response = context.HttpContext.Response;
+                HttpResponse response = context.HttpContext.Response;
 
                 response.ContentType = !string.IsNullOrEmpty(ContentType)
                     ? ContentType

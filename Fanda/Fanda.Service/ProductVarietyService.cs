@@ -40,9 +40,11 @@ namespace Fanda.Service
         public async Task<List<ProductVarietyDto>> GetAllAsync(Guid orgId, bool? active)
         {
             if (orgId == null || orgId == Guid.Empty)
+            {
                 throw new ArgumentNullException("orgId", "Org id is missing");
+            }
 
-            var varieties = await _context.ProductVarieties
+            List<ProductVarietyDto> varieties = await _context.ProductVarieties
                 .Where(p => p.OrgId == p.OrgId)
                 .Where(p => p.Active == ((active == null) ? p.Active : active))
                 .AsNoTracking()
@@ -53,13 +55,15 @@ namespace Fanda.Service
 
         public async Task<ProductVarietyDto> GetByIdAsync(Guid varietyId)
         {
-            var variety = await _context.ProductVarieties
+            ProductVarietyDto variety = await _context.ProductVarieties
                 .ProjectTo<ProductVarietyDto>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
                 .SingleOrDefaultAsync(pc => pc.Id == varietyId);
 
             if (variety != null)
+            {
                 return variety;
+            }
 
             throw new KeyNotFoundException("Product variety not found");
         }
@@ -67,9 +71,11 @@ namespace Fanda.Service
         public async Task<ProductVarietyDto> SaveAsync(Guid orgId, ProductVarietyDto dto)
         {
             if (orgId == null || orgId == Guid.Empty)
+            {
                 throw new ArgumentNullException("orgId", "Org id is missing");
+            }
 
-            var variety = _mapper.Map<ProductVariety>(dto);
+            ProductVariety variety = _mapper.Map<ProductVariety>(dto);
             if (variety.Id == Guid.Empty)
             {
                 variety.OrgId = orgId;
@@ -89,7 +95,7 @@ namespace Fanda.Service
 
         public async Task<bool> DeleteAsync(Guid varietyId)
         {
-            var variety = await _context.ProductVarieties
+            ProductVariety variety = await _context.ProductVarieties
                 .FindAsync(varietyId);
             if (variety != null)
             {

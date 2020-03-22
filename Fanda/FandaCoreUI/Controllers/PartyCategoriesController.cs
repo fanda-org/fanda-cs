@@ -26,19 +26,21 @@ namespace Fanda.Controllers
         [Produces("application/json")]
         public async Task<JsonResult> GetAll()
         {
-            var org = HttpContext.Session.Get<OrganizationDto>("DemoOrg");
+            OrganizationDto org = HttpContext.Session.Get<OrganizationDto>("DemoOrg");
             if (org == null)
+            {
                 return null;
+            }
 
             var request = new DataTablesRequest<PartyCategoryDto>(
                 Request.QueryString.Value
                 );
-            var result = await _service
+            IPagedList<PartyCategoryDto> result = await _service
                 .GetAll(org.Id)
                 .ToPagedListAsync(request);
             //var dt = JsonDataTable(result, request.Draw); //result.JsonDataTable(request.Draw);
             //return dt;
-            var dt = result.JsonDataTable(request.Draw);
+            JsonPagedResult.JsonNetResult dt = result.JsonDataTable(request.Draw);
             return dt;
         }
 
@@ -101,11 +103,15 @@ namespace Fanda.Controllers
         public async Task<ActionResult> Details(Guid id)
         {
             if (id == null || id == Guid.Empty)
+            {
                 return NotFound();
+            }
 
-            var cat = await _service.GetByIdAsync(id);
+            PartyCategoryDto cat = await _service.GetByIdAsync(id);
             if (cat == null)
+            {
                 return NotFound();
+            }
 
             ViewBag.Mode = "Details";
             ViewBag.Readonly = true;
@@ -125,11 +131,15 @@ namespace Fanda.Controllers
         public async Task<ActionResult> Edit(Guid id)
         {
             if (id == null || id == Guid.Empty)
+            {
                 return NotFound();
+            }
 
-            var party = await _service.GetByIdAsync(id);
+            PartyCategoryDto party = await _service.GetByIdAsync(id);
             if (party == null)
+            {
                 return NotFound();
+            }
 
             ViewBag.Mode = "Edit";
             ViewBag.Readonly = false;
@@ -143,31 +153,50 @@ namespace Fanda.Controllers
         {
             try
             {
-                var org = HttpContext.Session.Get<OrganizationDto>("DemoOrg");
+                OrganizationDto org = HttpContext.Session.Get<OrganizationDto>("DemoOrg");
                 if (org == null)
+                {
                     return null;
+                }
 
                 bool create = model.Id == null || model.Id == Guid.Empty;
                 await _service.SaveAsync(org.Id, model);
                 if (create) // Create
+                {
                     return RedirectToAction(nameof(Create));
+                }
                 else
+                {
                     return RedirectToAction(nameof(Index));
+                }
             }
             catch (Exception ex)
             {
                 if (ex.InnerException != null)
+                {
                     if ((ex.InnerException as SqlException)?.Number == 2601)
+                    {
                         ModelState.AddModelError("Error", "Code/Name already existst!");
+                    }
                     else
+                    {
                         ModelState.AddModelError("Error", ex.InnerException.Message);
+                    }
+                }
                 else
+                {
                     ModelState.AddModelError("Error", ex.Message);
+                }
 
                 if (model.Id == null || model.Id == Guid.Empty)
+                {
                     ViewBag.Mode = "Create";
+                }
                 else
+                {
                     ViewBag.Mode = "Edit";
+                }
+
                 ViewBag.Readonly = false;
                 return View("Edit", model);
             }
@@ -178,11 +207,15 @@ namespace Fanda.Controllers
         public async Task<ActionResult> Delete(Guid id)
         {
             if (id == null || id == Guid.Empty)
+            {
                 return NotFound();
+            }
 
-            var cat = await _service.GetByIdAsync(id);
+            PartyCategoryDto cat = await _service.GetByIdAsync(id);
             if (cat == null)
+            {
                 return NotFound();
+            }
 
             ViewBag.Mode = "Delete";
             ViewBag.Readonly = true;

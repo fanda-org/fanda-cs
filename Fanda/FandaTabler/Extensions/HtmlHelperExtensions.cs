@@ -16,7 +16,7 @@ namespace FandaTabler.Extensions
             IEnumerable<string> acceptedControllers = (controllers ?? currentController).Split(',');
 
             return acceptedActions.Contains(currentAction) && acceptedControllers.Contains(currentController) ?
-                cssClass : String.Empty;
+                cssClass : string.Empty;
         }
     }
 }

@@ -40,9 +40,11 @@ namespace Fanda.Service
         public async Task<List<ProductBrandDto>> GetAllAsync(Guid orgId, bool? active)
         {
             if (orgId == null || orgId == Guid.Empty)
+            {
                 throw new ArgumentNullException("orgId", "Org id is missing");
+            }
 
-            var brands = await _context.ProductBrands
+            List<ProductBrandDto> brands = await _context.ProductBrands
                 .Where(p => p.OrgId == p.OrgId)
                 .Where(p => p.Active == ((active == null) ? p.Active : active))
                 .AsNoTracking()
@@ -53,13 +55,15 @@ namespace Fanda.Service
 
         public async Task<ProductBrandDto> GetByIdAsync(Guid brandId)
         {
-            var brand = await _context.ProductBrands
+            ProductBrandDto brand = await _context.ProductBrands
                 .ProjectTo<ProductBrandDto>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
                 .SingleOrDefaultAsync(pc => pc.Id == brandId);
 
             if (brand != null)
+            {
                 return brand;
+            }
 
             throw new KeyNotFoundException("Product brand not found");
         }
@@ -67,9 +71,11 @@ namespace Fanda.Service
         public async Task<ProductBrandDto> SaveAsync(Guid orgId, ProductBrandDto dto)
         {
             if (orgId == null || orgId == Guid.Empty)
+            {
                 throw new ArgumentNullException("orgId", "Org id is missing");
+            }
 
-            var brand = _mapper.Map<ProductBrand>(dto);
+            ProductBrand brand = _mapper.Map<ProductBrand>(dto);
             if (brand.Id == Guid.Empty)
             {
                 brand.OrgId = orgId;
@@ -89,7 +95,7 @@ namespace Fanda.Service
 
         public async Task<bool> DeleteAsync(Guid brandId)
         {
-            var brand = await _context.ProductBrands
+            ProductBrand brand = await _context.ProductBrands
                 .FindAsync(brandId);
             if (brand != null)
             {

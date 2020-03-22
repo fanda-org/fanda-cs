@@ -30,7 +30,7 @@ namespace Fanda.Controllers
 
             //var organization = await _context.Organizations
             //    .FirstOrDefaultAsync(m => m.OrgId == id);
-            var org = await _service.GetByIdAsync(id);
+            OrganizationDto org = await _service.GetByIdAsync(id);
             if (org == null)
             {
                 return NotFound();
@@ -69,7 +69,7 @@ namespace Fanda.Controllers
             }
 
             //var organization = await _context.Organizations.FindAsync(id);
-            var org = await _service.GetByIdAsync(id);
+            OrganizationDto org = await _service.GetByIdAsync(id);
             if (org == null)
             {
                 return NotFound();
@@ -124,7 +124,7 @@ namespace Fanda.Controllers
 
             //var organization = await _context.Organizations
             //    .FirstOrDefaultAsync(m => m.OrgId == id);
-            var org = await _service.GetByIdAsync(id);
+            OrganizationDto org = await _service.GetByIdAsync(id);
             if (org == null)
             {
                 return NotFound();

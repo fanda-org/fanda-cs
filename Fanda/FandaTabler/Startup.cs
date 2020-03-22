@@ -38,7 +38,7 @@ namespace FandaTabler
 
             #region AppSettings
             services.Configure<AppSettings>(Configuration);
-            var appSettings = Configuration.Get<AppSettings>();
+            AppSettings appSettings = Configuration.Get<AppSettings>();
             #endregion
 
             #region CORS

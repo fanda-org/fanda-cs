@@ -40,9 +40,11 @@ namespace Fanda.Service
         public async Task<List<ProductCategoryDto>> GetAllAsync(Guid orgId, bool? active)
         {
             if (orgId == null || orgId == Guid.Empty)
+            {
                 throw new ArgumentNullException("orgId", "Org id is missing");
+            }
 
-            var categories = await _context.ProductCategories
+            List<ProductCategoryDto> categories = await _context.ProductCategories
                 .Where(p => p.OrgId == p.OrgId)
                 .Where(p => p.Active == ((active == null) ? p.Active : active))
                 .AsNoTracking()
@@ -53,13 +55,15 @@ namespace Fanda.Service
 
         public async Task<ProductCategoryDto> GetByIdAsync(Guid categoryId)
         {
-            var category = await _context.ProductCategories
+            ProductCategoryDto category = await _context.ProductCategories
                 .ProjectTo<ProductCategoryDto>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
                 .SingleOrDefaultAsync(pc => pc.Id == categoryId);
 
             if (category != null)
+            {
                 return category;
+            }
 
             throw new KeyNotFoundException("Product category not found");
         }
@@ -67,9 +71,11 @@ namespace Fanda.Service
         public async Task<ProductCategoryDto> SaveAsync(Guid orgId, ProductCategoryDto categoryVM)
         {
             if (orgId == null || orgId == Guid.Empty)
+            {
                 throw new ArgumentNullException("orgId", "Org id is missing");
+            }
 
-            var category = _mapper.Map<ProductCategory>(categoryVM);
+            ProductCategory category = _mapper.Map<ProductCategory>(categoryVM);
             if (category.Id == Guid.Empty)
             {
                 category.OrgId = orgId;
@@ -89,7 +95,7 @@ namespace Fanda.Service
 
         public async Task<bool> DeleteAsync(Guid categoryId)
         {
-            var category = await _context.ProductCategories
+            ProductCategory category = await _context.ProductCategories
                 .FindAsync(categoryId);
             if (category != null)
             {

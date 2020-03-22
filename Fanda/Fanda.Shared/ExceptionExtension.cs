@@ -14,7 +14,9 @@ namespace Fanda.Shared
                 {
                     exception = exception.InnerException;
                     if (exception.InnerException != null)
+                    {
                         exception = exception.InnerException;
+                    }
                 }
             }
 

@@ -19,9 +19,13 @@ namespace FandaTabler.Controllers
         public IActionResult Index()
         {
             if (HttpContext.Session.Get<OrganizationDto>("CurrentOrg") == null)
+            {
                 return RedirectToAction("Index", "Organizations");
+            }
             else
+            {
                 return View();
+            }
         }
 
         [AllowAnonymous]

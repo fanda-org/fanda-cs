@@ -40,9 +40,11 @@ namespace Fanda.Service
         public async Task<List<InvoiceCategoryDto>> GetAllAsync(Guid orgId, bool? active)
         {
             if (orgId == null || orgId == Guid.Empty)
+            {
                 throw new ArgumentNullException("orgId", "Org id is missing");
+            }
 
-            var categories = await _context.InvoiceCategories
+            List<InvoiceCategoryDto> categories = await _context.InvoiceCategories
                 .Where(p => p.OrgId == p.OrgId)
                 .Where(p => p.Active == ((active == null) ? p.Active : active))
                 .AsNoTracking()
@@ -53,13 +55,15 @@ namespace Fanda.Service
 
         public async Task<InvoiceCategoryDto> GetByIdAsync(Guid id)
         {
-            var category = await _context.InvoiceCategories
+            InvoiceCategoryDto category = await _context.InvoiceCategories
                 .ProjectTo<InvoiceCategoryDto>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
                 .SingleOrDefaultAsync(pc => pc.Id == id);
 
             if (category != null)
+            {
                 return category;
+            }
 
             throw new KeyNotFoundException("Invoice category not found");
         }
@@ -67,9 +71,11 @@ namespace Fanda.Service
         public async Task<InvoiceCategoryDto> SaveAsync(Guid orgId, InvoiceCategoryDto dto)
         {
             if (orgId == null || orgId == Guid.Empty)
+            {
                 throw new ArgumentNullException("orgId", "Org id is missing");
+            }
 
-            var category = _mapper.Map<InvoiceCategory>(dto);
+            InvoiceCategory category = _mapper.Map<InvoiceCategory>(dto);
             if (category.Id == Guid.Empty)
             {
                 category.OrgId = orgId;
@@ -90,7 +96,7 @@ namespace Fanda.Service
 
         public async Task<bool> DeleteAsync(Guid id)
         {
-            var category = await _context.InvoiceCategories
+            InvoiceCategory category = await _context.InvoiceCategories
                 .FindAsync(id);
             if (category != null)
             {

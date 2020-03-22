@@ -38,9 +38,11 @@ namespace Fanda.Service
         public async Task<List<UnitDto>> GetAllAsync(Guid orgId)
         {
             if (orgId == null || orgId == Guid.Empty)
+            {
                 throw new ArgumentNullException("OrgId", "Org id is missing");
+            }
 
-            var units = await _context.Units
+            List<UnitDto> units = await _context.Units
                 .Where(p => p.OrgId == p.OrgId)
                 .AsNoTracking()
                 .ProjectTo<UnitDto>(_mapper.ConfigurationProvider)
@@ -52,13 +54,17 @@ namespace Fanda.Service
         {
             UnitDto unit = null;
             if (unitId == null || unitId == Guid.Empty)
+            {
                 unit = await _context.Units
                 .ProjectTo<UnitDto>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
                 .SingleOrDefaultAsync(u => u.Id == unitId);
+            }
 
             if (unit != null)
+            {
                 return unit;
+            }
 
             throw new KeyNotFoundException("Unit not found");
         }
@@ -66,11 +72,16 @@ namespace Fanda.Service
         public async Task SaveAsync(Guid orgId, UnitDto model)
         {
             if (orgId == null || orgId == Guid.Empty)
+            {
                 throw new ArgumentNullException("OrgId", "Org id is missing");
+            }
 
             Unit unit = null;
             if (model.Id == null || model.Id == Guid.Empty)
+            {
                 unit = await _context.Units.FindAsync(model.Id);
+            }
+
             if (unit == null)
             {
                 model.DateCreated = DateTime.Now;
@@ -92,8 +103,11 @@ namespace Fanda.Service
         {
             Unit unit = null;
             if (unitId == null || unitId == Guid.Empty)
+            {
                 unit = await _context.Units
                     .FindAsync(unitId);
+            }
+
             if (unit != null)
             {
                 _context.Units.Remove(unit);

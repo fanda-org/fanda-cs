@@ -39,7 +39,7 @@ namespace Fanda.Service
 
         public IQueryable<OrganizationDto> GetAll()
         {
-            var orgs = _context.Organizations
+            IQueryable<OrganizationDto> orgs = _context.Organizations
                 .AsNoTracking()
                 .ProjectTo<OrganizationDto>(_mapper.ConfigurationProvider);
             return orgs;
@@ -48,17 +48,24 @@ namespace Fanda.Service
         public async Task<OrganizationDto> GetByIdAsync(Guid orgId, bool includes = false)
         {
             if (orgId == null || orgId == Guid.Empty)
+            {
                 throw new ArgumentNullException("orgId", "Org id is missing");
+            }
 
-            var org = await _context.Organizations
+            OrganizationDto org = await _context.Organizations
                 .AsNoTracking()
                 .ProjectTo<OrganizationDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(o => o.Id == orgId);
 
             if (org == null)
+            {
                 throw new KeyNotFoundException("Organization not found");
+            }
+
             if (org != null && !includes)
+            {
                 return org;
+            }
 
             org.Contacts = await _context.Organizations
                 .AsNoTracking()
@@ -109,7 +116,7 @@ namespace Fanda.Service
 
         public async Task<OrganizationDto> SaveAsync(OrganizationDto orgVM)
         {
-            var org = _mapper.Map<Organization>(orgVM);
+            Organization org = _mapper.Map<Organization>(orgVM);
             if (org.Id == Guid.Empty)
             {
                 org.DateCreated = DateTime.Now;
@@ -118,7 +125,7 @@ namespace Fanda.Service
             }
             else
             {
-                var dbOrg = await _context.Organizations
+                Organization dbOrg = await _context.Organizations
                     .Where(o => o.Id == org.Id)
                     .Include(o => o.OrgContacts).ThenInclude(oc => oc.Contact)
                     .Include(o => o.OrgAddresses).ThenInclude(oa => oa.Address)
@@ -132,18 +139,22 @@ namespace Fanda.Service
                 else
                 {
                     // delete all contacts that no longer exists
-                    foreach (var dbOrgContact in dbOrg.OrgContacts)
+                    foreach (OrgContact dbOrgContact in dbOrg.OrgContacts)
                     {
-                        var dbContact = dbOrgContact.Contact;
+                        Contact dbContact = dbOrgContact.Contact;
                         if (org.OrgContacts.All(oc => oc.Contact.Id != dbContact.Id))
+                        {
                             _context.Contacts.Remove(dbContact);
+                        }
                     }
                     // delete all addresses that no longer exists
-                    foreach (var dbOrgAddress in dbOrg.OrgAddresses)
+                    foreach (OrgAddress dbOrgAddress in dbOrg.OrgAddresses)
                     {
-                        var dbAddress = dbOrgAddress.Address;
+                        Address dbAddress = dbOrgAddress.Address;
                         if (org.OrgAddresses.All(oa => oa.Address.Id != dbAddress.Id))
+                        {
                             _context.Addresses.Remove(dbAddress);
+                        }
                     }
                     // copy current (incoming) values to db
                     org.DateModified = DateTime.Now;
@@ -158,7 +169,9 @@ namespace Fanda.Service
                     foreach (var pair in contactPairs)
                     {
                         if (pair.db != null)
+                        {
                             _context.Entry(pair.db).CurrentValues.SetValues(pair.curr);
+                        }
                         else
                         {
                             //_context.Set<Contact>().Add(pair.curr);
@@ -182,7 +195,9 @@ namespace Fanda.Service
                     foreach (var pair in addressPairs)
                     {
                         if (pair.db != null)
+                        {
                             _context.Entry(pair.db).CurrentValues.SetValues(pair.curr);
+                        }
                         else
                         {
                             //_context.Set<Address>().Add(pair.curr);
@@ -207,18 +222,26 @@ namespace Fanda.Service
         public async Task<bool> DeleteAsync(Guid orgId)
         {
             if (orgId == null || orgId == Guid.Empty)
+            {
                 throw new ArgumentNullException("orgId", "Org id is missing");
+            }
 
-            var org = await _context.Organizations
+            Organization org = await _context.Organizations
                 .Include(o => o.OrgContacts).ThenInclude(oc => oc.Contact)
                 .Include(o => o.OrgAddresses).ThenInclude(oa => oa.Address)
                 .SingleOrDefaultAsync(o => o.Id == orgId);
             if (org != null)
             {
-                foreach (var orgContact in org.OrgContacts)
+                foreach (OrgContact orgContact in org.OrgContacts)
+                {
                     _context.Contacts.Remove(orgContact.Contact);
-                foreach (var orgAddress in org.OrgAddresses)
+                }
+
+                foreach (OrgAddress orgAddress in org.OrgAddresses)
+                {
                     _context.Addresses.Remove(orgAddress.Address);
+                }
+
                 _context.Organizations.Remove(org);
                 await _context.SaveChangesAsync();
                 return true;
@@ -233,9 +256,11 @@ namespace Fanda.Service
         public async Task<bool> ChangeStatus(Guid orgId, bool active)
         {
             if (orgId == null || orgId == Guid.Empty)
+            {
                 throw new ArgumentNullException("orgId", "Org id is missing");
+            }
 
-            var org = await _context.Organizations
+            Organization org = await _context.Organizations
                 .FindAsync(orgId);
             if (org != null)
             {

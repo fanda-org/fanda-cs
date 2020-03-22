@@ -40,9 +40,11 @@ namespace Fanda.Service
         public async Task<List<InvoiceDto>> GetAllAsync(Guid yearId)
         {
             if (yearId == null || yearId == Guid.Empty)
+            {
                 throw new ArgumentNullException("yearId", "Year id is missing");
+            }
 
-            var invoices = await _context.Invoices
+            List<Invoice> invoices = await _context.Invoices
                 .Where(p => p.YearId == yearId)
                 .AsNoTracking()
                 //.ProjectTo<InvoiceViewModel>(_mapper.ConfigurationProvider)
@@ -52,13 +54,15 @@ namespace Fanda.Service
 
         public async Task<InvoiceDto> GetByIdAsync(Guid invoiceId)
         {
-            var invoice = await _context.Invoices
+            InvoiceDto invoice = await _context.Invoices
                 .ProjectTo<InvoiceDto>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
                 .SingleOrDefaultAsync(inv => inv.Id == invoiceId);
 
             if (invoice != null)
+            {
                 return invoice;
+            }
 
             throw new KeyNotFoundException("Invoice not found");
         }
@@ -66,9 +70,11 @@ namespace Fanda.Service
         public async Task<InvoiceDto> SaveAsync(Guid yearId, InvoiceDto dto)
         {
             if (yearId == null || yearId == Guid.Empty)
+            {
                 throw new ArgumentNullException("yearId", "Year id is missing");
+            }
 
-            var invoice = _mapper.Map<Invoice>(dto);
+            Invoice invoice = _mapper.Map<Invoice>(dto);
             if (invoice.Id == Guid.Empty)
             {
                 invoice.YearId = yearId;
@@ -78,7 +84,7 @@ namespace Fanda.Service
             }
             else
             {
-                var dbInvoice = await _context.Invoices
+                Invoice dbInvoice = await _context.Invoices
                     .Where(i => i.Id == invoice.Id)
                     .Include(i => i.InvoiceItems).ThenInclude(ii => ii.Stock)
                     .SingleOrDefaultAsync();
@@ -92,10 +98,12 @@ namespace Fanda.Service
                 {
                     invoice.DateModified = DateTime.Now;
                     // delete all linet items that no longer exists
-                    foreach (var dbLineItem in dbInvoice.InvoiceItems)
+                    foreach (InvoiceItem dbLineItem in dbInvoice.InvoiceItems)
                     {
                         if (invoice.InvoiceItems.All(ii => ii.InvoiceItemId != dbLineItem.InvoiceItemId))
+                        {
                             _context.Set<InvoiceItem>().Remove(dbLineItem);
+                        }
                     }
                     // copy current (incoming) values to db
                     _context.Entry(dbInvoice).CurrentValues.SetValues(invoice);
@@ -107,9 +115,13 @@ namespace Fanda.Service
                     foreach (var pair in itemPairs)
                     {
                         if (pair.db != null)
+                        {
                             _context.Entry(pair.db).CurrentValues.SetValues(pair.curr);
+                        }
                         else
+                        {
                             await _context.Set<InvoiceItem>().AddAsync(pair.curr);
+                        }
                     }
                 }
             }
@@ -120,7 +132,7 @@ namespace Fanda.Service
 
         public async Task<bool> DeleteAsync(Guid invoiceId)
         {
-            var invoice = await _context.Invoices
+            Invoice invoice = await _context.Invoices
                 .FindAsync(invoiceId);
             if (invoice != null)
             {

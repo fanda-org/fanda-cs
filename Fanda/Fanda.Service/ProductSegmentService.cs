@@ -40,9 +40,11 @@ namespace Fanda.Service
         public async Task<List<ProductSegmentDto>> GetAllAsync(Guid orgId, bool? active)
         {
             if (orgId == null || orgId == Guid.Empty)
+            {
                 throw new ArgumentNullException("orgId", "Org id is missing");
+            }
 
-            var segments = await _context.ProductSegments
+            List<ProductSegmentDto> segments = await _context.ProductSegments
                 .Where(p => p.OrgId == p.OrgId)
                 .Where(p => p.Active == ((active == null) ? p.Active : active))
                 .AsNoTracking()
@@ -53,13 +55,15 @@ namespace Fanda.Service
 
         public async Task<ProductSegmentDto> GetByIdAsync(Guid segmentId)
         {
-            var segment = await _context.ProductSegments
+            ProductSegmentDto segment = await _context.ProductSegments
                 .ProjectTo<ProductSegmentDto>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
                 .SingleOrDefaultAsync(pc => pc.Id == segmentId);
 
             if (segment != null)
+            {
                 return segment;
+            }
 
             throw new KeyNotFoundException("Product segment not found");
         }
@@ -67,9 +71,11 @@ namespace Fanda.Service
         public async Task<ProductSegmentDto> SaveAsync(Guid orgId, ProductSegmentDto dto)
         {
             if (orgId == null || orgId == Guid.Empty)
+            {
                 throw new ArgumentNullException("orgId", "Org id is missing");
+            }
 
-            var segment = _mapper.Map<ProductSegment>(dto);
+            ProductSegment segment = _mapper.Map<ProductSegment>(dto);
             if (segment.Id == Guid.Empty)
             {
                 segment.OrgId = orgId;
@@ -89,7 +95,7 @@ namespace Fanda.Service
 
         public async Task<bool> DeleteAsync(Guid segmentId)
         {
-            var segment = await _context.ProductSegments
+            ProductSegment segment = await _context.ProductSegments
                 .FindAsync(segmentId);
             if (segment != null)
             {

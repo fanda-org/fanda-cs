@@ -57,17 +57,25 @@ namespace Fanda.Service
             {
                 User user;
                 if (RegEx.IsEmail(model.NameOrEmail))
+                {
                     user = await _context.Users.SingleOrDefaultAsync(x => x.Email == model.NameOrEmail);
+                }
                 else
+                {
                     user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == model.NameOrEmail);
+                }
 
                 // return null if user not found
                 if (user == null)
+                {
                     return null;
+                }
 
                 // check if password is correct
                 if (!PasswordStorage.VerifyPasswordHash(model.Password, user.PasswordHash, user.PasswordSalt))
+                {
                     return null;
+                }
 
                 userModel = _mapper.Map<UserDto>(user);
             }
@@ -78,10 +86,14 @@ namespace Fanda.Service
         {
             // validation
             if (string.IsNullOrWhiteSpace(model.Password))
+            {
                 throw new AppException("Password is required");
+            }
 
             if (_context.Users.Any(x => x.UserName == model.UserName))
+            {
                 throw new AppException("Username \"" + model.UserName + "\" is already taken");
+            }
 
             PasswordStorage.CreatePasswordHash(model.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
@@ -106,14 +118,19 @@ namespace Fanda.Service
         {
             IQueryable<UserDto> userQry;
             if (orgId == null || orgId == Guid.Empty)
+            {
                 userQry = _context.Users
                     .ProjectTo<UserDto>(_mapper.ConfigurationProvider);
+            }
             else
+            {
                 userQry = _context.Organizations //_userManager.Users
                     .Where(o => o.Id == orgId)
                     .SelectMany(o => o.OrgUsers.Select(ou => ou.User))
                     .ProjectTo<UserDto>(_mapper.ConfigurationProvider);
-            var userList = await userQry
+            }
+
+            List<UserDto> userList = await userQry
                 //.Where(u => u.Active == (active == null) ? u.Active : (bool)active)
                 .AsNoTracking()
                 .ToListAsync();
@@ -150,13 +167,17 @@ namespace Fanda.Service
         public async Task<UserDto> SaveAsync(UserDto dto, string password)
         {
             if (string.IsNullOrWhiteSpace(password))
+            {
                 throw new ArgumentNullException("password", "Password is missing");
+            }
 
             PasswordStorage.CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
 
             User user = null;
             if (dto.Id != null && dto.Id != Guid.Empty)
+            {
                 user = await _context.Users.FindAsync(dto.Id);
+            }
 
             //var user = _mapper.Map<User>(dto);
             if (user == null)
@@ -197,7 +218,10 @@ namespace Fanda.Service
         {
             OrgUser orgUser = null;
             if (orgId != null && orgId != Guid.Empty && userId != null && userId != Guid.Empty)
+            {
                 orgUser = await _context.Set<OrgUser>().FindAsync(orgId, userId);
+            }
+
             if (orgUser != null)
             {
                 _context.Set<OrgUser>().Remove(orgUser);
@@ -206,7 +230,10 @@ namespace Fanda.Service
 
             User user = null;
             if (userId != null && userId != Guid.Empty)
+            {
                 user = await _context.Users.FindAsync(userId);
+            }
+
             if (user != null)
             {
                 _context.Users.Remove(user);
@@ -221,7 +248,7 @@ namespace Fanda.Service
         {
             try
             {
-                var orgUserDb = await _context.Set<OrgUser>()
+                OrgUser orgUserDb = await _context.Set<OrgUser>()
                     .FirstOrDefaultAsync(ou => ou.OrgId == orgId && ou.UserId == userId);
                 if (orgUserDb == null)
                 {
@@ -244,7 +271,7 @@ namespace Fanda.Service
         {
             try
             {
-                var role = await _context.Roles
+                Role role = await _context.Roles
                     .AsNoTracking()
                     .FirstOrDefaultAsync(r => r.Name == roleName && r.OrgId == orgId);
                 if (role != null)

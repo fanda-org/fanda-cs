@@ -37,7 +37,7 @@ namespace FandaCoreUI
 
             #region AppSettings
             services.Configure<AppSettings>(Configuration);
-            var appSettings = Configuration.Get<AppSettings>();
+            AppSettings appSettings = Configuration.Get<AppSettings>();
             #endregion
 
             #region CORS
@@ -127,7 +127,7 @@ namespace FandaCoreUI
             #endregion
 
             #region AppSettings
-            var appSettingsSection = Configuration.GetSection("AppSettings");
+            IConfigurationSection appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
             #endregion
 
