@@ -208,7 +208,7 @@ namespace DataTables.Queryable
         /// <returns><see cref="IDataTablesQueryable{T}"/> with appied global search from <see cref="DataTablesRequest{T}"/></returns>
         public static IDataTablesQueryable<T> GlobalSearch<T>(this IDataTablesQueryable<T> queryable)
         {
-            if (!String.IsNullOrEmpty(queryable.Request.GlobalSearchValue))
+            if (!string.IsNullOrEmpty(queryable.Request.GlobalSearchValue))
             {
                 // searchable columns
                 var columns = queryable.Request.Columns.Where(c => c.IsSearchable);
@@ -220,7 +220,10 @@ namespace DataTables.Queryable
                     {
                         var expr = c.GlobalSearchPredicate ?? BuildStringContainsPredicate<T>(c.PropertyName, queryable.Request.GlobalSearchValue, c.SearchCaseInsensitive);
                         if (expr == null)
+                        {
                             continue;
+                        }
+
                         predicate = predicate == null ?
                             PredicateBuilder.Create(expr) :
                             predicate.Or(expr);
@@ -242,7 +245,7 @@ namespace DataTables.Queryable
             // searchable columns
             var columns = queryable.Request.Columns.Where(c =>
                 c.IsSearchable &&
-                !String.IsNullOrEmpty(c.SearchValue));
+                !string.IsNullOrEmpty(c.SearchValue));
 
             if (columns.Any())
             {
@@ -380,7 +383,7 @@ namespace DataTables.Queryable
         /// <param name="query">Data type</param>
         /// <param name="propertyName">Property name</param>
         /// <param name="direction">Sorting direction</param>
-        /// <param name="caseInsensitive">If true, case insensitive ordering will be performed (with forced <see cref="String.ToLower()"/> conversion).</param>
+        /// <param name="caseInsensitive">If true, case insensitive ordering will be performed (with forced <see cref="string.ToLower()"/> conversion).</param>
         /// <param name="alreadyOrdered">Flag indicating the <see cref="IQueryable{T}"/> is already ordered.</param>
         /// <returns>Ordered <see cref="IQueryable{T}"/>.</returns>
         private static IQueryable<T> OrderBy<T>(this IQueryable<T> query, string propertyName, ListSortDirection direction, bool caseInsensitive, bool alreadyOrdered)
@@ -388,13 +391,22 @@ namespace DataTables.Queryable
             string methodName = null;
 
             if (direction == ListSortDirection.Ascending && !alreadyOrdered)
+            {
                 methodName = nameof(System.Linq.Queryable.OrderBy);
+            }
             else if (direction == ListSortDirection.Descending && !alreadyOrdered)
+            {
                 methodName = nameof(System.Linq.Queryable.OrderByDescending);
+            }
+
             if (direction == ListSortDirection.Ascending && alreadyOrdered)
+            {
                 methodName = nameof(System.Linq.Queryable.ThenBy);
+            }
             else if (direction == ListSortDirection.Descending && alreadyOrdered)
+            {
                 methodName = nameof(System.Linq.Queryable.ThenByDescending);
+            }
 
             var type = typeof(T);
             var parameterExp = Expression.Parameter(type, "e");

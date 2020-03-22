@@ -131,7 +131,10 @@ namespace FandaTabler.Controllers
             try
             {
                 if (!ModelState.IsValid)
+                {
                     return BadRequest();
+                }
+
                 var orgId = HttpContext.Session.Get<OrganizationDto>("CurrentOrg").Id;
                 model = await _service.SaveAsync(orgId, model);
                 return Ok(model); //Json(new { Success = true, Message = string.Empty }/*, JsonRequestBehavior.AllowGet*/);

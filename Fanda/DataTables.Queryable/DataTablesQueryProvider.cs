@@ -5,8 +5,8 @@ namespace DataTables.Queryable
 {
     internal class DataTablesQueryProvider<T> : IQueryProvider
     {
-        private IQueryProvider sourceProvider;
-        private DataTablesRequest<T> request;
+        private readonly IQueryProvider sourceProvider;
+        private readonly DataTablesRequest<T> request;
 
         internal DataTablesQueryProvider(IQueryProvider sourceProvider, DataTablesRequest<T> request)
         {

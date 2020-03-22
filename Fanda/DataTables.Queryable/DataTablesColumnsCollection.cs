@@ -54,7 +54,9 @@ namespace DataTables.Queryable
             {
                 var column = this.FirstOrDefault(c => c.PropertyName == columnName);
                 if (column == null)
+                {
                     throw new ArgumentException($"Column \"{columnName}\" not found", nameof(columnName));
+                }
 
                 return column;
             }
@@ -65,7 +67,9 @@ namespace DataTables.Queryable
             get
             {
                 if (columnIndex < 0 || columnIndex > base.Count)
+                {
                     throw new ArgumentException($"Column index \"{columnIndex}\" is out of range", nameof(columnIndex));
+                }
 
                 return base[columnIndex];
             }

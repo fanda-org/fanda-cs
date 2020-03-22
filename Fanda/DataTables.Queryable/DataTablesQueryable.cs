@@ -26,14 +26,14 @@ namespace DataTables.Queryable
     /// <typeparam name="T">Data type.</typeparam>
     internal class DataTablesQueryable<T> : IDataTablesQueryable<T>
     {
-        private IQueryable<T> sourceQueryable;
-        private DataTablesQueryProvider<T> sourceProvider;
-        private DataTablesRequest<T> request;
+        private readonly IQueryable<T> sourceQueryable;
+        private readonly DataTablesQueryProvider<T> sourceProvider;
+        private readonly DataTablesRequest<T> request;
 
         internal DataTablesQueryable(IQueryable<T> query, DataTablesRequest<T> request)
         {
-            this.sourceQueryable = query;
-            this.sourceProvider = new DataTablesQueryProvider<T>(query.Provider, request);
+            sourceQueryable = query;
+            sourceProvider = new DataTablesQueryProvider<T>(query.Provider, request);
             this.request = request;
         }
 

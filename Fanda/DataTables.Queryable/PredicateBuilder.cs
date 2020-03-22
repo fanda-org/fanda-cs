@@ -55,7 +55,7 @@ namespace DataTables.Queryable
         /// <summary>
         /// Combines the first expression with the second using the specified merge function.
         /// </summary>
-        static Expression<T> Compose<T>(this Expression<T> first, Expression<T> second, Func<Expression, Expression, Expression> merge)
+        private static Expression<T> Compose<T>(this Expression<T> first, Expression<T> second, Func<Expression, Expression, Expression> merge)
         {
             // zip parameters (map from parameters of second to parameters of first)
             var map = first.Parameters
@@ -71,9 +71,9 @@ namespace DataTables.Queryable
 
         private class ParameterRebinder : ExpressionVisitor
         {
-            readonly Dictionary<ParameterExpression, ParameterExpression> map;
+            private readonly Dictionary<ParameterExpression, ParameterExpression> map;
 
-            ParameterRebinder(Dictionary<ParameterExpression, ParameterExpression> map)
+            private ParameterRebinder(Dictionary<ParameterExpression, ParameterExpression> map)
             {
                 this.map = map ?? new Dictionary<ParameterExpression, ParameterExpression>();
             }
@@ -85,9 +85,8 @@ namespace DataTables.Queryable
 
             protected override Expression VisitParameter(ParameterExpression p)
             {
-                ParameterExpression replacement;
 
-                if (map.TryGetValue(p, out replacement))
+                if (map.TryGetValue(p, out ParameterExpression replacement))
                 {
                     p = replacement;
                 }

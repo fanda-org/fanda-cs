@@ -81,11 +81,15 @@ namespace FandaTabler.Controllers
         public async Task<IActionResult> Details(Guid id)
         {
             if (id == null || id == Guid.Empty)
+            {
                 return NotFound();
+            }
 
             var org = await _service.GetByIdAsync(id);
             if (org == null)
+            {
                 return NotFound();
+            }
 
             ViewBag.Mode = "Details";
             ViewBag.Readonly = true;
@@ -107,11 +111,15 @@ namespace FandaTabler.Controllers
         public async Task<IActionResult> Edit(Guid id)
         {
             if (id == null || id == Guid.Empty)
+            {
                 return NotFound();
+            }
 
             var org = await _service.GetByIdAsync(id);
             if (org == null)
+            {
                 return NotFound();
+            }
 
             //TempData.Set("PartyCategories", await GetPartyCategories(org.CategoryId));
             ViewBag.Mode = "Edit";
@@ -127,14 +135,20 @@ namespace FandaTabler.Controllers
             try
             {
                 if (model.Id == null || model.Id == Guid.Empty)
+                {
                     ViewBag.Mode = "Create";
+                }
                 else
+                {
                     ViewBag.Mode = "Edit";
+                }
 
                 ViewBag.Readonly = false;
 
                 if (!ModelState.IsValid)
+                {
                     return PartialView("_orgEdit", model); //View("Edit", model);
+                }
 
                 model.Contacts = model.Contacts
                     .Where(c => !c.IsDeleted)
@@ -144,19 +158,27 @@ namespace FandaTabler.Controllers
                 bool create = model.Id == null || model.Id == Guid.Empty;
                 await _service.SaveAsync(model);
                 if (create) // Create
+                {
                     return PartialView("_orgEdit", new OrganizationDto { Active = true });   //RedirectToAction(nameof(Create), new { contactType = model.PartyType });
+                }
                 else
+                {
                     return PartialView("_orgEdit");   //RedirectToAction(nameof(Index));
+                }
             }
             catch (Exception ex)
             {
                 if (ex.InnerException != null)
+                {
                     //if ((ex.InnerException as SqlException)?.Number == 2601)
                     //    ModelState.AddModelError("Error", "Code/Name already existst!");
                     //else
                     ModelState.AddModelError("Error", ex.InnerException.Message);
+                }
                 else
+                {
                     ModelState.AddModelError("Error", ex.Message);
+                }
 
                 return View("Edit", model);
             }
@@ -166,11 +188,15 @@ namespace FandaTabler.Controllers
         public async Task<IActionResult> Delete(Guid id)
         {
             if (id == null || id == Guid.Empty)
+            {
                 return NotFound();
+            }
 
             var org = await _service.GetByIdAsync(id);
             if (org == null)
+            {
                 return NotFound();
+            }
 
             ViewBag.Mode = "Delete";
             ViewBag.Readonly = true;

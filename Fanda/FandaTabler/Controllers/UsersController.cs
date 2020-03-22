@@ -132,9 +132,13 @@ namespace FandaTabler.Controllers
             if (!string.IsNullOrEmpty(userId) &&
                !string.IsNullOrEmpty(code) &&
                !string.IsNullOrEmpty(page))
+            {
                 return RedirectToAction(page);
+            }
             else
+            {
                 return View(new RegisterViewModel());
+            }
         }
 
         [AllowAnonymous]
@@ -142,7 +146,9 @@ namespace FandaTabler.Controllers
         public async Task<IActionResult> Register([FromForm]RegisterViewModel model)
         {
             if (!ModelState.IsValid)
+            {
                 return View(model);
+            }
 
             string token = Guid.NewGuid().ToString();
             string callbackUrl = Url.Page(

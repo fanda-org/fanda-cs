@@ -128,19 +128,23 @@ namespace DataTables.Queryable
         public DataTablesRequest(NameValueCollection query)
         {
             if (query == null)
+            {
                 throw new ArgumentNullException("Datatables query parameters collection is null.");
+            }
 
             if (!query.HasKeys())
+            {
                 throw new ArgumentException("Datatables query has no keys.");
+            }
 
             OriginalRequest = new NameValueCollection(query);
 
-            int start = Int32.TryParse(query["start"], out start) ? start : 0;
-            int length = Int32.TryParse(query["length"], out length) ? length : 15;
-            int draw = Int32.TryParse(query["draw"], out draw) ? draw : 0;
+            int start = int.TryParse(query["start"], out start) ? start : 0;
+            int length = int.TryParse(query["length"], out length) ? length : 15;
+            int draw = int.TryParse(query["draw"], out draw) ? draw : 0;
 
             string globalSearch = query["search[value]"];
-            bool searchRegex = Boolean.TryParse(query["search[regex]"], out searchRegex) ? searchRegex : false;
+            bool searchRegex = bool.TryParse(query["search[regex]"], out searchRegex) ? searchRegex : false;
 
             int pageNumber = start / length + 1;
 
@@ -156,11 +160,11 @@ namespace DataTables.Queryable
             foreach (var key in columnKeys)
             {
                 var colIndex = Regex.Match(key, columnPattern).Groups[1].Value;
-                bool orderable = Boolean.TryParse(query[$"columns[{colIndex}][orderable]"], out orderable) ? orderable : true;
-                bool searchable = Boolean.TryParse(query[$"columns[{colIndex}][searchable]"], out searchable) ? searchable : true;
-                bool colSearchRegex = Boolean.TryParse(query["search[regex]"], out colSearchRegex) ? colSearchRegex : false;
-                bool colCISearch = Boolean.TryParse(query[$"columns[{colIndex}][cisearch]"], out colCISearch) ? colCISearch : false;
-                bool colCIOrder = Boolean.TryParse(query[$"columns[{colIndex}][ciorder]"], out colCIOrder) ? colCIOrder : false;
+                bool orderable = bool.TryParse(query[$"columns[{colIndex}][orderable]"], out orderable) ? orderable : true;
+                bool searchable = bool.TryParse(query[$"columns[{colIndex}][searchable]"], out searchable) ? searchable : true;
+                bool colSearchRegex = bool.TryParse(query["search[regex]"], out colSearchRegex) ? colSearchRegex : false;
+                bool colCISearch = bool.TryParse(query[$"columns[{colIndex}][cisearch]"], out colCISearch) ? colCISearch : false;
+                bool colCIOrder = bool.TryParse(query[$"columns[{colIndex}][ciorder]"], out colCIOrder) ? colCIOrder : false;
 
                 string data = query[$"columns[{colIndex}][data]"];
                 string name = query[$"columns[{colIndex}][name]"];
@@ -204,7 +208,7 @@ namespace DataTables.Queryable
 
                 var column = new DataTablesColumn<T>()
                 {
-                    Index = Int32.Parse(colIndex),
+                    Index = int.Parse(colIndex),
                     PropertyName = propertyName,
                     SearchValue = searchValue,
                     SearchRegex = colSearchRegex,
@@ -224,10 +228,8 @@ namespace DataTables.Queryable
             {
                 var index = Regex.Match(key, orderPattern).Groups[1].Value;
 
-                int columnIndex = 0;
-                int sortingIndex = 0;
-                if (Int32.TryParse(index, out sortingIndex) &&
-                    Int32.TryParse(query[$"order[{index}][column]"], out columnIndex))
+                if (int.TryParse(index, out int sortingIndex) &&
+                    int.TryParse(query[$"order[{index}][column]"], out int columnIndex))
                 {
                     var column = Columns.FirstOrDefault(c => c.Index == columnIndex);
                     if (column != null)

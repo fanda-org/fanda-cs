@@ -121,13 +121,14 @@ namespace DataTables.Queryable
         /// </returns>
         internal NameValueCollection ToNameValueCollection()
         {
-            NameValueCollection model = new NameValueCollection();
-
-            model["draw"] = Draw.ToString();
-            model["start"] = Start.ToString();
-            model["length"] = Length.ToString();
-            model[$"search[value]"] = Search.Value;
-            model[$"search[regex]"] = Search.Regex.ToString();
+            NameValueCollection model = new NameValueCollection
+            {
+                ["draw"] = Draw.ToString(),
+                ["start"] = Start.ToString(),
+                ["length"] = Length.ToString(),
+                [$"search[value]"] = Search.Value,
+                [$"search[regex]"] = Search.Regex.ToString()
+            };
 
             for (int i = 0; i < Columns.Count; i++)
             {
