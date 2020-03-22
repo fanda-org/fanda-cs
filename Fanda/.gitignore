@@ -3,11 +3,11 @@
 ################################################################################
 
 *.suo
-.vs
-.vscode
-bin
-node_modules
-obj
+.vs/
+.vscode/
+bin/
+node_modules/
+obj/
 
 /Fanda/DataTables.Queryable/bin
 /Fanda/DataTables.Queryable/obj
