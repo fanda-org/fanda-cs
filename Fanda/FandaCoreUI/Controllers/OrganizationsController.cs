@@ -2,6 +2,7 @@
 using Fanda.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Threading.Tasks;
 
 namespace Fanda.Controllers
@@ -20,7 +21,7 @@ namespace Fanda.Controllers
         public IActionResult Index() => View(_service.GetAll() /*await _context.Organizations.ToListAsync()*/);
 
         // GET: Organizations/Details/5
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> Details(Guid id)
         {
             if (id == null)
             {
@@ -60,7 +61,7 @@ namespace Fanda.Controllers
         }
 
         // GET: Organizations/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(Guid id)
         {
             if (id == null)
             {
@@ -81,7 +82,8 @@ namespace Fanda.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("OrgId,OrgCode,OrgName,Description,RegdNum,PAN,TAN,GSTIN,Active,DateCreated,DateModified")] OrganizationDto dto)
+        public async Task<IActionResult> Edit(Guid id,
+            [Bind("OrgId,OrgCode,OrgName,Description,RegdNum,PAN,TAN,GSTIN,Active,DateCreated,DateModified")] OrganizationDto dto)
         {
             if (id != dto.Id)
             {
@@ -113,7 +115,7 @@ namespace Fanda.Controllers
         }
 
         // GET: Organizations/Delete/5
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             if (id == null)
             {
@@ -134,7 +136,7 @@ namespace Fanda.Controllers
         // POST: Organizations/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             //var organization = await _context.Organizations.FindAsync(id);
             //_context.Organizations.Remove(organization);
@@ -143,6 +145,6 @@ namespace Fanda.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool OrganizationExists(string id) => _service.ExistsById(id);
+        private bool OrganizationExists(Guid id) => _service.ExistsById(id);
     }
 }

@@ -41,7 +41,6 @@ namespace Fanda.Service.Seed
                     });
 
                     await CreateRolesAsync(org);
-                    //var loc = await CreateLocations(org);
                     await CreateUsersAsync(org);
                     await CreateUnitsAsync(org);
                     await CreatePartyCategoriesAsync(org);

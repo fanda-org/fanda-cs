@@ -14,11 +14,11 @@ namespace Fanda.Service
 {
     public interface IRoleService
     {
-        Task<List<RoleDto>> GetAllAsync(string orgId, bool? active);
-        Task<RoleDto> GetByIdAsync(string roleId);
-        Task SaveAsync(string orgId, RoleDto dto);
-        Task<bool> DeleteAsync(string roleId);
-        bool Exists(string orgId, string code);
+        Task<List<RoleDto>> GetAllAsync(Guid orgId, bool? active);
+        Task<RoleDto> GetByIdAsync(Guid roleId);
+        Task SaveAsync(Guid orgId, RoleDto dto);
+        Task<bool> DeleteAsync(Guid roleId);
+        bool Exists(Guid orgId, string code);
 
         string ErrorMessage { get; }
     }
@@ -38,9 +38,9 @@ namespace Fanda.Service
 
         public string ErrorMessage { get; private set; }
 
-        public async Task<List<RoleDto>> GetAllAsync(string orgId, bool? active)
+        public async Task<List<RoleDto>> GetAllAsync(Guid orgId, bool? active)
         {
-            if (string.IsNullOrEmpty(orgId))
+            if (orgId == null || orgId == Guid.Empty)
                 throw new ArgumentNullException("orgId", "Org id is missing");
 
             var roles = await _context.Roles
@@ -52,10 +52,10 @@ namespace Fanda.Service
             return roles;
         }
 
-        public async Task<RoleDto> GetByIdAsync(string roleId)
+        public async Task<RoleDto> GetByIdAsync(Guid roleId)
         {
             RoleDto role = null;
-            if (!string.IsNullOrEmpty(roleId))
+            if (roleId == null || roleId == Guid.Empty)
                 role = await _context.Roles
                     .ProjectTo<RoleDto>(_mapper.ConfigurationProvider)
                     .AsNoTracking()
@@ -66,9 +66,9 @@ namespace Fanda.Service
             throw new KeyNotFoundException("Role not found");
         }
 
-        public async Task SaveAsync(string orgId, RoleDto dto)
+        public async Task SaveAsync(Guid orgId, RoleDto dto)
         {
-            if (string.IsNullOrEmpty(orgId))
+            if (orgId == null || orgId == Guid.Empty)
                 throw new ArgumentNullException("orgId", "Org id is missing");
 
             //Role role = null;
@@ -77,7 +77,7 @@ namespace Fanda.Service
             var role = _mapper.Map<Role>(dto);
             if (role.Id == Guid.Empty)
             {
-                role.OrgId = new Guid(orgId);
+                role.OrgId = orgId;
                 role.DateCreated = DateTime.Now;
                 role.DateModified = null;
                 await _context.Roles.AddAsync(role);
@@ -92,10 +92,10 @@ namespace Fanda.Service
             //return dto;
         }
 
-        public async Task<bool> DeleteAsync(string roleId)
+        public async Task<bool> DeleteAsync(Guid roleId)
         {
             Role role = null;
-            if (!string.IsNullOrEmpty(roleId))
+            if (roleId == null || roleId == Guid.Empty)
                 role = await _context.Roles.FindAsync(roleId);
             if (role != null)
             {
@@ -105,16 +105,15 @@ namespace Fanda.Service
             throw new KeyNotFoundException("Role not found");
         }
 
-        public bool Exists(string orgId, string code)
+        public bool Exists(Guid orgId, string code)
         {
-            if (string.IsNullOrEmpty(orgId))
+            if (orgId == null || orgId == Guid.Empty)
                 throw new ArgumentNullException("orgId", "Org id is missing");
 
             if (string.IsNullOrEmpty(code))
                 throw new ArgumentNullException("code", "Role code is missing");
 
-            Guid guid = new Guid(orgId);
-            return _context.Roles.Any(r => r.Code == code && r.OrgId == guid);
+            return _context.Roles.Any(r => r.Code == code && r.OrgId == orgId);
         }
     }
 }

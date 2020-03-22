@@ -1,11 +1,12 @@
 using Fanda.Shared;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Fanda.Dto
 {
     public class AddressDto
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         [Display(Name = "Address Type")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Contact name should not be empty")]

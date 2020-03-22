@@ -13,12 +13,12 @@ namespace Fanda.Service
 {
     public interface IPartyCategoryService
     {
-        IQueryable<PartyCategoryDto> GetAll(string orgId);
-        Task<PartyCategoryDto> GetByIdAsync(string categoryId);
-        Task<PartyCategoryDto> SaveAsync(string orgId, PartyCategoryDto model);
-        Task<bool> DeleteAsync(string categoryId);
-        Task<bool> ChangeStatus(string categoryId, bool active);
-        bool Exists(string orgId, string categoryCode);
+        IQueryable<PartyCategoryDto> GetAll(Guid orgId);
+        Task<PartyCategoryDto> GetByIdAsync(Guid categoryId);
+        Task<PartyCategoryDto> SaveAsync(Guid orgId, PartyCategoryDto model);
+        Task<bool> DeleteAsync(Guid categoryId);
+        Task<bool> ChangeStatus(Guid categoryId, bool active);
+        bool Exists(Guid orgId, string categoryCode);
 
         string ErrorMessage { get; }
     }
@@ -36,22 +36,21 @@ namespace Fanda.Service
 
         public string ErrorMessage { get; private set; }
 
-        public IQueryable<PartyCategoryDto> GetAll(string orgId /*, bool? active*/)
+        public IQueryable<PartyCategoryDto> GetAll(Guid orgId /*, bool? active*/)
         {
-            if (string.IsNullOrEmpty(orgId)/*orgId == null || orgId == Guid.Empty*/)
+            if (orgId == null || orgId == Guid.Empty)
                 throw new ArgumentNullException("orgId", "Org id is missing");
 
-            Guid guid = new Guid(orgId);
             var categories = _context.PartyCategories
                 //.Where(p => p.Active == ((active == null) ? p.Active : active))
                 .AsNoTracking()
-                .Where(p => p.OrgId == guid)
+                .Where(p => p.OrgId == orgId)
                 .ProjectTo<PartyCategoryDto>(_mapper.ConfigurationProvider);
 
             return categories;
         }
 
-        public async Task<PartyCategoryDto> GetByIdAsync(string categoryId)
+        public async Task<PartyCategoryDto> GetByIdAsync(Guid categoryId)
         {
             var category = await _context.PartyCategories
                 .AsNoTracking()
@@ -63,19 +62,19 @@ namespace Fanda.Service
             throw new KeyNotFoundException("Party category not found");
         }
 
-        public async Task<PartyCategoryDto> SaveAsync(string orgId, PartyCategoryDto model)
+        public async Task<PartyCategoryDto> SaveAsync(Guid orgId, PartyCategoryDto model)
         {
-            if (string.IsNullOrEmpty(orgId)/*orgId == null || orgId == Guid.Empty*/)
+            if (orgId == null || orgId == Guid.Empty)
                 throw new ArgumentNullException("orgId", "Org id is missing");
 
             var category = _mapper.Map<PartyCategory>(model);
             category.Code = category.Code.ToUpper();
-            category.OrgId = new Guid(orgId);
+            category.OrgId = orgId;
             if (category.Id == Guid.Empty)
             {
                 category.DateCreated = DateTime.Now;
                 category.DateModified = null;
-                _context.PartyCategories.Add(category);
+                await _context.PartyCategories.AddAsync(category);
             }
             else
             {
@@ -87,14 +86,13 @@ namespace Fanda.Service
             return _mapper.Map<PartyCategoryDto>(category); //categoryVM;
         }
 
-        public async Task<bool> DeleteAsync(string categoryId)
+        public async Task<bool> DeleteAsync(Guid categoryId)
         {
-            if (string.IsNullOrEmpty(categoryId))
+            if (categoryId == null || categoryId == Guid.Empty)
                 throw new ArgumentNullException("categoryId", "Category id is missing");
 
-            Guid guid = new Guid(categoryId);
             var category = await _context.PartyCategories
-                .FindAsync(guid);
+                .FindAsync(categoryId);
             if (category != null)
             {
                 _context.PartyCategories.Remove(category);
@@ -104,27 +102,24 @@ namespace Fanda.Service
             throw new KeyNotFoundException("Party category not found");
         }
 
-        public async Task<bool> ChangeStatus(string categoryId, bool active)
+        public async Task<bool> ChangeStatus(Guid categoryId, bool active)
         {
-            if (string.IsNullOrEmpty(categoryId))
+            if (categoryId == null || categoryId == Guid.Empty)
                 throw new ArgumentNullException("categoryId", "Category id is missing");
 
-            Guid guid = new Guid(categoryId);
             var category = await _context.PartyCategories
-                .FindAsync(guid);
+                .FindAsync(categoryId);
             if (category != null)
             {
                 category.Active = active;
+                _context.PartyCategories.Update(category);
                 await _context.SaveChangesAsync();
                 return true;
             }
             throw new KeyNotFoundException("Party category not found");
         }
 
-        public bool Exists(string orgId, string categoryCode)
-        {
-            Guid orgGuid = new Guid(orgId);
-            return _context.PartyCategories.Any(pc => pc.Code == categoryCode && pc.OrgId == orgGuid);
-        }
+        public bool Exists(Guid orgId, string categoryCode) => _context.PartyCategories
+            .Any(pc => pc.Code == categoryCode && pc.OrgId == orgId);
     }
 }

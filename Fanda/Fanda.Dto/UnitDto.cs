@@ -4,7 +4,7 @@ namespace Fanda.Dto
 {
     public class UnitDto
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
         public bool Active { get; set; }

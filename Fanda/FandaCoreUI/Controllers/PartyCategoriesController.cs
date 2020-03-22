@@ -26,12 +26,15 @@ namespace Fanda.Controllers
         [Produces("application/json")]
         public async Task<JsonResult> GetAll()
         {
-            var orgId = HttpContext.Session.Get<OrganizationDto>("DemoOrg").Id.ToString();
+            var org = HttpContext.Session.Get<OrganizationDto>("DemoOrg");
+            if (org == null)
+                return null;
+
             var request = new DataTablesRequest<PartyCategoryDto>(
                 Request.QueryString.Value
                 );
             var result = await _service
-                .GetAll(orgId)
+                .GetAll(org.Id)
                 .ToPagedListAsync(request);
             //var dt = JsonDataTable(result, request.Draw); //result.JsonDataTable(request.Draw);
             //return dt;
@@ -95,9 +98,9 @@ namespace Fanda.Controllers
         }
 
         // GET: PartyCategories/Details/5
-        public async Task<ActionResult> Details(string id)
+        public async Task<ActionResult> Details(Guid id)
         {
-            if (string.IsNullOrEmpty(id))
+            if (id == null || id == Guid.Empty)
                 return NotFound();
 
             var cat = await _service.GetByIdAsync(id);
@@ -119,9 +122,9 @@ namespace Fanda.Controllers
         }
 
         // GET: PartyCategories/Edit/5
-        public async Task<ActionResult> Edit(string id)
+        public async Task<ActionResult> Edit(Guid id)
         {
-            if (string.IsNullOrEmpty(id))
+            if (id == null || id == Guid.Empty)
                 return NotFound();
 
             var party = await _service.GetByIdAsync(id);
@@ -140,9 +143,12 @@ namespace Fanda.Controllers
         {
             try
             {
-                var orgId = HttpContext.Session.Get<OrganizationDto>("DemoOrg").Id.ToString();
-                bool create = string.IsNullOrEmpty(model.Id);
-                await _service.SaveAsync(orgId, model);
+                var org = HttpContext.Session.Get<OrganizationDto>("DemoOrg");
+                if (org == null)
+                    return null;
+
+                bool create = model.Id == null || model.Id == Guid.Empty;
+                await _service.SaveAsync(org.Id, model);
                 if (create) // Create
                     return RedirectToAction(nameof(Create));
                 else
@@ -158,7 +164,7 @@ namespace Fanda.Controllers
                 else
                     ModelState.AddModelError("Error", ex.Message);
 
-                if (string.IsNullOrEmpty(model.Id))
+                if (model.Id == null || model.Id == Guid.Empty)
                     ViewBag.Mode = "Create";
                 else
                     ViewBag.Mode = "Edit";
@@ -169,9 +175,9 @@ namespace Fanda.Controllers
 
         [HttpGet]
         // GET: PartyCategories/Delete/5
-        public async Task<ActionResult> Delete(string id)
+        public async Task<ActionResult> Delete(Guid id)
         {
-            if (string.IsNullOrEmpty(id))
+            if (id == null || id == Guid.Empty)
                 return NotFound();
 
             var cat = await _service.GetByIdAsync(id);
@@ -186,7 +192,7 @@ namespace Fanda.Controllers
         // POST: PartyCategories/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(string id)
+        public async Task<ActionResult> DeleteConfirmed(Guid id)
         {
             try
             {

@@ -13,7 +13,7 @@ namespace Fanda.Dto
         }
 
         [Required]
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         [StringLength(16)]
         public string OrgCode { get; set; }

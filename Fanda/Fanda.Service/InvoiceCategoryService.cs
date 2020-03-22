@@ -13,13 +13,13 @@ namespace Fanda.Service
 {
     public interface IInvoiceCategoryService
     {
-        Task<List<InvoiceCategoryDto>> GetAllAsync(string orgId, bool? active);
+        Task<List<InvoiceCategoryDto>> GetAllAsync(Guid orgId, bool? active);
 
-        Task<InvoiceCategoryDto> GetByIdAsync(string id);
+        Task<InvoiceCategoryDto> GetByIdAsync(Guid id);
 
-        Task<InvoiceCategoryDto> SaveAsync(string orgId, InvoiceCategoryDto dto);
+        Task<InvoiceCategoryDto> SaveAsync(Guid orgId, InvoiceCategoryDto dto);
 
-        Task<bool> DeleteAsync(string id);
+        Task<bool> DeleteAsync(Guid id);
 
         string ErrorMessage { get; }
     }
@@ -37,9 +37,9 @@ namespace Fanda.Service
 
         public string ErrorMessage { get; private set; }
 
-        public async Task<List<InvoiceCategoryDto>> GetAllAsync(string orgId, bool? active)
+        public async Task<List<InvoiceCategoryDto>> GetAllAsync(Guid orgId, bool? active)
         {
-            if (string.IsNullOrEmpty(orgId))
+            if (orgId == null || orgId == Guid.Empty)
                 throw new ArgumentNullException("orgId", "Org id is missing");
 
             var categories = await _context.InvoiceCategories
@@ -51,7 +51,7 @@ namespace Fanda.Service
             return categories;
         }
 
-        public async Task<InvoiceCategoryDto> GetByIdAsync(string id)
+        public async Task<InvoiceCategoryDto> GetByIdAsync(Guid id)
         {
             var category = await _context.InvoiceCategories
                 .ProjectTo<InvoiceCategoryDto>(_mapper.ConfigurationProvider)
@@ -64,22 +64,22 @@ namespace Fanda.Service
             throw new KeyNotFoundException("Invoice category not found");
         }
 
-        public async Task<InvoiceCategoryDto> SaveAsync(string orgId, InvoiceCategoryDto dto)
+        public async Task<InvoiceCategoryDto> SaveAsync(Guid orgId, InvoiceCategoryDto dto)
         {
-            if (string.IsNullOrEmpty(orgId))
+            if (orgId == null || orgId == Guid.Empty)
                 throw new ArgumentNullException("orgId", "Org id is missing");
 
             var category = _mapper.Map<InvoiceCategory>(dto);
             if (category.Id == Guid.Empty)
             {
-                category.OrgId = new Guid(orgId);
+                category.OrgId = orgId;
                 category.DateCreated = DateTime.Now;
                 category.DateModified = null;
-                _context.InvoiceCategories.Add(category);
+                await _context.InvoiceCategories.AddAsync(category);
             }
             else
             {
-                category.OrgId = new Guid(orgId);
+                category.OrgId = orgId;
                 category.DateModified = DateTime.Now;
                 _context.InvoiceCategories.Update(category);
             }
@@ -88,7 +88,7 @@ namespace Fanda.Service
             return dto;
         }
 
-        public async Task<bool> DeleteAsync(string id)
+        public async Task<bool> DeleteAsync(Guid id)
         {
             var category = await _context.InvoiceCategories
                 .FindAsync(id);

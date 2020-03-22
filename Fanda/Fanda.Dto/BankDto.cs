@@ -1,11 +1,12 @@
 using Fanda.Shared;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Fanda.Dto
 {
     public class BankDto
     {
-        public string LedgerId { get; set; }
+        public Guid LedgerId { get; set; }
 
         [Display(Name = "Account No.")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Account No. is required")]
@@ -37,9 +38,6 @@ namespace Fanda.Dto
         public AddressDto Address { get; set; }
 
         public bool IsDefault { get; set; }
-
-        //public AccountOwner Owner { get; set; }
-        //public Guid? OwnerId { get; set; }
 
         //public bool IsDeleted { get; set; }
         //public int Index { get; set; }

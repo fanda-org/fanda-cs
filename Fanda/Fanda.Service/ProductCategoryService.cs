@@ -13,13 +13,13 @@ namespace Fanda.Service
 {
     public interface IProductCategoryService
     {
-        Task<List<ProductCategoryDto>> GetAllAsync(string orgId, bool? active);
+        Task<List<ProductCategoryDto>> GetAllAsync(Guid orgId, bool? active);
 
-        Task<ProductCategoryDto> GetByIdAsync(string categoryId);
+        Task<ProductCategoryDto> GetByIdAsync(Guid categoryId);
 
-        Task<ProductCategoryDto> SaveAsync(string orgId, ProductCategoryDto dto);
+        Task<ProductCategoryDto> SaveAsync(Guid orgId, ProductCategoryDto dto);
 
-        Task<bool> DeleteAsync(string categoryId);
+        Task<bool> DeleteAsync(Guid categoryId);
 
         string ErrorMessage { get; }
     }
@@ -37,9 +37,9 @@ namespace Fanda.Service
 
         public string ErrorMessage { get; private set; }
 
-        public async Task<List<ProductCategoryDto>> GetAllAsync(string orgId, bool? active)
+        public async Task<List<ProductCategoryDto>> GetAllAsync(Guid orgId, bool? active)
         {
-            if (string.IsNullOrEmpty(orgId))
+            if (orgId == null || orgId == Guid.Empty)
                 throw new ArgumentNullException("orgId", "Org id is missing");
 
             var categories = await _context.ProductCategories
@@ -51,7 +51,7 @@ namespace Fanda.Service
             return categories;
         }
 
-        public async Task<ProductCategoryDto> GetByIdAsync(string categoryId)
+        public async Task<ProductCategoryDto> GetByIdAsync(Guid categoryId)
         {
             var category = await _context.ProductCategories
                 .ProjectTo<ProductCategoryDto>(_mapper.ConfigurationProvider)
@@ -64,22 +64,21 @@ namespace Fanda.Service
             throw new KeyNotFoundException("Product category not found");
         }
 
-        public async Task<ProductCategoryDto> SaveAsync(string orgId, ProductCategoryDto categoryVM)
+        public async Task<ProductCategoryDto> SaveAsync(Guid orgId, ProductCategoryDto categoryVM)
         {
-            if (string.IsNullOrEmpty(orgId))
+            if (orgId == null || orgId == Guid.Empty)
                 throw new ArgumentNullException("orgId", "Org id is missing");
 
             var category = _mapper.Map<ProductCategory>(categoryVM);
             if (category.Id == Guid.Empty)
             {
-                category.OrgId = new Guid(orgId);
+                category.OrgId = orgId;
                 category.DateCreated = DateTime.Now;
                 category.DateModified = null;
-                _context.ProductCategories.Add(category);
+                await _context.ProductCategories.AddAsync(category);
             }
             else
             {
-                category.OrgId = new Guid(orgId);
                 category.DateModified = DateTime.Now;
                 _context.ProductCategories.Update(category);
             }
@@ -88,7 +87,7 @@ namespace Fanda.Service
             return categoryVM;
         }
 
-        public async Task<bool> DeleteAsync(string categoryId)
+        public async Task<bool> DeleteAsync(Guid categoryId)
         {
             var category = await _context.ProductCategories
                 .FindAsync(categoryId);

@@ -6,7 +6,7 @@ namespace Fanda.Dto
 {
     public class UserDto
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         [StringLength(16)]
         public string UserName { get; set; }

@@ -2,7 +2,6 @@
 using Fanda.Data;
 using Fanda.Dto;
 using Fanda.Dto.ViewModels;
-using System;
 using System.Linq;
 
 namespace Fanda.Service.AutoMapperProfile
@@ -105,9 +104,9 @@ namespace Fanda.Service.AutoMapperProfile
                       {
                           return orgVM.Contacts?.Select(c => new OrgContact
                           {
-                              OrgId = new Guid(orgVM.Id),
+                              OrgId = orgVM.Id,
                               Organization = org,
-                              ContactId = new Guid(c.Id),
+                              ContactId = c.Id,
                               Contact = context.Mapper.Map<ContactDto, Contact>(c)
                           }).ToList();
                       }))
@@ -116,9 +115,9 @@ namespace Fanda.Service.AutoMapperProfile
                     {
                         return orgVM.Addresses?.Select(a => new OrgAddress
                         {
-                            OrgId = new Guid(orgVM.Id),
+                            OrgId = orgVM.Id,
                             Organization = org,
-                            AddressId = new Guid(a.Id),
+                            AddressId = a.Id,
                             Address = context.Mapper.Map<AddressDto, Address>(a)
                         }).ToList();
                     }));
@@ -146,9 +145,9 @@ namespace Fanda.Service.AutoMapperProfile
                     {
                         return partyVM.Contacts?.Select(c => new PartyContact
                         {
-                            PartyId = new Guid(partyVM.LedgerId),
+                            PartyId = partyVM.LedgerId,
                             Party = party,
-                            ContactId = new Guid(c.Id),
+                            ContactId = c.Id,
                             Contact = context.Mapper.Map<ContactDto, Contact>(c)
                         }).ToList();
                     }))
@@ -157,9 +156,9 @@ namespace Fanda.Service.AutoMapperProfile
                     {
                         return partyVM.Addresses?.Select(a => new PartyAddress
                         {
-                            PartyId = new Guid(partyVM.LedgerId),
+                            PartyId = partyVM.LedgerId,
                             Party = party,
-                            AddressId = new Guid(a.Id),
+                            AddressId = a.Id,
                             Address = context.Mapper.Map<AddressDto, Address>(a)
                         }).ToList();
                     }));

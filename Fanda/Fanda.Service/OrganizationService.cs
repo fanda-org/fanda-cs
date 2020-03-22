@@ -14,13 +14,13 @@ namespace Fanda.Service
     public interface IOrganizationService
     {
         IQueryable<OrganizationDto> GetAll();
-        Task<OrganizationDto> GetByIdAsync(string orgId, bool includes = false);
-        //Task<OrganizationDto> GetByCodeAsync(string orgCode, bool includes = false);
+        Task<OrganizationDto> GetByIdAsync(Guid orgId, bool includes = false);
+        //Task<OrganizationDto> GetByCodeAsync(Guid orgCode, bool includes = false);
         Task<OrganizationDto> SaveAsync(OrganizationDto dto);
-        Task<bool> DeleteAsync(string orgId);
-        bool ExistsById(string id);
-        bool ExistsByCode(string code);
-        Task<bool> ChangeStatus(string orgId, bool active);
+        Task<bool> DeleteAsync(Guid orgId);
+        bool ExistsById(Guid orgId);
+        bool ExistsByCode(string orgCode);
+        Task<bool> ChangeStatus(Guid orgId, bool active);
         string ErrorMessage { get; }
     }
 
@@ -45,9 +45,9 @@ namespace Fanda.Service
             return orgs;
         }
 
-        public async Task<OrganizationDto> GetByIdAsync(string orgId, bool includes = false)
+        public async Task<OrganizationDto> GetByIdAsync(Guid orgId, bool includes = false)
         {
-            if (string.IsNullOrEmpty(orgId))
+            if (orgId == null || orgId == Guid.Empty)
                 throw new ArgumentNullException("orgId", "Org id is missing");
 
             var org = await _context.Organizations
@@ -60,16 +60,15 @@ namespace Fanda.Service
             if (org != null && !includes)
                 return org;
 
-            Guid guid = new Guid(orgId);
             org.Contacts = await _context.Organizations
                 .AsNoTracking()
-                .Where(m => m.Id == guid)
+                .Where(m => m.Id == orgId)
                 .SelectMany(oc => oc.OrgContacts.Select(c => c.Contact))
                 .ProjectTo<ContactDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
             org.Addresses = await _context.Organizations
                 .AsNoTracking()
-                .Where(m => m.Id == guid)
+                .Where(m => m.Id == orgId)
                 .SelectMany(oa => oa.OrgAddresses.Select(a => a.Address))
                 .ProjectTo<AddressDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
@@ -115,7 +114,7 @@ namespace Fanda.Service
             {
                 org.DateCreated = DateTime.Now;
                 org.DateModified = null;
-                _context.Organizations.Add(org);
+                await _context.Organizations.AddAsync(org);
             }
             else
             {
@@ -128,7 +127,7 @@ namespace Fanda.Service
                 {
                     org.DateCreated = DateTime.Now;
                     org.DateModified = null;
-                    _context.Organizations.Add(org);
+                    await _context.Organizations.AddAsync(org);
                 }
                 else
                 {
@@ -163,7 +162,7 @@ namespace Fanda.Service
                         else
                         {
                             //_context.Set<Contact>().Add(pair.curr);
-                            _context.Set<OrgContact>().Add(new OrgContact
+                            await _context.Set<OrgContact>().AddAsync(new OrgContact
                             {
                                 OrgId = org.Id,
                                 Organization = org,
@@ -187,7 +186,7 @@ namespace Fanda.Service
                         else
                         {
                             //_context.Set<Address>().Add(pair.curr);
-                            _context.Set<OrgAddress>().Add(new OrgAddress
+                            await _context.Set<OrgAddress>().AddAsync(new OrgAddress
                             {
                                 OrgId = org.Id,
                                 Organization = org,
@@ -205,16 +204,15 @@ namespace Fanda.Service
             return orgVM;
         }
 
-        public async Task<bool> DeleteAsync(string orgId)
+        public async Task<bool> DeleteAsync(Guid orgId)
         {
-            if (string.IsNullOrEmpty(orgId))
+            if (orgId == null || orgId == Guid.Empty)
                 throw new ArgumentNullException("orgId", "Org id is missing");
 
-            Guid guid = new Guid(orgId);
             var org = await _context.Organizations
                 .Include(o => o.OrgContacts).ThenInclude(oc => oc.Contact)
                 .Include(o => o.OrgAddresses).ThenInclude(oa => oa.Address)
-                .SingleOrDefaultAsync(o => o.Id == guid);
+                .SingleOrDefaultAsync(o => o.Id == orgId);
             if (org != null)
             {
                 foreach (var orgContact in org.OrgContacts)
@@ -228,25 +226,21 @@ namespace Fanda.Service
             throw new KeyNotFoundException("Organization not found");
         }
 
-        public bool ExistsById(string id)
-        {
-            Guid guid = new Guid(id);
-            return _context.Organizations.Any(o => o.Id == guid);
-        }
+        public bool ExistsById(Guid orgId) => _context.Organizations.Any(o => o.Id == orgId);
 
-        public bool ExistsByCode(string code) => _context.Organizations.Any(o => o.OrgCode == code);
+        public bool ExistsByCode(string orgCode) => _context.Organizations.Any(o => o.OrgCode == orgCode);
 
-        public async Task<bool> ChangeStatus(string orgId, bool active)
+        public async Task<bool> ChangeStatus(Guid orgId, bool active)
         {
-            if (string.IsNullOrEmpty(orgId))
+            if (orgId == null || orgId == Guid.Empty)
                 throw new ArgumentNullException("orgId", "Org id is missing");
 
-            Guid guid = new Guid(orgId);
             var org = await _context.Organizations
-                .FindAsync(guid);
+                .FindAsync(orgId);
             if (org != null)
             {
                 org.Active = active;
+                _context.Organizations.Update(org);
                 await _context.SaveChangesAsync();
                 return true;
             }

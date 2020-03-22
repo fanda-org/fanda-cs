@@ -27,7 +27,7 @@ namespace Fanda.Data
         public Guid CategoryId { get; set; }
 
         public virtual PartyCategory Category { get; set; }
-        public virtual Ledger Ledger { get; set; }        
+        public virtual Ledger Ledger { get; set; }
         public virtual ICollection<PartyContact> PartyContacts { get; set; }
         public virtual ICollection<PartyAddress> PartyAddresses { get; set; }
         public virtual ICollection<Invoice> Invoices { get; set; }

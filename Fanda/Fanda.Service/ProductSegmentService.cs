@@ -13,13 +13,13 @@ namespace Fanda.Service
 {
     public interface IProductSegmentService
     {
-        Task<List<ProductSegmentDto>> GetAllAsync(string orgId, bool? active);
+        Task<List<ProductSegmentDto>> GetAllAsync(Guid orgId, bool? active);
 
-        Task<ProductSegmentDto> GetByIdAsync(string segmentId);
+        Task<ProductSegmentDto> GetByIdAsync(Guid segmentId);
 
-        Task<ProductSegmentDto> SaveAsync(string orgId, ProductSegmentDto dto);
+        Task<ProductSegmentDto> SaveAsync(Guid orgId, ProductSegmentDto dto);
 
-        Task<bool> DeleteAsync(string segmentId);
+        Task<bool> DeleteAsync(Guid segmentId);
 
         string ErrorMessage { get; }
     }
@@ -37,9 +37,9 @@ namespace Fanda.Service
 
         public string ErrorMessage { get; private set; }
 
-        public async Task<List<ProductSegmentDto>> GetAllAsync(string orgId, bool? active)
+        public async Task<List<ProductSegmentDto>> GetAllAsync(Guid orgId, bool? active)
         {
-            if (string.IsNullOrEmpty(orgId))
+            if (orgId == null || orgId == Guid.Empty)
                 throw new ArgumentNullException("orgId", "Org id is missing");
 
             var segments = await _context.ProductSegments
@@ -51,7 +51,7 @@ namespace Fanda.Service
             return segments;
         }
 
-        public async Task<ProductSegmentDto> GetByIdAsync(string segmentId)
+        public async Task<ProductSegmentDto> GetByIdAsync(Guid segmentId)
         {
             var segment = await _context.ProductSegments
                 .ProjectTo<ProductSegmentDto>(_mapper.ConfigurationProvider)
@@ -64,18 +64,18 @@ namespace Fanda.Service
             throw new KeyNotFoundException("Product segment not found");
         }
 
-        public async Task<ProductSegmentDto> SaveAsync(string orgId, ProductSegmentDto dto)
+        public async Task<ProductSegmentDto> SaveAsync(Guid orgId, ProductSegmentDto dto)
         {
-            if (string.IsNullOrEmpty(orgId))
+            if (orgId == null || orgId == Guid.Empty)
                 throw new ArgumentNullException("orgId", "Org id is missing");
 
             var segment = _mapper.Map<ProductSegment>(dto);
             if (segment.Id == Guid.Empty)
             {
-                segment.OrgId = new Guid(orgId);
+                segment.OrgId = orgId;
                 segment.DateCreated = DateTime.Now;
                 segment.DateModified = null;
-                _context.ProductSegments.Add(segment);
+                await _context.ProductSegments.AddAsync(segment);
             }
             else
             {
@@ -87,7 +87,7 @@ namespace Fanda.Service
             return dto;
         }
 
-        public async Task<bool> DeleteAsync(string segmentId)
+        public async Task<bool> DeleteAsync(Guid segmentId)
         {
             var segment = await _context.ProductSegments
                 .FindAsync(segmentId);

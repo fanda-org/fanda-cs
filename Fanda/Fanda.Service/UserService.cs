@@ -20,15 +20,15 @@ namespace Fanda.Service
         Task<UserDto> LoginAsync(LoginViewModel model);
         Task<UserDto> RegisterAsync(RegisterViewModel model, string callbackUrl);
 
-        Task<List<UserDto>> GetAllAsync(string orgId/*, bool? active*/);
-        Task<UserDto> GetByIdAsync(string userId);
+        Task<List<UserDto>> GetAllAsync(Guid orgId/*, bool? active*/);
+        Task<UserDto> GetByIdAsync(Guid userId);
         Task<UserDto> GetByNameAsync(string userName);
         Task<UserDto> SaveAsync(UserDto userVM, string password);
-        Task<bool> DeleteAsync(string orgId, string userId);
+        Task<bool> DeleteAsync(Guid orgId, Guid userId);
         bool Exists(string userName);
 
-        Task AddToOrgAsync(string orgId, string userId);
-        Task AddToRoleAsync(string orgId, string userId, string roleName);
+        Task AddToOrgAsync(Guid orgId, Guid userId);
+        Task AddToRoleAsync(Guid orgId, Guid userId, string roleName);
 
         string ErrorMessage { get; }
     }
@@ -102,15 +102,15 @@ namespace Fanda.Service
             return userModel;
         }
 
-        public async Task<List<UserDto>> GetAllAsync(string orgId/*, bool? active*/)
+        public async Task<List<UserDto>> GetAllAsync(Guid orgId/*, bool? active*/)
         {
             IQueryable<UserDto> userQry;
-            if (string.IsNullOrEmpty(orgId))
+            if (orgId == null || orgId == Guid.Empty)
                 userQry = _context.Users
                     .ProjectTo<UserDto>(_mapper.ConfigurationProvider);
             else
                 userQry = _context.Organizations //_userManager.Users
-                    .Where(o => o.Id == new Guid(orgId))
+                    .Where(o => o.Id == orgId)
                     .SelectMany(o => o.OrgUsers.Select(ou => ou.User))
                     .ProjectTo<UserDto>(_mapper.ConfigurationProvider);
             var userList = await userQry
@@ -121,10 +121,10 @@ namespace Fanda.Service
             return userList;
         }
 
-        public async Task<UserDto> GetByIdAsync(string userId)
+        public async Task<UserDto> GetByIdAsync(Guid userId)
         {
             UserDto user = null;
-            if (!string.IsNullOrEmpty(userId))
+            if (userId == null || userId == Guid.Empty)
             {
                 user = await _context.Users
                     .AsNoTracking()
@@ -155,7 +155,7 @@ namespace Fanda.Service
             PasswordStorage.CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
 
             User user = null;
-            if (!string.IsNullOrEmpty(dto.Id))
+            if (dto.Id != null && dto.Id != Guid.Empty)
                 user = await _context.Users.FindAsync(dto.Id);
 
             //var user = _mapper.Map<User>(dto);
@@ -193,10 +193,10 @@ namespace Fanda.Service
             return _mapper.Map<UserDto>(user);
         }
 
-        public async Task<bool> DeleteAsync(string orgId, string userId)
+        public async Task<bool> DeleteAsync(Guid orgId, Guid userId)
         {
             OrgUser orgUser = null;
-            if (!string.IsNullOrEmpty(orgId) && !string.IsNullOrEmpty(userId))
+            if (orgId != null && orgId != Guid.Empty && userId != null && userId != Guid.Empty)
                 orgUser = await _context.Set<OrgUser>().FindAsync(orgId, userId);
             if (orgUser != null)
             {
@@ -205,7 +205,7 @@ namespace Fanda.Service
             }
 
             User user = null;
-            if (!string.IsNullOrEmpty(userId))
+            if (userId != null && userId != Guid.Empty)
                 user = await _context.Users.FindAsync(userId);
             if (user != null)
             {
@@ -217,21 +217,18 @@ namespace Fanda.Service
 
         public bool Exists(string userName) => _context.Users.Any(u => u.UserName == userName);
 
-        public async Task AddToOrgAsync(string orgId, string userId)
+        public async Task AddToOrgAsync(Guid orgId, Guid userId)
         {
             try
             {
-                var orgGuid = new Guid(orgId);
-                var userGuid = new Guid(userId);
-
                 var orgUserDb = await _context.Set<OrgUser>()
-                    .FirstOrDefaultAsync(ou => ou.OrgId == orgGuid && ou.UserId == userGuid);
+                    .FirstOrDefaultAsync(ou => ou.OrgId == orgId && ou.UserId == userId);
                 if (orgUserDb == null)
                 {
                     orgUserDb = new OrgUser
                     {
-                        OrgId = orgGuid,
-                        UserId = userGuid
+                        OrgId = orgId,
+                        UserId = userId
                     };
                     await _context.Set<OrgUser>().AddAsync(orgUserDb);
                     await _context.SaveChangesAsync();
@@ -243,22 +240,19 @@ namespace Fanda.Service
             }
         }
 
-        public async Task AddToRoleAsync(string orgId, string userId, string roleName)
+        public async Task AddToRoleAsync(Guid orgId, Guid userId, string roleName)
         {
             try
             {
-                Guid orgGuid = new Guid(orgId);
-                Guid userGuid = new Guid(userId);
-
                 var role = await _context.Roles
                     .AsNoTracking()
-                    .FirstOrDefaultAsync(r => r.Name == roleName && r.OrgId == orgGuid);
+                    .FirstOrDefaultAsync(r => r.Name == roleName && r.OrgId == orgId);
                 if (role != null)
                 {
                     await _context.Set<OrgUserRole>().AddAsync(new OrgUserRole
                     {
-                        OrgId = orgGuid,
-                        UserId = userGuid,
+                        OrgId = orgId,
+                        UserId = userId,
                         RoleId = role.Id
                     });
                     await _context.SaveChangesAsync();

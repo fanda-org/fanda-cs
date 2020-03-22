@@ -13,13 +13,13 @@ namespace Fanda.Service
 {
     public interface IProductService
     {
-        Task<List<ProductDto>> GetAllAsync(string orgId, bool? active);
+        Task<List<ProductDto>> GetAllAsync(Guid orgId, bool? active);
 
-        Task<ProductDto> GetByIdAsync(string productId);
+        Task<ProductDto> GetByIdAsync(Guid productId);
 
-        Task<ProductDto> SaveAsync(string orgId, ProductDto dto);
+        Task<ProductDto> SaveAsync(Guid orgId, ProductDto dto);
 
-        Task<bool> DeleteAsync(string productId);
+        Task<bool> DeleteAsync(Guid productId);
 
         string ErrorMessage { get; }
     }
@@ -37,9 +37,9 @@ namespace Fanda.Service
 
         public string ErrorMessage { get; private set; }
 
-        public async Task<List<ProductDto>> GetAllAsync(string orgId, bool? active)
+        public async Task<List<ProductDto>> GetAllAsync(Guid orgId, bool? active)
         {
-            if (string.IsNullOrEmpty(orgId))
+            if (orgId == null || orgId == Guid.Empty)
                 throw new ArgumentNullException("orgId", "Org id is missing");
 
             var products = await _context.Products
@@ -51,7 +51,7 @@ namespace Fanda.Service
             return _mapper.Map<List<ProductDto>>(products);
         }
 
-        public async Task<ProductDto> GetByIdAsync(string productId)
+        public async Task<ProductDto> GetByIdAsync(Guid productId)
         {
             var product = await _context.Products
                 //.Include(p => p.ProductIngredients)
@@ -66,18 +66,18 @@ namespace Fanda.Service
             throw new KeyNotFoundException("Product not found");
         }
 
-        public async Task<ProductDto> SaveAsync(string orgId, ProductDto dto)
+        public async Task<ProductDto> SaveAsync(Guid orgId, ProductDto dto)
         {
-            if (string.IsNullOrEmpty(orgId))
+            if (orgId == null || orgId == Guid.Empty)
                 throw new ArgumentNullException("orgId", "Org id is missing");
 
             var product = _mapper.Map<Product>(dto);
-            product.OrgId = new Guid(orgId);
             if (product.Id == Guid.Empty)
             {
+                product.OrgId = orgId;
                 product.DateCreated = DateTime.Now;
                 product.DateModified = null;
-                _context.Products.Add(product);
+                await _context.Products.AddAsync(product);
             }
             else
             {
@@ -90,7 +90,7 @@ namespace Fanda.Service
                 {
                     product.DateCreated = DateTime.Now;
                     product.DateModified = null;
-                    _context.Products.Add(product);
+                    await _context.Products.AddAsync(product);
                 }
                 else
                 {
@@ -117,9 +117,12 @@ namespace Fanda.Service
                     foreach (var pair in ingredientPairs)
                     {
                         if (pair.db != null)
+                        {
                             _context.Entry(pair.db).CurrentValues.SetValues(pair.curr);
+                            _context.Set<ProductIngredient>().Update(pair.db);
+                        }
                         else
-                            _context.Set<ProductIngredient>().Add(pair.curr);
+                            await _context.Set<ProductIngredient>().AddAsync(pair.curr);
                     }
                     var pricingPairs = from curr in product.ProductPricings//.Select(pi => pi.IngredientProduct)
                                        join db in dbProd.ProductPricings//.Select(pi => pi.IngredientProduct)
@@ -129,9 +132,12 @@ namespace Fanda.Service
                     foreach (var pair in pricingPairs)
                     {
                         if (pair.db != null)
+                        {
                             _context.Entry(pair.db).CurrentValues.SetValues(pair.curr);
+                            _context.Set<ProductPricing>().Update(pair.db);
+                        }
                         else
-                            _context.Set<ProductPricing>().Add(pair.curr);
+                            await _context.Set<ProductPricing>().AddAsync(pair.curr);
                     }
                 }
             }
@@ -140,7 +146,7 @@ namespace Fanda.Service
             return dto;
         }
 
-        public async Task<bool> DeleteAsync(string productId)
+        public async Task<bool> DeleteAsync(Guid productId)
         {
             var product = await _context.Products
                 .FindAsync(productId);

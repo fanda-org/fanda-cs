@@ -11,10 +11,6 @@
     <Compile Remove="Context\PgSqlDbContext.cs" />
     <Compile Remove="Device.cs" />
     <Compile Remove="Location.cs" />
-    <Compile Remove="Migrations\20200322041815_Initial.cs" />
-    <Compile Remove="Migrations\20200322041815_Initial.Designer.cs" />
-    <Compile Remove="Migrations\20200322043242_Initial.cs" />
-    <Compile Remove="Migrations\20200322043242_Initial.Designer.cs" />
     <Compile Remove="OrgBank.cs" />
     <Compile Remove="PartyBank.cs" />
   </ItemGroup>
@@ -50,8 +46,8 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.2" />
-    <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.19" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.2" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.1" />
     <!--<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.1" />-->
   </ItemGroup>
 

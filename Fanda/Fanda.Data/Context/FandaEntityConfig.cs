@@ -895,7 +895,7 @@ namespace Fanda.Data.Context
                 .WithOne(c => c.Bank)
                 .HasForeignKey<Bank>(a => a.ContactId)
                 .OnDelete(DeleteBehavior.Restrict);
-            
+
             builder.HasOne(b => b.Address)
                 .WithOne(a => a.Bank)
                 .HasForeignKey<Bank>(a => a.AddressId)

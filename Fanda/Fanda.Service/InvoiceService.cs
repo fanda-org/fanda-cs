@@ -13,13 +13,13 @@ namespace Fanda.Service
 {
     public interface IInvoiceService
     {
-        Task<List<InvoiceDto>> GetAllAsync(string yearId);
+        Task<List<InvoiceDto>> GetAllAsync(Guid yearId);
 
-        Task<InvoiceDto> GetByIdAsync(string invoiceId);
+        Task<InvoiceDto> GetByIdAsync(Guid invoiceId);
 
-        Task<InvoiceDto> SaveAsync(string yearId, InvoiceDto dto);
+        Task<InvoiceDto> SaveAsync(Guid yearId, InvoiceDto dto);
 
-        Task<bool> DeleteAsync(string invoiceId);
+        Task<bool> DeleteAsync(Guid invoiceId);
 
         string ErrorMessage { get; }
     }
@@ -37,20 +37,20 @@ namespace Fanda.Service
 
         public string ErrorMessage { get; private set; }
 
-        public async Task<List<InvoiceDto>> GetAllAsync(string yearId)
+        public async Task<List<InvoiceDto>> GetAllAsync(Guid yearId)
         {
-            if (string.IsNullOrEmpty(yearId))
+            if (yearId == null || yearId == Guid.Empty)
                 throw new ArgumentNullException("yearId", "Year id is missing");
 
             var invoices = await _context.Invoices
-                .Where(p => p.YearId == new Guid(yearId))
+                .Where(p => p.YearId == yearId)
                 .AsNoTracking()
                 //.ProjectTo<InvoiceViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
             return _mapper.Map<List<InvoiceDto>>(invoices);
         }
 
-        public async Task<InvoiceDto> GetByIdAsync(string invoiceId)
+        public async Task<InvoiceDto> GetByIdAsync(Guid invoiceId)
         {
             var invoice = await _context.Invoices
                 .ProjectTo<InvoiceDto>(_mapper.ConfigurationProvider)
@@ -63,18 +63,18 @@ namespace Fanda.Service
             throw new KeyNotFoundException("Invoice not found");
         }
 
-        public async Task<InvoiceDto> SaveAsync(string yearId, InvoiceDto dto)
+        public async Task<InvoiceDto> SaveAsync(Guid yearId, InvoiceDto dto)
         {
-            if (string.IsNullOrEmpty(yearId))
+            if (yearId == null || yearId == Guid.Empty)
                 throw new ArgumentNullException("yearId", "Year id is missing");
 
             var invoice = _mapper.Map<Invoice>(dto);
             if (invoice.Id == Guid.Empty)
             {
-                invoice.YearId = new Guid(yearId);
+                invoice.YearId = yearId;
                 invoice.DateCreated = DateTime.Now;
                 invoice.DateModified = null;
-                _context.Invoices.Add(invoice);
+                await _context.Invoices.AddAsync(invoice);
             }
             else
             {
@@ -86,7 +86,7 @@ namespace Fanda.Service
                 {
                     invoice.DateCreated = DateTime.Now;
                     invoice.DateModified = null;
-                    _context.Invoices.Add(invoice);
+                    await _context.Invoices.AddAsync(invoice);
                 }
                 else
                 {
@@ -109,7 +109,7 @@ namespace Fanda.Service
                         if (pair.db != null)
                             _context.Entry(pair.db).CurrentValues.SetValues(pair.curr);
                         else
-                            _context.Set<InvoiceItem>().Add(pair.curr);
+                            await _context.Set<InvoiceItem>().AddAsync(pair.curr);
                     }
                 }
             }
@@ -118,7 +118,7 @@ namespace Fanda.Service
             return dto;
         }
 
-        public async Task<bool> DeleteAsync(string invoiceId)
+        public async Task<bool> DeleteAsync(Guid invoiceId)
         {
             var invoice = await _context.Invoices
                 .FindAsync(invoiceId);

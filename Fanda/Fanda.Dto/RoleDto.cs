@@ -5,7 +5,7 @@ namespace Fanda.Dto
 {
     public class RoleDto
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         [StringLength(16)]
         public string Code { get; set; }

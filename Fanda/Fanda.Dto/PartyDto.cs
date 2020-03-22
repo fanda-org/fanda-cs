@@ -1,4 +1,5 @@
 ﻿using Fanda.Shared;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -11,11 +12,11 @@ namespace Fanda.Dto
             Contacts = new HashSet<ContactDto>();
             Addresses = new HashSet<AddressDto>();
         }
-        public string LedgerId { get; set; }
+        public Guid LedgerId { get; set; }
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please select contact category")]
         [Display(Name = "Contact Category")]
-        public string CategoryId { get; set; }
+        public Guid CategoryId { get; set; }
 
         public string CategoryName { get; set; }
 

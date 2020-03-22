@@ -31,6 +31,15 @@ namespace FandaCoreUI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            #region Health checks
+            services.AddHealthChecks();
+            #endregion
+
+            #region AppSettings
+            services.Configure<AppSettings>(Configuration);
+            var appSettings = Configuration.Get<AppSettings>();
+            #endregion
+
             #region CORS
             services.AddCors(options =>
             {
@@ -46,44 +55,21 @@ namespace FandaCoreUI
             #endregion
 
             #region DbContext
-            string databaseType = Configuration["DatabaseType"];
-            string connectionString = Configuration.GetConnectionString("DefaultConnection");
-            services.InitializeContext(databaseType, connectionString);
-            //services.AddDbContext<FandaContext>(options =>
-            //{
-            //    switch (databaseType)
-            //    {
-            //        case "MSSQL":
-            //            options.UseSqlServer(connectionString, sqlopt =>
-            //            {
-            //                sqlopt.EnableRetryOnFailure();
-            //                //sqlopt.UseRowNumberForPaging();
-            //            });
-            //            break;
-
-            //        case "MYSQL":
-            //            options.UseMySql(connectionString, mysqlOptions =>
-            //            {
-            //                mysqlOptions.ServerVersion(new Version(15, 1), ServerType.MariaDb);
-            //            });
-            //            break;
-
-            //        case "PGSQL":
-            //            options.UseNpgsql(connectionString);
-            //            break;
-
-            //        default:
-            //            throw new Exception("Unknown database type from appsettings");
-            //    }
-            //    if (_env.IsDevelopment())
-            //    {
-            //        options.EnableSensitiveDataLogging(true);
-            //    }
-            //    //options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-            //    //options
-            //    //.ConfigureWarnings(w => w.Throw(RelationalEventId.QueryClientEvaluationWarning));
-            //    //.ConfigureWarnings(w => w.Throw(CoreEventId.IncludeIgnoredWarning));
-            //});
+            switch (appSettings.DatabaseType)
+            {
+                case "MSSQL":
+                    services.InitializeContext(appSettings.DatabaseType, appSettings.ConnectionStrings.MsSqlConnection);
+                    break;
+                case "MYSQL":
+                    services.InitializeContext(appSettings.DatabaseType, appSettings.ConnectionStrings.MySqlConnection);
+                    break;
+                case "PGSQL":
+                    services.InitializeContext(appSettings.DatabaseType, appSettings.ConnectionStrings.PgSqlConnection);
+                    break;
+                default:
+                    services.InitializeContext("MSSQL", appSettings.ConnectionStrings.DefaultConnection);
+                    break;
+            }
             #endregion
 
             #region Response compression

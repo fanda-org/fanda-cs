@@ -16,7 +16,7 @@ namespace FandaTabler
         public static async Task Main(string[] args)
         {
             var host = CreateWebHostBuilder(args).Build();
-            await CreateAndRunTasks(host,"Fanda");
+            await CreateAndRunTasks(host, "Fanda");
             await CreateAndRunTasks(host, "Demo");
             host.Run();
         }

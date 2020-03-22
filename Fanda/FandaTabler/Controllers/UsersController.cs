@@ -166,14 +166,14 @@ namespace FandaTabler.Controllers
         public IActionResult ForgotPassword() => View();
 
         //[HttpGet]
-        public async Task<IActionResult> GetAll(string orgId/*, bool? active*/)
+        public async Task<IActionResult> GetAll(Guid orgId/*, bool? active*/)
         {
             var users = await _userService.GetAllAsync(orgId/*, active*/);
             return Ok(users);
         }
 
         //[HttpGet("{id}")]
-        public async Task<IActionResult> GetById(string id)
+        public async Task<IActionResult> GetById(Guid id)
         {
             var user = await _userService.GetByIdAsync(id);
             return Ok(user);
@@ -196,7 +196,7 @@ namespace FandaTabler.Controllers
         }
 
         //[HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(string orgId, string userId)
+        public async Task<IActionResult> Delete(Guid orgId, Guid userId)
         {
             await _userService.DeleteAsync(orgId, userId);
             return Ok();

@@ -50,7 +50,7 @@ namespace Fanda.Data
         public decimal GrandTotal { get; set; }
         public Guid YearId { get; set; }
         public DateTime DateCreated { get; set; }
-        public DateTime? DateModified { get; set; }        
+        public DateTime? DateModified { get; set; }
 
         // Virtual members        
         public virtual InvoiceCategory Category { get; set; }

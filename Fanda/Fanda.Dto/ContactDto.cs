@@ -1,10 +1,11 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Fanda.Dto
 {
     public class ContactDto
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         [Display(Name = "Salutation")]
         [StringLength(5, ErrorMessage = "Maximum allowed length is 5")]

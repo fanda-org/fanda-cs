@@ -5,8 +5,7 @@ namespace Fanda.Dto
 {
     public class PartyCategoryDto
     {
-        //public string OrgId { get; set; }
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         [Display(Name = "Code")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Code is required")]

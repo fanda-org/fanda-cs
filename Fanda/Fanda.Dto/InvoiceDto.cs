@@ -10,7 +10,7 @@ namespace Fanda.Dto
         {
             InvoiceItems = new HashSet<InvoiceItemDto>();
         }
-        public string Id { get; set; }
+        public Guid Id { get; set; }
         public string InvoiceNumber { get; set; }
         public DateTime InvoiceDate { get; set; }
         public Guid CategoryId { get; set; }

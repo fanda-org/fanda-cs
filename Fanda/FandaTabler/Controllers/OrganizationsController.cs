@@ -61,7 +61,7 @@ namespace FandaTabler.Controllers
 
         //[ValidateAntiForgeryToken]
         [HttpGet("{id}")]
-        public async Task<IActionResult> Select([FromRoute]string id)
+        public async Task<IActionResult> Select([FromRoute]Guid id)
         {
             // ** TODO **
             var org = await _service.GetByIdAsync(id/*, true*/);
@@ -78,9 +78,9 @@ namespace FandaTabler.Controllers
         }
 
         // GET: Orgs/Details/5
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> Details(Guid id)
         {
-            if (string.IsNullOrEmpty(id))
+            if (id == null || id == Guid.Empty)
                 return NotFound();
 
             var org = await _service.GetByIdAsync(id);
@@ -104,9 +104,9 @@ namespace FandaTabler.Controllers
         }
 
         // GET: Orgs/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(Guid id)
         {
-            if (string.IsNullOrEmpty(id))
+            if (id == null || id == Guid.Empty)
                 return NotFound();
 
             var org = await _service.GetByIdAsync(id);
@@ -126,7 +126,7 @@ namespace FandaTabler.Controllers
         {
             try
             {
-                if (string.IsNullOrEmpty(model.Id))
+                if (model.Id == null || model.Id == Guid.Empty)
                     ViewBag.Mode = "Create";
                 else
                     ViewBag.Mode = "Edit";
@@ -141,7 +141,7 @@ namespace FandaTabler.Controllers
                     .ToList();
 
                 var orgId = HttpContext.Session.Get<OrganizationDto>("CurrentOrg").Id;
-                bool create = string.IsNullOrEmpty(model.Id);
+                bool create = model.Id == null || model.Id == Guid.Empty;
                 await _service.SaveAsync(model);
                 if (create) // Create
                     return PartialView("_orgEdit", new OrganizationDto { Active = true });   //RedirectToAction(nameof(Create), new { contactType = model.PartyType });
@@ -163,9 +163,9 @@ namespace FandaTabler.Controllers
         }
 
         // GET: Orgs/Delete/5
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            if (string.IsNullOrEmpty(id))
+            if (id == null || id == Guid.Empty)
                 return NotFound();
 
             var org = await _service.GetByIdAsync(id);
@@ -180,7 +180,7 @@ namespace FandaTabler.Controllers
         // POST: Orgs/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<JsonResult> DeleteConfirmed(string id)
+        public async Task<JsonResult> DeleteConfirmed(Guid id)
         {
             try
             {
