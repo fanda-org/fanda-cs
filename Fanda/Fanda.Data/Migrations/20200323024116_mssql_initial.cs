@@ -1,9 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-using System;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Fanda.Data.Migrations
 {
-    public partial class pgsql_initial : Migration
+    public partial class mssql_initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -528,7 +528,7 @@ namespace Fanda.Data.Migrations
                     FromUnitId = table.Column<Guid>(nullable: false),
                     ToUnitId = table.Column<Guid>(nullable: false),
                     CalcStep = table.Column<byte>(nullable: false),
-                    Operator = table.Column<char>(nullable: false),
+                    Operator = table.Column<string>(nullable: false),
                     Factor = table.Column<decimal>(nullable: false),
                     Active = table.Column<bool>(nullable: false)
                 },
@@ -958,13 +958,15 @@ namespace Fanda.Data.Migrations
                 name: "IX_Banks_AddressId",
                 table: "Banks",
                 column: "AddressId",
-                unique: true);
+                unique: true,
+                filter: "[AddressId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Banks_ContactId",
                 table: "Banks",
                 column: "ContactId",
-                unique: true);
+                unique: true,
+                filter: "[ContactId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_InvoiceCategories_OrgId",
@@ -1022,7 +1024,8 @@ namespace Fanda.Data.Migrations
                 name: "IX_Invoices_InvoiceNumber_YearId",
                 table: "Invoices",
                 columns: new[] { "InvoiceNumber", "YearId" },
-                unique: true);
+                unique: true,
+                filter: "[InvoiceNumber] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_LedgerBalances_YearId",
@@ -1210,7 +1213,8 @@ namespace Fanda.Data.Migrations
                 name: "IX_ProductPricings_ProductId_PartyCategoryId_InvoiceCategoryId",
                 table: "ProductPricings",
                 columns: new[] { "ProductId", "PartyCategoryId", "InvoiceCategoryId" },
-                unique: true);
+                unique: true,
+                filter: "[PartyCategoryId] IS NOT NULL AND [InvoiceCategoryId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_BrandId",
@@ -1319,7 +1323,8 @@ namespace Fanda.Data.Migrations
                 name: "IX_Stock_BatchNumber_ProductId",
                 table: "Stock",
                 columns: new[] { "BatchNumber", "ProductId" },
-                unique: true);
+                unique: true,
+                filter: "[BatchNumber] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UnitConversions_ToUnitId",
