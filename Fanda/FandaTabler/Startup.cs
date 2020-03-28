@@ -52,6 +52,18 @@ namespace FandaTabler
                     .AllowAnyHeader();
                     //.AllowCredentials();
                 });
+
+                //var urls = new[]
+                //{
+                //    Configuration["Order.Web.Url"],
+                //    Configuration["Order.Ng.Url"]
+                //};
+                //options.AddPolicy("_MyAllowedOrigins", builder =>
+                //{
+                //    builder.WithOrigins(urls)
+                //    .AllowAnyHeader()
+                //    .AllowAnyMethod();
+                //});
             });
             #endregion
 
@@ -126,7 +138,7 @@ namespace FandaTabler
             });
             #endregion Response compression
 
-            #region DistributedMemoryCache and Session
+            #region DistributedMemoryCache, DataProtection and Session
             // Adds a default in-memory implementation of IDistributedCache.
             services.AddDistributedMemoryCache(options =>
             {
@@ -138,12 +150,14 @@ namespace FandaTabler
             //Distributed Cache
             //services.AddSingleton<IWebCache, WebCache>();
 
+            #region DataProtection
             services.AddDataProtection()
                 .UseCryptographicAlgorithms(new AuthenticatedEncryptorConfiguration()
                 {
                     EncryptionAlgorithm = EncryptionAlgorithm.AES_256_CBC,
                     ValidationAlgorithm = ValidationAlgorithm.HMACSHA256
                 });
+            #endregion
 
             services.AddSession(options =>
             {
@@ -366,8 +380,10 @@ namespace FandaTabler
             #endregion
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(name: "default", pattern: "{controller=Users}/{action=Logout}/{id?}");
-                endpoints.MapHealthChecks("/health");
+                endpoints.MapControllerRoute(name: "default", pattern: "{controller=Users}/{action=Logout}/{id?}")
+                    .RequireCors("AllowAll");
+                endpoints.MapHealthChecks("/health")
+                    .RequireCors("AllowAll");
             });
 
             app.UseCookiePolicy(new CookiePolicyOptions

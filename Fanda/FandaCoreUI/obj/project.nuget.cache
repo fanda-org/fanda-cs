@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "YPScvhueA+X2VZNvoFh8xgItMCZQZ50OlLDHPQUWxO1+dDLlgnVyqNxKB/uzM05Pq+A1nZApvoqns9GpH+Q3zA==",
+  "dgSpecHash": "uxi8l7K5qQd8z78jsvyhbO/t0nqOU2esVHLmL3usmeyVZ66hRwXcKZE2wrMc0+r8v94zeLlTY9j5yyY1HPMbow==",
   "success": true,
   "projectFilePath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\FandaCoreUI\\FandaCoreUI.csproj",
   "expectedPackageFiles": [
@@ -41,6 +41,7 @@
     "C:\\Users\\tbala\\.nuget\\packages\\microsoft.entityframeworkcore\\3.1.2\\microsoft.entityframeworkcore.3.1.2.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\3.1.2\\microsoft.entityframeworkcore.abstractions.3.1.2.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\3.1.2\\microsoft.entityframeworkcore.analyzers.3.1.2.nupkg.sha512",
+    "C:\\Users\\tbala\\.nuget\\packages\\microsoft.entityframeworkcore.dynamiclinq\\1.0.22\\microsoft.entityframeworkcore.dynamiclinq.1.0.22.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\microsoft.entityframeworkcore.relational\\3.1.2\\microsoft.entityframeworkcore.relational.3.1.2.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\microsoft.entityframeworkcore.sqlserver\\3.1.2\\microsoft.entityframeworkcore.sqlserver.3.1.2.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\microsoft.extensions.caching.abstractions\\3.1.2\\microsoft.extensions.caching.abstractions.3.1.2.nupkg.sha512",
@@ -148,6 +149,7 @@
     "C:\\Users\\tbala\\.nuget\\packages\\system.io.filesystem.primitives\\4.3.0\\system.io.filesystem.primitives.4.3.0.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\system.io.pipes\\4.3.0\\system.io.pipes.4.3.0.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\system.linq\\4.3.0\\system.linq.4.3.0.nupkg.sha512",
+    "C:\\Users\\tbala\\.nuget\\packages\\system.linq.dynamic.core\\1.0.22\\system.linq.dynamic.core.1.0.22.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\system.linq.expressions\\4.3.0\\system.linq.expressions.4.3.0.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\system.memory\\4.5.3\\system.memory.4.5.3.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\system.net.http\\4.3.0\\system.net.http.4.3.0.nupkg.sha512",

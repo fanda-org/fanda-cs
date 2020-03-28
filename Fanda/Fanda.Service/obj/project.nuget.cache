@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "PfFxgUJrfBHfaIHHceCz6v3OJeNtaMKja2xx0O7SE7j3h/xkWMAVxkA3/9Lh4UrVlUA4AlLGG4b9X1U6DRrgpw==",
+  "dgSpecHash": "/ewKCKOtBbSCXvFTMIOke9Ru/t9An+opY8UCLHz2Sb0ELmwg50Hm2iTNioJkH5itWGTxreaZ2D/mak4awUHI9g==",
   "success": true,
   "projectFilePath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Service\\Fanda.Service.csproj",
   "expectedPackageFiles": [
@@ -12,6 +12,7 @@
     "C:\\Users\\tbala\\.nuget\\packages\\microsoft.entityframeworkcore\\3.1.2\\microsoft.entityframeworkcore.3.1.2.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\3.1.2\\microsoft.entityframeworkcore.abstractions.3.1.2.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\3.1.2\\microsoft.entityframeworkcore.analyzers.3.1.2.nupkg.sha512",
+    "C:\\Users\\tbala\\.nuget\\packages\\microsoft.entityframeworkcore.dynamiclinq\\1.0.22\\microsoft.entityframeworkcore.dynamiclinq.1.0.22.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\microsoft.entityframeworkcore.relational\\3.1.2\\microsoft.entityframeworkcore.relational.3.1.2.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\microsoft.entityframeworkcore.sqlserver\\3.1.2\\microsoft.entityframeworkcore.sqlserver.3.1.2.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\microsoft.extensions.caching.abstractions\\3.1.2\\microsoft.extensions.caching.abstractions.3.1.2.nupkg.sha512",
@@ -66,6 +67,7 @@
     "C:\\Users\\tbala\\.nuget\\packages\\system.io.filesystem\\4.3.0\\system.io.filesystem.4.3.0.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\system.io.filesystem.primitives\\4.3.0\\system.io.filesystem.primitives.4.3.0.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\system.linq\\4.3.0\\system.linq.4.3.0.nupkg.sha512",
+    "C:\\Users\\tbala\\.nuget\\packages\\system.linq.dynamic.core\\1.0.22\\system.linq.dynamic.core.1.0.22.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\system.net.nameresolution\\4.3.0\\system.net.nameresolution.4.3.0.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\system.net.primitives\\4.3.0\\system.net.primitives.4.3.0.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\system.private.datacontractserialization\\4.3.0\\system.private.datacontractserialization.4.3.0.nupkg.sha512",

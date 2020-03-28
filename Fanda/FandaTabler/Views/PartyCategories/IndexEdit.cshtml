@@ -11,10 +11,10 @@
 }
 
 @*<div class="page-header">
-    <h1 class="page-title">
-        Contact Categories
-    </h1>
-</div>*@
+        <h1 class="page-title">
+            Contact Categories
+        </h1>
+    </div>*@
 <div class="card">
     <div class="card-header">
         <h3 class="card-title">Contact Categories</h3>
@@ -67,18 +67,20 @@
                 width: "100%",
 
                 heading: true,
+                autoload: true,
+
+                pagerFormat: "Pages: {pages} &nbsp;&nbsp;|&nbsp;&nbsp; Rows: {itemCount}",
+                // "Pages: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} of {pageCount}"
+                pageSize: 10,
+                pageButtonCount: 3,
+                paging: true,
+                pageLoading: true,
                 filtering: true,
+                sorting: true,
 
                 inserting: true,
                 editing: true,
                 selecting: true,
-                sorting: true,
-
-                paging: true,
-                pageLoading: false,
-                autoload: true,
-                pageSize: 10,
-                pageButtonCount: 3,
 
                 noDataContent: "No records",
 
@@ -92,7 +94,7 @@
                         return $.ajax({
                             type: "GET",
                             url: "@Url.Action("GetAll")",
-                            data: filter                            
+                            data: filter
                         });
                     },
 
@@ -102,7 +104,7 @@
                         $.ajax({
                             type: 'POST',
                             url: '@Url.Action("Save")',
-                            data: item                            
+                            data: item
                         }).done(function (response) {
                             console.log("done:", response);
                             d.resolve(response);
@@ -110,6 +112,7 @@
                             console.log("fail", message);
                             d.reject();
                         });
+                        $grid.find(".jsgrid-insert-row").focus();
 
                         return d.promise();
                     },
@@ -275,7 +278,9 @@
                     { type: "control" }
                 ]
             });
-            $("#jsGrid").find(".jsgrid-mode-button").click();
+            $grid.find(".jsgrid-mode-button").click();
+            $grid.jsGrid("option", "height", 452);
+            $grid.jsGrid("sort", { field: "code", order: "asc" });
             //function clearError() {
             //    var err = $("#errors").html("");
             //    err.addClass("hide");

@@ -1,5 +1,6 @@
 ﻿using Fanda.Dto;
 using Fanda.Service;
+using Fanda.Shared;
 using FandaTabler.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -10,6 +11,8 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using Microsoft.EntityFrameworkCore.DynamicLinq;
+using System.Linq.Dynamic.Core;
 
 namespace FandaTabler.Controllers
 {
@@ -40,6 +43,10 @@ namespace FandaTabler.Controllers
             NameValueCollection qFilter = HttpUtility.ParseQueryString(Request.QueryString.Value);
             var filter = new
             {
+                PageIndex = Convert.ToInt32(qFilter["pageIndex"]),
+                PageSize = Convert.ToInt32(qFilter["pageSize"]),
+                SortField = qFilter["sortField"],
+                SortOrder = qFilter["sortOrder"],
                 Code = qFilter["code"],
                 Name = qFilter["name"],
                 Description = qFilter["description"],
@@ -51,15 +58,25 @@ namespace FandaTabler.Controllers
             var org = HttpContext.Session.Get<OrganizationDto>("CurrentOrg");
             if (org != null)
             {
-                var data = await _service.GetAll(org.Id)
+                var query = _service.GetAll(org.Id)
                     .Where(c =>
-                        (string.IsNullOrEmpty(filter.Code) || c.Code.ToLower().Contains(filter.Code.ToLower())) &&
-                        (string.IsNullOrEmpty(filter.Name) || c.Name.ToLower().Contains(filter.Name.ToLower())) &&
-                        (string.IsNullOrEmpty(filter.Description) || c.Description.ToLower().Contains(filter.Description.ToLower())) &&
-                        (!filter.Active.HasValue || c.Active == filter.Active)
-                    )
-                    .ToListAsync();
-                return Json(data);
+                        //(string.IsNullOrEmpty(filter.Code) || c.Code.ToLower().Contains(filter.Code.ToLower()))
+                        //&& (string.IsNullOrEmpty(filter.Name) || c.Name.ToLower().Contains(filter.Name.ToLower()))
+                        //&& (string.IsNullOrEmpty(filter.Description) || c.Description.ToLower().Contains(filter.Description.ToLower()))
+                        //&& (!filter.Active.HasValue || c.Active == filter.Active)
+                        (string.IsNullOrEmpty(filter.Code) || c.Code.Contains(filter.Code))
+                        && (string.IsNullOrEmpty(filter.Name) || c.Name.Contains(filter.Name))
+                        && (string.IsNullOrEmpty(filter.Description) || c.Description.Contains(filter.Description))
+                        && (!filter.Active.HasValue || c.Active == filter.Active)
+                    );
+
+                if (filter.SortField != null && filter.SortOrder != null)
+                    query = query.OrderBy($"{filter.SortField} {filter.SortOrder}");
+
+                var data = await query.GetPaged(filter.PageIndex, filter.PageSize);
+
+                var result = new { data = data.List, itemsCount = data.RowCount };
+                return Json(result);
             }
             else
             {
