@@ -31,6 +31,5 @@ namespace Fanda.Data
         public virtual ICollection<PartyContact> PartyContacts { get; set; }
         public virtual ICollection<PartyAddress> PartyAddresses { get; set; }
         public virtual ICollection<Invoice> Invoices { get; set; }
-        public virtual ICollection<Invoice> BuyerInvoices { get; set; }
     }
 }

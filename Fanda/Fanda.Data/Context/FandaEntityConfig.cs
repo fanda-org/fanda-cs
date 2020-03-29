@@ -969,6 +969,33 @@ namespace Fanda.Data.Context
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }
+
+    public class BuyerConfig : IEntityTypeConfiguration<Buyer>
+    {
+        public void Configure(EntityTypeBuilder<Buyer> builder)
+        {
+            // table
+            builder.ToTable("Buyers");
+
+            // key
+            builder.HasKey(b => b.Id);
+
+            // columns
+
+            // index
+
+            // foreign keys
+            builder.HasOne(b => b.Contact)
+                .WithOne(c => c.Buyer)
+                .HasForeignKey<Buyer>(b => b.ContactId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(b => b.Address)
+                .WithOne(c => c.Buyer)
+                .HasForeignKey<Buyer>(b => b.AddressId)
+                .OnDelete(DeleteBehavior.Restrict);
+        }
+    }
     #endregion
 
     #region Accounting Year
@@ -1059,9 +1086,9 @@ namespace Fanda.Data.Context
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(i => i.Buyer)
-                .WithMany(b => b.BuyerInvoices)
+                .WithMany(b => b.Invoices)
                 .HasForeignKey(i => i.BuyerId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
     public class InvoiceItemConfig : IEntityTypeConfiguration<InvoiceItem>

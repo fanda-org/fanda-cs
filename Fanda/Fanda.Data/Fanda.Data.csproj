@@ -11,6 +11,8 @@
     <Compile Remove="Context\PgSqlDbContext.cs" />
     <Compile Remove="Device.cs" />
     <Compile Remove="Location.cs" />
+    <Compile Remove="Migrations\20200329040924_Buyer.cs" />
+    <Compile Remove="Migrations\20200329040924_Buyer.Designer.cs" />
     <Compile Remove="OrgBank.cs" />
     <Compile Remove="PartyBank.cs" />
   </ItemGroup>

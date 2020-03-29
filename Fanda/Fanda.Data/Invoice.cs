@@ -55,7 +55,7 @@ namespace Fanda.Data
         // Virtual members        
         public virtual InvoiceCategory Category { get; set; }
         public virtual Party Party { get; set; }
-        public virtual Party Buyer { get; set; }
+        public virtual Buyer Buyer { get; set; }
         public virtual AccountYear AccountYear { get; set; }
         public virtual ICollection<InvoiceItem> InvoiceItems { get; set; }
     }

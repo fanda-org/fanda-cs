@@ -24,6 +24,7 @@ namespace Fanda.Data
         }
 
         public virtual Bank Bank { get; set; }
+        public virtual Buyer Buyer { get; set; }
         public virtual ICollection<OrgAddress> OrgAddresses { get; set; }
         public virtual ICollection<PartyAddress> PartyAddresses { get; set; }
     }
