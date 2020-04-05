@@ -5,22 +5,18 @@ using FandaTabler.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using System.Web;
-using Microsoft.EntityFrameworkCore.DynamicLinq;
-using System.Linq.Dynamic.Core;
 
 namespace FandaTabler.Controllers
 {
-    //[Route("api/[controller]")]
     [Authorize]
     public class PartyCategoriesController : Controller
     {
-        //private const string OrgId = "AAEFE9D0-A36E-46E0-1E19-08D5EA042032";
         private readonly IPartyCategoryService _service;
 
         public PartyCategoriesController(IPartyCategoryService service)
@@ -30,40 +26,35 @@ namespace FandaTabler.Controllers
 
         public ActionResult IndexEdit() => View();
 
-        //// GET: PartyCategories
-        //public ActionResult Index()
-        //{
-        //    return View();
-        //}
-
         [HttpGet]
         [Produces("application/json")]
-        public async Task<JsonResult> GetAll()
+        public async Task<ActionResult> GetAll()
         {
-            NameValueCollection qFilter = HttpUtility.ParseQueryString(Request.QueryString.Value);
-            var filter = new
+            try
             {
-                PageIndex = Convert.ToInt32(qFilter["pageIndex"]),
-                PageSize = Convert.ToInt32(qFilter["pageSize"]),
-                SortField = qFilter["sortField"],
-                SortOrder = qFilter["sortOrder"],
-                Code = qFilter["code"],
-                Name = qFilter["name"],
-                Description = qFilter["description"],
-                Active = string.IsNullOrEmpty(qFilter["active"]) ? (bool?)null : bool.Parse(qFilter["Active"])
-                //(qFilter["Country"] == "0") ? (Country?)null : (Country)int.Parse(qFilter["Country"]),
-                //Married = string.IsNullOrEmpty(qFilter["Married"]) ? (bool?)null : bool.Parse(qFilter["Married"])
-            };
+                var org = GetSelectedOrg();
+                if (org == null)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
 
-            var org = HttpContext.Session.Get<OrganizationDto>("CurrentOrg");
-            if (org != null)
-            {
+                NameValueCollection qFilter = HttpUtility.ParseQueryString(Request.QueryString.Value);
+                var filter = new
+                {
+                    PageIndex = Convert.ToInt32(qFilter["pageIndex"]),
+                    PageSize = Convert.ToInt32(qFilter["pageSize"]),
+                    SortField = qFilter["sortField"],
+                    SortOrder = qFilter["sortOrder"],
+                    Code = qFilter["code"],
+                    Name = qFilter["name"],
+                    Description = qFilter["description"],
+                    Active = string.IsNullOrEmpty(qFilter["active"]) ? (bool?)null : bool.Parse(qFilter["Active"])
+                    //(qFilter["Country"] == "0") ? (Country?)null : (Country)int.Parse(qFilter["Country"]),
+                    //Married = string.IsNullOrEmpty(qFilter["Married"]) ? (bool?)null : bool.Parse(qFilter["Married"])
+                };
+
                 var query = _service.GetAll(org.Id)
                     .Where(c =>
-                        //(string.IsNullOrEmpty(filter.Code) || c.Code.ToLower().Contains(filter.Code.ToLower()))
-                        //&& (string.IsNullOrEmpty(filter.Name) || c.Name.ToLower().Contains(filter.Name.ToLower()))
-                        //&& (string.IsNullOrEmpty(filter.Description) || c.Description.ToLower().Contains(filter.Description.ToLower()))
-                        //&& (!filter.Active.HasValue || c.Active == filter.Active)
                         (string.IsNullOrEmpty(filter.Code) || c.Code.Contains(filter.Code))
                         && (string.IsNullOrEmpty(filter.Name) || c.Name.Contains(filter.Name))
                         && (string.IsNullOrEmpty(filter.Description) || c.Description.Contains(filter.Description))
@@ -71,75 +62,22 @@ namespace FandaTabler.Controllers
                     );
 
                 if (filter.SortField != null && filter.SortOrder != null)
+                {
                     query = query.OrderBy($"{filter.SortField} {filter.SortOrder}");
-
-                var data = await query.GetPaged(filter.PageIndex, filter.PageSize);
-
+                }
+                else
+                {
+                    query = query.OrderBy("DateCreated desc");
+                }
+                var data = await query.GetPagedAsync(filter.PageIndex, filter.PageSize);
                 var result = new { data = data.List, itemsCount = data.RowCount };
-                return Json(result);
+                return Ok(result);
             }
-            else
+            catch (Exception ex)
             {
-                return null;
+                return StatusCode(StatusCodes.Status500InternalServerError, new { Error = ex.Message });
             }
-            //var orgId = HttpContext.Session.Get<OrganizationViewModel>("DemoOrg").OrgId.ToString();
-            //var request = new DataTablesRequest<PartyCategoryViewModel>(
-            //    Request.QueryString.Value
-            //    );
-            //var result = await _service
-            //    .GetAll(orgId)
-            //    .ToPagedListAsync(request);
-            //return result.JsonDataTable(request.Draw);
         }
-
-        //[ValidateAntiForgeryToken]
-        //[HttpPatch]
-        //public async Task<IActionResult> ChangeStatus([FromBody]ActiveStatus status)
-        //{
-        //    await _service.ChangeStatus(status.Id, status.Active);
-        //    return Ok();
-        //}
-
-        //// GET: PartyCategories/Details/5
-        //public async Task<ActionResult> Details(string id)
-        //{
-        //    if (string.IsNullOrEmpty(id))
-        //        return NotFound();
-
-        //    var cat = await _service.GetByIdAsync(id);
-        //    if (cat == null)
-        //        return NotFound();
-
-        //    ViewBag.Mode = "Details";
-        //    ViewBag.Readonly = true;
-        //    return View("Edit", cat);
-        //}
-
-        //// GET: PartyCategories/Create
-        //public ActionResult Create()
-        //{
-        //    var cat = new PartyCategoryViewModel { Active = true };
-        //    ViewBag.Mode = "Create";
-        //    ViewBag.Readonly = false;
-        //    return View("Edit", cat);
-        //}
-
-        //// GET: PartyCategories/Edit/5
-        //public async Task<ActionResult> Edit(string id)
-        //{
-        //    if (string.IsNullOrEmpty(id))
-        //        return NotFound();
-
-        //    var cat = await _service.GetByIdAsync(id);
-        //    if (cat == null)
-        //        return NotFound();
-
-        //    ViewBag.Mode = "Edit";
-        //    ViewBag.Readonly = false;
-        //    return View(cat);
-        //}
-
-        // POST: PartyCategories/Edit/5
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -147,67 +85,60 @@ namespace FandaTabler.Controllers
         {
             try
             {
-                if (!ModelState.IsValid)
+                var org = GetSelectedOrg();
+                if (org == null)
                 {
-                    return BadRequest();
+                    return RedirectToAction("Index", "Home");
                 }
 
-                var orgId = HttpContext.Session.Get<OrganizationDto>("CurrentOrg").Id;
-                model = await _service.SaveAsync(orgId, model);
-                return Ok(model); //Json(new { Success = true, Message = string.Empty }/*, JsonRequestBehavior.AllowGet*/);
+                #region Validation: Dupllicate
+                // Check code duplicate
+                model.Code = model.Code.ToUpper();
+                var duplCode = new Duplicate { Field = DuplicateField.Code, Value = model.Code, Id = model.Id, OrgId = org.Id };
+                if (await _service.ExistsAsync(duplCode))
+                {
+                    ModelState.AddModelError("Code", $"Code '{model.Code}' already exists");
+                }
+                // Check name duplicate
+                var duplName = new Duplicate { Field = DuplicateField.Name, Value = model.Name, Id = model.Id, OrgId = org.Id };
+                if (await _service.ExistsAsync(duplName))
+                {
+                    ModelState.AddModelError("Name", $"Name '{model.Name}' already exists");
+                }
+                #endregion
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                model = await _service.SaveAsync(org.Id, model);
+                return Ok(model);
             }
             catch (Exception ex)
             {
-                //return Json(new { Success = false, Message = ex.InnerMessage() });
-                //throw ex;
-                return StatusCode(403, Json(ex.Message));
+                return StatusCode(StatusCodes.Status500InternalServerError, new { Error = ex.Message });
             }
         }
 
-        //[HttpGet]
-        //// GET: PartyCategories/Delete/5
-        //public async Task<ActionResult> Delete(string id)
-        //{
-        //    if (string.IsNullOrEmpty(id))
-        //        return NotFound();
-
-        //    var cat = await _service.GetByIdAsync(id);
-        //    if (cat == null)
-        //        return NotFound();
-
-        //    ViewBag.Mode = "Delete";
-        //    ViewBag.Readonly = true;
-        //    return View("Edit", cat);
-        //}
-
-        // POST: PartyCategories/Delete/5
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Delete(PartyDto model)
+        public async Task<ActionResult> Delete(string id)
         {
-            //try
-            //{
-            await _service.DeleteAsync(model.CategoryId);
-            return Ok();
-            //return new JsonResult(new
-            //{
-            //    ok = true,
-            //    url = Url.Action(nameof(Index))
-            //});
-            //}
-            //catch (Exception ex)
-            //{
-            //    ModelState.AddModelError("Error", ex.Message);
-            //    ViewBag.Mode = "Delete";
-            //    ViewBag.Readonly = true;
-            //    return new JsonResult(new
-            //    {
-            //        ok = false,
-            //        message = ex.Message,
-            //        url = Url.Action(nameof(Edit))
-            //    });
-            //}
+            try
+            {
+                await _service.DeleteAsync(new Guid(id));
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { Error = ex.Message });
+            }
+        }
+
+        private OrganizationDto GetSelectedOrg()
+        {
+            return HttpContext.Session.Get<OrganizationDto>("CurrentOrg");
         }
     }
 }

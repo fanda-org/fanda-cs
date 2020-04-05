@@ -14,6 +14,7 @@ using System.Web;
 namespace FandaTabler.Controllers
 {
     [Authorize]
+    //[Route("[controller]/[action]")]
     public class OrganizationsController : Controller
     {
         //private const string OrgId = "AAEFE9D0-A36E-46E0-1E19-08D5EA042032";
@@ -61,9 +62,8 @@ namespace FandaTabler.Controllers
 
         //[ValidateAntiForgeryToken]
         [HttpGet("{id}")]
-        public async Task<IActionResult> Select([FromRoute]Guid id)
+        public async Task<IActionResult> Select([FromRoute] Guid id)
         {
-            // ** TODO **
             var org = await _service.GetByIdAsync(id/*, true*/);
             HttpContext.Session.Set("CurrentOrg", org);
             return RedirectToAction("Index", "Home");
@@ -73,7 +73,7 @@ namespace FandaTabler.Controllers
         [HttpPatch]
         public async Task<IActionResult> ChangeStatus([FromBody]ActiveStatus status)
         {
-            await _service.ChangeStatus(status.Id, status.Active);
+            await _service.ChangeStatus(status);
             return Ok();
         }
 

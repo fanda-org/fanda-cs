@@ -6,9 +6,10 @@ require.config({
         'vector-map': ['jquery'],
         'vector-map-de': ['vector-map', 'jquery'],
         'vector-map-world': ['vector-map', 'jquery'],
-        'core': ['bootstrap', 'jquery'],
+        'core': ['jquery', 'bootstrap'],
         'jquery.validate': ['jquery'],
-        'sweetalert2': ['polyfill']
+        //'sweetalert2': ['polyfill']
+        'bootbox': ['jquery', 'bootstrap']
     },
     paths: {
         'core': 'assets/js/core',
@@ -26,7 +27,8 @@ require.config({
         //'jquery.validate.addon': 'assets/js/vendors/additional-methods.min',
         //'jquery-validation-addon': 'assets/js/vendors/additional-methods.min',
         //'jquery-validate-unobtrusive': 'assets/js/vendors/jquery.validate.unobtrusive.min',
-        'sweetalert2': 'assets/js/vendors/sweetalert2.min',
+        //'sweetalert2': 'assets/js/vendors/sweetalert2.min',
+        'bootbox': 'assets/js/vendors/bootbox.min',
         'polyfill': 'assets/js/vendors/polyfill.min'
     }
 });

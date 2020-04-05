@@ -8,7 +8,7 @@ namespace Fanda.Shared
 {
     public static class PagedResultExtension
     {
-        public static async Task<PagedList<T>> GetPaged<T>(this IQueryable<T> query,
+        public static async Task<PagedList<T>> GetPagedAsync<T>(this IQueryable<T> query,
                                          int page, int pageSize) where T : class
         {
             var result = new PagedList<T>
@@ -29,7 +29,7 @@ namespace Fanda.Shared
             return result;
         }
 
-        public static async Task<PagedList<dynamic>> GetPaged(this IQueryable query,
+        public static async Task<PagedList<dynamic>> GetPagedAsync(this IQueryable query,
                                  int page, int pageSize) //where T : class
         {
             var result = new PagedList<dynamic>

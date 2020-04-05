@@ -2,6 +2,7 @@ using AutoMapper;
 using Fanda.Service;
 using Fanda.Service.Extensions;
 using Fanda.Shared;
+using FandaTabler.Converters;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.CookiePolicy;
@@ -161,12 +162,12 @@ namespace FandaTabler
 
             services.AddSession(options =>
             {
-                options.Cookie.HttpOnly = true;
-                options.Cookie.Name = ".Fanda.Session";
-                options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
-                options.Cookie.SameSite = SameSiteMode.Lax;
-                //options.Cookie.SameSite = SameSiteMode.None;
-                options.IdleTimeout = TimeSpan.FromMinutes(20);
+                //options.Cookie.HttpOnly = false;
+                //options.Cookie.Name = ".Fanda.Session";
+                //options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+                //options.Cookie.SameSite = SameSiteMode.Lax;
+                //options.IdleTimeout = TimeSpan.FromMinutes(20);
+
                 //options.Cookie.IsEssential = true;
                 //options.Cookie.Path = "/";
             });
@@ -199,6 +200,7 @@ namespace FandaTabler
                 options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
                 options.JsonSerializerOptions.IgnoreNullValues = true;
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                //options.JsonSerializerOptions.Converters.Add(new JsonStringTrimConverter());
             })
             .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
             .AddSessionStateTempDataProvider()
@@ -207,13 +209,13 @@ namespace FandaTabler
             .AddRazorRuntimeCompilation();
             #endregion
 
-            #region Cookie Policy Options
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.Strict;
-            });
-            #endregion
+            //#region Cookie Policy Options
+            //services.Configure<CookiePolicyOptions>(options =>
+            //{
+            //    options.CheckConsentNeeded = context => true;
+            //    options.MinimumSameSitePolicy = SameSiteMode.Strict;
+            //});
+            //#endregion
 
             #region AutoMapper
             services.AddAutoMapper(typeof(Fanda.Service.AutoMapperProfile.AutoMapperProfile));
@@ -223,20 +225,14 @@ namespace FandaTabler
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>
             {
-                options.Cookie.Name = "auth_cookie";
-                options.SlidingExpiration = true;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
-
-                options.Cookie.SameSite = SameSiteMode.None;
+                //options.Cookie.IsEssential = true;
+                //options.SlidingExpiration = true;
+                //options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+                //options.Cookie.SameSite = SameSiteMode.None;
                 options.LoginPath = new PathString("/Users/Login");
-                //options.ReturnUrlParameter = "/Users/Login";
-                options.AccessDeniedPath = "/Errors/401";
-                options.LogoutPath = "/Users/Logout";
-                //options.Events.OnRedirectToLogin
-
-                //options.LoginPath = "/Users/Login";
-                //options.LogoutPath = "/Users/Logout";
-                options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+                options.AccessDeniedPath = new PathString("/Errors/401");
+                options.LogoutPath = new PathString("/Users/Logout");
+                //options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
             });
             #endregion
 
@@ -363,35 +359,28 @@ namespace FandaTabler
             app.UseStaticFiles();
             app.UseRouting();
 
-            app.UseSession();
             app.UseResponseCaching();
             app.UseResponseCompression();
-            app.UseAuthentication();
-            app.UseAuthorization();
-            app.UseCors("AllowAll");
-
-            #region Commented - Previous Routes
-            //app.UseMvc(routes =>
-            //{
-            //    routes.MapRoute(
-            //        name: "default",
-            //        template: "{controller=Users}/{action=Logout}/{id?}");
-            //});
-            #endregion
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(name: "default", pattern: "{controller=Users}/{action=Logout}/{id?}")
-                    .RequireCors("AllowAll");
-                endpoints.MapHealthChecks("/health")
-                    .RequireCors("AllowAll");
-            });
 
             app.UseCookiePolicy(new CookiePolicyOptions
             {
                 HttpOnly = HttpOnlyPolicy.Always,
-                Secure = CookieSecurePolicy.SameAsRequest,
-                MinimumSameSitePolicy = SameSiteMode.Lax,
-                CheckConsentNeeded = context => false,
+                //Secure = CookieSecurePolicy.SameAsRequest,
+                MinimumSameSitePolicy = SameSiteMode.Strict,
+                CheckConsentNeeded = context => false
+            });
+
+            app.UseCors("AllowAll");
+            app.UseSession();
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}")
+                    .RequireCors("AllowAll");
+                endpoints.MapHealthChecks("/health")
+                    .RequireCors("AllowAll");
             });
         }
     }

@@ -7,6 +7,17 @@
         .hide {
             display: none;
         }
+
+        .modal-open .modal {
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+        }
+
+        tr.highlight td.jsgrid-cell {
+            color: #fff;
+            background-color: #467fcf;
+        }
     </style>
 }
 
@@ -24,17 +35,17 @@
 
 @section scripts{
     <script>
-        require(['jquery', 'jsgrid', 'sweetalert2'], function ($, jsGrid, Swal) {
+        require(['jquery', 'bootstrap', 'jsgrid', 'bootbox', 'toastr'], function ($, bs, jsGrid, bootbox, toastr) {
             //console.log($, grid, polyfill, Swal);
             $(document).ajaxSend(function (e, xhr, options) {
                 if (options.type.toUpperCase() == "POST" || options.type.toUpperCase() == "PATCH") {
-                    var token = $("input[name='__RequestVerificationToken']").val();
+                    let token = $("input[name='__RequestVerificationToken']").val();
                     xhr.setRequestHeader("RequestVerificationToken", token);
                 }
             });
 
             var $grid = $("#jsGrid").jsGrid({
-                height: "auto",
+                height: "auto",  // "450"
                 width: "100%",
 
                 heading: true,
@@ -43,7 +54,7 @@
                 pagerFormat: "Pages: {pages} &nbsp;&nbsp;|&nbsp;&nbsp; Rows: {itemCount}",
                 // "Pages: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} of {pageCount}"
                 pageSize: 10,
-                pageButtonCount: 3,
+                pageButtonCount: 5,
                 paging: true,
                 pageLoading: true,
                 filtering: true,
@@ -59,29 +70,48 @@
                 deleteConfirm: function () {
                     return "Do you really want to delete the category?";
                 },
-                //data: clients,
+
                 controller: {
                     loadData: function (filter) {
-                        return $.ajax({
+                        let d = $.Deferred();
+
+                        $.ajax({
                             type: "GET",
                             url: "@Url.Action("GetAll")",
                             data: filter
+                        }).done(function (response) {
+                            //console.log("loadData.done", response);
+                            d.resolve(response);
+                        }).fail(function (xhr) {
+                            console.log("loadData.fail", xhr);
+                            d.reject();
+                            toastr.error("Error occured while loading categories!", "Error");
                         });
+
+                        return d.promise();
                     },
 
                     insertItem: function (item) {
-                        var d = $.Deferred();
+                        let d = $.Deferred();
 
                         $.ajax({
                             type: 'POST',
                             url: '@Url.Action("Save")',
                             data: item
                         }).done(function (response) {
-                            console.log("done:", response);
+                            //console.log("insertItem.done", response);
                             d.resolve(response);
-                        }).fail(function (message) {
-                            console.log("fail", message);
+                            toastr.success("Category inserted successfully!", "Success");
+                        }).fail(function (xhr) {
+                            console.log("insertItem.fail", xhr);
                             d.reject();
+
+                            let messages = $.map(xhr.responseJSON, function (msg) {
+                                console.log(msg);
+                                return msg + "!";
+                            });
+                            toastr.warning(messages.join("<br>"), "Warning");
+                            //toastr.error("Error occured while inserting a category!", "Error");                            
                         });
                         $grid.find(".jsgrid-insert-row").focus();
 
@@ -89,173 +119,321 @@
                     },
 
                     updateItem: function (item) {
-                        return $.ajax({
+                        let d = $.Deferred();
+
+                        $.ajax({
                             type: "POST",
                             url: "@Url.Action("Save")",
                             data: item
+                        }).done(function (response) {
+                            //console.log("updateItem.done", response);
+                            d.resolve(response);
+                            toastr.success("Category updated successfully!", "Success");
+                        }).fail(function (xhr) {
+                            console.log("updateItem.fail", xhr);
+                            d.reject();
+
+                            let messages = $.map(xhr.responseJSON, function (msg) {
+                                console.log(msg);
+                                return msg + "!";
+                            });
+                            toastr.warning(messages.join("<br>"), "Warning");
+                            //toastr.error("Error occured while updating a category!", "Error");
                         });
+
+                        return d.promise();
                     },
 
                     deleteItem: function (item) {
-                        return $.ajax({
+                        let d = $.Deferred();
+
+                        $.ajax({
                             type: "POST",
-                            url: "@Url.Action("Delete")",
+                            url: '@Url.Action("Delete", new { id = "ID" })'.replace("ID", item.id),
                             data: item
+                        }).done(function (response) {
+                            //console.log("deleteItem.done", response);
+                            d.resolve(response);
+                            toastr.success("Category deleted successfully!", "Success");
+                        }).fail(function (xhr) {
+                            console.log("deleteItem.fail", xhr);
+                            d.reject();
+                            toastr.error("Error occured while deleting a category!", "Error");
                         });
+
+                        return d.promise();
                     }
                 },
+
+                @*
+                //rowClick: function (args) {
+                //    let $row = this.rowByItem(args.item);
+                //    $row.toggleClass("highlight");
+                //},
+                //rowClick: function (args) {
+                //    if (selectedRow) { selectedRow.children('.jsgrid-cell').css('background-color', ''); }
+                //    let $row = this.rowByItem(args.item);
+                //    $row.children('.jsgrid-cell').css('background-color', '#F7B64B');
+                //    selectedRow = $row;
+                //},
+                *@
+                @*rowClick: function (args) {
+                    let $row = this.rowByItem(args.item),
+                        selectedRow = $grid.find('table tr.highlight');
+
+                    if (selectedRow.length) {
+                        selectedRow.toggleClass('highlight');
+                    };
+
+                    $row.toggleClass("highlight");
+                },*@
+                rowClick: function (args) { },
+
                 invalidNotify: function (args) {
                     //console.log("invalidNotify", args);
-                    var messages = $.map(args.errors, function (error) {
-                        return error.field.name + ": " + error.message;
+
+                    let messages = $.map(args.errors, function (error) {
+                        return error.field.title + " " + error.message + "!";
                     });
                     console.log("invalidNotify", messages);
-                    //var err = $("#errors").html(messages);
+
+                    //let err = $("#errors").html(messages);
                     //err.removeClass("hide");
                     //swal(messages, { icon: 'error' });
+
+                    //const wrapper = document.createElement('div');
+                    //wrapper.innerHTML = messages.join("<br>");
+                    //bootbox.alert({ title: 'Error', message: wrapper});
+                    toastr.warning(messages.join("<br>"), "Warning");
                 },
-                onItemInvalid: function (args) {
-                    var messages = $.map(args.errors, function (error) {
-                        return error.field.name + ": " + error.message;
+
+                @*onItemInvalid: function (args) {
+                    let messages = $.map(args.errors, function (error) {
+                        return error.field.name + ": " + error.message + "!";
                     });
                     console.log("onItemInvalid", messages);
 
                     const wrapper = document.createElement('div');
                     wrapper.innerHTML = messages.join("<br>");
-                    Swal.fire({ title: 'Error', html: wrapper, type: 'error' });
-                },
+                    //bootbox.alert({ title: 'Error', message: wrapper});
+                    toastr.warning(wrapper, "Warning");
+                },*@
+
                 onItemDeleting: function (args) {
+                    //$grid.jsGrid('highlight', args.item);
+                    let $row = this.rowByItem(args.item),
+                        selectedRow = $grid.find('table tr.highlight');
+                    if (selectedRow.length) {
+                        selectedRow.toggleClass('highlight');
+                    };
+                    $row.toggleClass("highlight");
+
+                    //console.log(args);
                     if (!args.item.deleteConfirmed) { // custom property for confirmation
                         args.cancel = true; // cancel deleting
-                        Swal.fire({
-                            title: 'Are you sure?',
-                            text: "Do you want to delete this Category? Once deleted, you will not be able to recover!",
-                            type: 'warning',
-                            showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'Yes, delete it!',
-                            reverseButtons: true
-                        }).then((result) => {
-                            if (result.value) {
-                                args.item.deleteConfirmed = true;
-                                $grid.jsGrid('deleteItem', args.item); //call deleting once more in callback
-                                Swal.fire('Deleted!', 'Category has been deleted.',  'success');
-                            }
-                        });
+
+                        @*//Swal.fire({
+                        //    title: 'Are you sure?',
+                        //    text: "Do you want to delete this Category? Once deleted, you will not be able to recover!",
+                        //    type: 'warning',
+                        //    showCancelButton: true,
+                        //    confirmButtonColor: '#3085d6',
+                        //    cancelButtonColor: '#d33',
+                        //    confirmButtonText: 'Yes, delete it!',
+                        //    reverseButtons: true
+                        //}).then((result) => {
+                        //    if (result.value) {
+                        //        args.item.deleteConfirmed = true;
+                        //        $grid.jsGrid('deleteItem', args.item); //call deleting once more in callback
+                        //        Swal.fire('Deleted!', 'Category has been deleted.',  'success');
+                        //    }
+                        //});
+
                         //confirm.showConfirm('Are you sure?', function() {
                         //    args.item.deleteConfirmed = true;
                         //    $grid.jsGrid('deleteItem', args.item); //call deleting once more in callback
                         //});
+                        *@
+
+                        bootbox.confirm({
+                            title: "Delete category?",
+                            message: "Are you sure you want to <em>delete</em> this category?<br>Once deleted, you will not be able to recover!",
+                            closeButton: true,
+                            buttons: {
+                                cancel: {
+                                    label: 'No',
+                                },
+                                confirm: {
+                                    label: 'Yes',
+                                    className: 'btn-danger'
+                                }
+                            },
+                            callback: function (yes) {
+                                //debugger;
+                                //console.log('This was logged in the callback: ' + result);
+                                if (yes) {
+                                    args.item.deleteConfirmed = true;
+                                    $grid.jsGrid('deleteItem', args.item); //call deleting once more in callback
+                                    //toastr.success('Category deleted successfully!', "Success");
+                                }
+                                //else {
+                                //    toastr.info('You cancelled category deletetion!', "Info");
+                                //}
+                                $row.toggleClass("highlight");
+                            }
+                        });
                     }
                 },
-                onError: function (args) {
+
+                @*onError: function (args) {
                     //debugger;
                     //swal(args.errors[0].message, { icon: 'error' });
                     //console.log("onError", args);
-                    //var err = $("#errors").html(args.args[1] + ": Error occured!");
+                    //let err = $("#errors").html(args.args[1] + ": Error occured!");
                     //err.removeClass("hide");
-                    Swal.fire('Error', 'Error occured!', 'error');
-                },
-                fields: [
-                    {
-                        name: "code", type: "text", title: "Code", width: 75,
-                        validate: {
-                            validator: function (value, item) {
-                                if (value == undefined || value == null || value == "")
-                                    return false;
+                    //Swal.fire('Error', 'Error occured!', 'error');
+                    //bootbox.alert({ title: 'Error', message: 'Error occured' });
+                    console.log("onError", args);
+                    toastr.error("Error occured!", "Error");
+                },*@
 
-                                var gridData = $grid.jsGrid("option", "data");
-                                var editRow = $grid.jsGrid("option", "_editingRow");
-                                var editItem = undefined;
-                                if (editRow != null)
-                                    editItem = editRow.data("JSGridItem");
-                                //console.log("editingItem", editItem, item);
-                                //debugger;
-                                for (i = 0; i < gridData.length; i++) {
-                                    if (editItem == undefined) {
-                                        if (value.toLowerCase() == gridData[i].code.toLowerCase())
-                                            return false;
-                                    }
-                                    else {
-                                        if (editItem.categoryId == gridData[i].categoryId)
-                                            continue;
-                                        if (value.toLowerCase() == gridData[i].code.toLowerCase())
-                                            return false;
-                                    }
-                                }
-                                //clearError();
-                                return true;
-                            },
-                            message: function (value, item) {
-                                if (value == undefined || value == null || value == "")
-                                    return "should not be empty";
-                                else
-                                    return "'" + value + "' already exists";
-                            },
-                            param: undefined
-                        }
+                fields: [{
+                    name: "code", type: "text", title: "Code", width: 75,
+                    insertTemplate: function () {
+                        var $input = this.__proto__.insertTemplate.call(this); //original input
+                        $input.addClass('text-uppercase');
+                        setTimeout(function () {
+                            $input.focus();
+                        })
+                        return $input;
                     },
-                    {
-                        name: "name", type: "text", title: "Name", width: 150,
-                        validate: {
-                            validator: function (value, item) {
-                                if (value == undefined || value == null || value == "")
-                                    return false;
-                                var gridData = $("#jsGrid").jsGrid("option", "data");
-                                var editRow = $("#jsGrid").jsGrid("option", "_editingRow");
-                                var editItem = undefined;
-                                if (editRow != null)
-                                    editItem = editRow.data("JSGridItem");
-                                //console.log("editingItem", editItem, item);
-                                //debugger;
-                                for (i = 0; i < gridData.length; i++) {
-                                    if (editItem == undefined) {
-                                        if (value.toLowerCase() == gridData[i].name.toLowerCase())
-                                            return false;
-                                    }
-                                    else {
-                                        if (editItem.categoryId == gridData[i].categoryId)
-                                            continue;
-                                        if (value.toLowerCase() == gridData[i].name.toLowerCase())
-                                            return false;
-                                    }
-                                }
-                                //clearError();
-                                return true;
-                            },
-                            message: function (value, item) {
-                                if (value == undefined || value == null || value == "")
-                                    return "should not be empty";
-                                else
-                                    return "'" + value + "' already exists";
-                            },
-                            param: undefined
-                        }
+                    editTemplate: function (value, item) {
+                        // To get the 'input' element.
+                        var $input = this.__proto__.editTemplate.call(this, value); //original input
+                        $input.addClass('text-uppercase');
+                            //jsGrid.fields.text.prototype.editTemplate.call(this, value);
+                        // It only works with 'setTimeout' function.
+                        setTimeout(function () {
+                            $input.focus();
+                        });
+                        return $input;
                     },
-                    { name: "description", type: "text", title: "Description", width: 200 },
-                    {
+                    validate: {validator: "required", message:"is required"},
+                    @*validate: {
+                        validator: function (value, item) {
+                            // debugger;
+                            if (!value)
+                                return false;
+
+                            let editRow = $grid.jsGrid("option", "_editingRow");
+                            let editItem = undefined;
+                            if (editRow != null)
+                                editItem = editRow.data("JSGridItem");
+
+                            let duplData = {};
+                            if (editItem == undefined) {
+                                duplData = { field: 1, value: value };
+                            } else {
+                                duplData = { field: 1, value: value, id: editItem.id };
+                            }
+                            // debugger;
+                            let res = $.ajax({
+                                type: "POST",
+                                url: '@Url.Action("Exists")',
+                                data: duplData,
+                                async: false,
+                            }).responseJSON;
+                            //console.log(res);
+                            return !res;
+                        },
+                        message: function (value, item) {
+                            // debugger;
+                            if (!value) {
+                                return "is required";
+                            }
+                            else {
+                                return "already exists";
+                            }
+                        }
+                    }*@
+                }, {
+                    name: "name", type: "text", title: "Name", width: 150,
+                        validate: { validator: "required", message: "is required" },
+                    @*validate: {
+                        validator: function (value, item) {
+                            // debugger;
+                            if (!value)
+                                return false;
+
+                            let editRow = $grid.jsGrid("option", "_editingRow");
+                            let editItem = undefined;
+                            if (editRow != null)
+                                editItem = editRow.data("JSGridItem");
+
+                            let duplData = {};
+                            if (editItem == undefined) {
+                                duplData = { field: 2, value: value };
+                            } else {
+                                duplData = { field: 2, value: value, id: editItem.id };
+                            }
+                            // debugger;
+                            let res = $.ajax({
+                                type: "POST",
+                                url: '@Url.Action("Exists")',
+                                data: duplData,
+                                async: false,
+                            }).responseJSON;
+                            //console.log(res);
+                            return !res;
+                        },
+                        message: function (value, item) {
+                            if (!value) {
+                                return "is required";
+                            }
+                            else {
+                                return "already exists";
+                            }
+                        }
+                    }*@
+                    }, {
+                        name: "description", type: "text", title: "Description", width: 200
+                    }, {
                         name: "active", type: "checkbox", title: "Active", sorting: false,
                         insertTemplate: function () {
-                            var input = this.__proto__.insertTemplate.call(this); //original input
+                            let input = this.__proto__.insertTemplate.call(this); //original input
                             input.prop('checked', true);
+                            input.prop('disabled', 'disabled');
                             return input;
                         }
-                    },
-                    { name: "categoryId", visible: false, width: 0 },
+                    }, {
+                        name: "id", visible: false, width: 0
+                    }, {
+                        type: "control"
+                    }
                     //{ name: "Age", type: "number", width: 50 },
-                    //{ name: "Address", type: "text", width: 200 },
-                    //{ name: "Country", type: "select", items: countries, valueField: "Id", textField: "Name" },
-                    { type: "control" }
+                    //{ name: "Country", type: "select", items: countries, valueField: "Id", textField: "Name" }
                 ]
             });
             $grid.find(".jsgrid-mode-button").click();
-            $grid.jsGrid("option", "height", 452);
-            $grid.jsGrid("sort", { field: "code", order: "asc" });
-            //function clearError() {
-            //    var err = $("#errors").html("");
-            //    err.addClass("hide");
-            //}
+
+            @*$grid.jsGrid("option", "height", 452);
+            $grid.jsGrid("sort", { field: "code", order: "asc" });*@
+
+            @*function highlightRow(item) {
+                let $row = $grid.rowByItem(item),
+                    selectedRow = $grid.find('table tr.highlight');
+
+                if (selectedRow.length) {
+                    selectedRow.toggleClass('highlight');
+                };
+
+                $row.toggleClass("highlight");
+            };*@
+
+            @*function clearError() {
+                let err = $("#errors").html("");
+                err.addClass("hide");
+            }*@
         });
     </script>
 }

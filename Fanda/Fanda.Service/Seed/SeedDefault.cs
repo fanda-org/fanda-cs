@@ -174,7 +174,12 @@ namespace Fanda.Service.Seed
             try
             {
                 IPartyCategoryService service = _provider.GetRequiredService<IPartyCategoryService>();
-                if (!service.Exists(org.Id, "DEFAULT"))
+                if (!await service.ExistsAsync(new Duplicate
+                {
+                    Field = DuplicateField.Code,
+                    Value = "DEFAULT",
+                    OrgId = org.Id
+                }))
                 {
                     await service.SaveAsync(org.Id, new PartyCategoryDto
                     {

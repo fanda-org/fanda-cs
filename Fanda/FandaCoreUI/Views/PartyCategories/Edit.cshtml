@@ -76,11 +76,11 @@
                         <label asp-for="Name" class="control-label"></label>
                         @if (ViewBag.Readonly)
                         {
-                            <input asp-for="Name" class="form-control form-control-sm" readonly />
+                            <input asp-for="Name" class="form-control text-uppercase form-control-sm" readonly />
                         }
                         else
                         {
-                            <input asp-for="Name" class="form-control form-control-sm" />
+                            <input asp-for="Name" class="form-control input-uppercase form-control-sm" />
                         }
                         <span asp-validation-for="Name" class="text-danger"></span>
                     </div>

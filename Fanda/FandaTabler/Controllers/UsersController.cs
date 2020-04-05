@@ -10,6 +10,9 @@ using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
+using FandaTabler.Extensions;
+using System.Linq;
+
 namespace FandaTabler.Controllers
 {
     [Authorize]
@@ -29,14 +32,26 @@ namespace FandaTabler.Controllers
         //[ResponseCache(Duration = 30)]
         public IActionResult Login(string returnUrl = null)
         {
+            var model = new LoginViewModel();
+
+            //var persistentClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.IsPersistent);
+            //if (persistentClaim != null)
+            //{
+            //    var isPersistent = persistentClaim.Value;
+            //    if (string.IsNullOrEmpty(isPersistent))
+            //    {
+            //        model.RememberMe = Convert.ToBoolean(isPersistent);
+            //    }
+            //}
+            
             ViewData["ReturnUrl"] = returnUrl;
-            return View(new LoginViewModel());
+            return View(model);
             //return Challenge(new AuthenticationProperties() { RedirectUri = "/Home/Index" });
         }
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Login([FromQuery] string returnUrl, [FromForm]LoginViewModel model)
+        public async Task<IActionResult> Login(/*[FromQuery] string returnUrl,*/ [FromForm] LoginViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -71,23 +86,23 @@ namespace FandaTabler.Controllers
                 new Claim(ClaimTypes.Name, user.UserName),
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.GivenName, $"{user.FirstName} {user.LastName}"),
-                new Claim(ClaimTypes.IsPersistent, model.RememberMe.ToString()),
-                //new Claim(ClaimTypes.Role,user.)
+                new Claim(ClaimTypes.IsPersistent, model.RememberMe.ToString())
             };
             var userIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var userPrincipal = new ClaimsPrincipal(userIdentity);
             var authProps = new AuthenticationProperties
             {
-                AllowRefresh = true,
-                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(20),
+                //AllowRefresh = true,
+                //ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(20),
                 IsPersistent = model.RememberMe,
-                IssuedUtc = DateTimeOffset.UtcNow,
-                RedirectUri = string.IsNullOrEmpty(returnUrl) ? "/Organizations/Index" : returnUrl
+                //IssuedUtc = DateTimeOffset.UtcNow,
+                //RedirectUri = string.IsNullOrEmpty(returnUrl) ? "/Home/Index" : returnUrl
             };
             await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 userPrincipal,
                 authProps);
+            //HttpContext.Session.Set("UserId", user.Id.ToString());
 
             //await HttpContext.AuthenticateAsync(JwtBearerDefaults.AuthenticationScheme);
 
@@ -103,25 +118,29 @@ namespace FandaTabler.Controllers
             //if (Url.IsLocalUrl(returnUrl))
             //    return Redirect(returnUrl);
             //else
-            return RedirectToAction("Index", "Organizations");
+            return RedirectToAction("Index", "Home");
             // return basic user info (without password) and token to store client side
             //return Ok(user);
         }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
-            var prop = new AuthenticationProperties
+            if (User.Identity.IsAuthenticated)
             {
-                RedirectUri = "/Users/Login"
-            };
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme, prop);
-            HttpContext.Session.Clear();
-            foreach (var cookieKey in Request.Cookies.Keys)
-            {
-                Response.Cookies.Delete(cookieKey);
+                //var prop = new AuthenticationProperties
+                //{
+                //    RedirectUri = "/Users/Login"
+                //};
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);  //, prop);
+                //HttpContext.Session.Clear();
+                //foreach (var cookieKey in Request.Cookies.Keys)
+                //{
+                //    Response.Cookies.Delete(cookieKey);
+                //}
             }
+            //return RedirectToAction("Index", "Home");
             return RedirectToAction(nameof(Login));
         }
 

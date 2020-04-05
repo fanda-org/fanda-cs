@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using Fanda.Data;
 using Fanda.Data.Context;
 using Fanda.Dto;
+using Fanda.Shared;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace Fanda.Service
         Task<bool> DeleteAsync(Guid orgId);
         bool ExistsById(Guid orgId);
         bool ExistsByCode(string orgCode);
-        Task<bool> ChangeStatus(Guid orgId, bool active);
+        Task<bool> ChangeStatus(ActiveStatus status);
         string ErrorMessage { get; }
     }
 
@@ -253,18 +254,18 @@ namespace Fanda.Service
 
         public bool ExistsByCode(string orgCode) => _context.Organizations.Any(o => o.OrgCode == orgCode);
 
-        public async Task<bool> ChangeStatus(Guid orgId, bool active)
+        public async Task<bool> ChangeStatus(ActiveStatus status)
         {
-            if (orgId == null || orgId == Guid.Empty)
+            if (status.Id == null || status.Id == Guid.Empty)
             {
                 throw new ArgumentNullException("orgId", "Org id is missing");
             }
 
             Organization org = await _context.Organizations
-                .FindAsync(orgId);
+                .FindAsync(status.Id);
             if (org != null)
             {
-                org.Active = active;
+                org.Active = status.Active;
                 _context.Organizations.Update(org);
                 await _context.SaveChangesAsync();
                 return true;

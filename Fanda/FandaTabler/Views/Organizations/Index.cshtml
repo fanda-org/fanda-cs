@@ -72,9 +72,11 @@
             //data: clients,
             controller: {
                 loadData: function (filter) {
+                    var $url = "@Url.Action("GetAll")";
+                    console.log($url);
                     return $.ajax({
                         type: "GET",
-                        url: "@Url.Action("GetAll")",
+                        url: $url,
                         data: filter
                     });
                 }
@@ -102,9 +104,12 @@
                 {
                     name: "orgCode", title: "Code", type: "text", width: 75, validate: "required",
                     itemTemplate: function (value, item) {
-                        var url = '@Url.Action("Select", "Organizations", new { id = -1 })'; @*"/Organizations/Select/" + item.OrgId;*@
-                        url = url.replace('-1', item.id);
-                        return $("<a href='" + url + "'>" + value + "</a>");
+                        let $url = '@Url.Action("Select", new { id = -1 })';
+                        console.log($url);
+                        $url = $url.replace('-1', item.id);
+                        //var url = ; @*"/Organizations/Select/" + item.OrgId;*@
+                        console.log($url);
+                        return $("<a href='" + $url + "'>" + value + "</a>");
                     }
                 },
                 { name: "orgName", title: "Name", type: "text", width: 150, validate: "required" },

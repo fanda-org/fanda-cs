@@ -95,7 +95,7 @@ namespace Fanda.Controllers
         [HttpPatch]
         public async Task<IActionResult> ChangeStatus([FromBody]ActiveStatus status)
         {
-            await _service.ChangeStatus(status.Id, status.Active);
+            await _service.ChangeStatusAsync(status);
             return Ok();
         }
 

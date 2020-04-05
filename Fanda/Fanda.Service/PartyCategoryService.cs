@@ -3,7 +3,9 @@ using AutoMapper.QueryableExtensions;
 using Fanda.Data;
 using Fanda.Data.Context;
 using Fanda.Dto;
+using Fanda.Shared;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,8 +19,8 @@ namespace Fanda.Service
         Task<PartyCategoryDto> GetByIdAsync(Guid categoryId);
         Task<PartyCategoryDto> SaveAsync(Guid orgId, PartyCategoryDto model);
         Task<bool> DeleteAsync(Guid categoryId);
-        Task<bool> ChangeStatus(Guid categoryId, bool active);
-        bool Exists(Guid orgId, string categoryCode);
+        Task<bool> ChangeStatusAsync(ActiveStatus status);
+        Task<bool> ExistsAsync(Duplicate data /*Guid orgId, string categoryCode, Guid categoryId = default*/);
 
         string ErrorMessage { get; }
     }
@@ -110,18 +112,18 @@ namespace Fanda.Service
             throw new KeyNotFoundException("Party category not found");
         }
 
-        public async Task<bool> ChangeStatus(Guid categoryId, bool active)
+        public async Task<bool> ChangeStatusAsync(ActiveStatus status)
         {
-            if (categoryId == null || categoryId == Guid.Empty)
+            if (status.Id == null || status.Id == Guid.Empty)
             {
                 throw new ArgumentNullException("categoryId", "Category id is missing");
             }
 
             PartyCategory category = await _context.PartyCategories
-                .FindAsync(categoryId);
+                .FindAsync(status.Id);
             if (category != null)
             {
-                category.Active = active;
+                category.Active = status.Active;
                 _context.PartyCategories.Update(category);
                 await _context.SaveChangesAsync();
                 return true;
@@ -129,7 +131,58 @@ namespace Fanda.Service
             throw new KeyNotFoundException("Party category not found");
         }
 
-        public bool Exists(Guid orgId, string categoryCode) => _context.PartyCategories
-            .Any(pc => pc.Code == categoryCode && pc.OrgId == orgId);
+        public async Task<bool> ExistsAsync(Duplicate data /*Guid orgId, string categoryCode, Guid categoryId = default*/)
+        {
+            bool result = true;
+            switch (data.Field)
+            {
+                case DuplicateField.Code:
+                    if (data.Id == Guid.Empty && data.OrgId == Guid.Empty)
+                    {
+                        result = await _context.PartyCategories
+                            .AnyAsync(pc => pc.Code == data.Value);
+                    }
+                    else if (data.Id == Guid.Empty && data.OrgId != Guid.Empty)
+                    {
+                        result = await _context.PartyCategories
+                            .AnyAsync(pc => pc.Code == data.Value && pc.OrgId == data.OrgId);
+                    }
+                    else if(data.Id != Guid.Empty && data.OrgId == Guid.Empty)
+                    {
+                        result = await _context.PartyCategories
+                            .AnyAsync(pc => pc.Code == data.Value && pc.Id != data.Id);
+                    }
+                    else if(data.Id != Guid.Empty && data.OrgId != Guid.Empty)
+                    {
+                        result = await _context.PartyCategories
+                            .AnyAsync(pc => pc.Code == data.Value && pc.Id != data.Id && pc.OrgId == data.OrgId);
+                    }
+                    return result;
+                case DuplicateField.Name:
+                    if (data.Id == Guid.Empty && data.OrgId == Guid.Empty)
+                    {
+                        result = await _context.PartyCategories
+                            .AnyAsync(pc => pc.Name == data.Value);
+                    }
+                    else if (data.Id == Guid.Empty && data.OrgId != Guid.Empty)
+                    {
+                        result = await _context.PartyCategories
+                            .AnyAsync(pc => pc.Name == data.Value && pc.OrgId == data.OrgId);
+                    }
+                    else if (data.Id != Guid.Empty && data.OrgId == Guid.Empty)
+                    {
+                        result = await _context.PartyCategories
+                            .AnyAsync(pc => pc.Name == data.Value && pc.Id != data.Id);
+                    }
+                    else if (data.Id != Guid.Empty && data.OrgId != Guid.Empty)
+                    {
+                        result = await _context.PartyCategories
+                            .AnyAsync(pc => pc.Name == data.Value && pc.Id != data.Id && pc.OrgId == data.OrgId);
+                    }
+                    return result;
+                default:
+                    return true;
+            }
+        }
     }
 }

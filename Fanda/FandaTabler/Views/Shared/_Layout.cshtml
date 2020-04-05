@@ -1,6 +1,4 @@
 ﻿@using Microsoft.AspNetCore.Http
-@using FandaTabler.Extensions
-@using Fanda.Dto
 @inject IHttpContextAccessor HttpContextAccessor
 
 @{
@@ -32,6 +30,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="~/favicon.ico" />
     <!-- Generated: 2018-04-16 09:29:05 +0200 -->
     <title>@orgCode - @ViewData["Title"]</title>
+
     <link rel="stylesheet" href="~/assets/css/google-fonts.css" />
     <script src="~/assets/js/require.min.js"></script>
     <script>
@@ -42,38 +41,42 @@
     <!-- Dashboard Core -->
     <link href="~/assets/css/dashboard.css" rel="stylesheet" type="text/css" />
     <script src="~/assets/js/dashboard.js"></script>
+
     <!-- SweetAlert2 -->
-    <link href="~/assets/css/sweetalert2.min.css" rel="stylesheet" type="text/css" />
+    @*<link href="~/assets/css/sweetalert2.min.css" rel="stylesheet" type="text/css" />*@
+
+    <!-- Toastr Plugin -->
+    <link href="~/assets/plugins/toastr/toastr.min.css" rel="stylesheet" type="text/css" />
+    <script src="~/assets/plugins/toastr/plugin.js"></script>
+
     <!-- JSGrid Plugin -->
     <link href="~/assets/plugins/jsgrid/jsgrid.min.css" rel="stylesheet" type="text/css" />
     <link href="~/assets/plugins/jsgrid/jsgrid-theme.min.css" rel="stylesheet" type="text/css" />
     <script src="~/assets/plugins/jsgrid/plugin.js"></script>
+
     <!-- Datatables Plugin -->
     <script src="~/assets/plugins/datatables/plugin.js"></script>
+
     <!-- Tabulator Tables Plugin -->
     <link href="~/assets/plugins/tabulator-tables/tabulator_bootstrap4.min.css" rel="stylesheet" type="text/css" />
     <script src="~/assets/plugins/tabulator-tables/plugin.js"></script>
+
     <!-- Select2 -->
     <link href="~/assets/plugins/select2/select2.min.css" rel="stylesheet" type="text/css" />
     <link href="~/assets/plugins/select2/select2-bootstrap4.css" rel="stylesheet" type="text/css" />
     <script src="~/assets/plugins/select2/plugin.js"></script>
-
     @RenderSection("Styles", required: false)
 </head>
 <body class="">
     <div class="page">
-        @if (Context.User.Identity.IsAuthenticated)
+        @if (Context.User.Identity.IsAuthenticated) @*if (!string.IsNullOrEmpty(Context.Session.Get<string>("UserId")))*@
         {
             <div class="flex-fill">
                 <div class="header py-4">
                     <div class="container">
                         <div class="d-flex">
                             <a class="header-brand" href='@Url.Action("Index", "Home")'>
-                                <img src="~/demo/logo.svg" class="header-brand-img" alt="fanda logo">
-                                @if (!string.IsNullOrEmpty(orgName))
-                                {
-                                    @orgName
-                                }
+                                <img src="~/demo/logo.svg" class="header-brand-img" alt="fanda logo"> @orgName
                             </a>
                             <div class="d-flex order-lg-2 ml-auto">
                                 <div class="dropdown d-none d-md-flex">
@@ -129,9 +132,12 @@
                                         <a class="dropdown-item" href="#">
                                             <i class="dropdown-icon fe fe-help-circle"></i> Need help?
                                         </a>
-                                        <a class="dropdown-item" href='@Url.Action("Logout", "Users")'>
-                                            <i class="dropdown-icon fe fe-log-out"></i> Sign out
-                                        </a>
+                                        <form asp-controller="Users" asp-action="Logout" method="post">
+                                            <button class="dropdown-item" asp-controller="Users" asp-action="Logout" type="submit">
+                                                <i class="dropdown-icon fe fe-log-out"></i> Sign out
+                                            </button>
+                                        </form>
+                                        @*href='@Url.Action("Logout", "Users")'*@
                                     </div>
                                 </div>
                                 <div class="dropdown d-md-flex">
@@ -236,8 +242,8 @@
                                     </ul>
                                 </div>
                                 @*<div class="col-auto">
-                                        <a href="https://github.com/tabler/tabler" class="btn btn-outline-primary btn-sm">Source code</a>
-                                    </div>*@
+                                    <a href="https://github.com/tabler/tabler" class="btn btn-outline-primary btn-sm">Source code</a>
+                                </div>*@
                             </div>
                         </div>
                         <div class="col-12 col-lg-auto mt-3 mt-lg-0 text-center">
@@ -256,6 +262,27 @@
             </div>
         }
     </div>
+    <script type="text/javascript">
+        require(['toastr'], function (toastr) {
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": true,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+        });
+    </script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

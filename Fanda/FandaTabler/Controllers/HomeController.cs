@@ -4,6 +4,7 @@ using FandaTabler.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Linq;
 
 namespace FandaTabler.Controllers
 {
@@ -18,14 +19,28 @@ namespace FandaTabler.Controllers
         //[ResponseCache(CacheProfileName = "Default")]
         public IActionResult Index()
         {
-            if (HttpContext.Session.Get<OrganizationDto>("CurrentOrg") == null)
+            //if (string.IsNullOrEmpty(HttpContext.Session.Get<string>("UserId")))
+            //{
+            //    return RedirectToAction("Login", "Users");
+            //}
+            //else
+            //{
+            if (User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("Index", "Organizations");
+                if (HttpContext.Session.Get<OrganizationDto>("CurrentOrg") == null)
+                {
+                    return RedirectToAction("Index", "Organizations");
+                }
+                else
+                {
+                    return View();
+                }
             }
             else
             {
-                return View();
+                return RedirectToAction("Login", "Users");
             }
+            //}
         }
 
         [AllowAnonymous]
