@@ -3,11 +3,12 @@ using Fanda.Service;
 using Fanda.Shared;
 using FandaTabler.Extensions;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -29,35 +30,47 @@ namespace FandaTabler.Controllers
         public ActionResult Index() => View();
 
         [Produces("application/json")]
-        public async Task<JsonResult> GetAll()
+        public async Task<ActionResult> GetAll()
         {
-            //var request = new DataTablesRequest<OrganizationViewModel>(
-            //    Request.QueryString.Value
-            //    );
-            //var result = await _service
-            //    .GetAll()
-            //    .ToPagedListAsync(request);
-            //return result.JsonDataTable(request.Draw);
-            NameValueCollection qFilter = HttpUtility.ParseQueryString(Request.QueryString.Value);
-            var filter = new
+            try
             {
-                Code = qFilter["orgCode"],
-                Name = qFilter["orgName"],
-                Description = qFilter["description"],
-                Active = string.IsNullOrEmpty(qFilter["active"]) ? (bool?)null : bool.Parse(qFilter["Active"])
-                //(qFilter["Country"] == "0") ? (Country?)null : (Country)int.Parse(qFilter["Country"]),
-                //Married = string.IsNullOrEmpty(qFilter["Married"]) ? (bool?)null : bool.Parse(qFilter["Married"])
-            };
+                NameValueCollection qFilter = HttpUtility.ParseQueryString(Request.QueryString.Value);
+                var filter = new
+                {
+                    PageIndex = Convert.ToInt32(qFilter["pageIndex"]),
+                    PageSize = Convert.ToInt32(qFilter["pageSize"]),
+                    SortField = qFilter["sortField"],
+                    SortOrder = qFilter["sortOrder"],
+                    Code = qFilter["orgCode"],
+                    Name = qFilter["orgName"],
+                    Description = qFilter["description"],
+                    Active = string.IsNullOrEmpty(qFilter["active"]) ? (bool?)null : bool.Parse(qFilter["Active"])
+                };
 
-            var data = await _service.GetAll()
-                .Where(c =>
-                    (string.IsNullOrEmpty(filter.Code) || c.OrgCode.ToLower().Contains(filter.Code.ToLower())) &&
-                    (string.IsNullOrEmpty(filter.Name) || c.OrgName.ToLower().Contains(filter.Name.ToLower())) &&
-                    (string.IsNullOrEmpty(filter.Description) || c.Description.ToLower().Contains(filter.Description.ToLower())) &&
-                    (!filter.Active.HasValue || c.Active == filter.Active)
-                )
-                .ToListAsync();
-            return Json(data);
+                var query = _service.GetAll()
+                    .Where(c =>
+                        (string.IsNullOrEmpty(filter.Code) || c.OrgCode.Contains(filter.Code))
+                        && (string.IsNullOrEmpty(filter.Name) || c.OrgName.Contains(filter.Name))
+                        && (string.IsNullOrEmpty(filter.Description) || c.Description.Contains(filter.Description))
+                        && (!filter.Active.HasValue || c.Active == filter.Active)
+                    );
+
+                if (filter.SortField != null && filter.SortOrder != null)
+                {
+                    query = query.OrderBy($"{filter.SortField} {filter.SortOrder}");
+                }
+                else
+                {
+                    query = query.OrderBy("OrgCode asc");
+                }
+                var data = await query.GetPagedAsync(filter.PageIndex, filter.PageSize);
+                var result = new { data = data.List, itemsCount = data.RowCount };
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { Error = ex.Message });
+            }
         }
 
         //[ValidateAntiForgeryToken]

@@ -67,7 +67,7 @@ namespace FandaTabler.Controllers
                 }
                 else
                 {
-                    query = query.OrderBy("DateCreated desc");
+                    query = query.OrderBy("Code asc");
                 }
                 var data = await query.GetPagedAsync(filter.PageIndex, filter.PageSize);
                 var result = new { data = data.List, itemsCount = data.RowCount };

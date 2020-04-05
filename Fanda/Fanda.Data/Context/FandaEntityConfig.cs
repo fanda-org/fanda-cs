@@ -98,8 +98,8 @@ namespace Fanda.Data.Context
                 .HasMaxLength(50);
             builder.Property(u => u.LastName)
                 .HasMaxLength(50);
-            builder.Property(o => o.DateCreated).ValueGeneratedOnAdd();
-            builder.Property(o => o.DateModified).ValueGeneratedOnUpdate();
+            //builder.Property(o => o.DateCreated).ValueGeneratedOnAdd();
+            //builder.Property(o => o.DateModified).ValueGeneratedOnUpdate();
 
             // index
             builder.HasIndex(u => u.UserName)
@@ -140,12 +140,12 @@ namespace Fanda.Data.Context
                 .HasMaxLength(25);
             builder.Property(o => o.GSTIN)
                 .HasMaxLength(25);
-            builder.Property(o => o.DateCreated)
+            //builder.Property(o => o.DateCreated)
                 //.HasDefaultValueSql("getdate()")
-                .ValueGeneratedOnAdd();
-            builder.Property(o => o.DateModified)
+                //.ValueGeneratedOnAdd();
+            //builder.Property(o => o.DateModified)
                 //.HasDefaultValueSql("getdate()")
-                .ValueGeneratedOnUpdate();
+                //.ValueGeneratedOnUpdate();
 
             // index
             builder.HasIndex(o => o.OrgCode)
@@ -237,8 +237,8 @@ namespace Fanda.Data.Context
                 .HasMaxLength(25);
             builder.Property(r => r.Description)
                 .HasMaxLength(255);
-            builder.Property(o => o.DateCreated).ValueGeneratedOnAdd();
-            builder.Property(o => o.DateModified).ValueGeneratedOnUpdate();
+            //builder.Property(o => o.DateCreated).ValueGeneratedOnAdd();
+            //builder.Property(o => o.DateModified).ValueGeneratedOnUpdate();
 
             // index
             builder.HasIndex(r => new { r.Code, r.OrgId })
@@ -296,8 +296,8 @@ namespace Fanda.Data.Context
                 .HasMaxLength(25);
             builder.Property(u => u.Description)
                 .HasMaxLength(255);
-            builder.Property(u => u.DateCreated).ValueGeneratedOnAdd();
-            builder.Property(u => u.DateModified).ValueGeneratedOnUpdate();
+            //builder.Property(u => u.DateCreated).ValueGeneratedOnAdd();
+            //builder.Property(u => u.DateModified).ValueGeneratedOnUpdate();
 
             // index
             builder.HasIndex(p => new { p.Code, p.OrgId })
@@ -360,8 +360,8 @@ namespace Fanda.Data.Context
                 .HasMaxLength(50);
             builder.Property(u => u.Description)
                 .HasMaxLength(255);
-            builder.Property(pc => pc.DateCreated).ValueGeneratedOnAdd();
-            builder.Property(pc => pc.DateModified).ValueGeneratedOnUpdate();
+            //builder.Property(pc => pc.DateCreated).ValueGeneratedOnAdd();
+            //builder.Property(pc => pc.DateModified).ValueGeneratedOnUpdate();
 
             // index
             builder.HasIndex(p => new { p.Code, p.OrgId })
@@ -399,8 +399,8 @@ namespace Fanda.Data.Context
                 .HasMaxLength(50);
             builder.Property(u => u.Description)
                 .HasMaxLength(255);
-            builder.Property(b => b.DateCreated).ValueGeneratedOnAdd();
-            builder.Property(b => b.DateModified).ValueGeneratedOnUpdate();
+            //builder.Property(b => b.DateCreated).ValueGeneratedOnAdd();
+            //builder.Property(b => b.DateModified).ValueGeneratedOnUpdate();
 
             // index
             builder.HasIndex(p => new { p.Code, p.OrgId })
@@ -434,8 +434,8 @@ namespace Fanda.Data.Context
                 .HasMaxLength(50);
             builder.Property(u => u.Description)
                 .HasMaxLength(255);
-            builder.Property(s => s.DateCreated).ValueGeneratedOnAdd();
-            builder.Property(s => s.DateModified).ValueGeneratedOnUpdate();
+            //builder.Property(s => s.DateCreated).ValueGeneratedOnAdd();
+            //builder.Property(s => s.DateModified).ValueGeneratedOnUpdate();
 
             // index
             builder.HasIndex(p => new { p.Code, p.OrgId })
@@ -469,8 +469,8 @@ namespace Fanda.Data.Context
                 .HasMaxLength(50);
             builder.Property(u => u.Description)
                 .HasMaxLength(255);
-            builder.Property(v => v.DateCreated).ValueGeneratedOnAdd();
-            builder.Property(v => v.DateModified).ValueGeneratedOnUpdate();
+            //builder.Property(v => v.DateCreated).ValueGeneratedOnAdd();
+            //builder.Property(v => v.DateModified).ValueGeneratedOnUpdate();
 
             // index
             builder.HasIndex(p => new { p.Code, p.OrgId })
@@ -599,8 +599,8 @@ namespace Fanda.Data.Context
             builder.Property(p => p.TaxPreferenceString)
                 .HasColumnName("TaxPreference")
                 .HasMaxLength(16);
-            builder.Property(p => p.DateCreated).ValueGeneratedOnAdd();
-            builder.Property(p => p.DateModified).ValueGeneratedOnUpdate();
+            //builder.Property(p => p.DateCreated).ValueGeneratedOnAdd();
+            //builder.Property(p => p.DateModified).ValueGeneratedOnUpdate();
 
             // index
             builder.HasIndex(p => new { p.Code, p.OrgId })
@@ -662,8 +662,8 @@ namespace Fanda.Data.Context
                 .HasColumnName("GroupType")
                 .IsRequired()
                 .HasMaxLength(20);
-            builder.Property(u => u.DateCreated).ValueGeneratedOnAdd();
-            builder.Property(u => u.DateModified).ValueGeneratedOnUpdate();
+            //builder.Property(u => u.DateCreated).ValueGeneratedOnAdd();
+            //builder.Property(u => u.DateModified).ValueGeneratedOnUpdate();
 
             // index
             builder.HasIndex(g => new { g.GroupCode, g.OrgId })
@@ -702,8 +702,8 @@ namespace Fanda.Data.Context
                 .HasMaxLength(50);
             builder.Property(u => u.Description)
                 .HasMaxLength(255);
-            builder.Property(pc => pc.DateCreated).ValueGeneratedOnAdd();
-            builder.Property(pc => pc.DateModified).ValueGeneratedOnUpdate();
+            //builder.Property(pc => pc.DateCreated).ValueGeneratedOnAdd();
+            //builder.Property(pc => pc.DateModified).ValueGeneratedOnUpdate();
 
             // index
             builder.HasIndex(p => new { p.LedgerCode, p.OrgId })
@@ -750,8 +750,8 @@ namespace Fanda.Data.Context
                 .HasMaxLength(50);
             builder.Property(pc => pc.Description)
                 .HasMaxLength(255);
-            builder.Property(pc => pc.DateCreated).ValueGeneratedOnAdd();
-            builder.Property(pc => pc.DateModified).ValueGeneratedOnUpdate();
+            //builder.Property(pc => pc.DateCreated).ValueGeneratedOnAdd();
+            //builder.Property(pc => pc.DateModified).ValueGeneratedOnUpdate();
 
             // index
             builder.HasIndex(pc => new { pc.Code, pc.OrgId })
@@ -953,8 +953,8 @@ namespace Fanda.Data.Context
                 .HasMaxLength(16);
             builder.Property(ic => ic.Description)
                 .HasMaxLength(255);
-            builder.Property(c => c.DateCreated).ValueGeneratedOnAdd();
-            builder.Property(c => c.DateModified).ValueGeneratedOnUpdate();
+            //builder.Property(c => c.DateCreated).ValueGeneratedOnAdd();
+            //builder.Property(c => c.DateModified).ValueGeneratedOnUpdate();
 
             // index
             builder.HasIndex(ic => new { ic.Code, ic.OrgId })
@@ -1062,8 +1062,8 @@ namespace Fanda.Data.Context
                 .HasColumnName("TaxPreference")
                 .HasMaxLength(16);
 
-            builder.Property(o => o.DateCreated).ValueGeneratedOnAdd();
-            builder.Property(o => o.DateModified).ValueGeneratedOnUpdate();
+            //builder.Property(o => o.DateCreated).ValueGeneratedOnAdd();
+            //builder.Property(o => o.DateModified).ValueGeneratedOnUpdate();
 
             // index
             builder.HasIndex(i => new { i.InvoiceNumber, i.YearId })

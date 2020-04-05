@@ -1,0 +1,14 @@
+﻿.hide {
+    display: none;
+}
+
+.modal-open .modal {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+}
+
+tr.highlight td.jsgrid-cell {
+    color: #fff;
+    background-color: #467fcf;
+}

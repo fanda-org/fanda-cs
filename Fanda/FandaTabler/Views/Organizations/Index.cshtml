@@ -51,18 +51,18 @@
             width: "100%",
 
             heading: true,
+            autoload: true,
+
+            paging: true,
+            pageLoading: true,
+            pageSize: 10,
+            pageButtonCount: 3,
             filtering: true,
+            sorting: true,
 
             inserting: false,
             editing: false,
             selecting: true,
-            sorting: true,
-
-            paging: true,
-            pageLoading: false,
-            autoload: true,
-            pageSize: 10,
-            pageButtonCount: 3,
 
             noDataContent: "No records",
 
@@ -72,18 +72,16 @@
             //data: clients,
             controller: {
                 loadData: function (filter) {
-                    var $url = "@Url.Action("GetAll")";
-                    console.log($url);
                     return $.ajax({
                         type: "GET",
-                        url: $url,
+                        url: "@Url.Action("GetAll")",
                         data: filter
                     });
                 }
             },
 
             onError: function (grid, args) {
-                consol.log(args);
+                console.log(args);
                 alert(args.item);
             },
 
@@ -104,18 +102,14 @@
                 {
                     name: "orgCode", title: "Code", type: "text", width: 75, validate: "required",
                     itemTemplate: function (value, item) {
-                        let $url = '@Url.Action("Select", new { id = -1 })';
-                        console.log($url);
-                        $url = $url.replace('-1', item.id);
-                        //var url = ; @*"/Organizations/Select/" + item.OrgId;*@
-                        console.log($url);
+                        let $url = '@Url.Action("Select", new { id = -1 })'.replace('-1', item.id);
                         return $("<a href='" + $url + "'>" + value + "</a>");
                     }
                 },
                 { name: "orgName", title: "Name", type: "text", width: 150, validate: "required" },
                 { name: "description", type: "text", width: 200 },
                 { name: "active", type: "checkbox", title: "Active", sorting: false },
-                { name: "orgId", visible: false, width: 0 },
+                //{ name: "id", visible: false, width: 0 },
                 //{ name: "Age", type: "number", width: 50 },
                 //{ name: "Address", type: "text", width: 200 },
                 //{ name: "Country", type: "select", items: countries, valueField: "Id", textField: "Name" },
