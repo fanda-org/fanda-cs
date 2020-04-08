@@ -16,7 +16,12 @@
 
 @section scripts{
     <script>
-        require(['jquery', 'jsgrid', 'bootbox', 'toastr'], function ($, _, bootbox, toastr) {
+        require(['jquery', 'bootstrap', 'jsgrid', 'bootbox', 'toastr'], function ($, _, _, bootbox, toastr) {
+            
+            //$(".model-dialog").draggable({
+            //    handle: ".modal-header"
+            //});
+
             $(document).ajaxSend(function (e, xhr, options) {
                 if (options.type.toUpperCase() == "POST" || options.type.toUpperCase() == "PATCH") {
                     let token = $("input[name='__RequestVerificationToken']").val();
@@ -125,7 +130,7 @@
                             buttons: {
                                 cancel: {
                                     label: 'No',
-                                    className: 'btn-primary'
+                                    className: 'btn-secondary'
                                 },
                                 confirm: {
                                     label: 'Yes',

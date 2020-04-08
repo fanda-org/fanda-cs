@@ -31,7 +31,7 @@
     <!-- Generated: 2018-04-16 09:29:05 +0200 -->
     <title>@orgCode - @ViewData["Title"]</title>
 
-    <link rel="stylesheet" href="~/assets/css/google-fonts.css" />
+    <link rel="stylesheet" href="~/assets/css/google-fonts.min.css" type="text/css" />
     <script src="~/assets/js/require.min.js"></script>
     <script>
         requirejs.config({
@@ -40,9 +40,9 @@
     </script>
 
     <!-- Dashboard Core -->
-    <link href="~/assets/css/dashboard.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="~/assets/css/dashboard.min.css" type="text/css" />
     <script src="~/assets/js/dashboard.js"></script>
-    <link href="~/assets/css/site.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/assets/css/site.css" type="text/css" />
 
     <!-- SweetAlert2 -->
     @*<link href="~/assets/css/sweetalert2.min.css" rel="stylesheet" type="text/css" />*@
@@ -60,8 +60,8 @@
     <script src="~/assets/plugins/datatables/plugin.js"></script>
 
     <!-- Tabulator Tables Plugin -->
-    <link href="~/assets/plugins/tabulator-tables/tabulator_bootstrap4.min.css" rel="stylesheet" type="text/css" />
-    <script src="~/assets/plugins/tabulator-tables/plugin.js"></script>
+    @*<link href="~/assets/plugins/tabulator-tables/tabulator_bootstrap4.min.css" rel="stylesheet" type="text/css" />
+        <script src="~/assets/plugins/tabulator-tables/plugin.js"></script>*@
 
     <!-- Select2 -->
     <link href="~/assets/plugins/select2/select2.min.css" rel="stylesheet" type="text/css" />
@@ -71,7 +71,7 @@
 </head>
 <body class="">
     <div class="page">
-        @if (Context.User.Identity.IsAuthenticated) @*if (!string.IsNullOrEmpty(Context.Session.Get<string>("UserId")))*@
+        @if (Context.User.Identity.IsAuthenticated)@*if (!string.IsNullOrEmpty(Context.Session.Get<string>("UserId")))*@
         {
             <div class="flex-fill">
                 <div class="header py-4">
@@ -244,8 +244,8 @@
                                     </ul>
                                 </div>
                                 @*<div class="col-auto">
-                                    <a href="https://github.com/tabler/tabler" class="btn btn-outline-primary btn-sm">Source code</a>
-                                </div>*@
+                                        <a href="https://github.com/tabler/tabler" class="btn btn-outline-primary btn-sm">Source code</a>
+                                    </div>*@
                             </div>
                         </div>
                         <div class="col-12 col-lg-auto mt-3 mt-lg-0 text-center">

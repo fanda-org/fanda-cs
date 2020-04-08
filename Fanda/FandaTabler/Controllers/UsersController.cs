@@ -134,7 +134,7 @@ namespace FandaTabler.Controllers
                 //    RedirectUri = "/Users/Login"
                 //};
                 await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);  //, prop);
-                //HttpContext.Session.Clear();
+                HttpContext.Session.Clear();
                 //foreach (var cookieKey in Request.Cookies.Keys)
                 //{
                 //    Response.Cookies.Delete(cookieKey);

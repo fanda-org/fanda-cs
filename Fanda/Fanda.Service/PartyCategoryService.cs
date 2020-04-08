@@ -76,7 +76,6 @@ namespace Fanda.Service
             }
 
             PartyCategory category = _mapper.Map<PartyCategory>(model);
-            category.Code = category.Code.ToUpper();
             category.OrgId = orgId;
             if (category.Id == Guid.Empty)
             {

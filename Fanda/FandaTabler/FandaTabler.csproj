@@ -22,6 +22,7 @@
   <ItemGroup>
     <Content Remove="Views\PartyCategories\Edit.cshtml" />
     <Content Remove="Views\PartyCategories\Index.cshtml" />
+    <Content Remove="wwwroot\assets\css\dashboard - Copy.css" />
   </ItemGroup>
 
   <ItemGroup>

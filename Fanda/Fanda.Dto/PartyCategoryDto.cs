@@ -9,13 +9,13 @@ namespace Fanda.Dto
 
         [Display(Name = "Code"),
             Required(AllowEmptyStrings = false, ErrorMessage = "Code is required"),
-            RegularExpression(@"^[a-zA-Z0-9~!@#$()_+-{}|:<>.?\/]+$", ErrorMessage = @"Special characters are not allowed in code"),
+            RegularExpression(@"^[a-zA-Z0-9~!@#$()_+-{}|:<>.?\/]+$", ErrorMessage = @"Space or tab are not allowed in code"),
             StringLength(16, ErrorMessage = "Maximum allowed length is 16")]
         public string Code { get; set; }
 
         [Display(Name = "Name"),
             Required(AllowEmptyStrings = false, ErrorMessage = "Category name is required"),
-            RegularExpression(@"^[a-zA-Z0-9\s~!@#$()_+-{}|:<>.?\/]+$", ErrorMessage = @"Special characters are not allowed in name"),
+            RegularExpression(@"^[a-zA-Z0-9\s~!@#$()_+-{}|:<>.?\/]*$", ErrorMessage = @"Special characters are not allowed in name"),
             StringLength(50, ErrorMessage = "Maximum allowed length is 50")]
         public string Name { get; set; }
 
@@ -36,4 +36,5 @@ namespace Fanda.Dto
     }
     //[RegularExpression(@"^[^\\/:*;\.\)\(]+$", ErrorMessage = "The characters ':', '.' ';', '*', '/' and '\' are not allowed")]
     // "^[a-zA-Z0-9~`!@#$%^&*()_+-={}|:;<>,.?\/']+$"
+    // "^((?![\s{2,}|\t]).)*$"
 }

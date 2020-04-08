@@ -1,9 +1,19 @@
 [
   {
-    "outputFileName": "wwwroot/css/site.min.css",
+    "outputFileName": "wwwroot/assets/css/dashboard.min.css",
     "includeInProject": true,
     "inputFiles": [
-      "wwwroot/css/site.css"
+      "wwwroot/assets/css/dashboard.css"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/assets/css/google-fonts.min.css",
+    "includeInProject": true,
+    "inputFiles": [
+      "wwwroot/assets/css/google-fonts.css"
     ],
     "minify": {
       "enabled": true

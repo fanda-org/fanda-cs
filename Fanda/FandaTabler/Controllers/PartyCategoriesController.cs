@@ -91,9 +91,12 @@ namespace FandaTabler.Controllers
                     return RedirectToAction("Index", "Home");
                 }
 
+                model.Code = model.Code.ToUpper();
+                model.Name = model.Name.TrimExtraSpaces();
+                model.Description = model.Description.TrimExtraSpaces();
+
                 #region Validation: Dupllicate
                 // Check code duplicate
-                model.Code = model.Code.ToUpper();
                 var duplCode = new Duplicate { Field = DuplicateField.Code, Value = model.Code, Id = model.Id, OrgId = org.Id };
                 if (await _service.ExistsAsync(duplCode))
                 {
