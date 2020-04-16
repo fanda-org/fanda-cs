@@ -4,12 +4,12 @@ using System.Collections.Generic;
 
 namespace Fanda.Data
 {
-    public class Product
+    public class Product : BaseOrgModel
     {
-        public Guid Id { get; set; }
-        public string Code { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
+        //public Guid Id { get; set; }
+        //public string Code { get; set; }
+        //public string Name { get; set; }
+        //public string Description { get; set; }
         public ProductType ProductType { get; set; }
         public string ProductTypeString
         {
@@ -35,17 +35,17 @@ namespace Fanda.Data
         #endregion Tax / GST
         public decimal CostPrice { get; set; }
         public decimal SellingPrice { get; set; }
-        public Guid OrgId { get; set; }
-        public bool Active { get; set; }
-        public DateTime DateCreated { get; set; }
-        public DateTime? DateModified { get; set; }
+        //public Guid OrgId { get; set; }
+        //public bool Active { get; set; }
+        //public DateTime DateCreated { get; set; }
+        //public DateTime? DateModified { get; set; }
 
         public virtual ProductCategory Category { get; set; }
         public virtual ProductBrand Brand { get; set; }
         public virtual ProductSegment Segment { get; set; }
         public virtual ProductVariety Variety { get; set; }
         public virtual Unit Unit { get; set; }
-        public virtual Organization Organization { get; set; }
+        //public virtual Organization Organization { get; set; }
         public virtual ICollection<Stock> Stocks { get; set; }
         public virtual ICollection<ProductPricing> ProductPricings { get; set; }
         public virtual ICollection<ProductIngredient> ParentIngredients { get; set; }   // ProductIngredient.ProductId

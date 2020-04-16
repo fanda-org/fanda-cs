@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Fanda.Data
 {
-    public class User //: IdentityUser<Guid>
+    public class User
     {
         public User()
         {

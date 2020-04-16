@@ -124,10 +124,10 @@ namespace Fanda.Data.Context
             builder.HasKey(o => o.Id);
 
             // columns
-            builder.Property(o => o.OrgCode)
+            builder.Property(o => o.Code)
                 .IsRequired()
                 .HasMaxLength(16);
-            builder.Property(o => o.OrgName)
+            builder.Property(o => o.Name)
                 .IsRequired()
                 .HasMaxLength(100);
             builder.Property(o => o.Description)
@@ -148,9 +148,9 @@ namespace Fanda.Data.Context
                 //.ValueGeneratedOnUpdate();
 
             // index
-            builder.HasIndex(o => o.OrgCode)
+            builder.HasIndex(o => o.Code)
                 .IsUnique();
-            builder.HasIndex(o => o.OrgName)
+            builder.HasIndex(o => o.Name)
                 .IsUnique();
         }
     }
@@ -649,10 +649,10 @@ namespace Fanda.Data.Context
             builder.HasKey(u => u.Id);
 
             // columns
-            builder.Property(u => u.GroupCode)
+            builder.Property(u => u.Code)
                 .IsRequired()
                 .HasMaxLength(16);
-            builder.Property(u => u.GroupName)
+            builder.Property(u => u.Name)
                 .IsRequired()
                 .HasMaxLength(50);
             builder.Property(u => u.Description)
@@ -666,9 +666,9 @@ namespace Fanda.Data.Context
             //builder.Property(u => u.DateModified).ValueGeneratedOnUpdate();
 
             // index
-            builder.HasIndex(g => new { g.GroupCode, g.OrgId })
+            builder.HasIndex(g => new { g.Code, g.OrgId })
                 .IsUnique();
-            builder.HasIndex(g => new { g.GroupName, g.OrgId })
+            builder.HasIndex(g => new { g.Name, g.OrgId })
                 .IsUnique();
 
             // foreign key
@@ -694,10 +694,10 @@ namespace Fanda.Data.Context
             builder.HasKey(l => l.Id);
 
             // columns
-            builder.Property(u => u.LedgerCode)
+            builder.Property(u => u.Code)
                 .IsRequired()
                 .HasMaxLength(16);
-            builder.Property(u => u.LedgerName)
+            builder.Property(u => u.Name)
                 .IsRequired()
                 .HasMaxLength(50);
             builder.Property(u => u.Description)
@@ -706,9 +706,9 @@ namespace Fanda.Data.Context
             //builder.Property(pc => pc.DateModified).ValueGeneratedOnUpdate();
 
             // index
-            builder.HasIndex(p => new { p.LedgerCode, p.OrgId })
+            builder.HasIndex(p => new { p.Code, p.OrgId })
                 .IsUnique();
-            builder.HasIndex(p => new { p.LedgerName, p.OrgId })
+            builder.HasIndex(p => new { p.Name, p.OrgId })
                 .IsUnique();
 
             // foreign key

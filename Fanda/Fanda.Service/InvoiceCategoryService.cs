@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Fanda.Service
 {
-    public interface IInvoiceCategoryService
+    public interface IInvoiceCategoryService //: IService<InvoiceCategoryDto>
     {
         Task<List<InvoiceCategoryDto>> GetAllAsync(Guid orgId, bool? active);
 

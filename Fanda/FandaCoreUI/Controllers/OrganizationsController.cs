@@ -100,7 +100,7 @@ namespace Fanda.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!OrganizationExists(dto.Id))
+                    if (!await OrganizationExists(dto.Id))
                     {
                         return NotFound();
                     }
@@ -145,6 +145,7 @@ namespace Fanda.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool OrganizationExists(Guid id) => _service.ExistsById(id);
+        private async Task<bool> OrganizationExists(Guid id) => 
+            await _service.ExistsAsync(new Shared.BaseDuplicate { Field = Shared.DuplicateField.Id, Id = id });
     }
 }

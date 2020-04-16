@@ -12,17 +12,17 @@ using System.Threading.Tasks;
 
 namespace Fanda.Service
 {
-    public interface IOrganizationService
+    public interface IOrganizationService : IBaseService<OrganizationDto>
     {
-        IQueryable<OrganizationDto> GetAll();
-        Task<OrganizationDto> GetByIdAsync(Guid orgId, bool includes = false);
-        //Task<OrganizationDto> GetByCodeAsync(Guid orgCode, bool includes = false);
-        Task<OrganizationDto> SaveAsync(OrganizationDto dto);
-        Task<bool> DeleteAsync(Guid orgId);
-        bool ExistsById(Guid orgId);
-        bool ExistsByCode(string orgCode);
-        Task<bool> ChangeStatus(ActiveStatus status);
-        string ErrorMessage { get; }
+        //IQueryable<OrganizationDto> GetAll();
+        //Task<OrganizationDto> GetByIdAsync(Guid orgId, bool includes = false);
+        ////Task<OrganizationDto> GetByCodeAsync(Guid orgCode, bool includes = false);
+        //Task<OrganizationDto> SaveAsync(OrganizationDto dto);
+        //Task<bool> DeleteAsync(Guid orgId);
+        //bool ExistsById(Guid orgId);
+        //bool ExistsByCode(string orgCode);
+        //Task<bool> ChangeStatus(ActiveStatus status);
+        //string ErrorMessage { get; }
     }
 
     public class OrganizationService : IOrganizationService
@@ -250,11 +250,10 @@ namespace Fanda.Service
             throw new KeyNotFoundException("Organization not found");
         }
 
-        public bool ExistsById(Guid orgId) => _context.Organizations.Any(o => o.Id == orgId);
+        //public bool ExistsById(Guid orgId) => _context.Organizations.Any(o => o.Id == orgId);
+        //public bool ExistsByCode(string orgCode) => _context.Organizations.Any(o => o.Code == orgCode);
 
-        public bool ExistsByCode(string orgCode) => _context.Organizations.Any(o => o.OrgCode == orgCode);
-
-        public async Task<bool> ChangeStatus(ActiveStatus status)
+        public async Task<bool> ChangeStatusAsync(ActiveStatus status)
         {
             if (status.Id == null || status.Id == Guid.Empty)
             {
@@ -272,5 +271,7 @@ namespace Fanda.Service
             }
             throw new KeyNotFoundException("Organization not found");
         }
+
+        public Task<bool> ExistsAsync(BaseDuplicate data) => _context.ExistsAsync<Organization>(data);
     }
 }

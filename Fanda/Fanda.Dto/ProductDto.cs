@@ -4,17 +4,17 @@ using System.Collections.Generic;
 
 namespace Fanda.Dto
 {
-    public class ProductDto
+    public class ProductDto : BaseDto
     {
         public ProductDto()
         {
             Ingredients = new HashSet<ProductIngredientDto>();
             ProductPricings = new HashSet<ProductPricingDto>();
         }
-        public Guid Id { get; set; }
-        public string Code { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
+        //public Guid Id { get; set; }
+        //public string Code { get; set; }
+        //public string Name { get; set; }
+        //public string Description { get; set; }
         public ProductType ProductType { get; set; }
         public Guid CategoryId { get; set; }
         public Guid BrandId { get; set; }
@@ -26,9 +26,9 @@ namespace Fanda.Dto
         public decimal StateGstPct { get; set; }
         public decimal InterGstPct { get; set; }
         public decimal SellingPrice { get; set; }
-        public bool Active { get; set; }
-        public DateTime DateCreated { get; set; }
-        public DateTime? DateModified { get; set; }
+        //public bool Active { get; set; }
+        //public DateTime DateCreated { get; set; }
+        //public DateTime? DateModified { get; set; }
 
         public bool IsCompoundProduct { get; set; }
         public ICollection<ProductIngredientDto> Ingredients { get; set; }

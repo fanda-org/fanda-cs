@@ -3,19 +3,19 @@ using System.Collections.Generic;
 
 namespace Fanda.Data
 {
-    public class Organization
+    public class Organization : BaseModel
     {
-        public Guid Id { get; set; }
-        public string OrgCode { get; set; }
-        public string OrgName { get; set; }
-        public string Description { get; set; }
+        //public Guid Id { get; set; }
+        //public string OrgCode { get; set; }
+        //public string OrgName { get; set; }
+        //public string Description { get; set; }
         public string RegdNum { get; set; }
         public string PAN { get; set; }
         public string TAN { get; set; }
         public string GSTIN { get; set; }
-        public bool Active { get; set; }
-        public DateTime DateCreated { get; set; }
-        public DateTime? DateModified { get; set; }
+        //public bool Active { get; set; }
+        //public DateTime DateCreated { get; set; }
+        //public DateTime? DateModified { get; set; }
 
         public virtual ICollection<OrgContact> OrgContacts { get; set; }
         public virtual ICollection<OrgAddress> OrgAddresses { get; set; }

@@ -5,7 +5,6 @@ using Fanda.Data.Context;
 using Fanda.Dto;
 using Fanda.Shared;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,16 +12,16 @@ using System.Threading.Tasks;
 
 namespace Fanda.Service
 {
-    public interface IPartyCategoryService
+    public interface IPartyCategoryService : IBaseOrgService<PartyCategoryDto>
     {
-        IQueryable<PartyCategoryDto> GetAll(Guid orgId);
-        Task<PartyCategoryDto> GetByIdAsync(Guid categoryId);
-        Task<PartyCategoryDto> SaveAsync(Guid orgId, PartyCategoryDto model);
-        Task<bool> DeleteAsync(Guid categoryId);
-        Task<bool> ChangeStatusAsync(ActiveStatus status);
-        Task<bool> ExistsAsync(Duplicate data /*Guid orgId, string categoryCode, Guid categoryId = default*/);
+        //IQueryable<PartyCategoryDto> GetAll(Guid orgId);
+        //Task<PartyCategoryDto> GetByIdAsync(Guid categoryId);
+        //Task<PartyCategoryDto> SaveAsync(Guid orgId, PartyCategoryDto model);
+        //Task<bool> DeleteAsync(Guid categoryId);
+        //Task<bool> ChangeStatusAsync(ActiveStatus status);
+        //Task<bool> ExistsAsync(Duplicate data /*Guid orgId, string categoryCode, Guid categoryId = default*/);
 
-        string ErrorMessage { get; }
+        //string ErrorMessage { get; }
     }
 
     public class PartyCategoryService : IPartyCategoryService
@@ -38,7 +37,7 @@ namespace Fanda.Service
 
         public string ErrorMessage { get; private set; }
 
-        public IQueryable<PartyCategoryDto> GetAll(Guid orgId /*, bool? active*/)
+        public IQueryable<PartyCategoryDto> GetAll(Guid orgId)
         {
             if (orgId == null || orgId == Guid.Empty)
             {
@@ -54,7 +53,7 @@ namespace Fanda.Service
             return categories;
         }
 
-        public async Task<PartyCategoryDto> GetByIdAsync(Guid categoryId)
+        public async Task<PartyCategoryDto> GetByIdAsync(Guid categoryId, bool include = false)
         {
             PartyCategoryDto category = await _context.PartyCategories
                 .AsNoTracking()
@@ -130,58 +129,6 @@ namespace Fanda.Service
             throw new KeyNotFoundException("Party category not found");
         }
 
-        public async Task<bool> ExistsAsync(Duplicate data /*Guid orgId, string categoryCode, Guid categoryId = default*/)
-        {
-            bool result = true;
-            switch (data.Field)
-            {
-                case DuplicateField.Code:
-                    if (data.Id == Guid.Empty && data.OrgId == Guid.Empty)
-                    {
-                        result = await _context.PartyCategories
-                            .AnyAsync(pc => pc.Code == data.Value);
-                    }
-                    else if (data.Id == Guid.Empty && data.OrgId != Guid.Empty)
-                    {
-                        result = await _context.PartyCategories
-                            .AnyAsync(pc => pc.Code == data.Value && pc.OrgId == data.OrgId);
-                    }
-                    else if(data.Id != Guid.Empty && data.OrgId == Guid.Empty)
-                    {
-                        result = await _context.PartyCategories
-                            .AnyAsync(pc => pc.Code == data.Value && pc.Id != data.Id);
-                    }
-                    else if(data.Id != Guid.Empty && data.OrgId != Guid.Empty)
-                    {
-                        result = await _context.PartyCategories
-                            .AnyAsync(pc => pc.Code == data.Value && pc.Id != data.Id && pc.OrgId == data.OrgId);
-                    }
-                    return result;
-                case DuplicateField.Name:
-                    if (data.Id == Guid.Empty && data.OrgId == Guid.Empty)
-                    {
-                        result = await _context.PartyCategories
-                            .AnyAsync(pc => pc.Name == data.Value);
-                    }
-                    else if (data.Id == Guid.Empty && data.OrgId != Guid.Empty)
-                    {
-                        result = await _context.PartyCategories
-                            .AnyAsync(pc => pc.Name == data.Value && pc.OrgId == data.OrgId);
-                    }
-                    else if (data.Id != Guid.Empty && data.OrgId == Guid.Empty)
-                    {
-                        result = await _context.PartyCategories
-                            .AnyAsync(pc => pc.Name == data.Value && pc.Id != data.Id);
-                    }
-                    else if (data.Id != Guid.Empty && data.OrgId != Guid.Empty)
-                    {
-                        result = await _context.PartyCategories
-                            .AnyAsync(pc => pc.Name == data.Value && pc.Id != data.Id && pc.OrgId == data.OrgId);
-                    }
-                    return result;
-                default:
-                    return true;
-            }
-        }
+        public Task<bool> ExistsAsync(BaseOrgDuplicate data) => _context.ExistsAsync<PartyCategory>(data);
     }
 }

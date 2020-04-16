@@ -2,10 +2,12 @@
 using Fanda.Service;
 using Fanda.Shared;
 using FandaTabler.Extensions;
+using FandaTabler.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Linq.Dynamic.Core;
@@ -27,44 +29,53 @@ namespace FandaTabler.Controllers
         }
 
         // GET: Orgs
-        public ActionResult Index() => View();
+        public async Task<ActionResult> Index(string search)
+        {
+            OkObjectResult orgResult = (OkObjectResult)await GetAll();
+            var orgs = (JsGridResult<IList<OrganizationDto>>)orgResult.Value;
+            return View(orgs.Data);
+        }
 
+        //[HttpPost]
+        //public async Task<ActionResult> Search()
+        //{
+        //    OkObjectResult orgResult = (OkObjectResult)await GetAll();
+        //    var orgs = (JsGridResult<IList<OrganizationDto>>)orgResult.Value;
+        //    return View("Index", orgs.Data);
+        //}
+
+        [HttpPost]
         [Produces("application/json")]
         public async Task<ActionResult> GetAll()
         {
             try
             {
                 NameValueCollection qFilter = HttpUtility.ParseQueryString(Request.QueryString.Value);
-                var filter = new
+                string search = qFilter["search"];
+                var filter = new BaseFilter<IOrganizationService, OrganizationDto>
                 {
-                    PageIndex = Convert.ToInt32(qFilter["pageIndex"]),
-                    PageSize = Convert.ToInt32(qFilter["pageSize"]),
+                    PageIndex = string.IsNullOrEmpty(qFilter["pageIndex"]) ? 1 : Convert.ToInt32(qFilter["pageIndex"]),
+                    PageSize = string.IsNullOrEmpty(qFilter["pageSize"]) ? 100 : Convert.ToInt32(qFilter["pageSize"]),
                     SortField = qFilter["sortField"],
                     SortOrder = qFilter["sortOrder"],
-                    Code = qFilter["orgCode"],
-                    Name = qFilter["orgName"],
-                    Description = qFilter["description"],
+                    Code = string.IsNullOrEmpty(qFilter["code"]) ? search : qFilter["code"],
+                    Name = string.IsNullOrEmpty(qFilter["name"]) ? search : qFilter["name"],
+                    Description = string.IsNullOrEmpty(qFilter["description"]) ? search : qFilter["description"],
                     Active = string.IsNullOrEmpty(qFilter["active"]) ? (bool?)null : bool.Parse(qFilter["Active"])
                 };
 
-                var query = _service.GetAll()
-                    .Where(c =>
-                        (string.IsNullOrEmpty(filter.Code) || c.OrgCode.Contains(filter.Code))
-                        && (string.IsNullOrEmpty(filter.Name) || c.OrgName.Contains(filter.Name))
-                        && (string.IsNullOrEmpty(filter.Description) || c.Description.Contains(filter.Description))
-                        && (!filter.Active.HasValue || c.Active == filter.Active)
-                    );
-
-                if (filter.SortField != null && filter.SortOrder != null)
+                PagedList<OrganizationDto> data;
+                if (string.IsNullOrEmpty(search))
                 {
-                    query = query.OrderBy($"{filter.SortField} {filter.SortOrder}");
+                    data = await filter.ApplyAsync(_service);
                 }
                 else
                 {
-                    query = query.OrderBy("OrgCode asc");
+                    data = await filter.ApplyOrAsync(_service);
                 }
-                var data = await query.GetPagedAsync(filter.PageIndex, filter.PageSize);
-                var result = new { data = data.List, itemsCount = data.RowCount };
+
+                var result = new JsGridResult<IList<OrganizationDto>> { Data = data.List, ItemsCount = data.RowCount };
+
                 return Ok(result);
             }
             catch (Exception ex)
@@ -86,7 +97,7 @@ namespace FandaTabler.Controllers
         [HttpPatch]
         public async Task<IActionResult> ChangeStatus([FromBody]ActiveStatus status)
         {
-            await _service.ChangeStatus(status);
+            await _service.ChangeStatusAsync(status);
             return Ok();
         }
 

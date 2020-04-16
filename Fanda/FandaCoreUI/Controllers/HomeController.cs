@@ -18,7 +18,7 @@ namespace FandaCoreUI.Controllers
         {
             var demoOrg = _organizationService
                 .GetAll()
-                .Where(o => o.OrgCode == "DEMO")
+                .Where(o => o.Code == "DEMO")
                 .FirstOrDefault();
 
             HttpContext.Session.Set("DemoOrg", demoOrg);

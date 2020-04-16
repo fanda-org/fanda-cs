@@ -1,38 +1,194 @@
-﻿@{
+﻿@model IEnumerable<OrganizationDto>
+
+@{
     ViewData["Title"] = "Index";
 }
-<div class="page-header">
-    <h1 class="page-title">
+
+@*<div class="page-header">*@
+@*<h1 class="page-title">
         Organizations
-    </h1>
-</div>
+    </h1>*@
+@*</div>*@
+
 <div class="card">
     <div class="card-header">
         <h3 class="card-title">List of Organizations</h3>
     </div>
     <div class="card-body">
-        @*<div class="row mb-3">
-                <div class="col-sm-3">
-                    <div class="input-icon">
-                        <input type="search" class="form-control header-search" placeholder="Search&hellip;" tabindex="1">
-                        <div class="input-icon-addon">
-                            <i class="fe fe-search"></i>
+        <div class="row mb-3 align-items-center">
+            <div class="col">
+                @*<div class="input-icon">*@
+                <form asp-action="Index" method="get">
+                    <div class="input-group">
+                        <input type="search" class="form-control" placeholder="Search&hellip;" tabindex="1" id="search" name="search">
+                        <span class="input-group-append">
+                            <button type="submit" class="btn btn-secondary"><i class="fe fe-search"></i></button>
+                        </span>
+                        @*<div class="input-icon-addon">
+                                <i class="fe fe-search"></i>
+                            </div>*@
+                    </div>
+                </form>
+                @*</div>*@
+            </div>
+            <div class="col-2 text-center">
+                <a href="javascript:void(0)" class="btn btn-secondary"><i class="fe fe-arrow-left"></i></a>
+            </div>
+            <div class="col-2 text-center">
+                <a href="javascript:void(0)" class="btn btn-secondary"><i class="fe fe-arrow-right"></i></a>
+            </div>
+            <div class="col-3">
+                <a href="javascript:void(0)" class="btn btn-success btn-block"><i class="fe fe-plus"></i> Add</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                @foreach (var org in Model)
+                {
+                    <div class="card card-hover">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <img src="~/demo/photos/adrian-infernus-281832-500.jpg" class="object-cover w-100 h-100" alt="Card side image">
+                            </div>
+                            <div class="col">
+                                <div class="card-body">
+                                    <h3 class="card-title">@org.Name</h3>
+                                    <p>@org.Name</p>
+                                    <div class="row align-items-center">
+                                        <div class="col-6">
+                                            <div class="input-group">
+                                                <select class="custom-select" id="inputGroupSelectYear">
+                                                    <option selected>Choose Year...</option>
+                                                    <option value="1">2019-20</option>
+                                                    <option value="2">2018-19</option>
+                                                    <option value="3">2017-18</option>
+                                                </select>
+                                                <div class="input-group-append">
+                                                    <a href='@Url.Action("Select", new { id = org.Id })' class="btn btn-primary" type="button"><i class="fe fe-book-open"></i> Open</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <button class="btn btn-block btn-outline-secondary"><i class="fe fe-edit-3"></i> Edit</button>
+                                        </div>
+                                        <div class="col">
+                                            <button class="btn btn-block btn-outline-danger"><i class="fe fe-trash-2"></i> Delete</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-sm-1">
-                    <a href="javascript:void(0)" class="btn btn-secondary"><i class="fe fe-refresh-cw"></i></a>
-                </div>
-                <div class="col-sm">
-                    <div class="float-right">
-                        <a href="javascript:void(0)" class="btn btn-secondary"><i class="fe fe-plus-circle"></i> Create New</a>
-                    </div>
-                </div>
-            </div>*@
-        <form method="post">
-            @Html.AntiForgeryToken()
-            <div id="jsGrid"></div>
-        </form>
+                    @*<div class="card card-hover">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <img src="~/demo/photos/ales-krivec-107499-500.jpg" class="object-cover w-100 h-100" alt="Card side image">
+                                </div>
+                                <div class="col">
+                                    <div class="card-body">
+                                        <h3 class="card-title">Fanda Company</h3>
+                                        <p>System organization</p>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="input-group">
+                                                    <select class="custom-select" id="inputGroupSelectYear">
+                                                        <option selected>Choose Year...</option>
+                                                        <option value="1">2019-20</option>
+                                                        <option value="2">2018-19</option>
+                                                        <option value="3">2017-18</option>
+                                                    </select>
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-primary" type="button"><i class="fe fe-book-open"></i> Open</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <button class="btn btn-block btn-outline-secondary"><i class="fe fe-edit-3"></i> Edit</button>
+                                            </div>
+                                            <div class="col">
+                                                <button class="btn btn-block btn-outline-danger"><i class="fe fe-trash"></i> Delete</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card card-hover">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <img src="~/demo/photos/alex-bertha-316137-500.jpg" class="object-cover w-100 h-100" alt="Card side image">
+                                </div>
+                                <div class="col">
+                                    <div class="card-body">
+                                        <h3 class="card-title">Finvent Company</h3>
+                                        <p>Finvent company</p>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="input-group">
+                                                    <select class="custom-select" id="inputGroupSelectYear">
+                                                        <option selected>Choose Year...</option>
+                                                        <option value="1">2019-20</option>
+                                                        <option value="2">2018-19</option>
+                                                        <option value="3">2017-18</option>
+                                                    </select>
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-primary" type="button"><i class="fe fe-book-open"></i> Open</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <button class="btn btn-block btn-outline-secondary"><i class="fe fe-edit-3"></i> Edit</button>
+                                            </div>
+                                            <div class="col">
+                                                <button class="btn btn-block btn-outline-danger"><i class="fe fe-trash"></i> Delete</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card card-hover">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <img src="~/demo/photos/anders-jilden-307322-500.jpg" class="object-cover w-100 h-100" alt="Card side image">
+                                </div>
+                                <div class="col">
+                                    <div class="card-body">
+                                        <h3 class="card-title">Capital Company</h3>
+                                        <p>Capital company</p>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="input-group">
+                                                    <select class="custom-select" id="inputGroupSelectYear">
+                                                        <option selected>Choose Year...</option>
+                                                        <option value="1">2019-20</option>
+                                                        <option value="2">2018-19</option>
+                                                        <option value="3">2017-18</option>
+                                                    </select>
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-primary" type="button"><i class="fe fe-book-open"></i> Open</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <button class="btn btn-block btn-outline-secondary"><i class="fe fe-edit-3"></i> Edit</button>
+                                            </div>
+                                            <div class="col">
+                                                <button class="btn btn-block btn-outline-danger"><i class="fe fe-trash"></i> Delete</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>*@
+                }
+            </div>
+        </div>
+
+        @*<form method="post">
+                @Html.AntiForgeryToken()
+                <div id="jsGrid"></div>
+            </form>*@
     </div>
 </div>
 

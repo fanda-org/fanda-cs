@@ -30,12 +30,12 @@ namespace Fanda.Service.Seed
                 IOrganizationService service = _provider.GetRequiredService<IOrganizationService>();
 
                 string orgCode = orgName.ToUpper();
-                if (!service.ExistsByCode(orgCode))
+                if (!await service.ExistsAsync(new BaseDuplicate { Field = DuplicateField.Code, Value = orgCode }))
                 {
                     OrganizationDto org = await service.SaveAsync(new OrganizationDto
                     {
-                        OrgCode = orgCode,
-                        OrgName = orgName,
+                        Code = orgCode,
+                        Name = orgName,
                         Description = $"{orgName} organization",
                         Active = true
                     });
@@ -174,7 +174,7 @@ namespace Fanda.Service.Seed
             try
             {
                 IPartyCategoryService service = _provider.GetRequiredService<IPartyCategoryService>();
-                if (!await service.ExistsAsync(new Duplicate
+                if (!await service.ExistsAsync(new BaseOrgDuplicate
                 {
                     Field = DuplicateField.Code,
                     Value = "DEFAULT",

@@ -4686,11 +4686,11 @@ input[type="button"].btn-block {
 .card-body {
   -ms-flex: 1 1 auto;
   flex: 1 1 auto;
-  padding: 1.5rem;
+  padding: 0.75rem;
 }
 
 .card-title {
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.75rem;
 }
 
 .card-subtitle {
@@ -4711,7 +4711,7 @@ input[type="button"].btn-block {
 }
 
 .card-header {
-  padding: 1.5rem 1.5rem;
+  padding: 0.5rem 0.75rem;
   margin-bottom: 0;
   background-color: rgba(0, 0, 0, 0.03);
   border-bottom: 1px solid rgba(0, 40, 100, 0.12);
@@ -14581,7 +14581,7 @@ a.icon:hover {
 .card {
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   position: relative;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.75rem;
   width: 100%;
 }
 
@@ -14600,7 +14600,7 @@ a.icon:hover {
   -ms-flex: 1 1 auto;
   flex: 1 1 auto;
   margin: 0;
-  padding: 1.5rem 1.5rem;
+  padding: 0.75rem 0.75rem;
   position: relative;
 }
 
@@ -14635,7 +14635,7 @@ a.icon:hover {
 
 .card-header {
   background: none;
-  padding: 0.5rem 1.5rem;
+  padding: 0.5rem 0.75rem;
   display: -ms-flexbox;
   display: flex;
   min-height: 3.5rem;
@@ -14674,7 +14674,7 @@ a.icon:hover {
   font-size: 1.125rem;
   line-height: 1.2;
   font-weight: 400;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.75rem;
 }
 
 .card-title a {

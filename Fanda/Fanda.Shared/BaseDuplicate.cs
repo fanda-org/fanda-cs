@@ -5,19 +5,24 @@ using System.Text;
 
 namespace Fanda.Shared
 {
-    public class Duplicate
+    public class BaseDuplicate
     {
         [Required]
         public DuplicateField Field { get; set; }
         [Required]
         public string Value { get; set; }
         public Guid Id { get; set; } = default;
+    }
+
+    public class BaseOrgDuplicate : BaseDuplicate
+    {
         public Guid OrgId { get; set; } = default;
     }
 
     public enum DuplicateField
     {
-        Code = 1,
-        Name = 2
+        Id = 1,
+        Code = 2,
+        Name = 3
     }
 }

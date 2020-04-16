@@ -2,10 +2,12 @@
 using Fanda.Service;
 using Fanda.Shared;
 using FandaTabler.Extensions;
+using FandaTabler.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Linq.Dynamic.Core;
@@ -39,7 +41,7 @@ namespace FandaTabler.Controllers
                 }
 
                 NameValueCollection qFilter = HttpUtility.ParseQueryString(Request.QueryString.Value);
-                var filter = new
+                var filter = new BaseOrgFilter<IPartyCategoryService, PartyCategoryDto>
                 {
                     PageIndex = Convert.ToInt32(qFilter["pageIndex"]),
                     PageSize = Convert.ToInt32(qFilter["pageSize"]),
@@ -53,24 +55,8 @@ namespace FandaTabler.Controllers
                     //Married = string.IsNullOrEmpty(qFilter["Married"]) ? (bool?)null : bool.Parse(qFilter["Married"])
                 };
 
-                var query = _service.GetAll(org.Id)
-                    .Where(c =>
-                        (string.IsNullOrEmpty(filter.Code) || c.Code.Contains(filter.Code))
-                        && (string.IsNullOrEmpty(filter.Name) || c.Name.Contains(filter.Name))
-                        && (string.IsNullOrEmpty(filter.Description) || c.Description.Contains(filter.Description))
-                        && (!filter.Active.HasValue || c.Active == filter.Active)
-                    );
-
-                if (filter.SortField != null && filter.SortOrder != null)
-                {
-                    query = query.OrderBy($"{filter.SortField} {filter.SortOrder}");
-                }
-                else
-                {
-                    query = query.OrderBy("Code asc");
-                }
-                var data = await query.GetPagedAsync(filter.PageIndex, filter.PageSize);
-                var result = new { data = data.List, itemsCount = data.RowCount };
+                var data = await filter.ApplyAsync(_service, org.Id);
+                var result = new JsGridResult<IList<PartyCategoryDto>>{ Data = data.List, ItemsCount = data.RowCount };
                 return Ok(result);
             }
             catch (Exception ex)
@@ -97,13 +83,13 @@ namespace FandaTabler.Controllers
 
                 #region Validation: Dupllicate
                 // Check code duplicate
-                var duplCode = new Duplicate { Field = DuplicateField.Code, Value = model.Code, Id = model.Id, OrgId = org.Id };
+                var duplCode = new BaseOrgDuplicate { Field = DuplicateField.Code, Value = model.Code, Id = model.Id, OrgId = org.Id };
                 if (await _service.ExistsAsync(duplCode))
                 {
                     ModelState.AddModelError("Code", $"Code '{model.Code}' already exists");
                 }
                 // Check name duplicate
-                var duplName = new Duplicate { Field = DuplicateField.Name, Value = model.Name, Id = model.Id, OrgId = org.Id };
+                var duplName = new BaseOrgDuplicate { Field = DuplicateField.Name, Value = model.Name, Id = model.Id, OrgId = org.Id };
                 if (await _service.ExistsAsync(duplName))
                 {
                     ModelState.AddModelError("Name", $"Name '{model.Name}' already exists");
@@ -139,9 +125,6 @@ namespace FandaTabler.Controllers
             }
         }
 
-        private OrganizationDto GetSelectedOrg()
-        {
-            return HttpContext.Session.Get<OrganizationDto>("CurrentOrg");
-        }
+        private OrganizationDto GetSelectedOrg() => HttpContext.Session.Get<OrganizationDto>("CurrentOrg");
     }
 }

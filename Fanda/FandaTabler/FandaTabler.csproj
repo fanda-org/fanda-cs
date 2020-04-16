@@ -8,9 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="backup\**" />
     <Compile Remove="Views\Parties\**" />
+    <Content Remove="backup\**" />
     <Content Remove="Views\Parties\**" />
+    <EmbeddedResource Remove="backup\**" />
     <EmbeddedResource Remove="Views\Parties\**" />
+    <None Remove="backup\**" />
     <None Remove="Views\Parties\**" />
   </ItemGroup>
 

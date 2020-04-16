@@ -4,12 +4,12 @@ using System.Collections.Generic;
 
 namespace Fanda.Data
 {
-    public class LedgerGroup
+    public class LedgerGroup: BaseOrgModel
     {
-        public Guid Id { get; set; }
-        public string GroupCode { get; set; }
-        public string GroupName { get; set; }
-        public string Description { get; set; }
+        //public Guid Id { get; set; }
+        //public string GroupCode { get; set; }
+        //public string GroupName { get; set; }
+        //public string Description { get; set; }
         public LedgerGroupType GroupType { get; set; }
         public string GroupTypeString
         {
@@ -18,14 +18,14 @@ namespace Fanda.Data
         }
         public Guid? ParentId { get; set; }
         public bool IsSystem { get; set; }
-        public Guid OrgId { get; set; }
-        public bool Active { get; set; }
-        public DateTime DateCreated { get; set; }
-        public DateTime? DateModified { get; set; }
+        //public Guid OrgId { get; set; }
+        //public bool Active { get; set; }
+        //public DateTime DateCreated { get; set; }
+        //public DateTime? DateModified { get; set; }
 
         public virtual LedgerGroup Parent { get; set; }
         public virtual ICollection<LedgerGroup> Children { get; set; }
-        public virtual Organization Organization { get; set; }
+        //public virtual Organization Organization { get; set; }
         public virtual ICollection<Ledger> Ledgers { get; set; }
     }
 }
