@@ -11,7 +11,10 @@ namespace Fanda.Shared
         public static string TrimExtraSpaces(this string input)
         {
             if (input == null)
+            {
                 return input;
+            }
+
             const string reduceMultiSpace = @"[ ]{2,}";
             return Regex.Replace(input.Replace('\t', ' '), reduceMultiSpace, " ").TrimEnd(' ', '\t');
         }

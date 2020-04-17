@@ -4,15 +4,15 @@ using System.Collections.Generic;
 
 namespace Fanda.Dto
 {
-    public class InvoiceDto
+    public class InvoiceDto : BaseYearDto
     {
         public InvoiceDto()
         {
             InvoiceItems = new HashSet<InvoiceItemDto>();
         }
-        public Guid Id { get; set; }
-        public string InvoiceNumber { get; set; }
-        public DateTime InvoiceDate { get; set; }
+        //public Guid Id { get; set; }
+        //public string InvoiceNumber { get; set; }
+        //public DateTime InvoiceDate { get; set; }
         public Guid CategoryId { get; set; }
         public InvoiceType InvoiceType { get; set; }
         public StockInvoiceType StockInvoiceType { get; set; }
@@ -29,8 +29,8 @@ namespace Fanda.Dto
         public decimal MiscAddDesc { get; set; }
         public decimal MiscAddAmt { get; set; }
         public decimal GrandTotal { get; set; }
-        public DateTime DateCreated { get; set; }
-        public DateTime? DateModified { get; set; }
+        //public DateTime DateCreated { get; set; }
+        //public DateTime? DateModified { get; set; }
 
         public ICollection<InvoiceItemDto> InvoiceItems { get; set; }
     }

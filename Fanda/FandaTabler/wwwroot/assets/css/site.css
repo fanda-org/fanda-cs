@@ -14,7 +14,18 @@ tr.highlight td.jsgrid-cell {
 }
 
 .card-hover:hover {
+    /*
+    color: #fff;
+    background-color: #727b84;
+    border-color: #6c757d;
     border: 1px solid rgba(0, 40, 100, .12);
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+    */
+    color: #495057;
+    background-color: #f6f6f6;
+    border-color: rgba(0, 20, 49, 0.12);
     /*0 4px 4px 0 rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.19);*/
+}
+
+.card-hover:focus {
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
 }

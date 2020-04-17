@@ -7,7 +7,7 @@ namespace FandaTabler.Controllers
     [AllowAnonymous]
     public class ErrorsController : Controller
     {
-        public IActionResult Index([FromRoute]int id)
+        public IActionResult Index([FromRoute] int id)
         {
             string message = ((HttpStatusCode)id).ToString();
             TempData["Code"] = id;

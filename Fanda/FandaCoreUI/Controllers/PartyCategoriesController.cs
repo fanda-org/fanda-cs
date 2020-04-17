@@ -93,7 +93,7 @@ namespace Fanda.Controllers
 
         [ValidateAntiForgeryToken]
         [HttpPatch]
-        public async Task<IActionResult> ChangeStatus([FromBody]ActiveStatus status)
+        public async Task<IActionResult> ChangeStatus([FromBody] ActiveStatus status)
         {
             await _service.ChangeStatusAsync(status);
             return Ok();

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace Fanda.Dto
 {
@@ -27,6 +25,15 @@ namespace Fanda.Dto
             StringLength(255, ErrorMessage = "Maximum allowed length is 255")]
         public string Description { get; set; }
         public bool Active { get; set; }
+        public DateTime DateCreated { get; set; }
+        public DateTime? DateModified { get; set; }
+    }
+
+    public class BaseYearDto
+    {
+        public Guid Id { get; set; }
+        public string Number { get; set; }
+        public DateTime Date { get; set; }
         public DateTime DateCreated { get; set; }
         public DateTime? DateModified { get; set; }
     }

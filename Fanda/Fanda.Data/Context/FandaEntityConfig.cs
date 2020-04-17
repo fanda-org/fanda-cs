@@ -141,11 +141,11 @@ namespace Fanda.Data.Context
             builder.Property(o => o.GSTIN)
                 .HasMaxLength(25);
             //builder.Property(o => o.DateCreated)
-                //.HasDefaultValueSql("getdate()")
-                //.ValueGeneratedOnAdd();
+            //.HasDefaultValueSql("getdate()")
+            //.ValueGeneratedOnAdd();
             //builder.Property(o => o.DateModified)
-                //.HasDefaultValueSql("getdate()")
-                //.ValueGeneratedOnUpdate();
+            //.HasDefaultValueSql("getdate()")
+            //.ValueGeneratedOnUpdate();
 
             // index
             builder.HasIndex(o => o.Code)
@@ -914,16 +914,21 @@ namespace Fanda.Data.Context
             builder.HasKey(u => u.Id);
 
             // columns
-            builder.Property(u => u.YearCode)
+            builder.Property(u => u.Code)
                 .IsRequired()
                 .HasMaxLength(16);
+            builder.Property(u => u.Name)
+                .IsRequired()
+                .HasMaxLength(50);
+            builder.Property(u => u.Description)
+                .HasMaxLength(255);
             builder.Property(u => u.YearBegin)
                 .IsRequired();
             builder.Property(u => u.YearEnd)
                 .IsRequired();
 
             // index
-            builder.HasIndex(p => new { p.YearCode, p.OrgId })
+            builder.HasIndex(p => new { p.Code, p.OrgId })
                 .IsUnique();
 
             // foreign key
@@ -1039,7 +1044,7 @@ namespace Fanda.Data.Context
             builder.HasKey(i => i.Id);
 
             // columns
-            builder.Property(i => i.InvoiceNumber)
+            builder.Property(i => i.Number)
                 .HasMaxLength(16);
             builder.Ignore(i => i.InvoiceType);
             builder.Property(i => i.InvoiceTypeString)
@@ -1066,7 +1071,7 @@ namespace Fanda.Data.Context
             //builder.Property(o => o.DateModified).ValueGeneratedOnUpdate();
 
             // index
-            builder.HasIndex(i => new { i.InvoiceNumber, i.YearId })
+            builder.HasIndex(i => new { i.Number, i.YearId })
                 .IsUnique();
 
             // foreign key

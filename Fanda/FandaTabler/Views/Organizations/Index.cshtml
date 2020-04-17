@@ -20,7 +20,7 @@
                 @*<div class="input-icon">*@
                 <form asp-action="Index" method="get">
                     <div class="input-group">
-                        <input type="search" class="form-control" placeholder="Search&hellip;" tabindex="1" id="search" name="search">
+                        <input type="search" class="form-control" placeholder="Search&hellip;" tabindex="1" id="search" name="search" value=@ViewBag.Search>
                         <span class="input-group-append">
                             <button type="submit" class="btn btn-secondary"><i class="fe fe-search"></i></button>
                         </span>
@@ -52,8 +52,8 @@
                             </div>
                             <div class="col">
                                 <div class="card-body">
-                                    <h3 class="card-title">@org.Name</h3>
-                                    <p>@org.Name</p>
+                                    <h3 class="card-title">@org.Code - @org.Name</h3>
+                                    <p>@org.Description</p>
                                     <div class="row align-items-center">
                                         <div class="col-6">
                                             <div class="input-group">

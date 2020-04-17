@@ -145,7 +145,7 @@ namespace Fanda.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private async Task<bool> OrganizationExists(Guid id) => 
+        private async Task<bool> OrganizationExists(Guid id) =>
             await _service.ExistsAsync(new Shared.BaseDuplicate { Field = Shared.DuplicateField.Id, Id = id });
     }
 }

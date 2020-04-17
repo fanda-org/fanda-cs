@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 namespace Fanda.Data
 {
-    public class Invoice
+    public class Invoice : BaseYearModel
     {
-        public Guid Id { get; set; }
-        public string InvoiceNumber { get; set; }
-        public DateTime InvoiceDate { get; set; }
+        //public Guid Id { get; set; }
+        //public string InvoiceNumber { get; set; }
+        //public DateTime InvoiceDate { get; set; }
         public Guid CategoryId { get; set; }
         public InvoiceType InvoiceType { get; set; }
         public string InvoiceTypeString
@@ -48,15 +48,15 @@ namespace Fanda.Data
         public decimal MiscAddDesc { get; set; }
         public decimal MiscAddAmt { get; set; }
         public decimal GrandTotal { get; set; }
-        public Guid YearId { get; set; }
-        public DateTime DateCreated { get; set; }
-        public DateTime? DateModified { get; set; }
+        //public Guid YearId { get; set; }
+        //public DateTime DateCreated { get; set; }
+        //public DateTime? DateModified { get; set; }
 
         // Virtual members        
         public virtual InvoiceCategory Category { get; set; }
         public virtual Party Party { get; set; }
         public virtual Buyer Buyer { get; set; }
-        public virtual AccountYear AccountYear { get; set; }
+        //public virtual AccountYear AccountYear { get; set; }
         public virtual ICollection<InvoiceItem> InvoiceItems { get; set; }
     }
 }

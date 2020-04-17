@@ -1,7 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-
-namespace Fanda.Dto
+﻿namespace Fanda.Dto
 {
     public class PartyCategoryDto : BaseDto
     {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Fanda.Dto
+﻿namespace Fanda.Dto
 {
     public class UnitDto : BaseDto
     {

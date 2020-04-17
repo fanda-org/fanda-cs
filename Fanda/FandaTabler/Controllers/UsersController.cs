@@ -10,9 +10,6 @@ using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-using FandaTabler.Extensions;
-using System.Linq;
-
 namespace FandaTabler.Controllers
 {
     [Authorize]
@@ -43,7 +40,7 @@ namespace FandaTabler.Controllers
             //        model.RememberMe = Convert.ToBoolean(isPersistent);
             //    }
             //}
-            
+
             ViewData["ReturnUrl"] = returnUrl;
             return View(model);
             //return Challenge(new AuthenticationProperties() { RedirectUri = "/Home/Index" });
@@ -162,7 +159,7 @@ namespace FandaTabler.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Register([FromForm]RegisterViewModel model)
+        public async Task<IActionResult> Register([FromForm] RegisterViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -205,7 +202,7 @@ namespace FandaTabler.Controllers
         }
 
         //[HttpPut("{id}")]
-        public async Task<IActionResult> Update([FromBody]UserDto model, string password)
+        public async Task<IActionResult> Update([FromBody] UserDto model, string password)
         {
             try
             {

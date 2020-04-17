@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace FandaTabler.Converters
 {
@@ -14,7 +11,7 @@ namespace FandaTabler.Converters
             return objectType == typeof(string);
         }
 
-        public override string Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) 
+        public override string Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
             => reader.GetString()?.Trim();
 
         //public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)

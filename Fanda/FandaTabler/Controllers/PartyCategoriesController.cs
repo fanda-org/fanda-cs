@@ -9,8 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
-using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -56,7 +54,7 @@ namespace FandaTabler.Controllers
                 };
 
                 var data = await filter.ApplyAsync(_service, org.Id);
-                var result = new JsGridResult<IList<PartyCategoryDto>>{ Data = data.List, ItemsCount = data.RowCount };
+                var result = new JsGridResult<IList<PartyCategoryDto>> { Data = data.List, ItemsCount = data.RowCount };
                 return Ok(result);
             }
             catch (Exception ex)

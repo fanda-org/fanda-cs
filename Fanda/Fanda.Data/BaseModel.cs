@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Fanda.Data
 {
@@ -21,9 +19,14 @@ namespace Fanda.Data
         public virtual Organization Organization { get; set; }
     }
 
-    public class BaseYearModel: BaseModel
+    public class BaseYearModel
     {
+        public Guid Id { get; set; }
+        public string Number { get; set; }
+        public DateTime Date { get; set; }
         public Guid YearId { get; set; }
+        public DateTime DateCreated { get; set; }
+        public DateTime? DateModified { get; set; }
         public virtual AccountYear AccountYear { get; set; }
     }
 }

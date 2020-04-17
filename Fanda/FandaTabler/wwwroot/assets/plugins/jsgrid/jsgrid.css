@@ -45,7 +45,7 @@
 }
 
 .jsgrid-cell {
-    padding: 0.5em 0.5em;
+    padding: 0.4em 0.4em;
 }
 
 .jsgrid-сell,
@@ -72,7 +72,7 @@
 }
 
 .jsgrid-header-cell {
-    padding: .5em .5em;
+    padding: .4em .4em;
 }
 
 .jsgrid-filter-row input,
@@ -85,7 +85,7 @@
 .jsgrid-insert-row textarea,
 .jsgrid-insert-row select {
     width: 100%;
-    padding: .3em .5em;
+    padding: .3em .4em;
 }
 
 .jsgrid-filter-row input[type='checkbox'],
@@ -100,7 +100,7 @@
 }
 
 .jsgrid-nodata-row .jsgrid-cell {
-    padding: .5em 0;
+    padding: .4em 0;
     text-align: center;
 }
 
@@ -109,11 +109,11 @@
 }
 
 .jsgrid-pager {
-    padding: .5em 0;
+    padding: .4em 0;
 }
 
 .jsgrid-pager-nav-button {
-    padding: .2em .6em;
+    padding: .2em .5em;
 }
 
 .jsgrid-pager-nav-inactive-button {
@@ -122,5 +122,5 @@
 }
 
 .jsgrid-pager-page {
-    padding: .2em .6em;
+    padding: .2em .5em;
 }

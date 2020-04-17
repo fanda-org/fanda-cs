@@ -28,11 +28,13 @@ namespace FandaTabler.Controllers
             _service = service;
         }
 
+        [HttpGet]
         // GET: Orgs
         public async Task<ActionResult> Index(string search)
         {
             OkObjectResult orgResult = (OkObjectResult)await GetAll();
             var orgs = (JsGridResult<IList<OrganizationDto>>)orgResult.Value;
+            ViewBag.Search = search;
             return View(orgs.Data);
         }
 
@@ -95,7 +97,7 @@ namespace FandaTabler.Controllers
 
         [ValidateAntiForgeryToken]
         [HttpPatch]
-        public async Task<IActionResult> ChangeStatus([FromBody]ActiveStatus status)
+        public async Task<IActionResult> ChangeStatus([FromBody] ActiveStatus status)
         {
             await _service.ChangeStatusAsync(status);
             return Ok();
