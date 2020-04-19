@@ -94,7 +94,7 @@ namespace Fanda.Service.AutoMapperProfile
                 .ForMember(x => x.ContactId, opt => opt.MapFrom(vm => vm.Contact.Id));
 
             CreateMap<Organization, OrganizationDto>()
-                .ForPath(vm => vm.Users, opt => opt.MapFrom(src => src.OrgUsers.Select(ou => ou.User).ToList()))
+                //.ForPath(vm => vm.Users, opt => opt.MapFrom(src => src.OrgUsers.Select(ou => ou.User).ToList()))
                 .ForPath(vm => vm.Contacts, opt => opt.MapFrom(src => src.OrgContacts.Select(c => c.Contact).ToList()))
                 .ForPath(s => s.Addresses, opt => opt.MapFrom(src => src.OrgAddresses.Select(a => a.Address).ToList()))
                 //.ForPath(vm => vm.Banks, opt => opt.MapFrom(src => src.Banks.Select(b => b.BankAccount).ToList()))
@@ -183,6 +183,22 @@ namespace Fanda.Service.AutoMapperProfile
                 .ReverseMap();
             CreateMap<Invoice, InvoiceDto>()
                 .ReverseMap();
+
+            CreateMap<AccountYear, AccountYearDto>()
+                .ReverseMap();
+
+            #region List mappings
+            CreateMap<AccountYear, YearListDto>()
+                .ReverseMap();
+            CreateMap<Organization, OrgListDto>()
+                .ReverseMap();
+            CreateMap<Organization, OrgYearListDto>()
+                .ForMember(vm => vm.SelectedYearId, opt => opt.Ignore())
+                .ForMember(vm => vm.IsSelected, opt => opt.Ignore())
+                .ReverseMap();
+            CreateMap<PartyCategory, PartyCategoryListDto>()
+                .ReverseMap();
+            #endregion
         }
     }
 

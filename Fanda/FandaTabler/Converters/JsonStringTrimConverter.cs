@@ -6,10 +6,7 @@ namespace FandaTabler.Converters
 {
     public class JsonStringTrimConverter : JsonConverter<string>
     {
-        public override bool CanConvert(Type objectType)
-        {
-            return objectType == typeof(string);
-        }
+        public override bool CanConvert(Type objectType) => objectType == typeof(string);
 
         public override string Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
             => reader.GetString()?.Trim();

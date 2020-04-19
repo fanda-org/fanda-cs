@@ -12,17 +12,13 @@ using System.Threading.Tasks;
 
 namespace Fanda.Service
 {
-    public interface IOrganizationService : IBaseService<OrganizationDto>
+    public interface IOrgYearListService : IListService<OrgYearListDto>
     {
-        //IQueryable<OrganizationDto> GetAll();
-        //Task<OrganizationDto> GetByIdAsync(Guid orgId, bool includes = false);
-        ////Task<OrganizationDto> GetByCodeAsync(Guid orgCode, bool includes = false);
-        //Task<OrganizationDto> SaveAsync(OrganizationDto dto);
-        //Task<bool> DeleteAsync(Guid orgId);
-        //bool ExistsById(Guid orgId);
-        //bool ExistsByCode(string orgCode);
-        //Task<bool> ChangeStatus(ActiveStatus status);
-        //string ErrorMessage { get; }
+    }
+
+    public interface IOrganizationService : IBaseService<OrganizationDto, OrgListDto>,
+        IOrgYearListService
+    {
     }
 
     public class OrganizationService : IOrganizationService
@@ -35,16 +31,7 @@ namespace Fanda.Service
             _context = context;
             _mapper = mapper;
         }
-
         public string ErrorMessage { get; private set; }
-
-        public IQueryable<OrganizationDto> GetAll()
-        {
-            IQueryable<OrganizationDto> orgs = _context.Organizations
-                .AsNoTracking()
-                .ProjectTo<OrganizationDto>(_mapper.ConfigurationProvider);
-            return orgs;
-        }
 
         public async Task<OrganizationDto> GetByIdAsync(Guid orgId, bool includes = false)
         {
@@ -62,8 +49,7 @@ namespace Fanda.Service
             {
                 throw new KeyNotFoundException("Organization not found");
             }
-
-            if (org != null && !includes)
+            else if (!includes)
             {
                 return org;
             }
@@ -82,38 +68,6 @@ namespace Fanda.Service
                 .ToListAsync();
             return org;
         }
-
-        //public async Task<OrganizationDto> GetByCodeAsync(string orgCode, bool includes = false)
-        //{
-        //    if (string.IsNullOrEmpty(orgCode))
-        //        throw new ArgumentNullException("orgCode", "Org code is missing");
-
-        //    var org = await _context.Organizations
-        //        .AsNoTracking()
-        //        .ProjectTo<OrganizationDto>(_mapper.ConfigurationProvider)
-        //        .FirstOrDefaultAsync(o => o.OrgCode == orgCode);
-
-        //    if (org == null)
-        //        throw new KeyNotFoundException("Organization not found");
-        //    if (org != null && !includes)
-        //        return org;
-
-        //    Guid guid = new Guid(orgCode);
-        //    org.Contacts = await _context.Organizations
-        //        .AsNoTracking()
-        //        .Where(m => m.Id == guid)
-        //        .SelectMany(oc => oc.OrgContacts.Select(c => c.Contact))
-        //        .ProjectTo<ContactDto>(_mapper.ConfigurationProvider)
-        //        .ToListAsync();
-        //    org.Addresses = await _context.Organizations
-        //        .AsNoTracking()
-        //        .Where(m => m.Id == guid)
-        //        .SelectMany(oa => oa.OrgAddresses.Select(a => a.Address))
-        //        .ProjectTo<AddressDto>(_mapper.ConfigurationProvider)
-        //        .ToListAsync();
-        //    return org;
-
-        //}
 
         public async Task<OrganizationDto> SaveAsync(OrganizationDto orgVM)
         {
@@ -250,9 +204,6 @@ namespace Fanda.Service
             throw new KeyNotFoundException("Organization not found");
         }
 
-        //public bool ExistsById(Guid orgId) => _context.Organizations.Any(o => o.Id == orgId);
-        //public bool ExistsByCode(string orgCode) => _context.Organizations.Any(o => o.Code == orgCode);
-
         public async Task<bool> ChangeStatusAsync(ActiveStatus status)
         {
             if (status.Id == null || status.Id == Guid.Empty)
@@ -273,5 +224,24 @@ namespace Fanda.Service
         }
 
         public Task<bool> ExistsAsync(BaseDuplicate data) => _context.ExistsAsync<Organization>(data);
+
+        #region List
+        public IQueryable<OrgListDto> GetAll()
+        {
+            IQueryable<OrgListDto> orgs = _context.Organizations
+                .AsNoTracking()
+                .ProjectTo<OrgListDto>(_mapper.ConfigurationProvider);
+            return orgs;
+        }
+
+        IQueryable<OrgYearListDto> IListService<OrgYearListDto>.GetAll()
+        {
+            IQueryable<OrgYearListDto> orgs = _context.Organizations
+                .Include(o => o.AccountYears)
+                .AsNoTracking()
+                .ProjectTo<OrgYearListDto>(_mapper.ConfigurationProvider);
+            return orgs;
+        }
+        #endregion
     }
 }

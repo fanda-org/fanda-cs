@@ -28,33 +28,45 @@ namespace FandaTabler.Controllers
 
         [HttpGet]
         [Produces("application/json")]
-        public async Task<ActionResult> GetAll()
+        public async Task<ActionResult> GetAll(Guid orgId)
         {
             try
             {
-                var org = GetSelectedOrg();
-                if (org == null)
+                if (orgId == Guid.Empty)
                 {
-                    return RedirectToAction("Index", "Home");
+                    var org = GetSelectedOrg();
+                    if (org == null)
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+                    orgId = org.Id;
                 }
-
                 NameValueCollection qFilter = HttpUtility.ParseQueryString(Request.QueryString.Value);
-                var filter = new BaseOrgFilter<IPartyCategoryService, PartyCategoryDto>
+                string search = qFilter["search"];
+                var filter = new BaseOrgFilter<IPartyCategoryService, PartyCategoryListDto>
                 {
                     PageIndex = Convert.ToInt32(qFilter["pageIndex"]),
                     PageSize = Convert.ToInt32(qFilter["pageSize"]),
                     SortField = qFilter["sortField"],
                     SortOrder = qFilter["sortOrder"],
-                    Code = qFilter["code"],
-                    Name = qFilter["name"],
+                    Code = string.IsNullOrEmpty(qFilter["code"]) ? search : qFilter["code"],
+                    Name = string.IsNullOrEmpty(qFilter["name"]) ? search : qFilter["name"],
                     Description = qFilter["description"],
                     Active = string.IsNullOrEmpty(qFilter["active"]) ? (bool?)null : bool.Parse(qFilter["Active"])
                     //(qFilter["Country"] == "0") ? (Country?)null : (Country)int.Parse(qFilter["Country"]),
                     //Married = string.IsNullOrEmpty(qFilter["Married"]) ? (bool?)null : bool.Parse(qFilter["Married"])
                 };
 
-                var data = await filter.ApplyAsync(_service, org.Id);
-                var result = new JsGridResult<IList<PartyCategoryDto>> { Data = data.List, ItemsCount = data.RowCount };
+                PagedList<PartyCategoryListDto> data;
+                if (string.IsNullOrEmpty(search))
+                {
+                    data = await filter.ApplyAllAsync(_service, orgId);
+                }
+                else
+                {
+                    data = await filter.ApplyAnyAsync(_service, orgId);
+                }
+                var result = new JsGridResult<IList<PartyCategoryListDto>> { Data = data.List, ItemsCount = data.RowCount };
                 return Ok(result);
             }
             catch (Exception ex)

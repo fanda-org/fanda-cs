@@ -9,4 +9,8 @@ namespace Fanda.Dto
         public DateTime YearBegin { get; set; }
         public DateTime YearEnd { get; set; }
     }
+
+    public class YearListDto : BaseListDto
+    {
+    }
 }

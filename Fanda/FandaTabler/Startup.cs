@@ -196,9 +196,10 @@ namespace FandaTabler
                 //options.SerializerSettings.Converters.Add(new StringEnumConverter());
                 //options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
                 //options.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
-                options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
-                options.JsonSerializerOptions.IgnoreNullValues = true;
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                options.JsonSerializerOptions.IgnoreNullValues = true;
+                options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+                options.JsonSerializerOptions.AllowTrailingCommas = true;
                 //options.JsonSerializerOptions.Converters.Add(new JsonStringTrimConverter());
             })
             .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
@@ -286,7 +287,7 @@ namespace FandaTabler
             services.AddScoped<IUnitService, UnitService>();
             services.AddScoped<IPartyCategoryService, PartyCategoryService>();
             //services.AddScoped<IPartyService, PartyService>();
-
+            services.AddScoped<IAccountYearService, AccountYearService>();
             services.AddHttpContextAccessor();
             #endregion
         }

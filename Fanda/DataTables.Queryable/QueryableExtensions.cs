@@ -23,10 +23,7 @@ namespace DataTables.Queryable
         /// <param name="source"><see cref="IEnumerable{T}"/> to be filtered and paginated immediately.</param>
         /// <param name="request"><see cref="DataTablesRequest{T}"/> instance with filtering parameters.</param>
         /// </summary>
-        public static IPagedList<T> ToPagedList<T>(this IEnumerable<T> source, DataTablesRequest<T> request)
-        {
-            return source.AsQueryable().ToPagedList(request);
-        }
+        public static IPagedList<T> ToPagedList<T>(this IEnumerable<T> source, DataTablesRequest<T> request) => source.AsQueryable().ToPagedList(request);
 
         /// <summary>
         /// Creates a <see cref="IPagedList{T}"/> from a <see cref="IQueryable{T}"/>.
@@ -36,10 +33,7 @@ namespace DataTables.Queryable
         /// <param name="queryable"><see cref="IQueryable{T}"/> to be filtered and paginated immediately.</param>
         /// <param name="request"><see cref="DataTablesRequest{T}"/> instance with filtering parameters.</param>
         /// <returns><see cref="IPagedList{T}"/> intstance.</returns>
-        public static IPagedList<T> ToPagedList<T>(this IQueryable<T> queryable, DataTablesRequest<T> request)
-        {
-            return queryable.Filter(request).ToPagedList();
-        }
+        public static IPagedList<T> ToPagedList<T>(this IQueryable<T> queryable, DataTablesRequest<T> request) => queryable.Filter(request).ToPagedList();
 
         /// <summary>
         /// Creates a <see cref="IPagedList{T}"/> from a <see cref="IDataTablesQueryable{T}"/>.
@@ -47,10 +41,7 @@ namespace DataTables.Queryable
         /// <typeparam name="T">Data type.</typeparam>
         /// <param name="queryable"><see cref="IDataTablesQueryable{T}"/> instance.</param>
         /// <returns><see cref="IPagedList{T}"/> instance.</returns>
-        public static IPagedList<T> ToPagedList<T>(this IDataTablesQueryable<T> queryable)
-        {
-            return new PagedList<T>(queryable);
-        }
+        public static IPagedList<T> ToPagedList<T>(this IDataTablesQueryable<T> queryable) => new PagedList<T>(queryable);
 
         #endregion Synchronous methods
 
@@ -62,10 +53,7 @@ namespace DataTables.Queryable
         /// <param name="source"><see cref="IEnumerable{T}"/> to be filtered and paginated.</param>
         /// <param name="request"><see cref="DataTablesRequest{T}"/> instance with filtering parameters.</param>
         /// </summary>
-        public static Task<IPagedList<T>> ToPagedListAsync<T>(this IEnumerable<T> source, DataTablesRequest<T> request)
-        {
-            return Task.Factory.StartNew(() => source.AsQueryable().ToPagedList(request));
-        }
+        public static Task<IPagedList<T>> ToPagedListAsync<T>(this IEnumerable<T> source, DataTablesRequest<T> request) => Task.Factory.StartNew(() => source.AsQueryable().ToPagedList(request));
 
         /// <summary>
         /// Asynchronously creates a <see cref="IPagedList{T}"/> from a <see cref="IQueryable{T}"/>.
@@ -75,10 +63,7 @@ namespace DataTables.Queryable
         /// <param name="queryable"><see cref="IQueryable{T}"/> to be filtered and paginated.</param>
         /// <param name="request"><see cref="DataTablesRequest{T}"/> instance with filtering parameters.</param>
         /// <returns><see cref="IPagedList{T}"/> intstance.</returns>
-        public static Task<IPagedList<T>> ToPagedListAsync<T>(this IQueryable<T> queryable, DataTablesRequest<T> request)
-        {
-            return Task.Factory.StartNew(() => queryable.Filter(request).ToPagedList());
-        }
+        public static Task<IPagedList<T>> ToPagedListAsync<T>(this IQueryable<T> queryable, DataTablesRequest<T> request) => Task.Factory.StartNew(() => queryable.Filter(request).ToPagedList());
 
         /// <summary>
         /// Asynchronously creates a <see cref="IPagedList{T}"/> from a <see cref="IDataTablesQueryable{T}"/>.
@@ -86,10 +71,7 @@ namespace DataTables.Queryable
         /// <typeparam name="T">Data type.</typeparam>
         /// <param name="queryable"><see cref="IDataTablesQueryable{T}"/> instance.</param>
         /// <returns><see cref="IPagedList{T}"/> instance.</returns>
-        public static Task<IPagedList<T>> ToPagedListAsync<T>(this IDataTablesQueryable<T> queryable)
-        {
-            return Task.Factory.StartNew<IPagedList<T>>(() => new PagedList<T>(queryable));
-        }
+        public static Task<IPagedList<T>> ToPagedListAsync<T>(this IDataTablesQueryable<T> queryable) => Task.Factory.StartNew<IPagedList<T>>(() => new PagedList<T>(queryable));
 
         #endregion Asynchronous methods
 
@@ -180,10 +162,7 @@ namespace DataTables.Queryable
         /// <param name="queryable"><see cref="IQueryable{T}"/> instance to be converted to <see cref="IDataTablesQueryable{T}"/>.</param>
         /// <param name="request"><see cref="DataTablesRequest{T}"/> instance with request parameters.</param>
         /// <returns><see cref="IDataTablesQueryable{T}"/> instance.</returns>
-        public static IDataTablesQueryable<T> AsDataTablesQueryable<T>(this IQueryable<T> queryable, DataTablesRequest<T> request)
-        {
-            return new DataTablesQueryable<T>(queryable, request);
-        }
+        public static IDataTablesQueryable<T> AsDataTablesQueryable<T>(this IQueryable<T> queryable, DataTablesRequest<T> request) => new DataTablesQueryable<T>(queryable, request);
 
         /// <summary>
         /// Modifies the <see cref="IDataTablesQueryable{T}"/> by applying custom filter from <see cref="DataTablesRequest{T}"/>.

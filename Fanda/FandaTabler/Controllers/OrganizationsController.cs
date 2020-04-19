@@ -17,34 +17,46 @@ using System.Web;
 namespace FandaTabler.Controllers
 {
     [Authorize]
-    //[Route("[controller]/[action]")]
     public class OrganizationsController : Controller
     {
         //private const string OrgId = "AAEFE9D0-A36E-46E0-1E19-08D5EA042032";
         private readonly IOrganizationService _service;
+        private readonly IAccountYearService _yearService;
 
-        public OrganizationsController(IOrganizationService service)
+        public OrganizationsController(IOrganizationService service, IAccountYearService yearService)
         {
             _service = service;
+            _yearService = yearService;
         }
 
         [HttpGet]
         // GET: Orgs
         public async Task<ActionResult> Index(string search)
         {
+            var currentOrg = HttpContext.Session.Get<OrganizationDto>("CurrentOrg");
+            var currentYear = HttpContext.Session.Get<AccountYearDto>("CurrentYear");
+
             OkObjectResult orgResult = (OkObjectResult)await GetAll();
-            var orgs = (JsGridResult<IList<OrganizationDto>>)orgResult.Value;
+            var orgs = (JsGridResult<IList<OrgYearListDto>>)orgResult.Value;
+
+            foreach (var org in orgs.Data)
+            {
+                if (currentOrg != null && org.Id == currentOrg.Id)
+                {
+                    org.IsSelected = true;
+                    foreach (var year in org.AccountYears)
+                    {
+                        if (currentYear != null && year.Id==currentYear.Id)
+                        {
+                            org.SelectedYearId = currentYear.Id;
+                        }
+                    }
+                }
+            }
+
             ViewBag.Search = search;
             return View(orgs.Data);
         }
-
-        //[HttpPost]
-        //public async Task<ActionResult> Search()
-        //{
-        //    OkObjectResult orgResult = (OkObjectResult)await GetAll();
-        //    var orgs = (JsGridResult<IList<OrganizationDto>>)orgResult.Value;
-        //    return View("Index", orgs.Data);
-        //}
 
         [HttpPost]
         [Produces("application/json")]
@@ -54,7 +66,7 @@ namespace FandaTabler.Controllers
             {
                 NameValueCollection qFilter = HttpUtility.ParseQueryString(Request.QueryString.Value);
                 string search = qFilter["search"];
-                var filter = new BaseFilter<IOrganizationService, OrganizationDto>
+                var filter = new BaseFilter<IOrganizationService, OrgYearListDto>
                 {
                     PageIndex = string.IsNullOrEmpty(qFilter["pageIndex"]) ? 1 : Convert.ToInt32(qFilter["pageIndex"]),
                     PageSize = string.IsNullOrEmpty(qFilter["pageSize"]) ? 100 : Convert.ToInt32(qFilter["pageSize"]),
@@ -66,17 +78,17 @@ namespace FandaTabler.Controllers
                     Active = string.IsNullOrEmpty(qFilter["active"]) ? (bool?)null : bool.Parse(qFilter["Active"])
                 };
 
-                PagedList<OrganizationDto> data;
+                PagedList<OrgYearListDto> data;
                 if (string.IsNullOrEmpty(search))
                 {
-                    data = await filter.ApplyAsync(_service);
+                    data = await filter.ApplyAllAsync(_service);
                 }
                 else
                 {
-                    data = await filter.ApplyOrAsync(_service);
+                    data = await filter.ApplyAnyAsync(_service);
                 }
 
-                var result = new JsGridResult<IList<OrganizationDto>> { Data = data.List, ItemsCount = data.RowCount };
+                var result = new JsGridResult<IList<OrgYearListDto>> { Data = data.List, ItemsCount = data.RowCount };
 
                 return Ok(result);
             }
@@ -86,12 +98,21 @@ namespace FandaTabler.Controllers
             }
         }
 
+        [HttpPost]
         //[ValidateAntiForgeryToken]
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Select([FromRoute] Guid id)
+        public async Task<IActionResult> Open([FromForm] OrgYearListDto org)
         {
-            var org = await _service.GetByIdAsync(id/*, true*/);
-            HttpContext.Session.Set("CurrentOrg", org);
+            if (org.Id != Guid.Empty)
+            {
+                var orgSelected = await _service.GetByIdAsync(org.Id);
+                HttpContext.Session.Set("CurrentOrg", orgSelected);
+            }
+            if (org.SelectedYearId != Guid.Empty)
+            {
+                var yearSelected = await _yearService.GetByIdAsync(org.SelectedYearId);
+                HttpContext.Session.Set("CurrentYear", yearSelected);
+            }
+
             return RedirectToAction("Index", "Home");
         }
 

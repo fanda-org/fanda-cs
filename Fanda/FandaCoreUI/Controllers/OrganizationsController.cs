@@ -18,7 +18,13 @@ namespace Fanda.Controllers
         }
 
         // GET: Organizations
-        public IActionResult Index() => View(_service.GetAll() /*await _context.Organizations.ToListAsync()*/);
+        public async Task<IActionResult> Index()
+        {
+            var list = await ((IListService<OrgListDto>)_service)
+                .GetAll()
+                .ToListAsync();
+            return View(list);
+        }
 
         // GET: Organizations/Details/5
         public async Task<IActionResult> Details(Guid id)

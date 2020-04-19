@@ -9,9 +9,16 @@ using System.Threading.Tasks;
 
 namespace Fanda.Service
 {
-    public interface IBaseService<TModel> where TModel : BaseDto
+    public interface IListService<TList>
+        where TList : BaseListDto
     {
-        IQueryable<TModel> GetAll();
+        IQueryable<TList> GetAll();
+    }
+
+    public interface IBaseService<TModel, TList> : IListService<TList>
+        where TModel : BaseDto
+        where TList : BaseListDto
+    {
         Task<TModel> GetByIdAsync(Guid id, bool include = false);
         Task<TModel> SaveAsync(TModel model);
         Task<bool> DeleteAsync(Guid id);
@@ -20,9 +27,16 @@ namespace Fanda.Service
         string ErrorMessage { get; }
     }
 
-    public interface IBaseOrgService<TModel> /*: IBaseService<TModel>*/ where TModel : BaseDto
+    public interface IListOrgService<TList>
+        where TList : BaseListDto
     {
-        IQueryable<TModel> GetAll(Guid orgId);
+        IQueryable<TList> GetAll(Guid orgId);
+    }
+
+    public interface IBaseOrgService<TModel, TList> : IListOrgService<TList>
+        where TModel : BaseDto
+        where TList : BaseListDto
+    {
         Task<TModel> GetByIdAsync(Guid id, bool include = false);
         Task<TModel> SaveAsync(Guid orgId, TModel model);
         Task<bool> DeleteAsync(Guid id);
@@ -74,7 +88,6 @@ namespace Fanda.Service
                     return true;
             }
         }
-
         public static async Task<bool> ExistsAsync<TModel>(this FandaContext context, BaseOrgDuplicate data) where TModel : BaseOrgModel
         {
             bool result = true;

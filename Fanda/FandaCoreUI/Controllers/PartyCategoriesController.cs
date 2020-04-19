@@ -32,10 +32,10 @@ namespace Fanda.Controllers
                 return null;
             }
 
-            var request = new DataTablesRequest<PartyCategoryDto>(
+            var request = new DataTablesRequest<PartyCategoryListDto>(
                 Request.QueryString.Value
                 );
-            IPagedList<PartyCategoryDto> result = await _service
+            IPagedList<PartyCategoryListDto> result = await _service
                 .GetAll(org.Id)
                 .ToPagedListAsync(request);
             //var dt = JsonDataTable(result, request.Draw); //result.JsonDataTable(request.Draw);

@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Fanda.Service
 {
-    public interface IPartyCategoryService : IBaseOrgService<PartyCategoryDto>
+    public interface IPartyCategoryService : IBaseOrgService<PartyCategoryDto, PartyCategoryListDto>
     {
         //IQueryable<PartyCategoryDto> GetAll(Guid orgId);
         //Task<PartyCategoryDto> GetByIdAsync(Guid categoryId);
@@ -37,18 +37,18 @@ namespace Fanda.Service
 
         public string ErrorMessage { get; private set; }
 
-        public IQueryable<PartyCategoryDto> GetAll(Guid orgId)
+        public IQueryable<PartyCategoryListDto> GetAll(Guid orgId)
         {
             if (orgId == null || orgId == Guid.Empty)
             {
                 throw new ArgumentNullException("orgId", "Org id is missing");
             }
 
-            IQueryable<PartyCategoryDto> categories = _context.PartyCategories
+            IQueryable<PartyCategoryListDto> categories = _context.PartyCategories
                 //.Where(p => p.Active == ((active == null) ? p.Active : active))
                 .AsNoTracking()
                 .Where(p => p.OrgId == orgId)
-                .ProjectTo<PartyCategoryDto>(_mapper.ConfigurationProvider);
+                .ProjectTo<PartyCategoryListDto>(_mapper.ConfigurationProvider);
 
             return categories;
         }

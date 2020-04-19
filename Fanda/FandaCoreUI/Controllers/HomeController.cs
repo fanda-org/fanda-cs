@@ -1,9 +1,12 @@
-﻿using Fanda.Service;
+﻿using Fanda.Dto;
+using Fanda.Service;
 using Fanda.Shared;
 using FandaCoreUI.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace FandaCoreUI.Controllers
 {
@@ -14,12 +17,12 @@ namespace FandaCoreUI.Controllers
         {
             _organizationService = organizationService;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var demoOrg = _organizationService
+            var demoOrg = await ((IListService<OrgListDto>)_organizationService)
                 .GetAll()
                 .Where(o => o.Code == "DEMO")
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             HttpContext.Session.Set("DemoOrg", demoOrg);
             return View();

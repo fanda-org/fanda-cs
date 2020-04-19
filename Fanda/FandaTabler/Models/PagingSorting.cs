@@ -6,14 +6,15 @@ using System.Threading.Tasks;
 
 namespace FandaTabler.Models
 {
-    public class PagingSorting<TModel> where TModel : BaseDto
+    public class PagingSorting<TList> : BaseListDto
+        where TList : BaseListDto
     {
         public int PageIndex { get; set; } = 1;
         public int PageSize { get; set; } = 100;
-        public string SortField { get; set; }
+        public string SortField { get; set; } = "Code";
         public string SortOrder { get; set; } = "asc";
 
-        public async Task<PagedList<TModel>> ApplyAsync(IQueryable<TModel> query)
+        public async Task<PagedList<TList>> ApplyAsync(IQueryable<TList> query)
         {
             if (SortField != null)
             {
