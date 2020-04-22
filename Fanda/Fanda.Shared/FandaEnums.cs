@@ -6,24 +6,26 @@ namespace Fanda.Shared
 {
     public static class FandaEnums
     {
-        //public static IEnumerable<RoleType> GetRoleTypes() => Enum.GetValues(typeof(RoleType)) as IEnumerable<RoleType>;
-        public static IEnumerable<AddressType> GetAddressTypes() => Enum.GetValues(typeof(AddressType)) as IEnumerable<AddressType>;
-
-        public static IEnumerable<BankAccountType> GetBankAccountTypes() => Enum.GetValues(typeof(BankAccountType)) as IEnumerable<BankAccountType>;
-
-        public static IEnumerable<PaymentTerm> GetPaymentTerms() => Enum.GetValues(typeof(PaymentTerm)) as IEnumerable<PaymentTerm>;
-
-        public static IEnumerable<PartyType> GetPartyTypes() => Enum.GetValues(typeof(PartyType)) as IEnumerable<PartyType>;
-
-        public static IEnumerable<ProductType> GetProductTypes() => Enum.GetValues(typeof(ProductType)) as IEnumerable<ProductType>;
-
-        public static IEnumerable<InvoiceType> GetInvoiceTypes() => Enum.GetValues(typeof(InvoiceType)) as IEnumerable<InvoiceType>;
-
-        public static IEnumerable<StockInvoiceType> GetStockInvoiceTypes() => Enum.GetValues(typeof(StockInvoiceType)) as IEnumerable<StockInvoiceType>;
-
-        public static IEnumerable<Status> GetStatus() => Enum.GetValues(typeof(Status)) as IEnumerable<Status>;
-
-        public static IEnumerable<RoundOffOption> GetRoundOffOptions() => Enum.GetValues(typeof(RoundOffOption)) as IEnumerable<RoundOffOption>;
+        //public static IEnumerable<RoleType> GetRoleTypes() => 
+            //Enum.GetValues(typeof(RoleType)) as IEnumerable<RoleType>;
+        public static IEnumerable<AddressType> GetAddressTypes() => 
+            Enum.GetValues(typeof(AddressType)) as IEnumerable<AddressType>;
+        public static IEnumerable<BankAccountType> GetBankAccountTypes() => 
+            Enum.GetValues(typeof(BankAccountType)) as IEnumerable<BankAccountType>;
+        public static IEnumerable<PaymentTerm> GetPaymentTerms() => 
+            Enum.GetValues(typeof(PaymentTerm)) as IEnumerable<PaymentTerm>;
+        public static IEnumerable<PartyType> GetPartyTypes() => 
+            Enum.GetValues(typeof(PartyType)) as IEnumerable<PartyType>;
+        public static IEnumerable<ProductType> GetProductTypes() => 
+            Enum.GetValues(typeof(ProductType)) as IEnumerable<ProductType>;
+        public static IEnumerable<InvoiceType> GetInvoiceTypes() => 
+            Enum.GetValues(typeof(InvoiceType)) as IEnumerable<InvoiceType>;
+        public static IEnumerable<StockInvoiceType> GetStockInvoiceTypes() => 
+            Enum.GetValues(typeof(StockInvoiceType)) as IEnumerable<StockInvoiceType>;
+        public static IEnumerable<Status> GetStatus() => 
+            Enum.GetValues(typeof(Status)) as IEnumerable<Status>;
+        public static IEnumerable<RoundOffOption> GetRoundOffOptions() => 
+            Enum.GetValues(typeof(RoundOffOption)) as IEnumerable<RoundOffOption>;
     }
 
     //public enum RoleType

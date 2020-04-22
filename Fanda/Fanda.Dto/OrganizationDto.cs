@@ -6,9 +6,24 @@ namespace Fanda.Dto
 {
     public class OrganizationDto : BaseDto
     {
+        [Display(Name = "Regd.No.", Prompt = "Registered number"),
+            RegularExpression(@"^[a-zA-Z0-9\s~!@#$()_+-{}|:<>.?\/]*$", ErrorMessage = @"Special characters are not allowed in name"),
+            StringLength(25, ErrorMessage = "Maximum allowed length is 25")]
         public string RegdNum { get; set; }
+
+        [Display(Name = "PAN", Prompt = "Permanent account number"),
+            RegularExpression(@"^[a-zA-Z0-9\s~!@#$()_+-{}|:<>.?\/]*$", ErrorMessage = @"Special characters are not allowed in name"),
+            StringLength(25, ErrorMessage = "Maximum allowed length is 25")]
         public string PAN { get; set; }
+
+        [Display(Name = "TAN", Prompt = "Tax deduction and collection account number"),
+            RegularExpression(@"^[a-zA-Z0-9\s~!@#$()_+-{}|:<>.?\/]*$", ErrorMessage = @"Special characters are not allowed in name"),
+            StringLength(25, ErrorMessage = "Maximum allowed length is 25")]
         public string TAN { get; set; }
+
+        [Display(Name = "GSTIN", Prompt = "Goods and services tax identification number"),
+            RegularExpression(@"^[a-zA-Z0-9\s~!@#$()_+-{}|:<>.?\/]*$", ErrorMessage = @"Special characters are not allowed in name"),
+            StringLength(25, ErrorMessage = "Maximum allowed length is 25")]
         public string GSTIN { get; set; }
 
         public virtual ICollection<ContactDto> Contacts { get; set; }

@@ -87,10 +87,14 @@ namespace FandaTabler.Controllers
                     return RedirectToAction("Index", "Home");
                 }
 
+                #region Validation
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
                 model.Code = model.Code.ToUpper();
                 model.Name = model.Name.TrimExtraSpaces();
                 model.Description = model.Description.TrimExtraSpaces();
-
                 #region Validation: Dupllicate
                 // Check code duplicate
                 var duplCode = new BaseOrgDuplicate { Field = DuplicateField.Code, Value = model.Code, Id = model.Id, OrgId = org.Id };
@@ -110,6 +114,7 @@ namespace FandaTabler.Controllers
                 {
                     return BadRequest(ModelState);
                 }
+                #endregion
 
                 model = await _service.SaveAsync(org.Id, model);
                 return Ok(model);

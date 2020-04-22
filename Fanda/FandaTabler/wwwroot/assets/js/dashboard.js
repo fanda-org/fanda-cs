@@ -7,13 +7,14 @@ require.config({
         'vector-map-de': ['vector-map', 'jquery'],
         'vector-map-world': ['vector-map', 'jquery'],
         'core': ['jquery', 'bootstrap'],
-        'jquery.validate': ['jquery'],
-        //'sweetalert2': ['polyfill']
+        'jqueryval': ['jquery'],
+        'jqueryval-unobtrusive': ['jqueryval', 'jquery'],
         'bootbox': ['jquery', 'bootstrap']
     },
     paths: {
         'core': 'assets/js/core',
         'jquery': 'assets/js/vendors/jquery-3.2.1.min',
+        'popperjs': 'assets/js/vendors/popper.min',
         'bootstrap': 'assets/js/vendors/bootstrap.bundle.min',
         'sparkline': 'assets/js/vendors/jquery.sparkline.min',
         'selectize': 'assets/js/vendors/selectize.min',
@@ -22,14 +23,9 @@ require.config({
         'vector-map-de': 'assets/js/vendors/jquery-jvectormap-de-merc',
         'vector-map-world': 'assets/js/vendors/jquery-jvectormap-world-mill',
         'circle-progress': 'assets/js/vendors/circle-progress.min',
-        'jquery.validate': 'assets/js/vendors/jquery.validate.min',
-        //'jquery-validation': 'assets/js/vendors/jquery.validate.min',
-        //'jquery.validate.addon': 'assets/js/vendors/additional-methods.min',
-        //'jquery-validation-addon': 'assets/js/vendors/additional-methods.min',
-        //'jquery-validate-unobtrusive': 'assets/js/vendors/jquery.validate.unobtrusive.min',
-        //'sweetalert2': 'assets/js/vendors/sweetalert2.min',
-        'bootbox': 'assets/js/vendors/bootbox.min',
-        'polyfill': 'assets/js/vendors/polyfill.min'
+        'jqueryval': 'assets/js/vendors/jquery.validate.min',
+        'jqueryval-unobtrusive': 'assets/js/vendors/jquery.validate.unobtrusive.min',
+        'bootbox': 'assets/js/vendors/bootbox.min'
     }
 });
 window.tabler = {

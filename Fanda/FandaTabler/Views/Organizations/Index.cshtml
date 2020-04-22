@@ -40,6 +40,7 @@
         }
     </style>
 }
+
 <div class="card">
     <div class="card-header">
         <h3 class="card-title">Organizations</h3>
@@ -47,28 +48,29 @@
     <div class="card-body">
         <div class="row align-items-center mb-3">
             <div class="col">
-                @*<div class="input-icon">*@
                 <form asp-action="Index" method="get">
                     <div class="input-group">
-                        <input type="search" class="form-control" placeholder="Search&hellip;" tabindex="1" id="search" name="search" value=@ViewBag.Search>
+                        <input type="search" class="form-control" placeholder="Search&hellip;" tabindex="1"
+                               id="search" name="search" value=@ViewBag.Search />
                         <span class="input-group-append">
-                            <button type="submit" class="btn btn-secondary"><i class="fe fe-search"></i></button>
-                        </span>
-                        @*<div class="input-icon-addon">
+                            <button type="submit" id="searchOrg" class="btn btn-secondary">
                                 <i class="fe fe-search"></i>
-                            </div>*@
+                            </button>
+                        </span>
                     </div>
                 </form>
-                @*</div>*@
             </div>
             <div class="col-2 text-center">
-                <a href="javascript:void(0)" class="btn btn-secondary"><i class="fe fe-arrow-left"></i></a>
+                <a href="#" class="btn btn-secondary" id="leftButton"><i class="fe fe-arrow-left"></i>&nbsp;</a>
             </div>
             <div class="col-2 text-center">
-                <buton type="button" class="btn btn-secondary" id="rightButton"><i class="fe fe-arrow-right"></i></buton>
+                <a href="#" class="btn btn-secondary" id="rightButton"><i class="fe fe-arrow-right"></i>&nbsp;</a>
             </div>
             <div class="col-3">
-                <a href="javascript:void(0)" class="btn btn-primary btn-block" data-toggle="modal" data-target="#modal-edit"><i class="fe fe-plus"></i> Create New</a>
+                <button type="button" class="btn btn-primary btn-block"
+                        data-toggle="ajax-modal" data-target="#modal-edit" data-url="@Url.Action("Create")">
+                    <i class="fe fe-plus"></i> Create New
+                </button>
             </div>
         </div>
 
@@ -76,435 +78,339 @@
             <div class="col">
                 @foreach (var org in Model)
                 {
-                    <div class="card card-hover">
-                        @if (org.IsSelected)
-                        {
-                            <div class="card-status card-status bg-blue"></div>
-                        }
-                        <div class="row">
-                            <div class="col-md-3">
-                                <img src="~/demo/photos/adrian-infernus-281832-500.jpg" class="object-cover w-100 h-100" alt="Card side image">
-                            </div>
-                            <div class="col">
-                                <div class="card-body">
-                                    <h3 class="card-title">@org.Name</h3>
-                                    <h6 class="card-subtitle">@org.Description</h6>
-                                    <div class="row align-items-center">
-                                        <div class="col-6">
-                                            <form asp-action="Open" method="post">
-                                                <input type="hidden" asp-for="@org.Id" id="orgId-@org.Id" />
-                                                <div class="input-group">
-                                                    <select class="custom-select"
-                                                            asp-for="@org.SelectedYearId" id="yearId-@org.Id"
-                                                            asp-items="@(new SelectList(org.AccountYears.OrderByDescending(y => y.Code), "Id", "Code"))">
-                                                        <option value="">Choose Year...</option>
-                                                    </select>
-                                                    <div class="input-group-append">
-                                                        <button type="submit" class="btn btn-primary">
-                                                            <i class="fe fe-book-open"></i> Open
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                        <div class="col">
-                                            <button class="btn btn-outline-secondary btn-block"><i class="fe fe-edit-3"></i> Edit</button>
-                                        </div>
-                                        <div class="col">
-                                            <button class="btn btn-outline-danger btn-block"><i class="fe fe-trash-2"></i> Delete</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    await Html.RenderPartialAsync("_OrganizationListItem", org);
                 }
             </div>
         </div>
-
-        @*<form method="post">
-                @Html.AntiForgeryToken()
-                <div id="jsGrid"></div>
-            </form>*@
     </div>
 </div>
 
-<!-- Modals -->
-<div class="modal modal-blur fade" id="modal-edit" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header align-items-center">
-                <h5 class="modal-title">Create New Organization</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" />
-            </div>
-            <div class="card">
-                <ul class="nav nav-tabs nav-fill" data-toggle="tabs">
-                    <li class="nav-item">
-                        <a href="#tabs-general" class="nav-link active" data-toggle="tab">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon mr-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" />
-                                <polyline points="5 12 3 12 12 3 21 12 19 12" />
-                                <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-                                <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
-                            </svg> General
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#tabs-contacts" class="nav-link" data-toggle="tab">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon mr-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" />
-                                <circle cx="12" cy="7" r="4" />
-                                <path d="M5.5 21v-2a4 4 0 0 1 4 -4h5a4 4 0 0 1 4 4v2" />
-                            </svg> Contacts
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#tabs-addresses" class="nav-link" data-toggle="tab">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon mr-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" />
-                                <polyline points="21 12 17 12 14 20 10 4 7 12 3 12" />
-                            </svg> Addresses
-                        </a>
-                    </li>
-                </ul>
-                <div class="card-body">
-                    <div class="tab-content">
-                        <div class="tab-pane active show" id="tabs-general">
-                            <div class="row">
-                                <div class="col-lg-4">
-                                    <div class="mb-3">
-                                        <label class="form-label">Organization Code</label>
-                                        <input type="text" class="form-control" placeholder="Organization code" id="orgCode" name="org.Code" autofocus>
-                                    </div>
-                                </div>
-                                <div class="col-lg-8">
-                                    <div class="mb-3">
-                                        <label class="form-label">Organization Name</label>
-                                        <input type="text" class="form-control" placeholder="Organization name" id="orgName" name="org.Name">
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="mb-3">
-                                        <label class="form-label">Description</label>
-                                        <input type="text" class="form-control" placeholder="Description" id="orgDesc" name="org.Description">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Regd.No.</label>
-                                        <input type="text" class="form-control" placeholder="Registered number" id="RegdNum" name="org.RegdNum">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">PAN</label>
-                                        <input type="text" class="form-control" placeholder="Permanent account number" id="pan" name="org.PAN">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">TAN</label>
-                                        <input type="text" class="form-control" placeholder="Tax deduction and collection account number" id="TAN" name="org.TAN">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">GSTIN</label>
-                                        <input type="text" class="form-control" placeholder="Goods and service tax identification number" id="GSTIN" name="org.GSTIN">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="float-right">
-                                <button class="btn btn-secondary btnPrev" disabled><i class="fe fe-arrow-left"></i> Previous</button>
-                                <button class="btn btn-secondary btnNext"><i class="fe fe-arrow-right"></i> Next</button>
-                            </div>
-                        </div>
-                        <div class="tab-pane" id="tabs-contacts">
-                            <div class="row mb-3">
-                                <div class="col-lg-12">
-                                    <form method="post">
-                                        <div id="jsgrid-contacts"></div>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="float-right">
-                                        <button class="btn btn-secondary btnPrev"><i class="fe fe-arrow-left"></i> Previous</button>
-                                        <button class="btn btn-secondary btnNext"><i class="fe fe-arrow-right"></i> Next</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane" id="tabs-addresses">
-                            <div class="row mb-3">
-                                <div class="col-lg-12">
-                                    <form method="post">
-                                        <div id="jsgrid-addresses"></div>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="float-right">
-                                        <button class="btn btn-secondary btnPrev"><i class="fe fe-arrow-left"></i> Previous</button>
-                                        <button class="btn btn-secondary btnNext" disabled><i class="fe fe-arrow-right"></i> Next</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="modal-footer">
-                <a href="#" class="btn btn-link link-secondary" data-dismiss="modal">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                    Cancel
-                </a>
-                <a href="#" class="btn btn-primary ml-auto" data-dismiss="modal">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-save"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-                    Save
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modals -->
+<!-- Modal placeholder -->
+<div id="modal-placeholder"></div>
 
 @section scripts {
     <script type="text/javascript">
-        require(['jquery', 'jsgrid', 'bootbox', 'toastr'], function ($, _, bootbox, toastr) {
-            var contacts = [];
-            var addresses = [];
+        require(['jquery', 'jsgrid', 'bootbox', 'toastr'],
+            function ($, _, bootbox, toastr, _) {
+                var contacts = [];
+                var addresses = [];
 
-            $(document).ready(function () {
+                $(document).ready(function () {
+                    // Send AntiforgeryToken to controller for POST and PATCH methods
+                    $(document).ajaxSend(function (e, xhr, options) {
+                        var optionType = options.type.toUpperCase();
+                        if (optionType != "GET") {//optionType == "POST" || optionType == "PATCH" || optionType == "PUT" || optionType="DELETE")
+                            let token = $("input[name='__RequestVerificationToken']").val();
+                            xhr.setRequestHeader("RequestVerificationToken", token);
+                        }
+                    });
 
-                $('.btnNext').click(function () {
-                    // debugger;
-                    var active = $('.nav-tabs > .nav-item > .active').parent();
-                    active.next('li').find('a').trigger('click');
+                    // Invoke Edit Modal on click Create New/Edit button
+                    var placeholderElement = $('#modal-placeholder');
+                    $('button[data-toggle="ajax-modal"]').click(function (event) {
+                        event.preventDefault();
+                        var url = $(this).data('url');
+                        $.get(url)
+                            .done(function (data) {
+                                placeholderElement.html(data);
+                                createContactGrid();
+                                createAddressGrid();
+                                placeholderElement.find('.modal').modal('show');
+                            });
+                    });
+
+                    // Next and previous button for Edit Modal
+                    $(document).on('click', '.btnNext', function (event) {
+                        event.preventDefault();
+                        var active = $('.nav-tabs > .nav-item > .active').parent();
+                        active.next('li').find('a').trigger('click');
+                        $('#modal-edit').modal('handleUpdate');
+                    });
+                    $(document).on('click', '.btnPrev', function (event) {
+                        event.preventDefault();
+                        var active = $('.nav-tabs > .nav-item > .active').parent();
+                        active.prev('li').find('a').trigger('click');
+                        $('#modal-edit').modal('handleUpdate');
+                    });
+
+                    // Save
+                    // Attach click event handler to an element
+                    // which is located inside #modal-placeholder
+                    // and has data-save attribute equal to modal
+                    placeholderElement.on('click', '[data-save="modal"]', function (event) {
+                        event.preventDefault();
+
+                        var form = $(this).parents('.modal').find('form');
+                        var actionUrl = form.attr('action');
+                        var dataToSend = form.serialize();
+
+                        $.post(actionUrl, dataToSend)
+                            .done(function (data) {
+                                //debugger;
+                                var newBody = $('.modal-body', data);
+                                placeholderElement.find('.modal-body').replaceWith(newBody);
+
+                                // find IsValid input field and check it's value
+                                // if it's valid then hide modal window
+                                var isValid = newBody.find('[name="IsValid"]').val() == 'True';
+                                if (isValid) {
+                                    toastr.warning("Organization saved successfully!", "Success");
+                                    placeholderElement.find('.modal').modal('hide');
+                                    $("#searchOrg").click();
+                                }
+
+                                //placeholderElement.find('.modal').modal('hide');
+                                //$("#searchOrg").click();
+                            })
+                            .fail(function (error) {
+                                console.log("Error on save organization", error);
+                                let messages = $.map(error.responseJSON, function (msg) {
+                                    return msg + "!";
+                                });
+                                toastr.warning(messages.join("<br>"), "Warning");
+                            });
+                    });
+
+                    // Attach a submit handler to the form
+                    //$("#saveOrg").click(function (event) {
+                    //    // debugger;
+                    //    // Stop form from submitting normally
+                    //    event.preventDefault();
+
+                    //    // Get some values from elements on the page:
+                    //    var form = $("#orgForm"),
+                    //        url = form.attr("action");
+                    //    const formData = new FormData(form[0]);
+
+                    //    // Send the data using post
+                    //    $.ajax(url, {
+                    //        type: "POST",
+                    //        processData: false,
+                    //        contentType: false,
+                    //        data: formData
+                    //    })
+                    //        .done(function (data) {
+                    //            $("#modal-edit").modal('hide');
+                    //            $("#searchOrg").click();
+                    //        })
+                    //        .fail(function (error) {
+                    //            console.log("Error on save organization", error);
+                    //            let messages = $.map(error.responseJSON, function (msg) {
+                    //                return msg + "!";
+                    //            });
+                    //            toastr.warning(messages.join("<br>"), "Warning");
+                    //        });
+                    //});
                 });
 
-                $('.btnPrev').click(function () {
-                    var active = $('.nav-tabs > .nav-item > .active').parent();
-                    active.prev('li').find('a').trigger('click');
-                });
+                function createContactGrid() {
+                    // jsGrid - Contacts
+                    var $gridContacts = $("#jsgrid-contacts").jsGrid({
+                        height: "296px",  // "450"
+                        width: "100%",
 
-                // Send AntiforgeryToken to controller for POST and PATCH methods
-                $(document).ajaxSend(function (e, xhr, options) {
-                    if (options.type.toUpperCase() == "POST" || options.type.toUpperCase() == "PATCH") {
-                        let token = $("input[name='__RequestVerificationToken']").val();
-                        xhr.setRequestHeader("RequestVerificationToken", token);
-                    }
-                });
+                        //heading: true,
+                        //autoload: true,
 
-                // jsGrid - Contacts
-                var $gridContacts = $("#jsgrid-contacts").jsGrid({
-                    height: "296px",  // "450"
-                    width: "100%",
+                        pagerFormat: "Pages: {pages} &nbsp;&nbsp;|&nbsp;&nbsp; Rows: {itemCount}",
+                        // "Pages: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} of {pageCount}"
+                        pageSize: 5,
+                        pageButtonCount: 5,
+                        paging: true,
+                        //pageLoading: true,
+                        filtering: true,
+                        sorting: true,
 
-                    //heading: true,
-                    //autoload: true,
+                        inserting: true,
+                        editing: true,
+                        selecting: true,
 
-                    pagerFormat: "Pages: {pages} &nbsp;&nbsp;|&nbsp;&nbsp; Rows: {itemCount}",
-                    // "Pages: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} of {pageCount}"
-                    pageSize: 5,
-                    pageButtonCount: 5,
-                    paging: true,
-                    //pageLoading: true,
-                    filtering: true,
-                    sorting: true,
+                        noDataContent: "No contacts",
 
-                    inserting: true,
-                    editing: true,
-                    selecting: true,
+                        data: contacts,
 
-                    noDataContent: "No contacts",
-
-                    data: contacts,
-
-                    confirmDeleting: false,
-                    @*deleteConfirm: function () {
+                        confirmDeleting: false,
+                    @* deleteConfirm: function () {
                         return "Do you really want to delete the category?";
                     },*@
 
-                    invalidNotify: function (args) {
-                        let messages = $.map(args.errors, function (error) {
-                            return error.message + "!";
-                        });
-                        console.log("invalidNotify", messages);
-                        toastr.warning(messages.join("<br>"), "Warning");
-                    },
-
-                    onError: function (error) {
-                        console.log("onError", error);
-                        let messages = $.map(error.args[0].responseJSON, function (msg) {
-                            return msg + "!";
-                        });
-                        toastr.warning(messages.join("<br>"), "Warning");
-                    },
-
-                    onItemDeleting: function (args) {
-                        let $row = this.rowByItem(args.item),
-                            selectedRow = $gridContacts.find('table tr.highlight');
-                        if (selectedRow.length) {
-                            selectedRow.toggleClass('highlight');
-                        };
-                        $row.toggleClass("highlight");
-
-                        //console.log(args);
-                        if (!args.item.deleteConfirmed) { // custom property for confirmation
-                            args.cancel = true; // cancel deleting
-
-                            bootbox.confirm({
-                                title: "Delete category?",
-                                message: "Are you sure you want to <em>delete</em> this contact?<br>Once deleted, you will not be able to recover!",
-                                closeButton: true,
-                                buttons: {
-                                    cancel: {
-                                        label: 'No',
-                                        className: 'btn-secondary'
-                                    },
-                                    confirm: {
-                                        label: 'Yes',
-                                        className: 'btn-danger'
-                                    }
-                                },
-                                callback: function (yes) {
-                                    if (yes) {
-                                        args.item.deleteConfirmed = true;
-                                        $gridContacts.jsGrid('deleteItem', args.item); //call deleting once more in callback
-                                    }
-                                    $row.toggleClass("highlight");
-                                }
+                        invalidNotify: function (args) {
+                            let messages = $.map(args.errors, function (error) {
+                                return error.message + "!";
                             });
-                        }
-                    },
+                            console.log("invalidNotify", messages);
+                            toastr.warning(messages.join("<br>"), "Warning");
+                        },
 
-                    fields: [
-                        { name: "salutation", type: "text", title: "Salutation", width: 100, validate: "required" },
-                        { name: "firstName", type: "text", title: "First Name", width: 200, validate: "required" },
-                        { name: "lastName", type: "text", title: "Last Name", width: 200, validate: "required" },
-                        { name: "designation", type: "text", title: "Designation", width: 150 },
-                        { name: "department", type: "text", title: "Department", width: 150 },
-                        { name: "email", type: "text", title: "Email", width: 200 },
-                        { name: "workPhone", type: "text", title: "Work Phone", width: 150 },
-                        { name: "mobile", type: "text", title: "Mobile", width: 150 },
-                        {
-                            name: "isPrimary", type: "checkbox", title: "Primary?", sorting: false, width: 100,
-                            insertTemplate: function () {
-                                let input = this.__proto__.insertTemplate.call(this); //original input
-                                input.prop('checked', true);
-                                input.prop('disabled', 'disabled');
-                                return input;
+                        onError: function (error) {
+                            console.log("onError", error);
+                            let messages = $.map(error.args[0].responseJSON, function (msg) {
+                                return msg + "!";
+                            });
+                            toastr.warning(messages.join("<br>"), "Warning");
+                        },
+
+                        onItemDeleting: function (args) {
+                            let $row = this.rowByItem(args.item),
+                                selectedRow = $gridContacts.find('table tr.highlight');
+                            if (selectedRow.length) {
+                                selectedRow.toggleClass('highlight');
+                            };
+                            $row.toggleClass("highlight");
+
+                            //console.log(args);
+                            if (!args.item.deleteConfirmed) { // custom property for confirmation
+                                args.cancel = true; // cancel deleting
+
+                                bootbox.confirm({
+                                    title: "Delete category?",
+                                    message: "Are you sure you want to <em>delete</em> this contact?<br>Once deleted, you will not be able to recover!",
+                                    closeButton: true,
+                                    buttons: {
+                                        cancel: {
+                                            label: 'No',
+                                            className: 'btn-secondary'
+                                        },
+                                        confirm: {
+                                            label: 'Yes',
+                                            className: 'btn-danger'
+                                        }
+                                    },
+                                    callback: function (yes) {
+                                        if (yes) {
+                                            args.item.deleteConfirmed = true;
+                                            $gridContacts.jsGrid('deleteItem', args.item); //call deleting once more in callback
+                                        }
+                                        $row.toggleClass("highlight");
+                                    }
+                                });
                             }
                         },
-                        { name: "id", visible: false, width: 0 },
-                        { type: "control", width: 100 }
-                    ]
-                });
-                $gridContacts.find(".jsgrid-mode-button").click();
 
-                // jsGrid - Addresses
-                var $gridAddresses = $("#jsgrid-addresses").jsGrid({
-                    height: "296px",  // "450"
-                    width: "100%",
-
-                    //heading: true,
-                    //autoload: true,
-
-                    pagerFormat: "Pages: {pages} &nbsp;&nbsp;|&nbsp;&nbsp; Rows: {itemCount}",
-                    // "Pages: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} of {pageCount}"
-                    pageSize: 5,
-                    pageButtonCount: 5,
-                    paging: true,
-                    //pageLoading: true,
-                    filtering: true,
-                    sorting: true,
-
-                    inserting: true,
-                    editing: true,
-                    selecting: true,
-
-                    noDataContent: "No addresses",
-
-                    data: addresses,
-
-                    confirmDeleting: false,
-
-                    invalidNotify: function (args) {
-                        let messages = $.map(args.errors, function (error) {
-                            return error.message + "!";
-                        });
-                        console.log("invalidNotify", messages);
-                        toastr.warning(messages.join("<br>"), "Warning");
-                    },
-
-                    onError: function (error) {
-                        console.log("onError", error);
-                        let messages = $.map(error.args[0].responseJSON, function (msg) {
-                            return msg + "!";
-                        });
-                        toastr.warning(messages.join("<br>"), "Warning");
-                    },
-
-                    onItemDeleting: function (args) {
-                        let $row = this.rowByItem(args.item),
-                            selectedRow = $gridAddresses.find('table tr.highlight');
-                        if (selectedRow.length) {
-                            selectedRow.toggleClass('highlight');
-                        };
-                        $row.toggleClass("highlight");
-
-                        //console.log(args);
-                        if (!args.item.deleteConfirmed) { // custom property for confirmation
-                            args.cancel = true; // cancel deleting
-
-                            bootbox.confirm({
-                                title: "Delete category?",
-                                message: "Are you sure you want to <em>delete</em> this address?<br>Once deleted, you will not be able to recover!",
-                                closeButton: true,
-                                buttons: {
-                                    cancel: {
-                                        label: 'No',
-                                        className: 'btn-secondary'
-                                    },
-                                    confirm: {
-                                        label: 'Yes',
-                                        className: 'btn-danger'
-                                    }
-                                },
-                                callback: function (yes) {
-                                    if (yes) {
-                                        args.item.deleteConfirmed = true;
-                                        $gridAddresses.jsGrid('deleteItem', args.item); //call deleting once more in callback
-                                    }
-                                    $row.toggleClass("highlight");
+                        fields: [
+                            { name: "salutation", type: "text", title: "Salutation", width: 100, validate: "required" },
+                            { name: "firstName", type: "text", title: "First Name", width: 200, validate: "required" },
+                            { name: "lastName", type: "text", title: "Last Name", width: 200, validate: "required" },
+                            { name: "designation", type: "text", title: "Designation", width: 150 },
+                            { name: "department", type: "text", title: "Department", width: 150 },
+                            { name: "email", type: "text", title: "Email", width: 200 },
+                            { name: "workPhone", type: "text", title: "Work Phone", width: 150 },
+                            { name: "mobile", type: "text", title: "Mobile", width: 150 },
+                            {
+                                name: "isPrimary", type: "checkbox", title: "Primary?", sorting: false, width: 100,
+                                insertTemplate: function () {
+                                    let input = this.__proto__.insertTemplate.call(this); //original input
+                                    input.prop('checked', true);
+                                    input.prop('disabled', 'disabled');
+                                    return input;
                                 }
+                            },
+                            { name: "id", visible: false, width: 0 },
+                            { type: "control", width: 100 }
+                        ]
+                    });
+                    $gridContacts.find(".jsgrid-mode-button").click();
+
+                }
+
+                function createAddressGrid() {
+                    // jsGrid - Addresses
+                    var $gridAddresses = $("#jsgrid-addresses").jsGrid({
+                        height: "296px",  // "450"
+                        width: "100%",
+
+                        //heading: true,
+                        //autoload: true,
+
+                        pagerFormat: "Pages: {pages} &nbsp;&nbsp;|&nbsp;&nbsp; Rows: {itemCount}",
+                        // "Pages: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} of {pageCount}"
+                        pageSize: 5,
+                        pageButtonCount: 5,
+                        paging: true,
+                        //pageLoading: true,
+                        filtering: true,
+                        sorting: true,
+
+                        inserting: true,
+                        editing: true,
+                        selecting: true,
+
+                        noDataContent: "No addresses",
+
+                        data: addresses,
+
+                        confirmDeleting: false,
+
+                        invalidNotify: function (args) {
+                            let messages = $.map(args.errors, function (error) {
+                                return error.message + "!";
                             });
-                        }
-                    },
+                            console.log("invalidNotify", messages);
+                            toastr.warning(messages.join("<br>"), "Warning");
+                        },
 
-                    fields: [
-                        { name: "attention", type: "text", title: "Attention", width: 100, validate: "required" },
-                        { name: "addressLine1", type: "text", title: "Address Line 1", width: 200, validate: "required" },
-                        { name: "addressLine2", type: "text", title: "Address Line 2", width: 200 },
-                        { name: "city", type: "text", title: "City", width: 100 },
-                        { name: "state", type: "text", title: "State", width: 100 },
-                        { name: "country", type: "text", title: "Country", width: 100 },
-                        { name: "postalCode", type: "text", title: "Postal Code", width: 100 },
-                        { name: "phone", type: "text", title: "Phone", width: 100 },
-                        { name: "fax", type: "text", title: "Fax", width: 100 },
-                        { name: "addressType", type: "text", title: "Addr. Type", width: 100 },
-                        { name: "id", visible: false, width: 0 },
-                        { type: "control", width: 100 }
-                    ]
-                });
-                $gridAddresses.find(".jsgrid-mode-button").click();
+                        onError: function (error) {
+                            console.log("onError", error);
+                            let messages = $.map(error.args[0].responseJSON, function (msg) {
+                                return msg + "!";
+                            });
+                            toastr.warning(messages.join("<br>"), "Warning");
+                        },
 
+                        onItemDeleting: function (args) {
+                            let $row = this.rowByItem(args.item),
+                                selectedRow = $gridAddresses.find('table tr.highlight');
+                            if (selectedRow.length) {
+                                selectedRow.toggleClass('highlight');
+                            };
+                            $row.toggleClass("highlight");
+
+                            //console.log(args);
+                            if (!args.item.deleteConfirmed) { // custom property for confirmation
+                                args.cancel = true; // cancel deleting
+
+                                bootbox.confirm({
+                                    title: "Delete category?",
+                                    message: "Are you sure you want to <em>delete</em> this address?<br>Once deleted, you will not be able to recover!",
+                                    closeButton: true,
+                                    buttons: {
+                                        cancel: {
+                                            label: 'No',
+                                            className: 'btn-secondary'
+                                        },
+                                        confirm: {
+                                            label: 'Yes',
+                                            className: 'btn-danger'
+                                        }
+                                    },
+                                    callback: function (yes) {
+                                        if (yes) {
+                                            args.item.deleteConfirmed = true;
+                                            $gridAddresses.jsGrid('deleteItem', args.item); //call deleting once more in callback
+                                        }
+                                        $row.toggleClass("highlight");
+                                    }
+                                });
+                            }
+                        },
+
+                        fields: [
+                            { name: "attention", type: "text", title: "Attention", width: 100, validate: "required" },
+                            { name: "addressLine1", type: "text", title: "Address Line 1", width: 200, validate: "required" },
+                            { name: "addressLine2", type: "text", title: "Address Line 2", width: 200 },
+                            { name: "city", type: "text", title: "City", width: 100 },
+                            { name: "state", type: "text", title: "State", width: 100 },
+                            { name: "country", type: "text", title: "Country", width: 100 },
+                            { name: "postalCode", type: "text", title: "Postal Code", width: 100 },
+                            { name: "phone", type: "text", title: "Phone", width: 100 },
+                            { name: "fax", type: "text", title: "Fax", width: 100 },
+                            { name: "addressType", type: "text", title: "Addr. Type", width: 100 },
+                            { name: "id", visible: false, width: 0 },
+                            { type: "control", width: 100 }
+                        ]
+                    });
+                    $gridAddresses.find(".jsgrid-mode-button").click();
+                }
             });
-        });
     </script>
 }

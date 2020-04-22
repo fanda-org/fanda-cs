@@ -38,47 +38,34 @@
             baseUrl: '/'
         });
     </script>
-
-    <!-- Dashboard Core -->
-    <link rel="stylesheet" href="~/assets/css/dashboard.css" type="text/css" />
-    <script src="~/assets/js/dashboard.js"></script>
+    <environment include="Development">
+        <link rel="stylesheet" href="~/assets/css/dashboard.css" type="text/css" />
+        <link href="~/assets/plugins/toastr/toastr.css" rel="stylesheet" type="text/css" />
+        <link href="~/assets/plugins/jsgrid/jsgrid.css" rel="stylesheet" type="text/css" />
+        <link href="~/assets/plugins/jsgrid/jsgrid-theme.css" rel="stylesheet" type="text/css" />
+        <link href="~/assets/plugins/select2/select2.css" rel="stylesheet" type="text/css" />
+        @*<link href="~/assets/plugins/select2/select2-bootstrap4.css" rel="stylesheet" type="text/css" />*@
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="~/assets/css/dashboard.min.css" type="text/css" />
+        <link href="~/assets/plugins/toastr/toastr.min.css" rel="stylesheet" type="text/css" />
+        <link href="~/assets/plugins/jsgrid/jsgrid.min.css" rel="stylesheet" type="text/css" />
+        <link href="~/assets/plugins/jsgrid/jsgrid-theme.min.css" rel="stylesheet" type="text/css" />
+        <link href="~/assets/plugins/select2/select2.min.css" rel="stylesheet" type="text/css" />
+        @*<link href="~/assets/plugins/select2/select2-bootstrap4.min.css" rel="stylesheet" type="text/css" />*@
+    </environment>
     <link rel="stylesheet" href="~/assets/css/site.css" type="text/css" />
-
-    <!-- SweetAlert2 -->
-    @*<link href="~/assets/css/sweetalert2.min.css" rel="stylesheet" type="text/css" />*@
-
+    @RenderSection("Styles", required: false)
+    <!-- Dashboard Core -->
+    <script src="~/assets/js/dashboard.js"></script>
     <!-- Toastr Plugin -->
-    <link href="~/assets/plugins/toastr/toastr.min.css" rel="stylesheet" type="text/css" />
     <script src="~/assets/plugins/toastr/plugin.js"></script>
-
     <!-- JSGrid Plugin -->
-    <link href="~/assets/plugins/jsgrid/jsgrid.css" rel="stylesheet" type="text/css" />
-    <link href="~/assets/plugins/jsgrid/jsgrid-theme.min.css" rel="stylesheet" type="text/css" />
     <script src="~/assets/plugins/jsgrid/plugin.js"></script>
-
     <!-- Datatables Plugin -->
     <script src="~/assets/plugins/datatables/plugin.js"></script>
-
-    <!-- Tabulator Tables Plugin -->
-    @*<link href="~/assets/plugins/tabulator-tables/tabulator_bootstrap4.min.css" rel="stylesheet" type="text/css" />
-        <script src="~/assets/plugins/tabulator-tables/plugin.js"></script>*@
-
     <!-- Select2 -->
-    <link href="~/assets/plugins/select2/select2.min.css" rel="stylesheet" type="text/css" />
-    <link href="~/assets/plugins/select2/select2-bootstrap4.css" rel="stylesheet" type="text/css" />
     <script src="~/assets/plugins/select2/plugin.js"></script>
-
-    <!-- smartWizard -->
-    <!-- Include SmartWizard CSS -->
-    <link href="~/assets/plugins/smartWizard/css/smart_wizard.css" rel="stylesheet" />
-    <!-- Optional SmartWizard theme -->
-    <link href="~/assets/plugins/smartWizard/css/smart_wizard_theme_arrows.css" rel="stylesheet" />
-    <link href="~/assets/plugins/smartWizard/css/smart_wizard_theme_circles.css" rel="stylesheet" />
-    <link href="~/assets/plugins/smartWizard/css/smart_wizard_theme_dots.css" rel="stylesheet" />
-    <!-- Include SmartWizard JavaScript source -->
-    <script src="~/assets/plugins/smartWizard/plugin.js"></script>
-
-    @RenderSection("Styles", required: false)
 </head>
 <body class="">
     <div class="page">
@@ -176,13 +163,13 @@
                     <div class="container">
                         <div class="row align-items-center">
                             @*<div class="col-lg-3 ml-auto">
-                                <form class="input-icon my-3 my-lg-0">
-                                    <input type="search" class="form-control header-search" placeholder="Search&hellip;" tabindex="1">
-                                    <div class="input-icon-addon">
-                                        <i class="fe fe-search"></i>
-                                    </div>
-                                </form>
-                            </div>*@
+                                    <form class="input-icon my-3 my-lg-0">
+                                        <input type="search" class="form-control header-search" placeholder="Search&hellip;" tabindex="1">
+                                        <div class="input-icon-addon">
+                                            <i class="fe fe-search"></i>
+                                        </div>
+                                    </form>
+                                </div>*@
                             <div class="col-lg order-lg-first">
                                 <ul class="nav nav-tabs border-0 flex-column flex-lg-row">
                                     <li class="nav-item">

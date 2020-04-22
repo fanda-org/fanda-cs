@@ -8,14 +8,14 @@ namespace Fanda.Dto
         [Required]
         public Guid Id { get; set; }
 
-        [Display(Name = "Code"),
+        [Display(Name = "Code", Prompt = "Code"),
             Required(AllowEmptyStrings = false, ErrorMessage = "Code is required"),
             RegularExpression(@"^[a-zA-Z0-9~!@#$()_+-{}|:<>.?\/]+$", ErrorMessage = @"Space or tab are not allowed in code"),
             StringLength(16, ErrorMessage = "Maximum allowed length is 16")]
         public string Code { get; set; }
 
         [Display(Name = "Name"),
-            Required(AllowEmptyStrings = false, ErrorMessage = "Category name is required"),
+            Required(AllowEmptyStrings = false, ErrorMessage = "Name is required"),
             RegularExpression(@"^[a-zA-Z0-9\s~!@#$()_+-{}|:<>.?\/]*$", ErrorMessage = @"Special characters are not allowed in name"),
             StringLength(50, ErrorMessage = "Maximum allowed length is 50")]
         public string Name { get; set; }
@@ -23,7 +23,9 @@ namespace Fanda.Dto
         [Display(Name = "Description"),
             RegularExpression(@"^[a-zA-Z0-9\s~!@#$()_+-{}|:<>.?\/]*$", ErrorMessage = @"Special characters are not allowed in description"),
             StringLength(255, ErrorMessage = "Maximum allowed length is 255")]
+        [DisplayFormat(ConvertEmptyStringToNull = true)]
         public string Description { get; set; }
+
         public bool? Active { get; set; }
         public DateTime DateCreated { get; set; }
         public DateTime? DateModified { get; set; }

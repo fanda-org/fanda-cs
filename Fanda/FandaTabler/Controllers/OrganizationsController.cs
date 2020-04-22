@@ -46,7 +46,7 @@ namespace FandaTabler.Controllers
                     org.IsSelected = true;
                     foreach (var year in org.AccountYears)
                     {
-                        if (currentYear != null && year.Id==currentYear.Id)
+                        if (currentYear != null && year.Id == currentYear.Id)
                         {
                             org.SelectedYearId = currentYear.Id;
                         }
@@ -116,6 +116,103 @@ namespace FandaTabler.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        // GET: Orgs/Create
+        public IActionResult Create()
+        {
+            var org = new OrganizationDto { Active = true };
+
+            //TempData.Set("PartyCategories", await GetPartyCategories(party.CategoryId));
+            ViewBag.Mode = "Create";
+            ViewBag.Readonly = false;
+            return PartialView("_OrganizationEdit", org);   // View("Edit", org);
+        }
+
+        // GET: Orgs/Edit/5
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            if (id == null || id == Guid.Empty)
+            {
+                return NotFound();
+            }
+
+            var org = await _service.GetByIdAsync(id);
+            if (org == null)
+            {
+                return NotFound();
+            }
+
+            //TempData.Set("PartyCategories", await GetPartyCategories(org.CategoryId));
+            ViewBag.Mode = "Edit";
+            ViewBag.Readonly = false;
+            return PartialView("_OrganizationEdit", org);   // View(org);
+        }
+
+        // POST: Orgs/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Save([FromForm] OrganizationDto org)
+        {
+            try
+            {
+                //if (!ModelState.IsValid)
+                //{
+                //    return BadRequest(ModelState);
+                //}
+                if (ModelState.IsValid)
+                {
+                    #region Validation
+                    org.Code = org.Code.ToUpper();
+                    org.Name = org.Name.TrimExtraSpaces();
+                    org.Description = org.Description.TrimExtraSpaces();
+
+                    #region Validation: Dupllicate
+                    // Check code duplicate
+                    var duplCode = new BaseDuplicate { Field = DuplicateField.Code, Value = org.Code, Id = org.Id };
+                    if (await _service.ExistsAsync(duplCode))
+                    {
+                        ModelState.AddModelError("Code", $"Code '{org.Code}' already exists");
+                    }
+                    // Check name duplicate
+                    var duplName = new BaseDuplicate { Field = DuplicateField.Name, Value = org.Name, Id = org.Id };
+                    if (await _service.ExistsAsync(duplName))
+                    {
+                        ModelState.AddModelError("Name", $"Name '{org.Name}' already exists");
+                    }
+                    #endregion
+                    //if (!ModelState.IsValid)
+                    //{
+                    //    return BadRequest(ModelState);
+                    //}
+                    #endregion
+
+                    if (ModelState.IsValid)
+                    {
+                        org = await _service.SaveAsync(org);
+                    }
+                }
+
+                return PartialView("_OrganizationEdit", org);   //return Ok(org);
+            }
+            catch (Exception ex)
+            {
+                if (ex.InnerException != null)
+                {
+                    //if ((ex.InnerException as SqlException)?.Number == 2601)
+                    //    ModelState.AddModelError("Error", "Code/Name already existst!");
+                    //else
+                    ModelState.AddModelError("Error", ex.InnerException.Message);
+                }
+                else
+                {
+                    ModelState.AddModelError("Error", ex.Message);
+                }
+                return StatusCode(StatusCodes.Status500InternalServerError, ModelState);
+            }
+        }
+
+
+
+        #region Old actions
         [ValidateAntiForgeryToken]
         [HttpPatch]
         public async Task<IActionResult> ChangeStatus([FromBody] ActiveStatus status)
@@ -141,37 +238,6 @@ namespace FandaTabler.Controllers
             ViewBag.Mode = "Details";
             ViewBag.Readonly = true;
             return View("Edit", org);
-        }
-
-        // GET: Orgs/Create
-        public IActionResult Create()
-        {
-            var org = new OrganizationDto { Active = true };
-
-            //TempData.Set("PartyCategories", await GetPartyCategories(party.CategoryId));
-            ViewBag.Mode = "Create";
-            ViewBag.Readonly = false;
-            return View("Edit", org);
-        }
-
-        // GET: Orgs/Edit/5
-        public async Task<IActionResult> Edit(Guid id)
-        {
-            if (id == null || id == Guid.Empty)
-            {
-                return NotFound();
-            }
-
-            var org = await _service.GetByIdAsync(id);
-            if (org == null)
-            {
-                return NotFound();
-            }
-
-            //TempData.Set("PartyCategories", await GetPartyCategories(org.CategoryId));
-            ViewBag.Mode = "Edit";
-            ViewBag.Readonly = false;
-            return View(org);
         }
 
         // POST: Orgs/Edit/5
@@ -321,5 +387,7 @@ namespace FandaTabler.Controllers
         //    return list;
         //}
         #endregion Private
+
+        #endregion
     }
 }
