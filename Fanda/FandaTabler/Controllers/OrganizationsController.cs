@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -146,6 +147,26 @@ namespace FandaTabler.Controllers
             ViewBag.Readonly = false;
             return PartialView("_OrganizationEdit", org);   // View(org);
         }
+        public async Task<JsonResult> GetContactAddress(Guid id)
+        {
+            if (id != null && id != Guid.Empty)
+            {
+                var org = await _service.GetByIdAsync(id, true);
+                if (org != null)
+                {
+                    return Json(new
+                    {
+                        contacts = org.Contacts,
+                        addresses = org.Addresses
+                    });
+                }
+            }
+            return Json(new
+            {
+                contacts = new List<ContactDto>(),
+                addresses = new List<AddressDto>()
+            });
+        }
 
         // POST: Orgs/Edit/5
         [HttpPost]
@@ -209,8 +230,6 @@ namespace FandaTabler.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ModelState);
             }
         }
-
-
 
         #region Old actions
         [ValidateAntiForgeryToken]

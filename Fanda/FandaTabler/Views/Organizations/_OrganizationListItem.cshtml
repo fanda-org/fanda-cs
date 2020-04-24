@@ -38,10 +38,10 @@
                         </form>
                     </div>
                     <div class="col">
-                        <button class="btn btn-outline-secondary btn-block"><i class="fe fe-edit-3"></i> Edit</button>
+                        <button data-toggle="ajax-modal" data-url="@Url.Action("Edit", new { id = Model.Id })" data-id=@Model.Id class="btn btn-outline-secondary btn-block"><i class="fe fe-edit-3"></i> Edit</button>
                     </div>
                     <div class="col">
-                        <button class="btn btn-outline-danger btn-block"><i class="fe fe-trash-2"></i> Delete</button>
+                        <a href="@Url.Action("Delete", new { id = Model.Id })" class="btn btn-outline-danger btn-block"><i class="fe fe-trash-2"></i> Delete</a>
                     </div>
                 </div>
             </div>

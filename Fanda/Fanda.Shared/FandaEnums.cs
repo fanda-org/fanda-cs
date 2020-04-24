@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 
 namespace Fanda.Shared
@@ -7,24 +9,24 @@ namespace Fanda.Shared
     public static class FandaEnums
     {
         //public static IEnumerable<RoleType> GetRoleTypes() => 
-            //Enum.GetValues(typeof(RoleType)) as IEnumerable<RoleType>;
-        public static IEnumerable<AddressType> GetAddressTypes() => 
+        //Enum.GetValues(typeof(RoleType)) as IEnumerable<RoleType>;
+        public static IEnumerable<AddressType> GetAddressTypes() =>
             Enum.GetValues(typeof(AddressType)) as IEnumerable<AddressType>;
-        public static IEnumerable<BankAccountType> GetBankAccountTypes() => 
+        public static IEnumerable<BankAccountType> GetBankAccountTypes() =>
             Enum.GetValues(typeof(BankAccountType)) as IEnumerable<BankAccountType>;
-        public static IEnumerable<PaymentTerm> GetPaymentTerms() => 
+        public static IEnumerable<PaymentTerm> GetPaymentTerms() =>
             Enum.GetValues(typeof(PaymentTerm)) as IEnumerable<PaymentTerm>;
-        public static IEnumerable<PartyType> GetPartyTypes() => 
+        public static IEnumerable<PartyType> GetPartyTypes() =>
             Enum.GetValues(typeof(PartyType)) as IEnumerable<PartyType>;
-        public static IEnumerable<ProductType> GetProductTypes() => 
+        public static IEnumerable<ProductType> GetProductTypes() =>
             Enum.GetValues(typeof(ProductType)) as IEnumerable<ProductType>;
-        public static IEnumerable<InvoiceType> GetInvoiceTypes() => 
+        public static IEnumerable<InvoiceType> GetInvoiceTypes() =>
             Enum.GetValues(typeof(InvoiceType)) as IEnumerable<InvoiceType>;
-        public static IEnumerable<StockInvoiceType> GetStockInvoiceTypes() => 
+        public static IEnumerable<StockInvoiceType> GetStockInvoiceTypes() =>
             Enum.GetValues(typeof(StockInvoiceType)) as IEnumerable<StockInvoiceType>;
-        public static IEnumerable<Status> GetStatus() => 
+        public static IEnumerable<Status> GetStatus() =>
             Enum.GetValues(typeof(Status)) as IEnumerable<Status>;
-        public static IEnumerable<RoundOffOption> GetRoundOffOptions() => 
+        public static IEnumerable<RoundOffOption> GetRoundOffOptions() =>
             Enum.GetValues(typeof(RoundOffOption)) as IEnumerable<RoundOffOption>;
     }
 
@@ -45,12 +47,24 @@ namespace Fanda.Shared
     //    Party = 2
     //}
 
+    [Flags]
     public enum AddressType
     {
-        Default = 0,
-        Billing = 1,
-        Shipping = 2,
-        Remittance = 3
+        [Display(Name = "Default Address Type", Description = "Default desc"),
+            Description("Desc Default")]
+        Default = 0x0,
+
+        [Display(Name = "Billing Address Type", Description = "Billing desc"),
+            Description("Desc Billing")]
+        Billing = 0x1,
+        
+        [Display(Name = "Shipping Address Type", Description = "Shipping desc"),
+            Description("Desc Shipping")]
+        Shipping = 0x2,
+        
+        [Display(Name = "Remittance Address Type", Description = "Remittance desc"),
+            Description("Desc Remittance")]
+        Remittance = 0x3
     }
 
     public enum BankAccountType
@@ -68,11 +82,12 @@ namespace Fanda.Shared
         None = 0,
         OnReceipt = 1,
         Net7 = 2,
-        Net10 = 2,
-        Net30 = 3,
-        Net60 = 4,
-        Net90 = 5,
-        OnDate = 6
+        Net10 = 3,
+        Net15 = 4,
+        Net30 = 5,
+        Net60 = 6,
+        Net90 = 7,
+        OnDate = 8
     }
 
     public enum PartyType

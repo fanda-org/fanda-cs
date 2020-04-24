@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<OrgYearListDto>
+@using Fanda.Shared;
 
 @{
     ViewData["Title"] = "Index";
@@ -92,6 +93,8 @@
     <script type="text/javascript">
         require(['jquery', 'jsgrid', 'bootbox', 'toastr'],
             function ($, _, bootbox, toastr, _) {
+
+                var addrTypes;
                 var contacts = [];
                 var addresses = [];
 
@@ -105,17 +108,33 @@
                         }
                     });
 
+                    @*var addrTypes2 = JSON.parse('@Html.GetEnumSelectList<AddressType>()');*@
+                    $.get('@Url.Action("GetAddressTypes", "Enums")', function (data) {
+                        //debugger;
+                        addrTypes = data;
+                    });
+
                     // Invoke Edit Modal on click Create New/Edit button
                     var placeholderElement = $('#modal-placeholder');
                     $('button[data-toggle="ajax-modal"]').click(function (event) {
                         event.preventDefault();
                         var url = $(this).data('url');
+                        var orgId = $(this).data('id');
                         $.get(url)
                             .done(function (data) {
-                                placeholderElement.html(data);
-                                createContactGrid();
-                                createAddressGrid();
-                                placeholderElement.find('.modal').modal('show');
+                                debugger;
+                                placeholderElement.html(data);                                
+                                var addlUrl = "@Url.Action("GetContactAddress", new { id = -1 })".replace("-1", orgId);
+                                $.get(addlUrl)
+                                    .done(function (addlData) {
+                                        console.log(addlData)
+                                        contacts = addlData.contacts;
+                                        addresses = addlData.addresses;
+
+                                        createContactGrid();
+                                        createAddressGrid();
+                                        placeholderElement.find('.modal').modal('show');
+                                    });
                             });
                     });
 
@@ -138,11 +157,15 @@
                     // which is located inside #modal-placeholder
                     // and has data-save attribute equal to modal
                     placeholderElement.on('click', '[data-save="modal"]', function (event) {
+                        //debugger;
                         event.preventDefault();
 
                         var form = $(this).parents('.modal').find('form');
                         var actionUrl = form.attr('action');
-                        var dataToSend = form.serialize();
+                        var formArray = form.serializeArray();
+                        var dataToSend = objectifyForm(formArray);
+                        dataToSend.contacts = contacts;
+                        dataToSend.addresses = addresses;
 
                         $.post(actionUrl, dataToSend)
                             .done(function (data) {
@@ -157,6 +180,9 @@
                                     toastr.warning("Organization saved successfully!", "Success");
                                     placeholderElement.find('.modal').modal('hide');
                                     $("#searchOrg").click();
+                                } else {
+                                    createContactGrid();
+                                    createAddressGrid();
                                 }
 
                                 //placeholderElement.find('.modal').modal('hide');
@@ -170,38 +196,15 @@
                                 toastr.warning(messages.join("<br>"), "Warning");
                             });
                     });
-
-                    // Attach a submit handler to the form
-                    //$("#saveOrg").click(function (event) {
-                    //    // debugger;
-                    //    // Stop form from submitting normally
-                    //    event.preventDefault();
-
-                    //    // Get some values from elements on the page:
-                    //    var form = $("#orgForm"),
-                    //        url = form.attr("action");
-                    //    const formData = new FormData(form[0]);
-
-                    //    // Send the data using post
-                    //    $.ajax(url, {
-                    //        type: "POST",
-                    //        processData: false,
-                    //        contentType: false,
-                    //        data: formData
-                    //    })
-                    //        .done(function (data) {
-                    //            $("#modal-edit").modal('hide');
-                    //            $("#searchOrg").click();
-                    //        })
-                    //        .fail(function (error) {
-                    //            console.log("Error on save organization", error);
-                    //            let messages = $.map(error.responseJSON, function (msg) {
-                    //                return msg + "!";
-                    //            });
-                    //            toastr.warning(messages.join("<br>"), "Warning");
-                    //        });
-                    //});
                 });
+
+                function objectifyForm(formArray) {//serialize data function
+                    var returnArray = {};
+                    for (var i = 0; i < formArray.length; i++) {
+                        returnArray[formArray[i]['name']] = formArray[i]['value'];
+                    }
+                    return returnArray;
+                }
 
                 function createContactGrid() {
                     // jsGrid - Contacts
@@ -301,7 +304,7 @@
                                 insertTemplate: function () {
                                     let input = this.__proto__.insertTemplate.call(this); //original input
                                     input.prop('checked', true);
-                                    input.prop('disabled', 'disabled');
+                                    //input.prop('disabled', 'disabled');
                                     return input;
                                 }
                             },
@@ -404,7 +407,10 @@
                             { name: "postalCode", type: "text", title: "Postal Code", width: 100 },
                             { name: "phone", type: "text", title: "Phone", width: 100 },
                             { name: "fax", type: "text", title: "Fax", width: 100 },
-                            { name: "addressType", type: "text", title: "Addr. Type", width: 100 },
+                            {
+                                name: "addressType", type: "select", title: "Addr. Type", width: 100,
+                                items: addrTypes, valueField: "text", textField: "displayText"
+                            },
                             { name: "id", visible: false, width: 0 },
                             { type: "control", width: 100 }
                         ]
