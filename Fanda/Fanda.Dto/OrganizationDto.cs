@@ -37,7 +37,13 @@ namespace Fanda.Dto
         public bool IsSelected { get; set; }
         public Guid SelectedYearId { get; set; }
 
-        [Display(Name="Accounting Years")]
+        [Display(Name = "Accounting Years")]
         public ICollection<YearListDto> AccountYears { get; set; }
+    }
+
+    public class OrgChildrenDto
+    {
+        public ICollection<ContactDto> Contacts { get; set; }
+        public ICollection<AddressDto> Addresses { get; set; }
     }
 }

@@ -12,14 +12,17 @@ using System.Threading.Tasks;
 
 namespace Fanda.Service
 {
-    public interface IOrgYearListService : IListService<OrgYearListDto>
+    public interface IOrgChildrenService<TModel>
     {
+        Task<TModel> GetChildrenByIdAsync(Guid id);
     }
 
+    public interface IOrgYearListService : IListService<OrgYearListDto> { }
+
     public interface IOrganizationService : IBaseService<OrganizationDto, OrgListDto>,
+        IOrgChildrenService<OrgChildrenDto>,
         IOrgYearListService
-    {
-    }
+    { }
 
     public class OrganizationService : IOrganizationService
     {
@@ -27,51 +30,78 @@ namespace Fanda.Service
         private readonly IMapper _mapper;
 
         public OrganizationService(FandaContext context, IMapper mapper)
-        {
+        {            
             _context = context;
             _mapper = mapper;
         }
-        public string ErrorMessage { get; private set; }
-
-        public async Task<OrganizationDto> GetByIdAsync(Guid orgId, bool includes = false)
+        
+        public async Task<OrganizationDto> GetByIdAsync(Guid id, bool includeChildren = false)
         {
-            if (orgId == null || orgId == Guid.Empty)
+            if (id == null || id == Guid.Empty)
             {
-                throw new ArgumentNullException("orgId", "Org id is missing");
+                throw new ArgumentNullException("Id", "Id is missing");
             }
 
             OrganizationDto org = await _context.Organizations
                 .AsNoTracking()
                 .ProjectTo<OrganizationDto>(_mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync(o => o.Id == orgId);
+                .FirstOrDefaultAsync(o => o.Id == id);
 
             if (org == null)
             {
                 throw new KeyNotFoundException("Organization not found");
             }
-            else if (!includes)
+            else if (!includeChildren)
             {
                 return org;
             }
 
             org.Contacts = await _context.Organizations
                 .AsNoTracking()
-                .Where(m => m.Id == orgId)
+                .Where(m => m.Id == id)
                 .SelectMany(oc => oc.OrgContacts.Select(c => c.Contact))
                 .ProjectTo<ContactDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
             org.Addresses = await _context.Organizations
                 .AsNoTracking()
-                .Where(m => m.Id == orgId)
+                .Where(m => m.Id == id)
                 .SelectMany(oa => oa.OrgAddresses.Select(a => a.Address))
                 .ProjectTo<AddressDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
             return org;
         }
 
-        public async Task<OrganizationDto> SaveAsync(OrganizationDto orgVM)
+        public async Task<OrgChildrenDto> GetChildrenByIdAsync(Guid id)
         {
-            Organization org = _mapper.Map<Organization>(orgVM);
+            if (id == null || id == Guid.Empty)
+            {
+                throw new ArgumentNullException("Id", "Id is missing");
+            }
+
+            var org = new OrgChildrenDto
+            {
+                Contacts = await _context.Organizations
+                .AsNoTracking()
+                .Where(m => m.Id == id)
+                .SelectMany(oc => oc.OrgContacts.Select(c => c.Contact))
+                .ProjectTo<ContactDto>(_mapper.ConfigurationProvider)
+                .ToListAsync(),
+                Addresses = await _context.Organizations
+                .AsNoTracking()
+                .Where(m => m.Id == id)
+                .SelectMany(oa => oa.OrgAddresses.Select(a => a.Address))
+                .ProjectTo<AddressDto>(_mapper.ConfigurationProvider)
+                .ToListAsync()
+            };
+            return org;
+        }
+
+        public async Task<OrganizationDto> SaveAsync(OrganizationDto model)
+        {
+            //var isValid = await ValidateAsync(model);
+            //if (!isValid)
+            //    throw new DtoValidationException<OrganizationDto>(model);
+            Organization org = _mapper.Map<Organization>(model);
             if (org.Id == Guid.Empty)
             {
                 org.DateCreated = DateTime.Now;
@@ -93,7 +123,7 @@ namespace Fanda.Service
                 }
                 else
                 {
-                    // delete all contacts that no longer exists
+                    // delete all contacts that are no longer exists
                     foreach (OrgContact dbOrgContact in dbOrg.OrgContacts)
                     {
                         Contact dbContact = dbOrgContact.Contact;
@@ -102,7 +132,7 @@ namespace Fanda.Service
                             _context.Contacts.Remove(dbContact);
                         }
                     }
-                    // delete all addresses that no longer exists
+                    // delete all addresses that are no longer exists
                     foreach (OrgAddress dbOrgAddress in dbOrg.OrgAddresses)
                     {
                         Address dbAddress = dbOrgAddress.Address;
@@ -118,7 +148,7 @@ namespace Fanda.Service
                     #region Contacts
                     var contactPairs = from curr in org.OrgContacts.Select(oc => oc.Contact)
                                        join db in dbOrg.OrgContacts.Select(oc => oc.Contact)
-                                         on curr.Id equals db.Id into grp
+                                            on curr.Id equals db.Id into grp
                                        from db in grp.DefaultIfEmpty()
                                        select new { curr, db };
                     foreach (var pair in contactPairs)
@@ -126,6 +156,7 @@ namespace Fanda.Service
                         if (pair.db != null)
                         {
                             _context.Entry(pair.db).CurrentValues.SetValues(pair.curr);
+                            _context.Contacts.Update(pair.db);
                         }
                         else
                         {
@@ -144,7 +175,7 @@ namespace Fanda.Service
                     #region Addresses
                     var addressPairs = from curr in org.OrgAddresses.Select(oa => oa.Address)
                                        join db in dbOrg.OrgAddresses.Select(oa => oa.Address)
-                                         on curr.Id equals db.Id into grp
+                                            on curr.Id equals db.Id into grp
                                        from db in grp.DefaultIfEmpty()
                                        select new { curr, db };
                     foreach (var pair in addressPairs)
@@ -152,6 +183,7 @@ namespace Fanda.Service
                         if (pair.db != null)
                         {
                             _context.Entry(pair.db).CurrentValues.SetValues(pair.curr);
+                            _context.Addresses.Update(pair.db);
                         }
                         else
                         {
@@ -165,38 +197,66 @@ namespace Fanda.Service
                             });
                         }
                     }
+
+                    _context.Organizations.Update(dbOrg);
                     #endregion
                 }
             }
 
             await _context.SaveChangesAsync();
-            orgVM = _mapper.Map<OrganizationDto>(org);
-            return orgVM;
+            model = _mapper.Map<OrganizationDto>(org);
+            return model;
         }
 
-        public async Task<bool> DeleteAsync(Guid orgId)
+        public async Task<bool> ValidateAsync(OrganizationDto model)
         {
-            if (orgId == null || orgId == Guid.Empty)
+            // Reset error
+            model.Errors.Clear();
+
+            #region Formatting: Cleansing and formatting
+            model.Code = model.Code.ToUpper();
+            model.Name = model.Name.TrimExtraSpaces();
+            model.Description = model.Description.TrimExtraSpaces();
+
+            #region Validation: Dupllicate
+            // Check code duplicate
+            var duplCode = new BaseDuplicate { Field = DuplicateField.Code, Value = model.Code, Id = model.Id };
+            if (await ExistsAsync(duplCode))
             {
-                throw new ArgumentNullException("orgId", "Org id is missing");
+                model.Errors.AddError(nameof(model.Code), $"{nameof(model.Code)} already exists");
+            }
+            // Check name duplicate
+            var duplName = new BaseDuplicate { Field = DuplicateField.Name, Value = model.Name, Id = model.Id };
+            if (await ExistsAsync(duplName))
+            {
+                model.Errors.AddError(nameof(model.Name), $"{nameof(model.Name)} already exists");
+            }
+            #endregion
+            #endregion
+            return model.Errors.Count == 0;
+        }
+
+        public async Task<bool> DeleteAsync(Guid id)
+        {
+            if (id == null || id == Guid.Empty)
+            {
+                throw new ArgumentNullException("Id", "Id is missing");
             }
 
             Organization org = await _context.Organizations
                 .Include(o => o.OrgContacts).ThenInclude(oc => oc.Contact)
                 .Include(o => o.OrgAddresses).ThenInclude(oa => oa.Address)
-                .SingleOrDefaultAsync(o => o.Id == orgId);
+                .SingleOrDefaultAsync(o => o.Id == id);
             if (org != null)
             {
                 foreach (OrgContact orgContact in org.OrgContacts)
                 {
                     _context.Contacts.Remove(orgContact.Contact);
                 }
-
                 foreach (OrgAddress orgAddress in org.OrgAddresses)
                 {
                     _context.Addresses.Remove(orgAddress.Address);
                 }
-
                 _context.Organizations.Remove(org);
                 await _context.SaveChangesAsync();
                 return true;
@@ -208,7 +268,7 @@ namespace Fanda.Service
         {
             if (status.Id == null || status.Id == Guid.Empty)
             {
-                throw new ArgumentNullException("orgId", "Org id is missing");
+                throw new ArgumentNullException("Id", "Id is missing");
             }
 
             Organization org = await _context.Organizations

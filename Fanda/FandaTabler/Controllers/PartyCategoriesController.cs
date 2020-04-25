@@ -28,18 +28,18 @@ namespace FandaTabler.Controllers
 
         [HttpGet]
         [Produces("application/json")]
-        public async Task<ActionResult> GetAll(Guid orgId)
+        public async Task<ActionResult> GetAll(Guid id)
         {
             try
             {
-                if (orgId == Guid.Empty)
+                if (id == Guid.Empty)
                 {
                     var org = GetSelectedOrg();
                     if (org == null)
                     {
                         return RedirectToAction("Index", "Home");
                     }
-                    orgId = org.Id;
+                    id = org.Id;
                 }
                 NameValueCollection qFilter = HttpUtility.ParseQueryString(Request.QueryString.Value);
                 string search = qFilter["search"];
@@ -60,11 +60,11 @@ namespace FandaTabler.Controllers
                 PagedList<PartyCategoryListDto> data;
                 if (string.IsNullOrEmpty(search))
                 {
-                    data = await filter.ApplyAllAsync(_service, orgId);
+                    data = await filter.ApplyAllAsync(_service, id);
                 }
                 else
                 {
-                    data = await filter.ApplyAnyAsync(_service, orgId);
+                    data = await filter.ApplyAnyAsync(_service, id);
                 }
                 var result = new JsGridResult<IList<PartyCategoryListDto>> { Data = data.List, ItemsCount = data.RowCount };
                 return Ok(result);

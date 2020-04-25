@@ -1454,6 +1454,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v5.0",
         "dependencies": {
+          "AutoMapper": "9.0.0",
           "System.ComponentModel.Annotations": "4.7.0"
         },
         "compile": {
@@ -5460,7 +5461,6 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v5.0": [
-      "AutoMapper >= 9.0.0",
       "Fanda.Data >= 1.0.0",
       "Fanda.Dto >= 1.0.0",
       "Fanda.Shared >= 1.0.0",
@@ -5524,10 +5524,6 @@
     "frameworks": {
       "net5.0": {
         "dependencies": {
-          "AutoMapper": {
-            "target": "Package",
-            "version": "[9.0.0, )"
-          },
           "Microsoft.EntityFrameworkCore": {
             "target": "Package",
             "version": "[3.1.3, )"

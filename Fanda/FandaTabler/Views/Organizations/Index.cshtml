@@ -110,7 +110,7 @@
 
                     @*var addrTypes2 = JSON.parse('@Html.GetEnumSelectList<AddressType>()');*@
                     $.get('@Url.Action("GetAddressTypes", "Enums")', function (data) {
-                        //debugger;
+                        // debugger;
                         addrTypes = data;
                     });
 
@@ -122,12 +122,12 @@
                         var orgId = $(this).data('id');
                         $.get(url)
                             .done(function (data) {
-                                debugger;
-                                placeholderElement.html(data);                                
-                                var addlUrl = "@Url.Action("GetContactAddress", new { id = -1 })".replace("-1", orgId);
+                                // debugger;
+                                placeholderElement.html(data);
+                                var addlUrl = "@Url.Action("GetChildren", new { id = -1 })".replace("-1", orgId);
                                 $.get(addlUrl)
                                     .done(function (addlData) {
-                                        console.log(addlData)
+                                        console.log(addlData);
                                         contacts = addlData.contacts;
                                         addresses = addlData.addresses;
 
@@ -157,19 +157,22 @@
                     // which is located inside #modal-placeholder
                     // and has data-save attribute equal to modal
                     placeholderElement.on('click', '[data-save="modal"]', function (event) {
-                        //debugger;
+                        // debugger;
                         event.preventDefault();
 
                         var form = $(this).parents('.modal').find('form');
                         var actionUrl = form.attr('action');
                         var formArray = form.serializeArray();
+
+                        var activeValue = $('#Active:checked').val();
                         var dataToSend = objectifyForm(formArray);
+                        dataToSend.Active = activeValue;
                         dataToSend.contacts = contacts;
                         dataToSend.addresses = addresses;
 
                         $.post(actionUrl, dataToSend)
                             .done(function (data) {
-                                //debugger;
+                                // debugger;
                                 var newBody = $('.modal-body', data);
                                 placeholderElement.find('.modal-body').replaceWith(newBody);
 
@@ -177,18 +180,19 @@
                                 // if it's valid then hide modal window
                                 var isValid = newBody.find('[name="IsValid"]').val() == 'True';
                                 if (isValid) {
-                                    toastr.warning("Organization saved successfully!", "Success");
                                     placeholderElement.find('.modal').modal('hide');
                                     $("#searchOrg").click();
+                                    toastr.success("Organization saved successfully!", "Success");
                                 } else {
+                                    $('[href="#tabs-general"]').click();
                                     createContactGrid();
                                     createAddressGrid();
                                 }
-
                                 //placeholderElement.find('.modal').modal('hide');
                                 //$("#searchOrg").click();
                             })
                             .fail(function (error) {
+                                // debugger;
                                 console.log("Error on save organization", error);
                                 let messages = $.map(error.responseJSON, function (msg) {
                                     return msg + "!";

@@ -2682,6 +2682,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v5.0",
         "dependencies": {
+          "AutoMapper": "9.0.0",
           "System.ComponentModel.Annotations": "4.7.0"
         },
         "compile": {
@@ -2695,7 +2696,6 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v5.0",
         "dependencies": {
-          "AutoMapper": "9.0.0",
           "Microsoft.EntityFrameworkCore": "3.1.3",
           "Microsoft.EntityFrameworkCore.SqlServer": "3.1.3",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "3.1.3",

@@ -12,17 +12,7 @@ using System.Threading.Tasks;
 
 namespace Fanda.Service
 {
-    public interface IPartyCategoryService : IBaseOrgService<PartyCategoryDto, PartyCategoryListDto>
-    {
-        //IQueryable<PartyCategoryDto> GetAll(Guid orgId);
-        //Task<PartyCategoryDto> GetByIdAsync(Guid categoryId);
-        //Task<PartyCategoryDto> SaveAsync(Guid orgId, PartyCategoryDto model);
-        //Task<bool> DeleteAsync(Guid categoryId);
-        //Task<bool> ChangeStatusAsync(ActiveStatus status);
-        //Task<bool> ExistsAsync(Duplicate data /*Guid orgId, string categoryCode, Guid categoryId = default*/);
-
-        //string ErrorMessage { get; }
-    }
+    public interface IPartyCategoryService : IBaseOrgService<PartyCategoryDto, PartyCategoryListDto> { }
 
     public class PartyCategoryService : IPartyCategoryService
     {
@@ -45,7 +35,6 @@ namespace Fanda.Service
             }
 
             IQueryable<PartyCategoryListDto> categories = _context.PartyCategories
-                //.Where(p => p.Active == ((active == null) ? p.Active : active))
                 .AsNoTracking()
                 .Where(p => p.OrgId == orgId)
                 .ProjectTo<PartyCategoryListDto>(_mapper.ConfigurationProvider);
@@ -53,12 +42,16 @@ namespace Fanda.Service
             return categories;
         }
 
-        public async Task<PartyCategoryDto> GetByIdAsync(Guid categoryId, bool include = false)
+        public async Task<PartyCategoryDto> GetByIdAsync(Guid id, bool includeChildren = false)
         {
+            if (id == null || id == Guid.Empty)
+            {
+                throw new ArgumentNullException("id", "Id is missing");
+            }
             PartyCategoryDto category = await _context.PartyCategories
                 .AsNoTracking()
                 .ProjectTo<PartyCategoryDto>(_mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync(pc => pc.Id == categoryId);
+                .FirstOrDefaultAsync(pc => pc.Id == id);
             if (category != null)
             {
                 return category;
@@ -92,15 +85,15 @@ namespace Fanda.Service
             return _mapper.Map<PartyCategoryDto>(category); //categoryVM;
         }
 
-        public async Task<bool> DeleteAsync(Guid categoryId)
+        public async Task<bool> DeleteAsync(Guid id)
         {
-            if (categoryId == null || categoryId == Guid.Empty)
+            if (id == null || id == Guid.Empty)
             {
-                throw new ArgumentNullException("categoryId", "Category id is missing");
+                throw new ArgumentNullException("Id", "Id is missing");
             }
 
             PartyCategory category = await _context.PartyCategories
-                .FindAsync(categoryId);
+                .FindAsync(id);
             if (category != null)
             {
                 _context.PartyCategories.Remove(category);
@@ -114,7 +107,7 @@ namespace Fanda.Service
         {
             if (status.Id == null || status.Id == Guid.Empty)
             {
-                throw new ArgumentNullException("categoryId", "Category id is missing");
+                throw new ArgumentNullException("Id", "Id is missing");
             }
 
             PartyCategory category = await _context.PartyCategories
@@ -130,5 +123,7 @@ namespace Fanda.Service
         }
 
         public Task<bool> ExistsAsync(BaseOrgDuplicate data) => _context.ExistsAsync<PartyCategory>(data);
+
+        public Task<bool> ValidateAsync(PartyCategoryDto model) => throw new NotImplementedException();
     }
 }

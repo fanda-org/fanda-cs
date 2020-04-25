@@ -1,10 +1,20 @@
-﻿using System;
+﻿using AutoMapper;
+using Fanda.Shared;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System;
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace Fanda.Dto
 {
     public class BaseDto
     {
+        public BaseDto()
+        {
+            Errors = new DtoErrors();
+        }
+
         [Required]
         public Guid Id { get; set; }
 
@@ -26,9 +36,12 @@ namespace Fanda.Dto
         [DisplayFormat(ConvertEmptyStringToNull = true)]
         public string Description { get; set; }
 
-        public bool? Active { get; set; }
+        public bool Active { get; set; }
         public DateTime DateCreated { get; set; }
         public DateTime? DateModified { get; set; }
+
+        [JsonIgnore(), IgnoreDataMember(), IgnoreMap()]
+        public DtoErrors Errors { get; set; }
     }
 
     public class BaseListDto

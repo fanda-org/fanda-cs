@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Linq.Dynamic.Core;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -147,24 +146,21 @@ namespace FandaTabler.Controllers
             ViewBag.Readonly = false;
             return PartialView("_OrganizationEdit", org);   // View(org);
         }
-        public async Task<JsonResult> GetContactAddress(Guid id)
+
+        public async Task<JsonResult> GetChildren(Guid id)
         {
             if (id != null && id != Guid.Empty)
             {
-                var org = await _service.GetByIdAsync(id, true);
-                if (org != null)
+                var orgChildren = await _service.GetChildrenByIdAsync(id);
+                if (orgChildren != null)
                 {
-                    return Json(new
-                    {
-                        contacts = org.Contacts,
-                        addresses = org.Addresses
-                    });
+                    return Json(orgChildren);
                 }
             }
-            return Json(new
+            return Json(new OrgChildrenDto
             {
-                contacts = new List<ContactDto>(),
-                addresses = new List<AddressDto>()
+                Contacts = new List<ContactDto>(),
+                Addresses = new List<AddressDto>()
             });
         }
 
@@ -175,52 +171,32 @@ namespace FandaTabler.Controllers
         {
             try
             {
-                //if (!ModelState.IsValid)
-                //{
-                //    return BadRequest(ModelState);
-                //}
+                #region Validation: Basic model validation
                 if (ModelState.IsValid)
                 {
-                    #region Validation
-                    org.Code = org.Code.ToUpper();
-                    org.Name = org.Name.TrimExtraSpaces();
-                    org.Description = org.Description.TrimExtraSpaces();
-
-                    #region Validation: Dupllicate
-                    // Check code duplicate
-                    var duplCode = new BaseDuplicate { Field = DuplicateField.Code, Value = org.Code, Id = org.Id };
-                    if (await _service.ExistsAsync(duplCode))
+                    #region
+                    bool isValid = await _service.ValidateAsync(org);
+                    if (!isValid)
                     {
-                        ModelState.AddModelError("Code", $"Code '{org.Code}' already exists");
-                    }
-                    // Check name duplicate
-                    var duplName = new BaseDuplicate { Field = DuplicateField.Name, Value = org.Name, Id = org.Id };
-                    if (await _service.ExistsAsync(duplName))
-                    {
-                        ModelState.AddModelError("Name", $"Name '{org.Name}' already exists");
+                        foreach(var err in org.Errors)
+                        {
+                            ModelState.AddModelError(err.Key, err.Value);
+                        }
                     }
                     #endregion
-                    //if (!ModelState.IsValid)
-                    //{
-                    //    return BadRequest(ModelState);
-                    //}
-                    #endregion
-
                     if (ModelState.IsValid)
                     {
                         org = await _service.SaveAsync(org);
                     }
                 }
+                #endregion
 
-                return PartialView("_OrganizationEdit", org);   //return Ok(org);
+                return PartialView("_OrganizationEdit", org);
             }
             catch (Exception ex)
             {
                 if (ex.InnerException != null)
                 {
-                    //if ((ex.InnerException as SqlException)?.Number == 2601)
-                    //    ModelState.AddModelError("Error", "Code/Name already existst!");
-                    //else
                     ModelState.AddModelError("Error", ex.InnerException.Message);
                 }
                 else

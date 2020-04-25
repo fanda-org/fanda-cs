@@ -42,7 +42,7 @@ namespace Fanda.Service
             return years;
         }
 
-        public async Task<AccountYearDto> GetByIdAsync(Guid id, bool include = false)
+        public async Task<AccountYearDto> GetByIdAsync(Guid id, bool includeChildren = false)
         {
             AccountYearDto year = await _context.AccountYears
                 .AsNoTracking()
@@ -55,7 +55,7 @@ namespace Fanda.Service
 
             throw new KeyNotFoundException("Account year not found");
         }
-
+        
         public async Task<AccountYearDto> SaveAsync(Guid orgId, AccountYearDto model)
         {
             if (orgId == null || orgId == Guid.Empty)
@@ -118,5 +118,7 @@ namespace Fanda.Service
         }
 
         public Task<bool> ExistsAsync(BaseOrgDuplicate data) => _context.ExistsAsync<AccountYear>(data);
+
+        public Task<bool> ValidateAsync(AccountYearDto model) => throw new NotImplementedException();
     }
 }

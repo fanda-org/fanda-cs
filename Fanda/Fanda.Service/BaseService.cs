@@ -9,42 +9,40 @@ using System.Threading.Tasks;
 
 namespace Fanda.Service
 {
+    public interface IService<TModel>
+    {
+        Task<TModel> GetByIdAsync(Guid id, bool includeChildren = false);
+        //Task<TModel> GetChildrenByIdAsync(Guid id);
+        Task<bool> DeleteAsync(Guid id);
+        Task<bool> ChangeStatusAsync(ActiveStatus status);
+        Task<bool> ValidateAsync(TModel model);
+    }
+
     public interface IListService<TList>
-        where TList : BaseListDto
     {
         IQueryable<TList> GetAll();
     }
 
-    public interface IBaseService<TModel, TList> : IListService<TList>
-        where TModel : BaseDto
-        where TList : BaseListDto
-    {
-        Task<TModel> GetByIdAsync(Guid id, bool include = false);
-        Task<TModel> SaveAsync(TModel model);
-        Task<bool> DeleteAsync(Guid id);
-        Task<bool> ChangeStatusAsync(ActiveStatus status);
-        Task<bool> ExistsAsync(BaseDuplicate data);
-        string ErrorMessage { get; }
-    }
-
     public interface IListOrgService<TList>
-        where TList : BaseListDto
     {
         IQueryable<TList> GetAll(Guid orgId);
     }
 
-    public interface IBaseOrgService<TModel, TList> : IListOrgService<TList>
+    public interface IBaseService<TModel, TList> : IService<TModel>, IListService<TList>
+    where TModel : BaseDto
+    where TList : BaseListDto
+    {
+        Task<TModel> SaveAsync(TModel model);
+        Task<bool> ExistsAsync(BaseDuplicate data);
+    }
+
+    public interface IBaseOrgService<TModel, TList> : IService<TModel>, IListOrgService<TList>
         where TModel : BaseDto
         where TList : BaseListDto
     {
-        Task<TModel> GetByIdAsync(Guid id, bool include = false);
         Task<TModel> SaveAsync(Guid orgId, TModel model);
-        Task<bool> DeleteAsync(Guid id);
-        Task<bool> ChangeStatusAsync(ActiveStatus status);
         Task<bool> ExistsAsync(BaseOrgDuplicate data);
-        string ErrorMessage { get; }
     }
-
 
     public static class DuplicateExtensions
     {
