@@ -178,7 +178,7 @@ namespace FandaTabler.Controllers
                     bool isValid = await _service.ValidateAsync(org);
                     if (!isValid)
                     {
-                        foreach(var err in org.Errors)
+                        foreach (var err in org.Errors)
                         {
                             ModelState.AddModelError(err.Key, err.Value);
                         }
@@ -203,7 +203,7 @@ namespace FandaTabler.Controllers
                 {
                     ModelState.AddModelError("Error", ex.Message);
                 }
-                return StatusCode(StatusCodes.Status500InternalServerError, ModelState);
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
 
