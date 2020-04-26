@@ -226,7 +226,7 @@ namespace Fanda.Service
             model.Name = model.Name.TrimExtraSpaces();
             model.Description = model.Description.TrimExtraSpaces();
             #endregion
-            
+
             #region Validation: Dupllicate
             // Check code duplicate
             var duplCode = new BaseDuplicate { Field = DuplicateField.Code, Value = model.Code, Id = model.Id };
@@ -241,7 +241,7 @@ namespace Fanda.Service
                 model.Errors.Add(nameof(model.Name), $"{nameof(model.Name)} already exists");
             }
             #endregion
-            
+
             return model.IsValid();
         }
 
