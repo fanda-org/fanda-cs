@@ -15,10 +15,10 @@ namespace Fanda.Shared
             {
                 CurrentPage = page,
                 PageSize = pageSize,
-                RowCount = query.Count()
+                ItemsCount = query.Count()
             };
 
-            double pageCount = (double)result.RowCount / pageSize;
+            double pageCount = (double)result.ItemsCount / pageSize;
             result.PageCount = (int)Math.Ceiling(pageCount);
 
             var skip = (page - 1) * pageSize;
@@ -36,10 +36,10 @@ namespace Fanda.Shared
             {
                 CurrentPage = page,
                 PageSize = pageSize,
-                RowCount = query.Count()
+                ItemsCount = query.Count()
             };
 
-            double pageCount = (double)result.RowCount / pageSize;
+            double pageCount = (double)result.ItemsCount / pageSize;
             result.PageCount = (int)Math.Ceiling(pageCount);
 
             var skip = (page - 1) * pageSize;

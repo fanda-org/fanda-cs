@@ -47,7 +47,7 @@ namespace FandaTabler.Controllers
                 
                 var filter = new OrgFilter<IAccountYearService, YearListDto>(_service, qFilter, search);
                 var data = await filter.ApplyAsync(id);
-                var result = new JsGridResult<IList<YearListDto>> { Data = data.List, ItemsCount = data.RowCount };
+                var result = new JsGridResult<IList<YearListDto>> { Data = data.List, ItemsCount = data.ItemsCount };
 
                 return Ok(result);
             }

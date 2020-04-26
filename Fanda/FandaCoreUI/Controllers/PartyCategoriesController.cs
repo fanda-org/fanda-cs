@@ -174,14 +174,14 @@ namespace Fanda.Controllers
             {
                 if (ex.InnerException != null)
                 {
-                    if ((ex.InnerException as SqlException)?.Number == 2601)
-                    {
-                        ModelState.AddModelError("Error", "Code/Name already existst!");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("Error", ex.InnerException.Message);
-                    }
+                    //if ((ex.InnerException as SqlException)?.Number == 2601)
+                    //{
+                    //    ModelState.AddModelError("Error", "Code/Name already existst!");
+                    //}
+                    //else
+                    //{
+                    ModelState.AddModelError("Error", ex.InnerException.Message);
+                    //}
                 }
                 else
                 {

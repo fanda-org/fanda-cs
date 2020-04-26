@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Fanda.Data
+namespace Fanda.Dto
 {
     public class UnitConversionDto
     {

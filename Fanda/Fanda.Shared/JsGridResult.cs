@@ -1,8 +1,19 @@
 ﻿namespace Fanda.Shared
 {
-    public class JsGridResult<T> where T : class
+    public class JsGridResult<T>
+        where T : class
     {
-        public T Data { get; set; }
-        public int ItemsCount { get; set; }
+        #region JsGrid information
+        public T Data { get; set; } = null;
+        public int? ItemsCount { get; set; } = -1;
+        #endregion
+
+        #region Additional information
+        public string Error { get; set; } = null;
+        public int? CurrentPage { get; set; }
+        public int? PageCount { get; set; }
+        public int? FirstRowOnPage { get; set; }
+        public int? LastRowOnPage { get; set; }
+        #endregion
     }
 }

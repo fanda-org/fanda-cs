@@ -115,7 +115,7 @@ namespace Fanda.Shared
 
     public static class EnumParserExtensions
     {
-        public static T Parse<T>(this Enum @enum, string value) => (T)Enum.Parse(typeof(T), value, true);
+        public static T Parse<T>(this Enum _, string value) => (T)Enum.Parse(typeof(T), value, true);
 
         public static T ToEnum<T>(this string value, T defaultValue)
             where T : struct

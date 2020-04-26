@@ -1,5 +1,4 @@
-﻿@model IEnumerable<OrgYearListDto>
-@using Fanda.Shared;
+﻿@*@model IEnumerable<OrgYearListDto>*@
 
 @{
     ViewData["Title"] = "Index";
@@ -49,25 +48,21 @@
     <div class="card-body">
         <div class="row align-items-center mb-3">
             <div class="col">
-                <form asp-action="Index" method="get">
+                <form>
                     <div class="input-group">
                         <input type="search" class="form-control" placeholder="Search&hellip;" tabindex="1"
                                id="search" name="search" value=@ViewBag.Search />
                         <span class="input-group-append">
-                            <button type="submit" id="searchOrg" class="btn btn-secondary">
-                                <i class="fe fe-search"></i>
-                            </button>
+                            <button type="submit" id="searchButton" class="btn btn-secondary"><i class="fe fe-search"></i></button>
                         </span>
                     </div>
                 </form>
             </div>
-            <div class="col-2 text-center">
-                <a href="#" class="btn btn-secondary" id="leftButton"><i class="fe fe-arrow-left"></i>&nbsp;</a>
+            <div class="col text-center">
+                <button type="button" class="btn btn-secondary" id="prevPage1"><i class="fe fe-arrow-left"></i></button>
+                <button type="button" class="btn btn-secondary" id="nextPage1"><i class="fe fe-arrow-right"></i></button>
             </div>
-            <div class="col-2 text-center">
-                <a href="#" class="btn btn-secondary" id="rightButton"><i class="fe fe-arrow-right"></i>&nbsp;</a>
-            </div>
-            <div class="col-3">
+            <div class="col">
                 <button type="button" class="btn btn-primary btn-block"
                         data-toggle="ajax-modal" data-target="#modal-edit" data-url="@Url.Action("Create")">
                     <i class="fe fe-plus"></i> Create New
@@ -76,11 +71,22 @@
         </div>
 
         <div class="row align-items-center">
+            <div class="col" id="list-placeholder">
+                @*@Html.RenderPartial("_OrganizationListItem", Model);*@
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <div class="row">
             <div class="col">
-                @foreach (var org in Model)
-                {
-                    await Html.RenderPartialAsync("_OrganizationListItem", org);
-                }
+                <span class="item-text">Showing 1-1 of 1 entries</span>
+            </div>
+            <div class="col text-center">
+                <button type="button" class="btn btn-secondary" id="prevPage2"><i class="fe fe-arrow-left"></i></button>
+                <button type="button" class="btn btn-secondary" id="nextPage2"><i class="fe fe-arrow-right"></i></button>
+            </div>
+            <div class="col text-right">
+                <span class="page-text">Page 1 of 1</span>
             </div>
         </div>
     </div>
@@ -93,12 +99,23 @@
     <script type="text/javascript">
         require(['jquery', 'jsgrid', 'bootbox', 'toastr'],
             function ($, _, bootbox, toastr, _) {
-
-                var addrTypes;
+                var addrTypes = [];
                 var contacts = [];
                 var addresses = [];
+                var pageIndex = 1;
+                var pageSize = 5;
+                var pageCount = 1;
+
+                //var firstRow = $(".page-info > #FirstRowOnPage").val();
+                //var lastRow = $(".page-info > #LastRowOnPage").val();
+                //var itemsCount = $(".page-info > #ItemsCount").val();
+                //var currentPage = $(".page-info > #CurrentPage").val();
+                //var pageCount = $(".page-info > #PageCount").val();
 
                 $(document).ready(function () {
+                    var listPlaceholderElement = $("#list-placeholder");
+                    var modalPlaceholderElement = $('#modal-placeholder');
+
                     // Send AntiforgeryToken to controller for POST and PATCH methods
                     $(document).ajaxSend(function (e, xhr, options) {
                         var optionType = options.type.toUpperCase();
@@ -114,38 +131,118 @@
                         addrTypes = data;
                     });
 
-                    // Invoke Edit Modal on click Create New/Edit button
-                    var placeholderElement = $('#modal-placeholder');
-                    $('button[data-toggle="ajax-modal"]').click(function (event) {
+                    // Search
+                    $("#searchButton").click(function (event) {
+                        event.preventDefault();
+                        // debugger;
+                        var searchText = $('#search').val();
+                        $.get('@Url.Action("List")', { search: searchText, pageIndex: pageIndex, pageSize: pageSize })
+                            .done(function (data) {
+                                listPlaceholderElement.html(data);
+
+                                debugger;
+                                var firstRow = $(".page-info > #FirstRowOnPage").val();
+                                var lastRow = $(".page-info > #LastRowOnPage").val();
+                                var itemsCount = $(".page-info > #ItemsCount").val();
+                                var currentPage = $(".page-info > #CurrentPage").val();
+                                pageCount = $(".page-info > #PageCount").val();
+                                $(".item-text").text("Showing " + firstRow + "-" + lastRow + " of " + itemsCount);
+                                $(".page-text").text("Page " + currentPage + " of " + pageCount);
+                            });
+                    });
+                    $("#searchButton").click();
+
+                    $("#prevPage1, #prevPage2").click(function (event) {
+                        event.preventDefault();
+                        if (pageIndex > 1) {
+                            pageIndex -= 1;
+                            $("#searchButton").click();
+                        } else {
+                            // disable previous button
+                        }
+                    });
+                    $("#nextPage1, #nextPage2").click(function (event) {
+                        event.preventDefault();
+                        if (pageIndex < pageCount) {
+                            pageIndex += 1;
+                            $("#searchButton").click();
+                        } else {
+                            // disable next button
+                        }
+                    });
+
+                    // Invoke Edit Modal on click of Create New/Edit button
+                    $(document).on('click', 'button[data-toggle="ajax-modal"]', function (event) {
                         event.preventDefault();
                         var url = $(this).data('url');
                         var orgId = $(this).data('id');
                         $.get(url)
                             .done(function (data) {
                                 // debugger;
-                                placeholderElement.html(data);
-                                var addlUrl = "@Url.Action("GetChildren", new { id = -1 })".replace("-1", orgId);
-                                $.get(addlUrl)
-                                    .done(function (addlData) {
-                                        console.log(addlData);
-                                        contacts = addlData.contacts;
-                                        addresses = addlData.addresses;
-
-                                        createContactGrid();
-                                        createAddressGrid();
-                                        placeholderElement.find('.modal').modal('show');
-                                    });
+                                if (orgId) {
+                                    var childUrl = "@Url.Action("GetChildren", new { id = -1 })".replace("-1", orgId);
+                                    $.get(childUrl)
+                                        .done(function (childData) {
+                                            // console.log(childData);
+                                            contacts = childData.contacts;
+                                            addresses = childData.addresses;
+                                            modalPlaceholderElement.html(data);
+                                            createContactGrid();
+                                            createAddressGrid();
+                                            modalPlaceholderElement.find('.modal').modal('show');
+                                        });
+                                } else {
+                                    contacts = [];
+                                    addresses = [];
+                                    modalPlaceholderElement.html(data);
+                                    createContactGrid();
+                                    createAddressGrid();
+                                    modalPlaceholderElement.find('.modal').modal('show');
+                                }
                             });
                     });
 
-                    // Next and previous button for Edit Modal
-                    $(document).on('click', '.btnNext', function (event) {
+                    // Delete
+                    listPlaceholderElement.on('click', '#delete', function (event) {
+                        event.preventDefault();
+                        var url = $(this).data('url');
+
+                        bootbox.confirm({
+                            title: "Delete organization?",
+                            message: "Are you sure you want to <em>delete</em> this organization?<br>Once deleted, you will not be able to recover!",
+                            closeButton: true,
+                            buttons: {
+                                cancel: {
+                                    label: 'No',
+                                    className: 'btn-secondary'
+                                },
+                                confirm: {
+                                    label: 'Yes',
+                                    className: 'btn-danger'
+                                }
+                            },
+                            callback: function (yes) {
+                                if (yes) {
+                                    //args.item.deleteConfirmed = true;
+                                    //$grid.jsGrid('deleteItem', args.item); //call deleting once more in callback
+                                    $.post(url)
+                                        .done(function (_) {
+                                            $("#searchButton").click();
+                                        });
+                                }
+                                //$row.toggleClass("highlight");
+                            }
+                        });
+                    });
+
+                    // Next and previous tabs for Edit Modal
+                    modalPlaceholderElement.on('click', '.btnNext', function (event) {
                         event.preventDefault();
                         var active = $('.nav-tabs > .nav-item > .active').parent();
                         active.next('li').find('a').trigger('click');
                         $('#modal-edit').modal('handleUpdate');
                     });
-                    $(document).on('click', '.btnPrev', function (event) {
+                    modalPlaceholderElement.on('click', '.btnPrev', function (event) {
                         event.preventDefault();
                         var active = $('.nav-tabs > .nav-item > .active').parent();
                         active.prev('li').find('a').trigger('click');
@@ -156,7 +253,7 @@
                     // Attach click event handler to an element
                     // which is located inside #modal-placeholder
                     // and has data-save attribute equal to modal
-                    placeholderElement.on('click', '[data-save="modal"]', function (event) {
+                    modalPlaceholderElement.on('click', '[data-save="modal"]', function (event) {
                         // debugger;
                         event.preventDefault();
 
@@ -174,22 +271,20 @@
                             .done(function (data) {
                                 // debugger;
                                 var newBody = $('.modal-body', data);
-                                placeholderElement.find('.modal-body').replaceWith(newBody);
+                                modalPlaceholderElement.find('.modal-body').replaceWith(newBody);
 
                                 // find IsValid input field and check it's value
                                 // if it's valid then hide modal window
                                 var isValid = newBody.find('[name="IsValid"]').val() == 'True';
                                 if (isValid) {
-                                    placeholderElement.find('.modal').modal('hide');
-                                    $("#searchOrg").click();
+                                    modalPlaceholderElement.find('.modal').modal('hide');
+                                    $("#searchButton").click();
                                     toastr.success("Organization saved successfully!", "Success");
                                 } else {
                                     $('[href="#tabs-general"]').click();
                                     createContactGrid();
                                     createAddressGrid();
                                 }
-                                //placeholderElement.find('.modal').modal('hide');
-                                //$("#searchOrg").click();
                             })
                             .fail(function (error) {
                                 // debugger;
@@ -201,14 +296,6 @@
                             });
                     });
                 });
-
-                function objectifyForm(formArray) {//serialize data function
-                    var returnArray = {};
-                    for (var i = 0; i < formArray.length; i++) {
-                        returnArray[formArray[i]['name']] = formArray[i]['value'];
-                    }
-                    return returnArray;
-                }
 
                 function createContactGrid() {
                     // jsGrid - Contacts

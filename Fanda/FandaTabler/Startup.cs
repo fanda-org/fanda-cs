@@ -12,10 +12,12 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.CodeAnalysis.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Linq;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace FandaTabler
@@ -175,6 +177,7 @@ namespace FandaTabler
             #region MVC - AddControllersWithViews
             services.AddControllersWithViews(options =>
             {
+                options.RespectBrowserAcceptHeader = true; // false by default
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
 
                 options.CacheProfiles.Add("Default",
@@ -190,23 +193,25 @@ namespace FandaTabler
                         NoStore = true
                     });
             })
-            .AddJsonOptions(options =>
-            {
-                //options.SerializerSettings.ContractResolver = new DefaultContractResolver();    //new CamelCasePropertyNamesContractResolver();
-                //options.SerializerSettings.Converters.Add(new StringEnumConverter());
-                //options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
-                //options.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
-                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-                options.JsonSerializerOptions.IgnoreNullValues = true;
-                options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
-                options.JsonSerializerOptions.AllowTrailingCommas = true;
-                //options.JsonSerializerOptions.Converters.Add(new JsonStringTrimConverter());
-            })
-            .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
-            .AddSessionStateTempDataProvider()
-            .AddViewLocalization(Microsoft.AspNetCore.Mvc.Razor.LanguageViewLocationExpanderFormat.Suffix)
-            .AddDataAnnotationsLocalization()
-            .AddRazorRuntimeCompilation();
+                .AddXmlSerializerFormatters()
+                .AddJsonOptions(options =>
+                {
+                    //options.SerializerSettings.ContractResolver = new DefaultContractResolver();    //new CamelCasePropertyNamesContractResolver();
+                    //options.SerializerSettings.Converters.Add(new StringEnumConverter());
+                    //options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+                    //options.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                    options.JsonSerializerOptions.IgnoreNullValues = true;
+                    options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+                    options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;    // null = default property (Pascal) casing
+                    options.JsonSerializerOptions.AllowTrailingCommas = true;
+                    //options.JsonSerializerOptions.Converters.Add(new JsonStringTrimConverter());
+                })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+                .AddSessionStateTempDataProvider()
+                .AddViewLocalization(Microsoft.AspNetCore.Mvc.Razor.LanguageViewLocationExpanderFormat.Suffix)
+                .AddDataAnnotationsLocalization()
+                .AddRazorRuntimeCompilation();
             #endregion
 
             //#region Cookie Policy Options
