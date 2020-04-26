@@ -8,7 +8,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace FandaTabler.Models
+namespace Fanda.Service.Base
 {
     public interface IFilter<TList>
         where TList : class

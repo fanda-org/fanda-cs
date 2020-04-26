@@ -1,8 +1,8 @@
 ﻿using Fanda.Dto;
 using Fanda.Service;
+using Fanda.Service.Base;
 using Fanda.Shared;
 using FandaTabler.Extensions;
-using FandaTabler.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +19,6 @@ namespace FandaTabler.Controllers
     [Authorize]
     public class OrganizationsController : Controller
     {
-        //private const string OrgId = "AAEFE9D0-A36E-46E0-1E19-08D5EA042032";
         private readonly IOrganizationService _service;
         private readonly IAccountYearService _yearService;
 
@@ -36,7 +35,7 @@ namespace FandaTabler.Controllers
             var currentOrg = HttpContext.Session.Get<OrganizationDto>("CurrentOrg");
             var currentYear = HttpContext.Session.Get<AccountYearDto>("CurrentYear");
 
-            OkObjectResult orgResult = (OkObjectResult)await GetAll();
+            var orgResult = await GetAll();
             var orgs = (JsGridResult<IList<OrgYearListDto>>)orgResult.Value;
 
             #region Selected org and accounting year
@@ -62,7 +61,7 @@ namespace FandaTabler.Controllers
 
         [HttpPost]
         [Produces("application/json")]
-        public async Task<ActionResult> GetAll()
+        public async Task<JsonResult> GetAll()
         {
             try
             {
@@ -73,11 +72,11 @@ namespace FandaTabler.Controllers
                 var data = await filter.ApplyAsync();
                 var result = new JsGridResult<IList<OrgYearListDto>> { Data = data.List, ItemsCount = data.RowCount };
 
-                return Ok(result);
+                return Json(result);
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { Error = ex.Message });
+                return Json(StatusCodes.Status500InternalServerError, new { Error = ex.Message });
             }
         }
 

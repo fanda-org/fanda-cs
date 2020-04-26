@@ -1,5 +1,6 @@
 ﻿using Fanda.Dto;
 using Fanda.Service;
+using Fanda.Service.Base;
 using Fanda.Shared;
 using FandaCoreUI.Extensions;
 using Microsoft.AspNetCore.Mvc;

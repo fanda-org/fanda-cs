@@ -1,5 +1,6 @@
 ﻿using Fanda.Dto;
 using Fanda.Service;
+using Fanda.Service.Base;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;

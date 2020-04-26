@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 
-namespace FandaTabler.Models
+namespace Fanda.Service.Base
 {
     public class PagingSorting<TList> : BaseListDto
         where TList : BaseListDto

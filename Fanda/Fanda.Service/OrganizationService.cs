@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using Fanda.Data;
 using Fanda.Data.Context;
 using Fanda.Dto;
+using Fanda.Service.Base;
 using Fanda.Shared;
 using Microsoft.EntityFrameworkCore;
 using System;

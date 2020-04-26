@@ -1,7 +1,7 @@
 ﻿using Fanda.Dto;
 using System;
 
-namespace Fanda.Service
+namespace Fanda.Service.Base
 {
     public class DtoValidationException<TModel> : Exception
         where TModel : BaseDto

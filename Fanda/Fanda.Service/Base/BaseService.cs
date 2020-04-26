@@ -7,7 +7,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Fanda.Service
+namespace Fanda.Service.Base
 {
     public interface IBaseService<TModel>
     {
