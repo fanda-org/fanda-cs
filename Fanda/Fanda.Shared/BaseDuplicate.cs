@@ -23,6 +23,7 @@ namespace Fanda.Shared
     {
         Id = 1,
         Code = 2,
-        Name = 3
+        Name = 3,
+        Number = 4
     }
 }

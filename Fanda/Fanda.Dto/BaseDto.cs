@@ -69,7 +69,7 @@ namespace Fanda.Dto
         public DateTime? DateModified { get; set; }
     }
 
-    public class BaseListYearDto
+    public class BaseYearListDto
     {
         public Guid Id { get; set; }
         public string Number { get; set; }

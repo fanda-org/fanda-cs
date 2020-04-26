@@ -45,7 +45,7 @@ namespace Fanda.Service
 
     public static class DuplicateExtensions
     {
-        public static async Task<bool> ExistsAsync<TModel>(this FandaContext context, BaseDuplicate data) 
+        public static async Task<bool> ExistsAsync<TModel>(this FandaContext context, BaseDuplicate data)
             where TModel : BaseModel
         {
             bool result = true;
@@ -86,7 +86,8 @@ namespace Fanda.Service
                     return true;
             }
         }
-        public static async Task<bool> ExistsAsync<TModel>(this FandaContext context, BaseOrgDuplicate data) 
+
+        public static async Task<bool> ExistsAsync<TModel>(this FandaContext context, BaseOrgDuplicate data)
             where TModel : BaseOrgModel
         {
             bool result = true;
@@ -95,7 +96,7 @@ namespace Fanda.Service
                 case DuplicateField.Id:
                     if (data.Id != Guid.Empty)
                     {
-                        return await context.Set<TModel>() //PartyCategories
+                        return await context.Set<TModel>()
                             .AnyAsync(pc => pc.Id == data.Id);
                     }
                     return result;

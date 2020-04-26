@@ -57,11 +57,11 @@ namespace Fanda.Shared
         [Display(Name = "Billing Address Type", Description = "Billing desc"),
             Description("Desc Billing")]
         Billing = 0x1,
-        
+
         [Display(Name = "Shipping Address Type", Description = "Shipping desc"),
             Description("Desc Shipping")]
         Shipping = 0x2,
-        
+
         [Display(Name = "Remittance Address Type", Description = "Remittance desc"),
             Description("Desc Remittance")]
         Remittance = 0x3

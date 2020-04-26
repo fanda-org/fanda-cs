@@ -121,7 +121,6 @@ namespace FandaTabler.Models
         }
     }
 
-
     public class OrgFilter<TService, TList> : BaseFilter<TList>, IOrgFilter<TList>
         where TService : IOrgListService<TList>
         where TList : BaseListDto
@@ -156,101 +155,4 @@ namespace FandaTabler.Models
             return await base.ApplyAsync(query);
         }
     }
-
-    /*
-    public class BaseOrgFilter<TService, TList> : PagingSorting<TList>
-        where TService : IListOrgService<TList>
-        where TList : BaseListDto
-    {
-        private readonly TService _service;
-        private readonly Guid _orgId;
-        private readonly string _search;
-
-        public BaseOrgFilter(TService service, Guid orgId, 
-            NameValueCollection qFilter, string search = null)
-        {
-            _service = service;
-            _orgId = orgId;
-
-            PageIndex = Convert.ToInt32(qFilter["pageIndex"]);
-            PageSize = Convert.ToInt32(qFilter["pageSize"]);
-            SortField = qFilter["sortField"];
-            SortOrder = qFilter["sortOrder"];
-            Code = string.IsNullOrEmpty(qFilter["code"]) ? search : qFilter["code"];
-            Name = string.IsNullOrEmpty(qFilter["name"]) ? search : qFilter["name"];
-            Description = qFilter["description"];
-            Active = string.IsNullOrEmpty(qFilter["active"]) ? (bool?)null : bool.Parse(qFilter["Active"]);
-            //(qFilter["Country"] == "0") ? (Country?)null : (Country)int.Parse(qFilter["Country"]),
-            //Married = string.IsNullOrEmpty(qFilter["Married"]) ? (bool?)null : bool.Parse(qFilter["Married"])
-            
-            _search = search;
-        }
-
-        public static BaseOrgFilter<TService, TList> Create(TService service, Guid orgId,
-            NameValueCollection qFilter, string search = null) =>
-            new BaseOrgFilter<TService, TList>(service, orgId, qFilter, search);
-
-        public async Task<PagedList<TList>> ApplyAsync()
-        {
-            if (string.IsNullOrEmpty(_search))
-            {
-                return await ApplyAllAsync();
-            }
-            else
-            {
-                return await ApplyAnyAsync();
-            }
-        }
-
-        public async Task<PagedList<TList>> ApplyAllAsync()
-        {
-            var query = _service.GetAll(_orgId);
-
-            if (!string.IsNullOrEmpty(Code))
-            {
-                query = query.Where(o => o.Code.Contains(Code));
-            }
-            if (!string.IsNullOrEmpty(Name))
-            {
-                query = query.Where(o => o.Name.Contains(Name));
-            }
-            if (!string.IsNullOrEmpty(Description))
-            {
-                query = query.Where(o => o.Description.Contains(Description));
-            }
-            if (Active != null)
-            {
-                query = query.Where(o => o.Active == Active);
-            }
-
-            return await base.ApplyAsync(query);
-        }
-
-        public async Task<PagedList<TList>> ApplyAnyAsync()
-        {
-            var query = _service.GetAll(_orgId);
-            var orFilters = new List<Expression<Func<TList, bool>>>();
-
-            if (!string.IsNullOrEmpty(Code))
-            {
-                orFilters.Add(o => o.Code.Contains(Code));
-            }
-            if (!string.IsNullOrEmpty(Name))
-            {
-                orFilters.Add(o => o.Name.Contains(Name));
-            }
-            if (!string.IsNullOrEmpty(Description))
-            {
-                orFilters.Add(o => o.Description.Contains(Description));
-            }
-            if (Active != null)
-            {
-                orFilters.Add(o => o.Active == Active);
-            }
-
-            query = query.WhereAny(orFilters.ToArray());
-            return await base.ApplyAsync(query);
-        }
-    }
-    */
 }
