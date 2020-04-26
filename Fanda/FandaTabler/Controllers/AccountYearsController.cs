@@ -28,45 +28,27 @@ namespace FandaTabler.Controllers
 
         [HttpPost]
         [Produces("application/json")]
-        public async Task<ActionResult> GetAll(Guid orgId)
+        public async Task<ActionResult> GetAll(Guid id)
         {
             try
             {
-                if (orgId == Guid.Empty)
+                if (id == Guid.Empty)
                 {
                     var org = GetSelectedOrg();
                     if (org == null)
                     {
                         return RedirectToAction("Index", "Home");
                     }
-                    orgId = org.Id;
+                    id = org.Id;
                 }
 
                 NameValueCollection qFilter = HttpUtility.ParseQueryString(Request.QueryString.Value);
                 string search = qFilter["search"];
-                var filter = new BaseOrgFilter<IAccountYearService, YearListDto>
-                {
-                    PageIndex = string.IsNullOrEmpty(qFilter["pageIndex"]) ? 1 : Convert.ToInt32(qFilter["pageIndex"]),
-                    PageSize = string.IsNullOrEmpty(qFilter["pageSize"]) ? 100 : Convert.ToInt32(qFilter["pageSize"]),
-                    SortField = qFilter["sortField"],
-                    SortOrder = qFilter["sortOrder"],
-                    Code = string.IsNullOrEmpty(qFilter["code"]) ? search : qFilter["code"],
-                    Name = string.IsNullOrEmpty(qFilter["name"]) ? search : qFilter["name"],
-                    Description = string.IsNullOrEmpty(qFilter["description"]) ? search : qFilter["description"],
-                    Active = string.IsNullOrEmpty(qFilter["active"]) ? (bool?)null : bool.Parse(qFilter["Active"])
-                };
-
-                PagedList<YearListDto> data;
-                if (string.IsNullOrEmpty(search))
-                {
-                    data = await filter.ApplyAllAsync(_service, orgId);
-                }
-                else
-                {
-                    data = await filter.ApplyAnyAsync(_service, orgId);
-                }
-
+                
+                var filter = new OrgFilter<IAccountYearService, YearListDto>(_service, qFilter, search);
+                var data = await filter.ApplyAsync(id);
                 var result = new JsGridResult<IList<YearListDto>> { Data = data.List, ItemsCount = data.RowCount };
+
                 return Ok(result);
             }
             catch (Exception ex)

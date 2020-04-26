@@ -20,7 +20,7 @@ namespace Fanda.Service
 
     public interface IOrgYearListService : IListService<OrgYearListDto> { }
 
-    public interface IOrganizationService : IBaseService<OrganizationDto, OrgListDto>,
+    public interface IOrganizationService : IService<OrganizationDto, OrgListDto>,
         IOrgChildrenService<OrgChildrenDto>,
         IOrgYearListService
     { }
@@ -149,12 +149,11 @@ namespace Fanda.Service
                         _context.Entry(dbOrg).CurrentValues.SetValues(org);
 
                         #region Contacts
-                        var contactPairs = (from curr in org.OrgContacts.Select(oc => oc.Contact)
-                                            join db in dbOrg.OrgContacts.Select(oc => oc.Contact)
-                                                 on curr.Id equals db.Id into grp
-                                            from db in grp.DefaultIfEmpty()
-                                            select new { curr, db }
-                                           ).ToList();
+                        var contactPairs = from curr in org.OrgContacts.Select(oc => oc.Contact)
+                                           join db in dbOrg.OrgContacts.Select(oc => oc.Contact)
+                                                on curr.Id equals db.Id into grp
+                                           from db in grp.DefaultIfEmpty()
+                                           select new { curr, db };
                         foreach (var pair in contactPairs)
                         {
                             if (pair.db != null)
@@ -172,26 +171,16 @@ namespace Fanda.Service
                                     Contact = pair.curr
                                 };
                                 dbOrg.OrgContacts.Add(orgContact);
-                                //_context.Entry(orgContact).State = EntityState.Added;
-
-                                //await _context.Set<OrgContact>().AddAsync(new OrgContact
-                                //{
-                                //    OrgId = org.Id,
-                                //    Organization = org,
-                                //    ContactId = pair.curr.Id,
-                                //    Contact = pair.curr
-                                //});
                             }
                         }
                         #endregion
 
                         #region Addresses
-                        var addressPairs = (from curr in org.OrgAddresses.Select(oa => oa.Address)
-                                            join db in dbOrg.OrgAddresses.Select(oa => oa.Address)
-                                                 on curr.Id equals db.Id into grp
-                                            from db in grp.DefaultIfEmpty()
-                                            select new { curr, db }
-                                           ).ToList();
+                        var addressPairs = from curr in org.OrgAddresses.Select(oa => oa.Address)
+                                           join db in dbOrg.OrgAddresses.Select(oa => oa.Address)
+                                                on curr.Id equals db.Id into grp
+                                           from db in grp.DefaultIfEmpty()
+                                           select new { curr, db };
                         foreach (var pair in addressPairs)
                         {
                             if (pair.db != null)
@@ -209,8 +198,6 @@ namespace Fanda.Service
                                     Address = pair.curr
                                 };
                                 dbOrg.OrgAddresses.Add(orgAddress);
-                                //_context.Set<Address>().Add(pair.curr);
-                                //await _context.Set<OrgAddress>().AddAsync();
                             }
                         }
 
@@ -231,30 +218,31 @@ namespace Fanda.Service
 
         public async Task<bool> ValidateAsync(OrganizationDto model)
         {
-            // Reset error
+            // Reset validation errors
             model.Errors.Clear();
 
             #region Formatting: Cleansing and formatting
             model.Code = model.Code.ToUpper();
             model.Name = model.Name.TrimExtraSpaces();
             model.Description = model.Description.TrimExtraSpaces();
-
+            #endregion
+            
             #region Validation: Dupllicate
             // Check code duplicate
             var duplCode = new BaseDuplicate { Field = DuplicateField.Code, Value = model.Code, Id = model.Id };
             if (await ExistsAsync(duplCode))
             {
-                model.Errors.AddError(nameof(model.Code), $"{nameof(model.Code)} already exists");
+                model.Errors.Add(nameof(model.Code), $"{nameof(model.Code)} already exists");
             }
             // Check name duplicate
             var duplName = new BaseDuplicate { Field = DuplicateField.Name, Value = model.Name, Id = model.Id };
             if (await ExistsAsync(duplName))
             {
-                model.Errors.AddError(nameof(model.Name), $"{nameof(model.Name)} already exists");
+                model.Errors.Add(nameof(model.Name), $"{nameof(model.Name)} already exists");
             }
             #endregion
-            #endregion
-            return model.Errors.Count == 0;
+            
+            return model.IsValid();
         }
 
         public async Task<bool> DeleteAsync(Guid id)

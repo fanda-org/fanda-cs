@@ -11,12 +11,14 @@ namespace Fanda.Shared
         public string Value { get; set; }
         public Guid Id { get; set; } = default;
     }
-
     public class BaseOrgDuplicate : BaseDuplicate
     {
         public Guid OrgId { get; set; } = default;
     }
-
+    public class BaseYearDuplicate : BaseDuplicate
+    {
+        public Guid YearId { get; set; } = default;
+    }
     public enum DuplicateField
     {
         Id = 1,

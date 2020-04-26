@@ -39,6 +39,7 @@ namespace FandaTabler.Controllers
             OkObjectResult orgResult = (OkObjectResult)await GetAll();
             var orgs = (JsGridResult<IList<OrgYearListDto>>)orgResult.Value;
 
+            #region Selected org and accounting year
             foreach (var org in orgs.Data)
             {
                 if (currentOrg != null && org.Id == currentOrg.Id)
@@ -53,6 +54,7 @@ namespace FandaTabler.Controllers
                     }
                 }
             }
+            #endregion
 
             ViewBag.Search = search;
             return View(orgs.Data);
@@ -66,28 +68,9 @@ namespace FandaTabler.Controllers
             {
                 NameValueCollection qFilter = HttpUtility.ParseQueryString(Request.QueryString.Value);
                 string search = qFilter["search"];
-                var filter = new BaseFilter<IOrganizationService, OrgYearListDto>
-                {
-                    PageIndex = string.IsNullOrEmpty(qFilter["pageIndex"]) ? 1 : Convert.ToInt32(qFilter["pageIndex"]),
-                    PageSize = string.IsNullOrEmpty(qFilter["pageSize"]) ? 100 : Convert.ToInt32(qFilter["pageSize"]),
-                    SortField = qFilter["sortField"],
-                    SortOrder = qFilter["sortOrder"],
-                    Code = string.IsNullOrEmpty(qFilter["code"]) ? search : qFilter["code"],
-                    Name = string.IsNullOrEmpty(qFilter["name"]) ? search : qFilter["name"],
-                    Description = string.IsNullOrEmpty(qFilter["description"]) ? search : qFilter["description"],
-                    Active = string.IsNullOrEmpty(qFilter["active"]) ? (bool?)null : bool.Parse(qFilter["Active"])
-                };
 
-                PagedList<OrgYearListDto> data;
-                if (string.IsNullOrEmpty(search))
-                {
-                    data = await filter.ApplyAllAsync(_service);
-                }
-                else
-                {
-                    data = await filter.ApplyAnyAsync(_service);
-                }
-
+                var filter = new Filter<IOrganizationService, OrgYearListDto>(_service, qFilter, search);
+                var data = await filter.ApplyAsync();
                 var result = new JsGridResult<IList<OrgYearListDto>> { Data = data.List, ItemsCount = data.RowCount };
 
                 return Ok(result);

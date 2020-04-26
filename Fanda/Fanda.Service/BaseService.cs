@@ -9,10 +9,9 @@ using System.Threading.Tasks;
 
 namespace Fanda.Service
 {
-    public interface IService<TModel>
+    public interface IBaseService<TModel>
     {
         Task<TModel> GetByIdAsync(Guid id, bool includeChildren = false);
-        //Task<TModel> GetChildrenByIdAsync(Guid id);
         Task<bool> DeleteAsync(Guid id);
         Task<bool> ChangeStatusAsync(ActiveStatus status);
         Task<bool> ValidateAsync(TModel model);
@@ -23,12 +22,12 @@ namespace Fanda.Service
         IQueryable<TList> GetAll();
     }
 
-    public interface IListOrgService<TList>
+    public interface IOrgListService<TList>
     {
-        IQueryable<TList> GetAll(Guid orgId);
+        IQueryable<TList> GetAll(Guid parentId);
     }
 
-    public interface IBaseService<TModel, TList> : IService<TModel>, IListService<TList>
+    public interface IService<TModel, TList> : IBaseService<TModel>, IListService<TList>
     where TModel : BaseDto
     where TList : BaseListDto
     {
@@ -36,17 +35,18 @@ namespace Fanda.Service
         Task<bool> ExistsAsync(BaseDuplicate data);
     }
 
-    public interface IBaseOrgService<TModel, TList> : IService<TModel>, IListOrgService<TList>
+    public interface IOrgService<TModel, TList> : IBaseService<TModel>, IOrgListService<TList>
         where TModel : BaseDto
         where TList : BaseListDto
     {
-        Task<TModel> SaveAsync(Guid orgId, TModel model);
+        Task<TModel> SaveAsync(Guid parentId, TModel model);
         Task<bool> ExistsAsync(BaseOrgDuplicate data);
     }
 
     public static class DuplicateExtensions
     {
-        public static async Task<bool> ExistsAsync<TModel>(this FandaContext context, BaseDuplicate data) where TModel : BaseModel
+        public static async Task<bool> ExistsAsync<TModel>(this FandaContext context, BaseDuplicate data) 
+            where TModel : BaseModel
         {
             bool result = true;
             switch (data.Field)
@@ -86,7 +86,8 @@ namespace Fanda.Service
                     return true;
             }
         }
-        public static async Task<bool> ExistsAsync<TModel>(this FandaContext context, BaseOrgDuplicate data) where TModel : BaseOrgModel
+        public static async Task<bool> ExistsAsync<TModel>(this FandaContext context, BaseOrgDuplicate data) 
+            where TModel : BaseOrgModel
         {
             bool result = true;
             switch (data.Field)

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Fanda.Shared;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
@@ -19,20 +18,20 @@ namespace Fanda.Dto
         public Guid Id { get; set; }
 
         [Display(Name = "Code", Prompt = "Code"),
-            Required(AllowEmptyStrings = false, ErrorMessage = "Code is required"),
-            RegularExpression(@"^[a-zA-Z0-9~!@#$()_+-{}|:<>.?\/]+$", ErrorMessage = @"Space or tab are not allowed in code"),
-            StringLength(16, ErrorMessage = "Maximum allowed length is 16")]
+            Required(AllowEmptyStrings = false, ErrorMessage = "{0} is required"),
+            //RegularExpression(@"^[a-zA-Z0-9~!@#$()_+-{}|:<>.?\/]+$", ErrorMessage = @"{0} must not contain spaces or tabs"),
+            StringLength(16, ErrorMessage = "{0} length must be between {2} and {1}.", MinimumLength = 3)]
         public string Code { get; set; }
 
         [Display(Name = "Name"),
-            Required(AllowEmptyStrings = false, ErrorMessage = "Name is required"),
-            RegularExpression(@"^[a-zA-Z0-9\s~!@#$()_+-{}|:<>.?\/]*$", ErrorMessage = @"Special characters are not allowed in name"),
-            StringLength(50, ErrorMessage = "Maximum allowed length is 50")]
+            Required(AllowEmptyStrings = false, ErrorMessage = "{0} is required"),
+            //RegularExpression(@"^[a-zA-Z0-9\s~!@#$%^&*()_+-=\\|{}\[\];:',.<>/?\/]*$", ErrorMessage = @"{0} must not contain special characters"),
+            StringLength(50, ErrorMessage = "{0} length must be between {2} and {1}.", MinimumLength = 3)]
         public string Name { get; set; }
 
         [Display(Name = "Description"),
-            RegularExpression(@"^[a-zA-Z0-9\s~!@#$()_+-{}|:<>.?\/]*$", ErrorMessage = @"Special characters are not allowed in description"),
-            StringLength(255, ErrorMessage = "Maximum allowed length is 255")]
+            //RegularExpression(@"^[a-zA-Z0-9\s~!@#$()_+-{}|:<>.?\/]*$", ErrorMessage = @"{0} must not contain special characters"),
+            StringLength(255, ErrorMessage = "{0} cannot exceeed {2} characters")]
         [DisplayFormat(ConvertEmptyStringToNull = true)]
         public string Description { get; set; }
 
@@ -42,6 +41,7 @@ namespace Fanda.Dto
 
         [JsonIgnore(), IgnoreDataMember(), IgnoreMap()]
         public DtoErrors Errors { get; set; }
+        public bool IsValid() => Errors.Count == 0;
     }
 
     public class BaseListDto

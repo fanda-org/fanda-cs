@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Fanda.Service
 {
-    public interface IAccountYearService : IBaseOrgService<AccountYearDto, YearListDto> { }
+    public interface IAccountYearService : IOrgService<AccountYearDto, YearListDto> { }
 
     public class AccountYearService : IAccountYearService
     {

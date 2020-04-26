@@ -41,32 +41,14 @@ namespace FandaTabler.Controllers
                     }
                     id = org.Id;
                 }
+
                 NameValueCollection qFilter = HttpUtility.ParseQueryString(Request.QueryString.Value);
                 string search = qFilter["search"];
-                var filter = new BaseOrgFilter<IPartyCategoryService, PartyCategoryListDto>
-                {
-                    PageIndex = Convert.ToInt32(qFilter["pageIndex"]),
-                    PageSize = Convert.ToInt32(qFilter["pageSize"]),
-                    SortField = qFilter["sortField"],
-                    SortOrder = qFilter["sortOrder"],
-                    Code = string.IsNullOrEmpty(qFilter["code"]) ? search : qFilter["code"],
-                    Name = string.IsNullOrEmpty(qFilter["name"]) ? search : qFilter["name"],
-                    Description = qFilter["description"],
-                    Active = string.IsNullOrEmpty(qFilter["active"]) ? (bool?)null : bool.Parse(qFilter["Active"])
-                    //(qFilter["Country"] == "0") ? (Country?)null : (Country)int.Parse(qFilter["Country"]),
-                    //Married = string.IsNullOrEmpty(qFilter["Married"]) ? (bool?)null : bool.Parse(qFilter["Married"])
-                };
 
-                PagedList<PartyCategoryListDto> data;
-                if (string.IsNullOrEmpty(search))
-                {
-                    data = await filter.ApplyAllAsync(_service, id);
-                }
-                else
-                {
-                    data = await filter.ApplyAnyAsync(_service, id);
-                }
+                var filter = new OrgFilter<IPartyCategoryService, PartyCategoryListDto>(_service, qFilter, search);
+                var data = await filter.ApplyAsync(id);
                 var result = new JsGridResult<IList<PartyCategoryListDto>> { Data = data.List, ItemsCount = data.RowCount };
+
                 return Ok(result);
             }
             catch (Exception ex)

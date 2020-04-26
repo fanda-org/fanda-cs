@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Fanda.Service
 {
-    public interface IPartyCategoryService : IBaseOrgService<PartyCategoryDto, PartyCategoryListDto> { }
+    public interface IPartyCategoryService : IOrgService<PartyCategoryDto, PartyCategoryListDto> { }
 
     public class PartyCategoryService : IPartyCategoryService
     {
