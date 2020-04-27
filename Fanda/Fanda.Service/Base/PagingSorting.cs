@@ -14,7 +14,7 @@ namespace Fanda.Service.Base
         public string SortField { get; set; } = "Code";
         public string SortOrder { get; set; } = "asc";
 
-        public async Task<PagedList<TList>> ApplyAsync(IQueryable<TList> query)
+        protected virtual async Task<PagedList<TList>> ApplyAsync(IQueryable<TList> query)
         {
             if (SortField != null)
             {

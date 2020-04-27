@@ -22,3 +22,9 @@ https://docs.microsoft.com/en-us/aspnet/core/security/authentication/accconfirm?
 
 Refit - REST
 LazyCache
+
+from Master to Transaction: Functionalities apart from Create/Edit/Delete
+--------------------------
+Clone
+Deep clone
+Merge

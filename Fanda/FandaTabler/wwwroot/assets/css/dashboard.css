@@ -19082,11 +19082,13 @@ svg {
 }
 
 .selectize-input > * {
-  vertical-align: baseline;
-  display: -moz-inline-stack;
-  display: inline-block;
-  zoom: 1;
-  *display: inline;
+    vertical-align: baseline;
+    display: -moz-inline-stack;
+    display: inline-block;
+    /*zoom: 1;*/
+    transform: scale(1);
+    transform-origin: 0 0;
+    *display: inline;
 }
 
 .selectize-control.multi .selectize-input > div {

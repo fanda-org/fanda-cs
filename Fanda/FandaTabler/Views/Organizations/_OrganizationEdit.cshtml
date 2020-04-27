@@ -10,7 +10,7 @@
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header align-items-center">
-                <h5 class="modal-title">Create New Organization</h5>
+                <h5 class="modal-title">@(Model.Id == null || Model.Id == Guid.Empty ? "Create New" : "Edit") Organization</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" />
             </div>
             <div class="card">
@@ -104,10 +104,15 @@
                                 </div>
                                 <div class="row align-items-center">
                                     <div class="col-lg-6">
-                                        <div class="custom-control custom-switch ml-3">
-                                            <input asp-for="Active" type="checkbox" class="custom-control-input" />
-                                            <label asp-for="Active" class="custom-control-label"></label>
-                                        </div>
+                                        @*<div class="custom-control custom-switch ml-3">
+                                                <input asp-for="Active" type="checkbox" class="custom-control-input" />
+                                                <label asp-for="Active" class="custom-control-label"></label>
+                                            </div>*@
+                                        <label class="custom-switch m-0">
+                                            <input asp-for="Active" type="checkbox" class="custom-switch-input">
+                                            <span class="custom-switch-indicator"></span>
+                                            <span asp-for="Active" class="custom-switch-description">Active</span>
+                                        </label>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="float-right">
@@ -120,9 +125,7 @@
                             <div class="tab-pane" id="tabs-contacts">
                                 <div class="row mb-3">
                                     <div class="col-lg-12">
-                                        @*<form method="post">*@
                                         <div id="jsgrid-contacts"></div>
-                                        @*</form>*@
                                     </div>
                                 </div>
                                 <div class="row">
@@ -137,9 +140,7 @@
                             <div class="tab-pane" id="tabs-addresses">
                                 <div class="row mb-3">
                                     <div class="col-lg-12">
-                                        @*<form method="post">*@
                                         <div id="jsgrid-addresses"></div>
-                                        @*</form>*@
                                     </div>
                                 </div>
                                 <div class="row">

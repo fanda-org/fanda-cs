@@ -13,17 +13,19 @@ namespace Fanda.Service.Base
     public interface IFilter<TList>
         where TList : class
     {
-        Task<PagedList<TList>> ApplyAsync();
-        Task<PagedList<TList>> ApplyAllAsync();
-        Task<PagedList<TList>> ApplyAnyAsync();
+        Task<PagedList<TList>> ApplyAsync(Expression<Func<TList, bool>> condition = null);
+        //Task<PagedList<TList>> ApplyAllAsync();
+        //Task<PagedList<TList>> ApplyAnyAsync();
+        //Task<PagedList<TList>> ApplyAsync(Expression<Func<TList, bool>> condition);
     }
 
     public interface IOrgFilter<TList>
         where TList : class
     {
-        Task<PagedList<TList>> ApplyAsync(Guid orgId);
-        Task<PagedList<TList>> ApplyAllAsync(Guid orgId);
-        Task<PagedList<TList>> ApplyAnyAsync(Guid orgId);
+        Task<PagedList<TList>> ApplyAsync(Guid orgId, Expression<Func<TList, bool>> condition = null);
+        //Task<PagedList<TList>> ApplyAllAsync(Guid orgId);
+        //Task<PagedList<TList>> ApplyAnyAsync(Guid orgId);
+        //Task<PagedList<TList>> ApplyAsync(Guid orgId, Expression<Func<TList, bool>> condition);
     }
 
     public abstract class BaseFilter<TList> : PagingSorting<TList>
@@ -95,27 +97,34 @@ namespace Fanda.Service.Base
         {
             Service = service;
         }
-        public async Task<PagedList<TList>> ApplyAsync()
+        public async Task<PagedList<TList>> ApplyAsync(Expression<Func<TList, bool>> condition = null)
         {
             if (string.IsNullOrEmpty(Search))
             {
-                return await ApplyAllAsync();
+                return await ApplyAllAsync(condition);
             }
             else
             {
-                return await ApplyAnyAsync();
+                return await ApplyAnyAsync(condition);
             }
         }
-        public async Task<PagedList<TList>> ApplyAllAsync()
+        protected virtual async Task<PagedList<TList>> ApplyAllAsync(Expression<Func<TList, bool>> condition = null)
         {
             var query = Service.GetAll();
+            if (condition != null)
+            {
+                query = query.Where(condition);
+            }
             query = FilterAll(query);
             return await base.ApplyAsync(query);
         }
-
-        public async Task<PagedList<TList>> ApplyAnyAsync()
+        protected virtual async Task<PagedList<TList>> ApplyAnyAsync(Expression<Func<TList, bool>> condition = null)
         {
             var query = Service.GetAll();
+            if (condition != null)
+            {
+                query = query.Where(condition);
+            }
             query = FilterAny(query);
             return await base.ApplyAsync(query);
         }
@@ -131,26 +140,34 @@ namespace Fanda.Service.Base
         {
             Service = service;
         }
-        public async Task<PagedList<TList>> ApplyAsync(Guid orgId)
+        public async Task<PagedList<TList>> ApplyAsync(Guid orgId, Expression<Func<TList, bool>> condition = null)
         {
             if (string.IsNullOrEmpty(Search))
             {
-                return await ApplyAllAsync(orgId);
+                return await ApplyAllAsync(orgId, condition);
             }
             else
             {
-                return await ApplyAnyAsync(orgId);
+                return await ApplyAnyAsync(orgId, condition);
             }
         }
-        public async Task<PagedList<TList>> ApplyAllAsync(Guid orgId)
+        protected virtual async Task<PagedList<TList>> ApplyAllAsync(Guid orgId, Expression<Func<TList, bool>> condition = null)
         {
             var query = Service.GetAll(orgId);
+            if (condition != null)
+            {
+                query = query.Where(condition);
+            }
             query = FilterAll(query);
             return await base.ApplyAsync(query);
         }
-        public async Task<PagedList<TList>> ApplyAnyAsync(Guid orgId)
+        protected virtual async Task<PagedList<TList>> ApplyAnyAsync(Guid orgId, Expression<Func<TList, bool>> condition = null)
         {
             var query = Service.GetAll(orgId);
+            if (condition != null)
+            {
+                query = query.Where(condition);
+            }
             query = FilterAny(query);
             return await base.ApplyAsync(query);
         }
