@@ -85,10 +85,8 @@ public static class CrossSiteScriptingValidation
 
     #region Private methods
 
-    private static bool IsAtoZ(char c)
-    {
-        return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
-    }
+    private static bool IsAtoZ(char c) 
+        => (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
 
     #endregion
 }

@@ -296,21 +296,27 @@ namespace Fanda.Service
         public Task<bool> ExistsAsync(BaseDuplicate data) => _context.ExistsAsync<Organization>(data);
 
         #region List
+        private IQueryable<T> GetAll<T>(IQueryable<T> query)
+            where T : BaseListDto 
+        {
+            query = query.Where(c => c.Code != "FANDA");
+            return query;
+        }
         public IQueryable<OrgListDto> GetAll()
         {
-            IQueryable<OrgListDto> orgs = _context.Organizations
+            IQueryable<OrgListDto> query = _context.Organizations
                 .AsNoTracking()
                 .ProjectTo<OrgListDto>(_mapper.ConfigurationProvider);
-            return orgs;
+            return GetAll(query);
         }
 
         IQueryable<OrgYearListDto> IListService<OrgYearListDto>.GetAll()
         {
-            IQueryable<OrgYearListDto> orgs = _context.Organizations
+            IQueryable<OrgYearListDto> query = _context.Organizations
                 .Include(o => o.AccountYears)
                 .AsNoTracking()
                 .ProjectTo<OrgYearListDto>(_mapper.ConfigurationProvider);
-            return orgs;
+            return GetAll(query);
         }
         #endregion
     }

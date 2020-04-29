@@ -39,12 +39,12 @@ namespace FandaTabler.Controllers
                 string search = qFilter["search"];
 
                 var filter = new Filter<IOrganizationService, OrgYearListDto>(_service, qFilter, search);
-                var data = await filter.ApplyAsync(c => c.Code != "FANDA");
+                var data = await filter.ApplyAsync();
                 var result = new JsGridResult<IList<OrgYearListDto>>
                 {
                     Data = data.List,
                     ItemsCount = data.ItemsCount,
-                    CurrentPage = data.CurrentPage,
+                    Page = data.Page,
                     PageCount = data.PageCount,
                     FirstRowOnPage = data.FirstRowOnPage,
                     LastRowOnPage = data.LastRowOnPage

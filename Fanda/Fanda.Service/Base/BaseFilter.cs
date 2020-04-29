@@ -50,10 +50,8 @@ namespace Fanda.Service.Base
 
             Search = search;
         }
-        protected IQueryable<TList> Filter(IQueryable<TList> query)
-        {
-            return string.IsNullOrEmpty(Search) ? FilterAll(query) : FilterAny(query);
-        }
+        protected IQueryable<TList> Filter(IQueryable<TList> query) 
+            => string.IsNullOrEmpty(Search) ? FilterAll(query) : FilterAny(query);
         private IQueryable<TList> FilterAll(IQueryable<TList> query)
         {
             if (!string.IsNullOrEmpty(Code))

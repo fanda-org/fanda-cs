@@ -21,7 +21,10 @@ namespace FandaTabler.Middleware
             this IApplicationBuilder builder, AntiXssMiddlewareOptions options)
         {
             if (options == null)
+            {
                 options = new AntiXssMiddlewareOptions();
+            }
+
             return builder.UseMiddleware<AntiXssMiddleware>(options);
         }
     }
@@ -59,7 +62,6 @@ namespace FandaTabler.Middleware
         }
     }
 
-
     public class AntiXssMiddleware
     {
         private readonly RequestDelegate _next;
@@ -67,12 +69,7 @@ namespace FandaTabler.Middleware
 
         public AntiXssMiddleware(RequestDelegate next, AntiXssMiddlewareOptions options)
         {
-            if (next == null)
-            {
-                throw new ArgumentNullException(nameof(next));
-            }
-
-            _next = next;
+            _next = next ?? throw new ArgumentNullException(nameof(next));
             _options = options;
         }
 
@@ -83,7 +80,7 @@ namespace FandaTabler.Middleware
             {
                 var url = context.Request.Path.Value;
 
-                if (CrossSiteScriptingValidation.IsDangerousString(url, out int matchIndex))
+                if (CrossSiteScriptingValidation.IsDangerousString(url, out int _))
                 {
                     if (_options.ThrowExceptionIfRequestContainsCrossSiteScripting)
                     {
@@ -101,7 +98,7 @@ namespace FandaTabler.Middleware
             {
                 var queryString = HttpUtility.UrlDecode(context.Request.QueryString.Value);
 
-                if (CrossSiteScriptingValidation.IsDangerousString(queryString, out int matchIndex))
+                if (CrossSiteScriptingValidation.IsDangerousString(queryString, out int _))
                 {
                     if (_options.ThrowExceptionIfRequestContainsCrossSiteScripting)
                     {
@@ -110,8 +107,41 @@ namespace FandaTabler.Middleware
 
                     context.Response.Clear();
                     await context.Response.WriteAsync(_options.ErrorMessage);
+                    //var encoded = HttpUtility.UrlEncode(queryString);
+                    //context.Request.QueryString = new QueryString(encoded);
                     return;
                 }
+            }
+
+            // Check XSS in request form
+            if (context.Request.HasFormContentType)
+            {
+                //bool dangerousValueFound = false;
+                //var formDataAsString = FormDataAsString(await context.Request.ReadFormAsync());
+                var formData = await context.Request.ReadFormAsync();
+                //var nv = new Dictionary<string, StringValues>();
+                foreach (var key in formData.Keys)
+                {
+                    if (formData.TryGetValue(key, out var newValue))
+                    {
+                        if (CrossSiteScriptingValidation.IsDangerousString(newValue, out int _))
+                        {
+                            //dangerousValueFound = true;
+                            if (_options.ThrowExceptionIfRequestContainsCrossSiteScripting)
+                            {
+                                throw new CrossSiteScriptingException(_options.ErrorMessage);
+                            }
+                            context.Response.Clear();
+                            await context.Response.WriteAsync(_options.ErrorMessage);
+                            return;
+                            //newValue = HttpUtility.JavaScriptStringEncode(newValue);
+                        }
+                    }
+                    //nv.Add(key, newValue);
+                }
+                //context.Request.Form = new FormCollection(nv, context.Request.Form.Files);
+                //if (dangerousValueFound)
+                //    return;
             }
 
             // Check XSS in request content
@@ -120,7 +150,7 @@ namespace FandaTabler.Middleware
             {
                 var content = await ReadRequestBody(context);
 
-                if (CrossSiteScriptingValidation.IsDangerousString(content, out int matchIndex))
+                if (CrossSiteScriptingValidation.IsDangerousString(content, out int _))
                 {
                     if (_options.ThrowExceptionIfRequestContainsCrossSiteScripting)
                     {
@@ -140,28 +170,40 @@ namespace FandaTabler.Middleware
             }
         }
 
+        private string FormDataAsString(IFormCollection formCollection)
+        {
+            var sb = new StringBuilder();
+            foreach (var key in formCollection.Keys)
+            {
+                sb.Append(formCollection.TryGetValue(key, out var value) ? value.ToString() : "");
+            }
+            return sb.ToString();
+        }
+
         private static async Task<string> ReadRequestBody(HttpContext context)
         {
-            var buffer = new MemoryStream();
-            await context.Request.Body.CopyToAsync(buffer);
-            context.Request.Body = buffer;
-            buffer.Position = 0;
-
-            var encoding = Encoding.UTF8;
-            var contentType = context.Request.GetTypedHeaders().ContentType;
-            if (contentType?.Charset != null && !string.IsNullOrEmpty(contentType?.Charset.Value))
+            using (var buffer = new MemoryStream())
             {
-                encoding = Encoding.GetEncoding(contentType.Charset.Value);
-            }
-            else if (contentType?.Encoding != null)
-            {
-                encoding = Encoding.GetEncoding(contentType.Encoding.CodePage);
-            }
+                await context.Request.Body.CopyToAsync(buffer);
+                context.Request.Body = buffer;
+                buffer.Position = 0;
 
-            var requestContent = await new StreamReader(buffer, encoding).ReadToEndAsync();
-            context.Request.Body.Position = 0;
+                var encoding = Encoding.UTF8;
+                var contentType = context.Request.GetTypedHeaders().ContentType;
+                if (contentType?.Charset != null && !string.IsNullOrEmpty(contentType?.Charset.Value))
+                {
+                    encoding = Encoding.GetEncoding(contentType.Charset.Value);
+                }
+                else if (contentType?.Encoding != null)
+                {
+                    encoding = Encoding.GetEncoding(contentType.Encoding.CodePage);
+                }
 
-            return requestContent;
+                var requestContent = await new StreamReader(buffer, encoding).ReadToEndAsync();
+                context.Request.Body.Position = 0;
+
+                return requestContent;
+            }
         }
     }
 }

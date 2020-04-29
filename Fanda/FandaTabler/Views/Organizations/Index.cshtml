@@ -139,18 +139,21 @@
 
                     // listOrgs function
                     function listOrgs() {
+                        // debugger;
+                        //if (pageIndex > pageCount)
+                        //    pageIndex = pageCount;
                         $.get('@Url.Action("List")', { search: searchText, pageIndex: pageIndex, pageSize: pageSize })
                             .done(function (data) {
                                 listPlaceholderElement.html(data);
 
                                 // debugger;
-                                var firstRow = $(".page-info > #FirstRowOnPage").val();
-                                var lastRow = $(".page-info > #LastRowOnPage").val();
-                                var itemsCount = $(".page-info > #ItemsCount").val();
-                                var currentPage = $(".page-info > #CurrentPage").val();
-                                pageCount = $(".page-info > #PageCount").val();
+                                var firstRow = parseInt($(".page-info > #FirstRowOnPage").val());
+                                var lastRow = parseInt($(".page-info > #LastRowOnPage").val());
+                                var itemsCount = parseInt($(".page-info > #ItemsCount").val());
+                                pageIndex = parseInt($(".page-info > #Page").val());
+                                pageCount = parseInt($(".page-info > #PageCount").val());
                                 $(".item-text").text("Entries " + firstRow + "-" + lastRow + " of " + itemsCount);
-                                $(".page-text").text("Page " + currentPage + " of " + pageCount);
+                                $(".page-text").text("Page " + pageIndex + " of " + pageCount);
                             });
                     };
                     listOrgs();
@@ -158,17 +161,15 @@
                     // Search
                     $("#searchButton").click(function (event) {
                         event.preventDefault();
-                        pageIndex = 1;
+                        //pageIndex = 1;
                         searchText = $('#search').val();
                         listOrgs();
                     });
 
                     // Item options
                     $(".item-options").change(function () {
-                        //debugger;
-                        pageIndex = 1;
+                        //pageIndex = 1;
                         pageSize = this.value;
-                        console.log("pageSize in change", pageSize);
                         listOrgs();
                     });
 
@@ -178,6 +179,7 @@
                             pageIndex -= 1;
                             listOrgs();
                         } else {
+                            pageIndex = 1;
                             // disable previous button
                         }
                     });
@@ -187,6 +189,7 @@
                             pageIndex += 1;
                             listOrgs();
                         } else {
+                            pageIndex = 1;
                             // disable next button
                         }
                     });

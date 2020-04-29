@@ -9,21 +9,25 @@ namespace Fanda.Shared
     public static class PagedResultExtension
     {
         public static async Task<PagedList<T>> GetPagedAsync<T>(this IQueryable<T> query,
-                                         int page = 1, int pageSize = 100) where T : class
+                                         int page = 1, int pageSize = 100) 
+            where T : class
         {
             var result = new PagedList<T>
             {
-                CurrentPage = page,
+                Page = page,
                 PageSize = pageSize,
                 ItemsCount = query.Count()
             };
-
-            double pageCount = (double)result.ItemsCount / pageSize;
+            double pageCount = (double)result.ItemsCount / result.PageSize;
             result.PageCount = (int)Math.Ceiling(pageCount);
+            if (result.Page > result.PageCount)
+            {
+                result.Page = result.PageCount;
+            }
 
-            var skip = (page - 1) * pageSize;
+            var skip = (result.Page - 1) * result.PageSize;
             result.List = await query
-                .Skip(skip).Take(pageSize)
+                .Skip(skip).Take(result.PageSize)
                 .ToDynamicListAsync<T>();
 
             return result;
@@ -34,17 +38,20 @@ namespace Fanda.Shared
         {
             var result = new PagedList<dynamic>
             {
-                CurrentPage = page,
+                Page = page,
                 PageSize = pageSize,
                 ItemsCount = query.Count()
             };
-
-            double pageCount = (double)result.ItemsCount / pageSize;
+            double pageCount = (double)result.ItemsCount / result.PageSize;
             result.PageCount = (int)Math.Ceiling(pageCount);
+            if (result.Page > result.PageCount)
+            {
+                result.Page = result.PageCount;
+            }
 
-            var skip = (page - 1) * pageSize;
+            var skip = (result.Page - 1) * result.PageSize;
             result.List = await query
-                .Skip(skip).Take(pageSize)
+                .Skip(skip).Take(result.PageSize)
                 .ToDynamicListAsync();
 
             return result;

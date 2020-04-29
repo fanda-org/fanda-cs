@@ -10,7 +10,7 @@
 
         #region Additional information
         public string Error { get; set; } = null;
-        public int? CurrentPage { get; set; }
+        public int? Page { get; set; }
         public int? PageCount { get; set; }
         public int? FirstRowOnPage { get; set; }
         public int? LastRowOnPage { get; set; }
