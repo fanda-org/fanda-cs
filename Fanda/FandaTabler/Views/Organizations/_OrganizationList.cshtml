@@ -30,7 +30,7 @@
                     <div class="col">
                         <div class="card-body">
                             <h3 class="card-title">@org.Name</h3>
-                            <h6 class="card-subtitle">@org.Description</h6>
+                            <h6 class="card-subtitle">@(string.IsNullOrEmpty(org.Description) ? " " : org.Description)</h6>
                             <div class="row align-items-center">
                                 <div class="col-6">
                                     <form asp-action="Open" method="post">

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "uHFzQVBz4nEQmlfrjBqTJdHBJACfBhcXJQz4kg3qyE0Nfk9L5h2jKE68pQskXsTaeskAthRyR1/XOIe12yJwNg==",
+  "dgSpecHash": "/OkvY1FAQCbdbEDCTyuhdjr8KtRt4JtKsYz/1TQEtbsGQdYJq7HJ8AAdLjQ5qyR7uYYV9FZ+2Gz2rYJEKBeKFA==",
   "success": true,
   "projectFilePath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\FandaCoreUI\\FandaCoreUI.csproj",
   "expectedPackageFiles": [
@@ -41,7 +41,6 @@
     "C:\\Users\\tbala\\.nuget\\packages\\microsoft.entityframeworkcore\\3.1.3\\microsoft.entityframeworkcore.3.1.3.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\3.1.3\\microsoft.entityframeworkcore.abstractions.3.1.3.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\3.1.3\\microsoft.entityframeworkcore.analyzers.3.1.3.nupkg.sha512",
-    "C:\\Users\\tbala\\.nuget\\packages\\microsoft.entityframeworkcore.dynamiclinq\\1.1.0\\microsoft.entityframeworkcore.dynamiclinq.1.1.0.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\microsoft.entityframeworkcore.relational\\3.1.3\\microsoft.entityframeworkcore.relational.3.1.3.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\microsoft.entityframeworkcore.sqlserver\\3.1.3\\microsoft.entityframeworkcore.sqlserver.3.1.3.nupkg.sha512",
     "C:\\Users\\tbala\\.nuget\\packages\\microsoft.extensions.caching.abstractions\\3.1.3\\microsoft.extensions.caching.abstractions.3.1.3.nupkg.sha512",

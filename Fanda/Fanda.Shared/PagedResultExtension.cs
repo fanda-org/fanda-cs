@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿//using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Linq.Dynamic.Core;
@@ -24,7 +24,7 @@ namespace Fanda.Shared
             var skip = (page - 1) * pageSize;
             result.List = await query
                 .Skip(skip).Take(pageSize)
-                .ToListAsync();
+                .ToDynamicListAsync<T>();
 
             return result;
         }

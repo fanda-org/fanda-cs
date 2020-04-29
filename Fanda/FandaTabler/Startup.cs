@@ -2,6 +2,7 @@ using AutoMapper;
 using Fanda.Service;
 using Fanda.Service.Extensions;
 using Fanda.Shared;
+using FandaTabler.Middleware;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.CookiePolicy;
@@ -12,7 +13,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.CodeAnalysis.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -379,6 +379,9 @@ namespace FandaTabler
             app.UseSession();
             app.UseAuthentication();
             app.UseAuthorization();
+
+            /* Middleware */
+            app.UseAntiXss();
 
             app.UseEndpoints(endpoints =>
             {

@@ -1,5 +1,4 @@
 ﻿using Fanda.Dto;
-using Fanda.Service;
 using Fanda.Shared;
 using System;
 using System.Collections.Generic;
@@ -7,25 +6,31 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+//using Microsoft.EntityFrameworkCore.DynamicLinq;
+using System.Linq.Dynamic.Core;
 
 namespace Fanda.Service.Base
 {
     public interface IFilter<TList>
         where TList : class
     {
-        Task<PagedList<TList>> ApplyAsync(Expression<Func<TList, bool>> condition = null);
+        Task<PagedList<TList>> ApplyAsync(Expression<Func<TList, bool>> predicate = null);
+        Task<PagedList<TList>> ApplyAsync(string predicate = null, params object[] args);
+
         //Task<PagedList<TList>> ApplyAllAsync();
         //Task<PagedList<TList>> ApplyAnyAsync();
-        //Task<PagedList<TList>> ApplyAsync(Expression<Func<TList, bool>> condition);
+        //Task<PagedList<TList>> ApplyAsync(Expression<Func<TList, bool>> predicate);
     }
 
     public interface IOrgFilter<TList>
         where TList : class
     {
-        Task<PagedList<TList>> ApplyAsync(Guid orgId, Expression<Func<TList, bool>> condition = null);
+        Task<PagedList<TList>> ApplyAsync(Guid orgId, Expression<Func<TList, bool>> predicate = null);
+        Task<PagedList<TList>> ApplyAsync(Guid orgId, string predicate = null, params object[] args);
+
         //Task<PagedList<TList>> ApplyAllAsync(Guid orgId);
         //Task<PagedList<TList>> ApplyAnyAsync(Guid orgId);
-        //Task<PagedList<TList>> ApplyAsync(Guid orgId, Expression<Func<TList, bool>> condition);
+        //Task<PagedList<TList>> ApplyAsync(Guid orgId, Expression<Func<TList, bool>> predicate);
     }
 
     public abstract class BaseFilter<TList> : PagingSorting<TList>
@@ -45,7 +50,11 @@ namespace Fanda.Service.Base
 
             Search = search;
         }
-        protected IQueryable<TList> FilterAll(IQueryable<TList> query)
+        protected IQueryable<TList> Filter(IQueryable<TList> query)
+        {
+            return string.IsNullOrEmpty(Search) ? FilterAll(query) : FilterAny(query);
+        }
+        private IQueryable<TList> FilterAll(IQueryable<TList> query)
         {
             if (!string.IsNullOrEmpty(Code))
             {
@@ -65,7 +74,7 @@ namespace Fanda.Service.Base
             }
             return query;
         }
-        protected IQueryable<TList> FilterAny(IQueryable<TList> query)
+        private IQueryable<TList> FilterAny(IQueryable<TList> query)
         {
             var orFilters = new List<Expression<Func<TList, bool>>>();
 
@@ -97,37 +106,54 @@ namespace Fanda.Service.Base
         {
             Service = service;
         }
-        public async Task<PagedList<TList>> ApplyAsync(Expression<Func<TList, bool>> condition = null)
+        public async Task<PagedList<TList>> ApplyAsync(Expression<Func<TList, bool>> predicate = null)
         {
-            if (string.IsNullOrEmpty(Search))
-            {
-                return await ApplyAllAsync(condition);
-            }
-            else
-            {
-                return await ApplyAnyAsync(condition);
-            }
-        }
-        protected virtual async Task<PagedList<TList>> ApplyAllAsync(Expression<Func<TList, bool>> condition = null)
-        {
+            //if (string.IsNullOrEmpty(Search))
+            //{
+            //    return await ApplyAllAsync(predicate);
+            //}
+            //else
+            //{
+            //    return await ApplyAnyAsync(predicate);
+            //}
             var query = Service.GetAll();
-            if (condition != null)
+            if (predicate != null)
             {
-                query = query.Where(condition);
+                query = query.Where(predicate);
             }
-            query = FilterAll(query);
+            query = Filter(query);
             return await base.ApplyAsync(query);
         }
-        protected virtual async Task<PagedList<TList>> ApplyAnyAsync(Expression<Func<TList, bool>> condition = null)
+        public async Task<PagedList<TList>> ApplyAsync(string predicate = null, params object[] args)
         {
             var query = Service.GetAll();
-            if (condition != null)
+            if (predicate != null)
             {
-                query = query.Where(condition);
+                query = query.Where(predicate, args);
             }
-            query = FilterAny(query);
+            query = Filter(query);
             return await base.ApplyAsync(query);
         }
+        //private async Task<PagedList<TList>> ApplyAllAsync(Expression<Func<TList, bool>> predicate = null)
+        //{
+        //    var query = Service.GetAll();
+        //    if (predicate != null)
+        //    {
+        //        query = query.Where(predicate);
+        //    }
+        //    query = FilterAll(query);
+        //    return await base.ApplyAsync(query);
+        //}
+        //private async Task<PagedList<TList>> ApplyAnyAsync(Expression<Func<TList, bool>> predicate = null)
+        //{
+        //    var query = Service.GetAll();
+        //    if (predicate != null)
+        //    {
+        //        query = query.Where(predicate);
+        //    }
+        //    query = FilterAny(query);
+        //    return await base.ApplyAsync(query);
+        //}
     }
 
     public class OrgFilter<TService, TList> : BaseFilter<TList>, IOrgFilter<TList>
@@ -140,36 +166,48 @@ namespace Fanda.Service.Base
         {
             Service = service;
         }
-        public async Task<PagedList<TList>> ApplyAsync(Guid orgId, Expression<Func<TList, bool>> condition = null)
-        {
-            if (string.IsNullOrEmpty(Search))
-            {
-                return await ApplyAllAsync(orgId, condition);
-            }
-            else
-            {
-                return await ApplyAnyAsync(orgId, condition);
-            }
-        }
-        protected virtual async Task<PagedList<TList>> ApplyAllAsync(Guid orgId, Expression<Func<TList, bool>> condition = null)
+        public async Task<PagedList<TList>> ApplyAsync(Guid orgId,
+            Expression<Func<TList, bool>> predicate = null)
         {
             var query = Service.GetAll(orgId);
-            if (condition != null)
+            if (predicate != null)
             {
-                query = query.Where(condition);
+                query = query.Where(predicate);
             }
-            query = FilterAll(query);
+            query = Filter(query);
             return await base.ApplyAsync(query);
         }
-        protected virtual async Task<PagedList<TList>> ApplyAnyAsync(Guid orgId, Expression<Func<TList, bool>> condition = null)
+        public async Task<PagedList<TList>> ApplyAsync(Guid orgId, string predicate = null, params object[] args)
         {
             var query = Service.GetAll(orgId);
-            if (condition != null)
+            if (predicate != null)
             {
-                query = query.Where(condition);
+                query = query.Where(predicate, args);
             }
-            query = FilterAny(query);
+            query = Filter(query);
             return await base.ApplyAsync(query);
         }
+        //protected virtual async Task<PagedList<TList>> ApplyAllAsync(Guid orgId, 
+        //    Expression<Func<TList, bool>> predicate = null)
+        //{
+        //    var query = Service.GetAll(orgId);
+        //    if (predicate != null)
+        //    {
+        //        query = query.Where(predicate);
+        //    }
+        //    query = FilterAll(query);
+        //    return await base.ApplyAsync(query);
+        //}
+        //protected virtual async Task<PagedList<TList>> ApplyAnyAsync(Guid orgId, 
+        //    Expression<Func<TList, bool>> predicate = null)
+        //{
+        //    var query = Service.GetAll(orgId);
+        //    if (predicate != null)
+        //    {
+        //        query = query.Where(predicate);
+        //    }
+        //    query = FilterAny(query);
+        //    return await base.ApplyAsync(query);
+        //}
     }
 }
