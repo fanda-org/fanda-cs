@@ -5,7 +5,7 @@
     {
         #region JsGrid information
         public T Data { get; set; } = null;
-        public int? ItemsCount { get; set; } = -1;
+        public int? ItemsCount { get; set; } = 0;
         #endregion
 
         #region Additional information

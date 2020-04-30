@@ -14,7 +14,7 @@
         <input type="hidden" asp-for="LastRowOnPage" />
         <input type="hidden" asp-for="ItemsCount" />
     </div>
-    @if (Model.Data != null)
+    @if (Model.Data != null && Model.Data.Count > 0)
     {
         @foreach (var org in Model.Data)
         {
@@ -67,5 +67,9 @@
                 </div>
             </div>
         }
+    }
+    else
+    {
+        <p class="ml-auto align-content-center text-center mt-4">No organizations</p>
     }
 }

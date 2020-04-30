@@ -87,7 +87,7 @@ namespace FandaTabler.Controllers
             }
             #endregion
 
-            return PartialView("_OrganizationList", orgs);
+            return PartialView("_List", orgs);
         }
 
         // POST: Orgs/Open
@@ -115,7 +115,7 @@ namespace FandaTabler.Controllers
             var org = new OrganizationDto { Active = true };
             //ViewBag.Mode = "Create";
             //ViewBag.Readonly = false;
-            return PartialView("_OrganizationEdit", org);   // View("Edit", org);
+            return PartialView("_Edit", org);   // View("Edit", org);
         }
 
         // GET: Orgs/Edit/5
@@ -132,7 +132,7 @@ namespace FandaTabler.Controllers
             }
             //ViewBag.Mode = "Edit";
             //ViewBag.Readonly = false;
-            return PartialView("_OrganizationEdit", org);   // View(org);
+            return PartialView("_Edit", org);   // View(org);
         }
 
         // GET: Orgs/GetChildren/5
@@ -178,7 +178,7 @@ namespace FandaTabler.Controllers
                 }
                 #endregion
 
-                return PartialView("_OrganizationEdit", org);
+                return PartialView("_Edit", org);
             }
             catch (Exception ex)
             {

@@ -1,16 +1,10 @@
 ﻿@model OrganizationDto
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-
 <!-- Modals -->
 <div class="modal modal-blur fade" id="modal-edit" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header align-items-center">
-                <h5 class="modal-title">@(Model.Id == null || Model.Id == Guid.Empty ? "Create New" : "Edit") Organization</h5>
+                <h5 class="modal-title">@(Model?.Id == null || Model?.Id == Guid.Empty ? "Create New" : "Edit") Organization</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" />
             </div>
             <div class="card">
@@ -157,10 +151,10 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-link link-secondary" data-dismiss="modal">
+                <a href="#" type="button" class="btn btn-link link-secondary" data-dismiss="modal">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                     Cancel
-                </button>
+                </a>
                 <button type="button" id="saveOrg" class="btn btn-primary ml-auto" data-save="modal">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-save"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
                     Save
@@ -170,3 +164,9 @@
     </div>
 </div>
 <!-- Modals -->
+
+<script type="text/javascript">
+    $('#modal-edit').on('shown.bs.modal', function () {
+        $('input#Code').focus();
+    });
+</script>
