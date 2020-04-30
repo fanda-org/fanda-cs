@@ -24,30 +24,43 @@
                     <div class="card-status card-status bg-blue"></div>
                 }
                 <div class="row">
+                    @*<div class="col-md-3">
+                            <img src="~/demo/photos/adrian-infernus-281832-500.jpg" class="object-cover w-100 h-100" alt="Card side image">
+                        </div>*@
+
                     <div class="col-md-3">
-                        <img src="~/demo/photos/adrian-infernus-281832-500.jpg" class="object-cover w-100 h-100" alt="Card side image">
+                        <label class="imagecheck mb-4">
+                            <input id="active-@org.Id" @(org.Active.HasValue && (bool)org.Active ? "checked" : "") type="checkbox" class="imagecheck-input" readonly disabled />
+                            <figure class="imagecheck-figure">
+                                <img src="~/demo/photos/grant-ritchie-338179-500.jpg" alt="Organization logo" class="imagecheck-image object-cover w-100 h-100">
+                            </figure>
+                        </label>
                     </div>
+
                     <div class="col">
                         <div class="card-body">
                             <h3 class="card-title">@org.Name</h3>
                             <h6 class="card-subtitle">@(string.IsNullOrEmpty(org.Description) ? " " : org.Description)</h6>
                             <div class="row align-items-center">
                                 <div class="col-6">
-                                    <form asp-action="Open" method="post">
-                                        <input type="hidden" asp-for="@org.Id" id="orgId-@org.Id" />
-                                        <div class="input-group">
-                                            <select class="custom-select"
-                                                    asp-for="@org.SelectedYearId" id="yearId-@org.Id"
-                                                    asp-items="@(new SelectList(org.AccountYears.OrderByDescending(y => y.Code), "Id", "Code"))">
-                                                <option value="">Choose Year...</option>
-                                            </select>
-                                            <div class="input-group-append">
-                                                <button type="submit" class="btn btn-primary">
-                                                    <i class="fe fe-book-open"></i> Open
-                                                </button>
+                                    @if (org.Active.HasValue && (bool)org.Active)
+                                    {
+                                        <form asp-action="Open" method="post">
+                                            <input type="hidden" asp-for="@org.Id" id="orgId-@org.Id" />
+                                            <div class="input-group">
+                                                <select class="custom-select"
+                                                        asp-for="@org.SelectedYearId" id="yearId-@org.Id"
+                                                        asp-items="@(new SelectList(org.AccountYears.OrderByDescending(y => y.Code), "Id", "Code"))">
+                                                    <option value="">Choose Year...</option>
+                                                </select>
+                                                <div class="input-group-append">
+                                                    <button type="submit" class="btn btn-primary">
+                                                        <i class="fe fe-book-open"></i> Open
+                                                    </button>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </form>
+                                        </form>
+                                    }
                                 </div>
                                 <div class="col">
                                     <button data-toggle="ajax-modal" data-url="@Url.Action("Edit", new { id = org.Id })" data-id=@org.Id
@@ -56,7 +69,7 @@
                                     </button>
                                 </div>
                                 <div class="col">
-                                    <button data-url="@Url.Action("Delete", new { id = org.Id })" id="delete"
+                                    <button data-url="@Url.Action("Delete", new { id = org.Id })" data-mode="delete"
                                             class="btn btn-outline-danger btn-block">
                                         <i class="fe fe-trash-2"></i> Delete
                                     </button>

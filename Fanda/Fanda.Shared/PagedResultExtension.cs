@@ -9,7 +9,7 @@ namespace Fanda.Shared
     public static class PagedResultExtension
     {
         public static async Task<PagedList<T>> GetPagedAsync<T>(this IQueryable<T> query,
-                                         int page = 1, int pageSize = 100) 
+                                         int page = 1, int pageSize = 100)
             where T : class
         {
             var result = new PagedList<T>
@@ -19,7 +19,7 @@ namespace Fanda.Shared
                 ItemsCount = query.Count()
             };
             double pageCount = (double)result.ItemsCount / result.PageSize;
-            result.PageCount = (int)Math.Ceiling(pageCount);
+            result.PageCount = (int)(Math.Ceiling(pageCount) == 0.0d ? 1.0d : Math.Ceiling(pageCount));
             if (result.Page > result.PageCount)
             {
                 result.Page = result.PageCount;

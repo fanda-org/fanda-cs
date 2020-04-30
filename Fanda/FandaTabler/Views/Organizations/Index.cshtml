@@ -45,7 +45,7 @@
     <div class="card-header">
         <h3 class="card-title">Organizations</h3>
         <div class="card-options">
-            <button type="button" class="btn btn-primary btn-block"
+            <button type="button" class="btn btn-primary btn-block mr-2"
                     data-toggle="ajax-modal" data-target="#modal-edit" data-url="@Url.Action("Create")">
                 <i class="fe fe-plus"></i> Create New
             </button>
@@ -256,7 +256,7 @@
                     });
 
                     // Delete
-                    listPlaceholderElement.on('click', '#delete', function (event) {
+                    listPlaceholderElement.on('click', 'button[data-mode="delete"]', function (event) {
                         event.preventDefault();
                         var url = $(this).data('url');
 
@@ -307,22 +307,22 @@
                     // which is located inside #modal-placeholder
                     // and has data-save attribute equal to modal
                     modalPlaceholderElement.on('click', '[data-save="modal"]', function (event) {
-                        // debugger;
+                        debugger;
                         event.preventDefault();
 
                         var form = $(this).parents('.modal').find('form');
                         var actionUrl = form.attr('action');
                         var formArray = form.serializeArray();
 
-                        var activeValue = $('#Active:checked').val();
+                        var activeValue = $('input#Active:checked').val();
                         var dataToSend = objectifyForm(formArray);
-                        dataToSend.Active = activeValue;
+                        dataToSend.Active = (activeValue == 'true');
                         dataToSend.contacts = contacts;
                         dataToSend.addresses = addresses;
 
                         $.post(actionUrl, dataToSend)
                             .done(function (data) {
-                                // debugger;
+                                debugger;
                                 var newBody = $('.modal-body', data);
                                 modalPlaceholderElement.find('.modal-body').replaceWith(newBody);
 
@@ -340,7 +340,7 @@
                                 }
                             })
                             .fail(function (error) {
-                                // debugger;
+                                debugger;
                                 console.log("Error on save organization", error);
                                 let messages = $.map(error.responseJSON, function (msg) {
                                     return msg + "!";

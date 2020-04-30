@@ -58,6 +58,45 @@ namespace FandaTabler.Controllers
                 return result;
             }
         }
+        private async Task Open(Guid orgId, Guid yearId)
+        {
+            #region Open org
+            if (orgId != Guid.Empty)
+            {
+                var orgSelected = await _service.GetByIdAsync(orgId);
+                if (orgSelected.Active)
+                {
+                    HttpContext.Session.Set("CurrentOrg", orgSelected);
+                }
+                else
+                {
+                    HttpContext.Session.Remove("CurrentOrg");
+                }
+            }
+            else
+            {
+                HttpContext.Session.Remove("CurrentOrg");
+            }
+            #endregion
+            #region Open year
+            if (yearId != Guid.Empty)
+            {
+                var yearSelected = await _yearService.GetByIdAsync(yearId);
+                if (yearSelected.Active)
+                {
+                    HttpContext.Session.Set("CurrentYear", yearSelected);
+                }
+                else
+                {
+                    HttpContext.Session.Remove("CurrentYear");
+                }
+            }
+            else
+            {
+                HttpContext.Session.Remove("CurrentYear");
+            }
+            #endregion
+        }
 
         // GET: Orgs/List
         public async Task<IActionResult> List(string search = "" /*, int pageIndex = 1, int pageSize = 100*/)
@@ -95,17 +134,7 @@ namespace FandaTabler.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Open([FromForm] OrgYearListDto org)
         {
-            if (org.Id != Guid.Empty)
-            {
-                var orgSelected = await _service.GetByIdAsync(org.Id);
-                HttpContext.Session.Set("CurrentOrg", orgSelected);
-            }
-            if (org.SelectedYearId != Guid.Empty)
-            {
-                var yearSelected = await _yearService.GetByIdAsync(org.SelectedYearId);
-                HttpContext.Session.Set("CurrentYear", yearSelected);
-            }
-
+            await Open(org.Id, org.SelectedYearId);
             return RedirectToAction("Index", "Home");
         }
 
@@ -174,6 +203,11 @@ namespace FandaTabler.Controllers
                     if (ModelState.IsValid)
                     {
                         org = await _service.SaveAsync(org);
+
+                        // Refresh org session value
+                        var orgOpened = HttpContext.Session.Get<OrganizationDto>("CurrentOrg");
+                        if (org.Id == orgOpened?.Id)
+                            await Open(org.Id, Guid.Empty);
                     }
                 }
                 #endregion

@@ -24,29 +24,28 @@ namespace FandaTabler.Controllers
             _service = service;
         }
 
-        public ActionResult IndexEdit() => View();
+        public ActionResult IndexEdit()
+        {
+            var org = GetSelectedOrg();
+            if (org == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            return View();
+        }
 
         [HttpGet]
         [Produces("application/json")]
-        public async Task<ActionResult> GetAll(Guid id)
+        public async Task<ActionResult> GetAll()
         {
             try
             {
-                if (id == Guid.Empty)
-                {
-                    var org = GetSelectedOrg();
-                    if (org == null)
-                    {
-                        return RedirectToAction("Index", "Home");
-                    }
-                    id = org.Id;
-                }
-
+                var org = GetSelectedOrg();
                 NameValueCollection qFilter = HttpUtility.ParseQueryString(Request.QueryString.Value);
                 string search = qFilter["search"];
 
                 var filter = new OrgFilter<IPartyCategoryService, PartyCategoryListDto>(_service, qFilter, search);
-                var data = await filter.ApplyAsync(id);
+                var data = await filter.ApplyAsync(org.Id);
                 var result = new JsGridResult<IList<PartyCategoryListDto>> { Data = data.List, ItemsCount = data.ItemsCount };
 
                 return Ok(result);

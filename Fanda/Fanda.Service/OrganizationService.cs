@@ -248,30 +248,37 @@ namespace Fanda.Service
 
         public async Task<bool> DeleteAsync(Guid id)
         {
-            if (id == null || id == Guid.Empty)
+            try
             {
-                throw new ArgumentNullException("Id", "Id is missing");
-            }
+                if (id == null || id == Guid.Empty)
+                {
+                    throw new ArgumentNullException("Id", "Id is missing");
+                }
 
-            Organization org = await _context.Organizations
-                .Include(o => o.OrgContacts).ThenInclude(oc => oc.Contact)
-                .Include(o => o.OrgAddresses).ThenInclude(oa => oa.Address)
-                .FirstOrDefaultAsync(o => o.Id == id);
-            if (org != null)
-            {
-                foreach (OrgContact orgContact in org.OrgContacts)
+                Organization org = await _context.Organizations
+                    .Include(o => o.OrgContacts).ThenInclude(oc => oc.Contact)
+                    .Include(o => o.OrgAddresses).ThenInclude(oa => oa.Address)
+                    .FirstOrDefaultAsync(o => o.Id == id);
+                if (org != null)
                 {
-                    _context.Contacts.Remove(orgContact.Contact);
+                    foreach (OrgContact orgContact in org.OrgContacts)
+                    {
+                        _context.Contacts.Remove(orgContact.Contact);
+                    }
+                    foreach (OrgAddress orgAddress in org.OrgAddresses)
+                    {
+                        _context.Addresses.Remove(orgAddress.Address);
+                    }
+                    _context.Organizations.Remove(org);
+                    await _context.SaveChangesAsync();
+                    return true;
                 }
-                foreach (OrgAddress orgAddress in org.OrgAddresses)
-                {
-                    _context.Addresses.Remove(orgAddress.Address);
-                }
-                _context.Organizations.Remove(org);
-                await _context.SaveChangesAsync();
-                return true;
+                throw new KeyNotFoundException("Organization not found");
             }
-            throw new KeyNotFoundException("Organization not found");
+            catch (Exception ex)
+            {
+                throw new ApplicationException(ex.Message, ex);
+            }
         }
 
         public async Task<bool> ChangeStatusAsync(ActiveStatus status)
@@ -297,7 +304,7 @@ namespace Fanda.Service
 
         #region List
         private IQueryable<T> GetAll<T>(IQueryable<T> query)
-            where T : BaseListDto 
+            where T : BaseListDto
         {
             query = query.Where(c => c.Code != "FANDA");
             return query;
