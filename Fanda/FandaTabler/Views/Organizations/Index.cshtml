@@ -177,6 +177,8 @@
                                 }
                             });
                     };
+                    listOrgs();
+
                     // Load page list
                     function loadPageList() {
                         $pageList.empty();
@@ -184,9 +186,7 @@
                             $pageList.append('<option value="' + (p + 1) + '">' + (p + 1) + '</option>');
                         }
                         $pageList.val(pageIndex);
-                    };
-
-                    listOrgs();
+                    };                    
 
                     // Page size
                     $("select.page-size").change(function () {
@@ -255,39 +255,6 @@
                             });
                     });
 
-                    // Delete
-                    listPlaceholderElement.on('click', 'button[data-mode="delete"]', function (event) {
-                        event.preventDefault();
-                        var url = $(this).data('url');
-
-                        bootbox.confirm({
-                            title: "Delete organization?",
-                            message: "Are you sure you want to <em>delete</em> this organization?<br>Once deleted, you will not be able to recover!",
-                            closeButton: true,
-                            buttons: {
-                                cancel: {
-                                    label: 'No',
-                                    className: 'btn-secondary'
-                                },
-                                confirm: {
-                                    label: 'Yes',
-                                    className: 'btn-danger'
-                                }
-                            },
-                            callback: function (yes) {
-                                if (yes) {
-                                    //args.item.deleteConfirmed = true;
-                                    //$grid.jsGrid('deleteItem', args.item); //call deleting once more in callback
-                                    $.post(url)
-                                        .done(function (_) {
-                                            listOrgs();
-                                        });
-                                }
-                                //$row.toggleClass("highlight");
-                            }
-                        });
-                    });
-
                     // Next and previous tabs for Edit Modal
                     modalPlaceholderElement.on('click', '.btnNext', function (event) {
                         event.preventDefault();
@@ -322,7 +289,7 @@
 
                         $.post(actionUrl, dataToSend)
                             .done(function (data) {
-                                debugger;
+                                // debugger;
                                 var newBody = $('.modal-body', data);
                                 modalPlaceholderElement.find('.modal-body').replaceWith(newBody);
 
@@ -340,13 +307,54 @@
                                 }
                             })
                             .fail(function (error) {
-                                debugger;
+                                // debugger;
                                 console.log("Error on save organization", error);
                                 let messages = $.map(error.responseJSON, function (msg) {
                                     return msg + "!";
                                 });
                                 toastr.warning(messages.join("<br>"), "Warning");
                             });
+                    });
+
+                    // Delete
+                    listPlaceholderElement.on('click', 'button[data-mode="delete"]', function (event) {
+                        event.preventDefault();
+                        var url = $(this).data('url');
+
+                        bootbox.confirm({
+                            title: "Delete organization?",
+                            message: "Are you sure you want to <em>delete</em> this organization?<br>Once deleted, you will not be able to recover!",
+                            closeButton: true,
+                            buttons: {
+                                cancel: {
+                                    label: 'No',
+                                    className: 'btn-secondary'
+                                },
+                                confirm: {
+                                    label: 'Yes',
+                                    className: 'btn-danger'
+                                }
+                            },
+                            callback: function (yes) {
+                                if (yes) {
+                                    //args.item.deleteConfirmed = true;
+                                    //$grid.jsGrid('deleteItem', args.item); //call deleting once more in callback
+                                    $.post(url)
+                                        .done(function (_) {
+                                            listOrgs();
+                                            toastr.success("Organization deleted successfully!", "Success");                                            
+                                        })
+                                        .fail(function (error) {
+                                            console.log("Error on delete organization", error);
+                                            let messages = $.map(error.responseJSON, function (msg) {
+                                                return msg + "!";
+                                            });
+                                            toastr.warning(messages.join("<br>"), "Warning");
+                                        });
+                                }
+                                //$row.toggleClass("highlight");
+                            }
+                        });
                     });
 
                     @*var addrTypes2 = JSON.parse('@Html.GetEnumSelectList<AddressType>()');*@

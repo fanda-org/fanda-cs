@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Threading.Tasks;
 using System.Web;
@@ -29,34 +28,187 @@ namespace FandaTabler.Controllers
         // GET: Orgs
         public ActionResult Index() => View();
 
-        //[NonAction]   // [HttpGet]
-        //[Produces("application/json")]
-        private async Task<JsGridResult<IList<OrgYearListDto>>> GetAll()
+        // GET: Orgs/List
+        public async Task<IActionResult> List(/*string search = "", int pageIndex = 1, int pageSize = 100*/)
         {
             try
             {
-                NameValueCollection qFilter = HttpUtility.ParseQueryString(Request.QueryString.Value);
-                string search = qFilter["search"];
+                //ViewBag.Search = search;
+                var currentOrg = HttpContext.Session.Get<OrganizationDto>("CurrentOrg");
+                var currentYear = HttpContext.Session.Get<AccountYearDto>("CurrentYear");
 
-                var filter = new Filter<IOrganizationService, OrgYearListDto>(_service, qFilter, search);
-                var data = await filter.ApplyAsync();
-                var result = new JsGridResult<IList<OrgYearListDto>>
+                var orgs = await GetAll();
+                #region Selected org and accounting year
+                if (orgs.Data != null)
                 {
-                    Data = data.List,
-                    ItemsCount = data.ItemsCount,
-                    Page = data.Page,
-                    PageCount = data.PageCount,
-                    FirstRowOnPage = data.FirstRowOnPage,
-                    LastRowOnPage = data.LastRowOnPage
-                };
-
-                return result;
+                    foreach (var org in orgs.Data)
+                    {
+                        if (currentOrg != null && org.Id == currentOrg.Id)
+                        {
+                            org.IsSelected = true;
+                            foreach (var year in org.AccountYears)
+                            {
+                                if (currentYear != null && year.Id == currentYear.Id)
+                                {
+                                    org.SelectedYearId = currentYear.Id;
+                                }
+                            }
+                        }
+                    }
+                }
+                #endregion
+                return PartialView("_List", orgs);
             }
             catch (Exception ex)
             {
-                var result = new JsGridResult<IList<OrgYearListDto>> { Error = ex.Message };
-                return result;
+                string errorMessage = ex.InnerException == null ? ex.Message : ex.InnerException.Message;
+                ViewBag.Error = errorMessage;
+                return PartialView("_List", null);
             }
+        }
+
+        // POST: Orgs/Open
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Open([FromForm] OrgYearListDto org)
+        {
+            await Open(org.Id, org.SelectedYearId);
+            return RedirectToAction("Index", "Home");
+        }
+
+        // GET: Orgs/Create
+        public IActionResult Create()
+        {
+            var org = new OrganizationDto { Active = true };
+            return PartialView("_Edit", org);
+        }
+
+        // GET: Orgs/Edit/5
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            try
+            {
+                if (id == null || id == Guid.Empty)
+                {
+                    return BadRequest(new { Error = "Id is missing" });
+                }
+                var org = await _service.GetByIdAsync(id);
+                if (org == null)
+                {
+                    return NotFound(new { Error = "Organization not found" });
+                }
+                return PartialView("_Edit", org);
+            }
+            catch (Exception ex)
+            {
+                string errorMessage = ex.InnerException == null ? ex.Message : ex.InnerException.Message;
+                ViewBag.Error = errorMessage;
+                return PartialView("_Edit", null);
+            }
+        }
+
+        // GET: Orgs/GetChildren/5
+        public async Task<IActionResult> GetChildren(Guid id)
+        {
+            try
+            {
+                if (id == null || id == Guid.Empty)
+                {
+                    return BadRequest();
+                }
+                var orgChildren = await _service.GetChildrenByIdAsync(id);
+                if (orgChildren == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(orgChildren);
+            }
+            catch (Exception ex)
+            {
+                string errorMessage = ex.InnerException == null ? ex.Message : ex.InnerException.Message;
+                return StatusCode(StatusCodes.Status500InternalServerError, new { Error = errorMessage });
+            }
+        }
+
+        // POST: Orgs/Save
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Save([FromForm] OrganizationDto org)
+        {
+            try
+            {
+                #region Validation: Basic model validation
+                if (ModelState.IsValid)
+                {
+                    #region
+                    bool isValid = await _service.ValidateAsync(org);
+                    if (!isValid)
+                    {
+                        foreach (var err in org.Errors)
+                        {
+                            ModelState.AddModelError(err.Key, err.Value);
+                        }
+                    }
+                    #endregion
+                    if (ModelState.IsValid)
+                    {
+                        org = await _service.SaveAsync(org);
+
+                        // Refresh org session value
+                        var orgOpened = HttpContext.Session.Get<OrganizationDto>("CurrentOrg");
+                        if (org.Id == orgOpened?.Id)
+                        {
+                            await Open(org.Id, Guid.Empty);
+                        }
+                    }
+                }
+                #endregion
+
+                return PartialView("_Edit", org);
+            }
+            catch (Exception ex)
+            {
+                string errorMessage = ex.InnerException == null ? ex.Message : ex.InnerException.Message;
+                ViewBag.Error = errorMessage;
+                return PartialView("_Edit", org);
+            }
+        }
+
+        // POST: Orgs/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            try
+            {
+                if (id == null || id == Guid.Empty)
+                {
+                    return BadRequest();
+                }
+                var result = await _service.DeleteAsync(id);
+                if (!result)
+                {
+                    return NotFound();
+                }
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                string errorMessage = ex.InnerException == null ? ex.Message : ex.InnerException.Message;
+                return StatusCode(StatusCodes.Status500InternalServerError, new { Error = errorMessage });
+            }
+        }
+
+        #region Private methods
+        private async Task<PagedList<OrgYearListDto>> GetAll()
+        {
+            NameValueCollection qFilter = HttpUtility.ParseQueryString(Request.QueryString.Value);
+            string search = qFilter["search"];
+
+            var filter = new Filter<IOrganizationService, OrgYearListDto>(_service, qFilter, search);
+            var result = await filter.ApplyAsync();
+            return result;
         }
         private async Task Open(Guid orgId, Guid yearId)
         {
@@ -97,168 +249,22 @@ namespace FandaTabler.Controllers
             }
             #endregion
         }
+        #endregion
 
-        // GET: Orgs/List
-        public async Task<IActionResult> List(string search = "" /*, int pageIndex = 1, int pageSize = 100*/)
-        {
-            ViewBag.Search = search;
-            var currentOrg = HttpContext.Session.Get<OrganizationDto>("CurrentOrg");
-            var currentYear = HttpContext.Session.Get<AccountYearDto>("CurrentYear");
+        #region Old actions
+        //[HttpPatch]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> ChangeStatus([FromBody] ActiveStatus status)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest();
+        //    }
 
-            var orgs = await GetAll();
-            #region Selected org and accounting year
-            if (orgs.Data != null)
-            {
-                foreach (var org in orgs.Data)
-                {
-                    if (currentOrg != null && org.Id == currentOrg.Id)
-                    {
-                        org.IsSelected = true;
-                        foreach (var year in org.AccountYears)
-                        {
-                            if (currentYear != null && year.Id == currentYear.Id)
-                            {
-                                org.SelectedYearId = currentYear.Id;
-                            }
-                        }
-                    }
-                }
-            }
-            #endregion
+        //    await _service.ChangeStatusAsync(status);
+        //    return Ok();
+        //}
 
-            return PartialView("_List", orgs);
-        }
-
-        // POST: Orgs/Open
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Open([FromForm] OrgYearListDto org)
-        {
-            await Open(org.Id, org.SelectedYearId);
-            return RedirectToAction("Index", "Home");
-        }
-
-        // GET: Orgs/Create
-        public IActionResult Create()
-        {
-            var org = new OrganizationDto { Active = true };
-            //ViewBag.Mode = "Create";
-            //ViewBag.Readonly = false;
-            return PartialView("_Edit", org);   // View("Edit", org);
-        }
-
-        // GET: Orgs/Edit/5
-        public async Task<IActionResult> Edit(Guid id)
-        {
-            if (id == null || id == Guid.Empty)
-            {
-                return BadRequest();
-            }
-            var org = await _service.GetByIdAsync(id);
-            if (org == null)
-            {
-                return NotFound();
-            }
-            //ViewBag.Mode = "Edit";
-            //ViewBag.Readonly = false;
-            return PartialView("_Edit", org);   // View(org);
-        }
-
-        // GET: Orgs/GetChildren/5
-        public async Task<IActionResult> GetChildren(Guid id)
-        {
-            if (id == null || id == Guid.Empty)
-            {
-                return BadRequest();
-            }
-            var orgChildren = await _service.GetChildrenByIdAsync(id);
-            if (orgChildren == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(orgChildren);
-        }
-
-        // POST: Orgs/Save
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Save([FromForm] OrganizationDto org)
-        {
-            try
-            {
-                #region Validation: Basic model validation
-                if (ModelState.IsValid)
-                {
-                    #region
-                    bool isValid = await _service.ValidateAsync(org);
-                    if (!isValid)
-                    {
-                        foreach (var err in org.Errors)
-                        {
-                            ModelState.AddModelError(err.Key, err.Value);
-                        }
-                    }
-                    #endregion
-                    if (ModelState.IsValid)
-                    {
-                        org = await _service.SaveAsync(org);
-
-                        // Refresh org session value
-                        var orgOpened = HttpContext.Session.Get<OrganizationDto>("CurrentOrg");
-                        if (org.Id == orgOpened?.Id)
-                            await Open(org.Id, Guid.Empty);
-                    }
-                }
-                #endregion
-
-                return PartialView("_Edit", org);
-            }
-            catch (Exception ex)
-            {
-                if (ex.InnerException != null)
-                {
-                    ModelState.AddModelError("Error", ex.InnerException.Message);
-                }
-                else
-                {
-                    ModelState.AddModelError("Error", ex.Message);
-                }
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
-
-        // POST: Orgs/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(Guid id)
-        {
-            if (id == null || id == Guid.Empty)
-            {
-                return BadRequest();
-            }
-            var result = await _service.DeleteAsync(id);
-            if (!result)
-            {
-                return NotFound();
-            }
-            return Ok(result);
-        }
-
-        [HttpPatch]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ChangeStatus([FromBody] ActiveStatus status)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
-
-            await _service.ChangeStatusAsync(status);
-            return Ok();
-        }
-
-        #region Old actions        
         // GET: Orgs/Details/5
         //public async Task<IActionResult> Details(Guid id)
         //{

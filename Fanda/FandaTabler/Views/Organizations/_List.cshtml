@@ -1,11 +1,11 @@
-﻿@model JsGridResult<IList<OrgYearListDto>>
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model PagedList<OrgYearListDto>
 
-@if (Model != null)
+@if (Model == null)
+{
+    <p class="ml-auto align-content-center text-center mt-4">Error occured. Please contact system administrators.</p>
+    <p class="m-2">@ViewBag.Error</p>
+}
+else
 {
     <div class="page-info">
         <input type="hidden" asp-for="Page" />
@@ -84,5 +84,6 @@
     else
     {
         <p class="ml-auto align-content-center text-center mt-4">No organizations</p>
+        <p class="m-2">@ViewBag.Error</p>
     }
 }
