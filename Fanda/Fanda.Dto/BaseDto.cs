@@ -7,9 +7,9 @@ using System.Text.Json.Serialization;
 
 namespace Fanda.Dto
 {
-    public class BaseDto
+    public class RootDto
     {
-        public BaseDto()
+        public RootDto()
         {
             Errors = new DtoErrors();
         }
@@ -17,23 +17,11 @@ namespace Fanda.Dto
         [Required]
         public Guid Id { get; set; }
 
-        [Display(Name = "Code", Prompt = "Code"),
-            Required(AllowEmptyStrings = false, ErrorMessage = "{0} is required"),
-            //RegularExpression(@"^[a-zA-Z0-9~!@#$()_+-{}|:<>.?\/]+$", ErrorMessage = @"{0} must not contain spaces or tabs"),
-            StringLength(16, ErrorMessage = "{0} length must be between {2} and {1}.", MinimumLength = 3)]
-        public string Code { get; set; }
-
         [Display(Name = "Name"),
             Required(AllowEmptyStrings = false, ErrorMessage = "{0} is required"),
             //RegularExpression(@"^[a-zA-Z0-9\s~!@#$%^&*()_+-=\\|{}\[\];:',.<>/?\/]*$", ErrorMessage = @"{0} must not contain special characters"),
             StringLength(50, ErrorMessage = "{0} length must be between {2} and {1}.", MinimumLength = 3)]
         public string Name { get; set; }
-
-        [Display(Name = "Description"),
-            //RegularExpression(@"^[a-zA-Z0-9\s~!@#$()_+-{}|:<>.?\/]*$", ErrorMessage = @"{0} must not contain special characters"),
-            StringLength(255, ErrorMessage = "{0} cannot exceeed {2} characters")]
-        [DisplayFormat(ConvertEmptyStringToNull = true)]
-        public string Description { get; set; }
 
         public bool Active { get; set; }
         public DateTime DateCreated { get; set; }
@@ -44,20 +32,40 @@ namespace Fanda.Dto
         public bool IsValid() => Errors.Count == 0;
     }
 
-    public class BaseListDto
+    public class BaseDto : RootDto
+    {
+        [Display(Name = "Code", Prompt = "Code"),
+            Required(AllowEmptyStrings = false, ErrorMessage = "{0} is required"),
+            //RegularExpression(@"^[a-zA-Z0-9~!@#$()_+-{}|:<>.?\/]+$", ErrorMessage = @"{0} must not contain spaces or tabs"),
+            StringLength(16, ErrorMessage = "{0} length must be between {2} and {1}.", MinimumLength = 3)]
+        public string Code { get; set; }
+
+
+        [Display(Name = "Description"),
+            //RegularExpression(@"^[a-zA-Z0-9\s~!@#$()_+-{}|:<>.?\/]*$", ErrorMessage = @"{0} must not contain special characters"),
+            StringLength(255, ErrorMessage = "{0} cannot exceeed {2} characters")]
+        [DisplayFormat(ConvertEmptyStringToNull = true)]
+        public string Description { get; set; }
+    }
+
+    public class RootListDto
     {
         [Required]
         public Guid Id { get; set; }
 
-        [Display(Name = "Code")]
-        public string Code { get; set; }
-
         [Display(Name = "Name")]
         public string Name { get; set; }
 
+        public bool? Active { get; set; }
+    }
+
+    public class BaseListDto : RootListDto
+    {
+        [Display(Name = "Code")]
+        public string Code { get; set; }
+
         [Display(Name = "Description")]
         public string Description { get; set; }
-        public bool? Active { get; set; }
     }
 
     public class BaseYearDto

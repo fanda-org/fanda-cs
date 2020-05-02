@@ -21,8 +21,8 @@ namespace Fanda.Service.AutoMapperProfile
             CreateMap<User, UserDto>()
                 .ForMember(vm => vm.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(vm => vm.Token, opt => opt.Ignore())
-                .ForPath(vm => vm.Organizations, opt => opt.MapFrom(src => src.OrgUsers.Select(c => c.Organization).ToList()))
-                //.ForMember(vm => vm.Password, opt => opt.Ignore())
+                //.ForPath(vm => vm.Organizations, opt => opt.MapFrom(src => src.OrgUsers.Select(c => c.Organization).ToList()))
+                .ForMember(vm => vm.Password, opt => opt.Ignore())
                 .ReverseMap()
                 .ForMember(x => x.Id, opt => opt.MapFrom(vm => vm.Id));
 
@@ -198,6 +198,10 @@ namespace Fanda.Service.AutoMapperProfile
                 .ReverseMap();
             CreateMap<PartyCategory, PartyCategoryListDto>()
                 .ReverseMap();
+
+            CreateMap<User, UserListDto>()
+                .ForPath(vm => vm.OrgId,
+                    opt => opt.MapFrom(src => src.OrgUsers.Select(ou => ou.OrgId).First()));
             #endregion
         }
     }

@@ -123,18 +123,18 @@ namespace Fanda.Service.Seed
                 // creating a super user who could maintain the web app
                 var superAdmin = new UserDto
                 {
-                    UserName = _settings.FandaSettings.UserName,
+                    Name = _settings.FandaSettings.UserName,
                     Email = _settings.FandaSettings.UserEmail,
+                    Password = _settings.FandaSettings.UserPassword,
                     //LocationId = loc.LocationId,
                     Active = true
                 };
-                UserDto user = await service.GetByNameAsync(superAdmin.UserName);
-                if (user == null)
+                if (!await service.ExistsAsync(new RootDuplicate { Field = DuplicateField.Name, Value = superAdmin.Name }))
                 {
-                    user = await service.SaveAsync(superAdmin, _settings.FandaSettings.UserPassword);
+                    var user = await service.SaveAsync(superAdmin);
+                    await service.AddToOrgAsync(user.Id, org.Id );
+                    await service.AddToRoleAsync(user.Id, "SuperAdmin", org.Id);
                 }
-                await service.AddToOrgAsync(org.Id, user.Id);
-                await service.AddToRoleAsync(org.Id, user.Id, "SuperAdmin");
             }
             catch (Exception ex)
             {

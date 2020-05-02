@@ -26,15 +26,12 @@ namespace Fanda.Service
             _mapper = mapper;
         }
 
-        public string ErrorMessage { get; private set; }
-
         public IQueryable<PartyCategoryListDto> GetAll(Guid orgId)
         {
             if (orgId == null || orgId == Guid.Empty)
             {
                 throw new ArgumentNullException("orgId", "Org id is missing");
             }
-
             IQueryable<PartyCategoryListDto> categories = _context.PartyCategories
                 .AsNoTracking()
                 .Where(p => p.OrgId == orgId)
@@ -57,7 +54,6 @@ namespace Fanda.Service
             {
                 return category;
             }
-
             throw new KeyNotFoundException("Party category not found");
         }
 

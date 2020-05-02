@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -80,7 +82,7 @@ namespace FandaTabler.Controllers
             var claims = new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(ClaimTypes.Name, user.Name),
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.GivenName, $"{user.FirstName} {user.LastName}"),
                 new Claim(ClaimTypes.IsPersistent, model.RememberMe.ToString())
@@ -170,7 +172,7 @@ namespace FandaTabler.Controllers
             string callbackUrl = Url.Page(
                 "/Users/ConfirmEmail",
                 pageHandler: null,
-                values: new { userId = model.UserName, code = token },
+                values: new { userId = model.Name, code = token },
                 protocol: Request.Scheme
             );
 
@@ -190,7 +192,9 @@ namespace FandaTabler.Controllers
         //[HttpGet]
         public async Task<IActionResult> GetAll(Guid orgId/*, bool? active*/)
         {
-            var users = await _userService.GetAllAsync(orgId/*, active*/);
+            var users = await _userService.GetAll()
+                .Where(u => u.OrgId == orgId)
+                .ToListAsync();
             return Ok(users);
         }
 
@@ -207,7 +211,8 @@ namespace FandaTabler.Controllers
             try
             {
                 // save 
-                await _userService.SaveAsync(model, password);
+                model.Password = password;
+                await _userService.SaveAsync(model);
                 return Ok();
             }
             catch (AppException ex)
@@ -220,7 +225,7 @@ namespace FandaTabler.Controllers
         //[HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid orgId, Guid userId)
         {
-            await _userService.DeleteAsync(orgId, userId);
+            await _userService.RemoveFromOrgAsync(userId, orgId);
             return Ok();
         }
 

@@ -24,7 +24,7 @@ namespace FandaTabler.Controllers
             _service = service;
         }
 
-        public ActionResult IndexEdit()
+        public ActionResult Index()
         {
             var org = GetSelectedOrg();
             if (org == null)

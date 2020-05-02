@@ -141,12 +141,19 @@
                                     </div>
                                 </div>
                                 <div class="dropdown d-md-flex">
-                                    <a class="nav-link icon pr-0 leading-none @Html.IsSelected(controllers: "Organizations", actions: "Index")" data-toggle="dropdown">
+                                    <a class="nav-link icon pr-0 leading-none @Html.IsSelected("Users,AccountYears,Organizations", "Index")" data-toggle="dropdown">
                                         <span class="stamp mr-0">
                                             <i class="fe fe-settings"></i>
                                         </span>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                        <a class="dropdown-item @Html.IsSelected(controllers: "Users", actions: "Index")" href='@Url.Action("Index", "Users")'>
+                                            <i class="dropdown-icon fe fe-users"></i> Users
+                                        </a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item @Html.IsSelected(controllers: "AccountYears", actions: "Index")" href='@Url.Action("Index", "AccountYears")'>
+                                            <i class="dropdown-icon fe fe-calendar"></i> Accounting Years
+                                        </a>
                                         <a class="dropdown-item @Html.IsSelected(controllers: "Organizations", actions: "Index")" href='@Url.Action("Index", "Organizations")'>
                                             <i class="dropdown-icon fe fe-briefcase"></i> Organizations
                                         </a>
@@ -197,12 +204,12 @@
                                             </div>
                                         </li>
                                         <li class="nav-item dropdown">
-                                            <a href="javascript:void(0)" class="nav-link @Html.IsSelected("Parties,PartyCategories", "Index,IndexEdit")" data-toggle="dropdown"><i class="fe fe-users"></i> Contacts</a>
+                                            <a href="javascript:void(0)" class="nav-link @Html.IsSelected("Parties,PartyCategories", "Index")" data-toggle="dropdown"><i class="fe fe-users"></i> Contacts</a>
                                             <div class="dropdown-menu dropdown-menu-arrow">
                                                 <a href='@Url.Action("Index", "Parties")' class="dropdown-item @Html.IsSelected("Parties", actions: "Index")"><i class="fe fe-user"></i> Business Contacts</a>
                                                 <a href="#" class="dropdown-item "><i class="fe fe-dollar-sign"></i> Banks</a>
                                                 <div class="dropdown-divider"></div>
-                                                <a href='@Url.Action("IndexEdit", "PartyCategories")' class="dropdown-item @Html.IsSelected(controllers: "PartyCategories", actions: "IndexEdit")"><i class="fe fe-package"></i> Categories</a>
+                                                <a href='@Url.Action("Index", "PartyCategories")' class="dropdown-item @Html.IsSelected(controllers: "PartyCategories", actions: "Index")"><i class="fe fe-package"></i> Categories</a>
                                             </div>
                                         </li>
                                         <li class="nav-item dropdown">

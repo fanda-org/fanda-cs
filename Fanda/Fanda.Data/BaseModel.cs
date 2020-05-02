@@ -2,15 +2,19 @@
 
 namespace Fanda.Data
 {
-    public class BaseModel
+    public class RootModel
     {
         public Guid Id { get; set; }
-        public string Code { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
         public bool Active { get; set; }
         public DateTime DateCreated { get; set; }
         public DateTime? DateModified { get; set; }
+    }
+
+    public class BaseModel : RootModel
+    {        
+        public string Code { get; set; }        
+        public string Description { get; set; }
     }
 
     public class BaseOrgModel : BaseModel

@@ -4,6 +4,7 @@ using Fanda.Data;
 using Fanda.Data.Context;
 using Fanda.Dto;
 using Fanda.Dto.ViewModels;
+using Fanda.Service.Base;
 using Fanda.Shared;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -15,22 +16,14 @@ using System.Threading.Tasks;
 
 namespace Fanda.Service
 {
-    public interface IUserService
+    public interface IUserService : IRootService<UserDto, UserListDto>
     {
         Task<UserDto> LoginAsync(LoginViewModel model);
         Task<UserDto> RegisterAsync(RegisterViewModel model, string callbackUrl);
-
-        Task<List<UserDto>> GetAllAsync(Guid orgId/*, bool? active*/);
-        Task<UserDto> GetByIdAsync(Guid userId);
-        Task<UserDto> GetByNameAsync(string userName);
-        Task<UserDto> SaveAsync(UserDto userVM, string password);
-        Task<bool> DeleteAsync(Guid orgId, Guid userId);
-        bool Exists(string userName);
-
-        Task AddToOrgAsync(Guid orgId, Guid userId);
-        Task AddToRoleAsync(Guid orgId, Guid userId, string roleName);
-
-        string ErrorMessage { get; }
+        IQueryable<UserListDto> GetAll(Guid orgId);
+        Task<bool> AddToOrgAsync(Guid userId, Guid orgId);
+        Task<bool> RemoveFromOrgAsync(Guid userId, Guid orgId);
+        Task<bool> AddToRoleAsync(Guid userId, string roleName, Guid orgId);
     }
 
     public class UserService : IUserService
@@ -49,8 +42,6 @@ namespace Fanda.Service
             _logger = logger;
         }
 
-        public string ErrorMessage { get; private set; }
-
         public async Task<UserDto> LoginAsync(LoginViewModel model)
         {
             UserDto userModel;
@@ -62,7 +53,7 @@ namespace Fanda.Service
                 }
                 else
                 {
-                    user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == model.NameOrEmail);
+                    user = await _context.Users.SingleOrDefaultAsync(x => x.Name == model.NameOrEmail);
                 }
 
                 // return null if user not found
@@ -90,9 +81,9 @@ namespace Fanda.Service
                 throw new AppException("Password is required");
             }
 
-            if (_context.Users.Any(x => x.UserName == model.UserName))
+            if (_context.Users.Any(x => x.Name == model.Name))
             {
-                throw new AppException("Username \"" + model.UserName + "\" is already taken");
+                throw new AppException("Username \"" + model.Name + "\" is already taken");
             }
 
             PasswordStorage.CreatePasswordHash(model.Password, out byte[] passwordHash, out byte[] passwordSalt);
@@ -114,64 +105,63 @@ namespace Fanda.Service
             return userModel;
         }
 
-        public async Task<List<UserDto>> GetAllAsync(Guid orgId/*, bool? active*/)
+        public IQueryable<UserListDto> GetAll() => GetAll(Guid.Empty);
+
+        public IQueryable<UserListDto> GetAll(Guid orgId)
         {
-            IQueryable<UserDto> userQry;
-            if (orgId == null || orgId == Guid.Empty)
+            IQueryable<UserListDto> userQry = _context.Users
+                //.Include(u => u.OrgUsers)
+                //.SelectMany(u => u.OrgUsers.Select(ou => ou.Organization))
+                //.Where(u => u.OrgUsers.Any(ou => ou.OrgId == orgId))
+                .ProjectTo<UserListDto>(_mapper.ConfigurationProvider);
+
+            if (orgId != null && orgId != Guid.Empty)
             {
-                userQry = _context.Users
-                    .ProjectTo<UserDto>(_mapper.ConfigurationProvider);
-            }
-            else
-            {
-                userQry = _context.Organizations //_userManager.Users
-                    .Where(o => o.Id == orgId)
-                    .SelectMany(o => o.OrgUsers.Select(ou => ou.User))
-                    .ProjectTo<UserDto>(_mapper.ConfigurationProvider);
+                userQry = userQry.Where(u => u.OrgId == orgId);
             }
 
-            List<UserDto> userList = await userQry
-                //.Where(u => u.Active == (active == null) ? u.Active : (bool)active)
+            return userQry;
+        }
+
+        public async Task<UserDto> GetByIdAsync(Guid id, bool includeChildren = false)
+        {
+            UserDto user = null;
+            if (id == null || id == Guid.Empty)
+            {
+                throw new ArgumentNullException("id", "Id is missing");
+            }
+            user = await _context.Users
                 .AsNoTracking()
-                .ToListAsync();
-
-            return userList;
+                .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync(u => u.Id == id);
+            if (user != null)
+            {
+                return user;
+            }
+            throw new KeyNotFoundException("User not found");
         }
 
-        public async Task<UserDto> GetByIdAsync(Guid userId)
-        {
-            UserDto user = null;
-            if (userId == null || userId == Guid.Empty)
-            {
-                user = await _context.Users
-                    .AsNoTracking()
-                    .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
-                    .SingleOrDefaultAsync(u => u.Id == userId);
-            }
-            return user;
-        }
+        //public async Task<UserDto> GetByNameAsync(string userName)
+        //{
+        //    UserDto user = null;
+        //    if (!string.IsNullOrEmpty(userName))
+        //    {
+        //        user = await _context.Users
+        //            .AsNoTracking()
+        //            .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
+        //            .SingleOrDefaultAsync(u => u.UserName == userName);
+        //    }
+        //    return user;
+        //}
 
-        public async Task<UserDto> GetByNameAsync(string userName)
+        public async Task<UserDto> SaveAsync(UserDto dto)
         {
-            UserDto user = null;
-            if (!string.IsNullOrEmpty(userName))
+            if (string.IsNullOrWhiteSpace(dto.Password))
             {
-                user = await _context.Users
-                    .AsNoTracking()
-                    .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
-                    .SingleOrDefaultAsync(u => u.UserName == userName);
-            }
-            return user;
-        }
-
-        public async Task<UserDto> SaveAsync(UserDto dto, string password)
-        {
-            if (string.IsNullOrWhiteSpace(password))
-            {
-                throw new ArgumentNullException("password", "Password is missing");
+                throw new ArgumentNullException("Password", "Password is missing");
             }
 
-            PasswordStorage.CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
+            PasswordStorage.CreatePasswordHash(dto.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
             User user = null;
             if (dto.Id != null && dto.Id != Guid.Empty)
@@ -189,21 +179,20 @@ namespace Fanda.Service
                 user.PasswordSalt = passwordSalt;
                 //user.OrgUsers.Add(new OrgUser
                 //{
-                //    OrgId = new Guid(orgId),
+                //    OrgId = parentId,
                 //    User = user
                 //});
-
                 await _context.Users.AddAsync(user);
             }
             else
             {
                 user = _mapper.Map<User>(dto);
-                //if (dto.UserName != user.UserName)
-                //{
-                //    // username has changed so check if the new username is already taken
-                //    if (_context.Users.Any(x => x.UserName == dto.UserName))
-                //        throw new AppException("Username " + dto.UserName + " is already taken");
-                //}
+                if (dto.Name != user.Name)
+                {
+                    // username has changed so check if the new username is already taken
+                    if (_context.Users.Any(x => x.Name == dto.Name))
+                        throw new AppException("Username '" + dto.Name + "' is already taken");
+                }
                 user.DateModified = DateTime.Now;
                 user.PasswordHash = passwordHash;
                 user.PasswordSalt = passwordSalt;
@@ -214,60 +203,97 @@ namespace Fanda.Service
             return _mapper.Map<UserDto>(user);
         }
 
-        public async Task<bool> DeleteAsync(Guid orgId, Guid userId)
+        public async Task<bool> AddToOrgAsync(Guid userId, Guid orgId)
         {
-            OrgUser orgUser = null;
-            if (orgId != null && orgId != Guid.Empty && userId != null && userId != Guid.Empty)
+            if (userId == null || userId == Guid.Empty)
             {
-                orgUser = await _context.Set<OrgUser>().FindAsync(orgId, userId);
+                throw new ArgumentNullException("userId", "User Id is missing");
             }
-
-            if (orgUser != null)
+            if (orgId == null || orgId == Guid.Empty)
             {
-                _context.Set<OrgUser>().Remove(orgUser);
+                throw new ArgumentNullException("orgId", "Org Id is missing");
+            }
+            var OrgUsers = _context.Set<OrgUser>();
+
+            var orgUser = await OrgUsers
+                .FindAsync(orgId, userId);
+            if (orgUser == null)
+            {
+                await OrgUsers.AddAsync(new OrgUser
+                {
+                    UserId = userId,
+                    OrgId = orgId
+                });
                 await _context.SaveChangesAsync();
             }
-
-            User user = null;
-            if (userId != null && userId != Guid.Empty)
-            {
-                user = await _context.Users.FindAsync(userId);
-            }
-
-            if (user != null)
-            {
-                _context.Users.Remove(user);
-                return true;
-            }
-            throw new KeyNotFoundException("User not found");
+            return true;
         }
 
-        public bool Exists(string userName) => _context.Users.Any(u => u.UserName == userName);
-
-        public async Task AddToOrgAsync(Guid orgId, Guid userId)
+        public async Task<bool> RemoveFromOrgAsync(Guid userId, Guid orgId)
         {
-            try
+            if (userId == null || userId == Guid.Empty)
             {
-                OrgUser orgUserDb = await _context.Set<OrgUser>()
-                    .FirstOrDefaultAsync(ou => ou.OrgId == orgId && ou.UserId == userId);
-                if (orgUserDb == null)
-                {
-                    orgUserDb = new OrgUser
-                    {
-                        OrgId = orgId,
-                        UserId = userId
-                    };
-                    await _context.Set<OrgUser>().AddAsync(orgUserDb);
-                    await _context.SaveChangesAsync();
-                }
+                throw new ArgumentNullException("userId", "User Id is missing");
             }
-            catch (Exception ex)
+            if (orgId == null || orgId == Guid.Empty)
             {
-                _logger.LogError(ex, ex.Message);
+                throw new ArgumentNullException("orgId", "Org Id is missing");
             }
+            var OrgUsers = _context.Set<OrgUser>();
+
+            var orgUser = await OrgUsers
+                .FindAsync(orgId, userId);
+
+            if (orgUser == null)
+                throw new KeyNotFoundException("User not found in organization");
+
+            OrgUsers.Remove(orgUser);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
-        public async Task AddToRoleAsync(Guid orgId, Guid userId, string roleName)
+        public async Task<bool> DeleteAsync(Guid id)
+        {
+            if (id == null || id == Guid.Empty)
+            {
+                throw new ArgumentNullException("Id", "Id is missing");
+            }
+            var user = await _context.Users
+                .FindAsync(id);
+            if (user == null)
+                throw new KeyNotFoundException("User not found");
+
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        //public bool Exists(string userName) => _context.Users.Any(u => u.UserName == userName);
+        //public async Task AddToOrgAsync(Guid userId, Guid orgId)
+        //{
+        //    try
+        //    {
+        //        OrgUser orgUserDb = await _context.Set<OrgUser>()
+        //            .FirstOrDefaultAsync(ou => ou.OrgId == orgId && ou.UserId == userId);
+        //        if (orgUserDb == null)
+        //        {
+        //            orgUserDb = new OrgUser
+        //            {
+        //                OrgId = orgId,
+        //                UserId = userId
+        //            };
+        //            await _context.Set<OrgUser>().AddAsync(orgUserDb);
+        //            await _context.SaveChangesAsync();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError(ex, ex.Message);
+        //    }
+        //}
+
+
+        public async Task<bool> AddToRoleAsync(Guid userId, string roleName, Guid orgId)
         {
             try
             {
@@ -284,12 +310,37 @@ namespace Fanda.Service
                     });
                     await _context.SaveChangesAsync();
                 }
+                return true;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
             }
+            return false;
         }
+
+        public async Task<bool> ChangeStatusAsync(ActiveStatus status)
+        {
+            if (status.Id == null || status.Id == Guid.Empty)
+            {
+                throw new ArgumentNullException("Id", "Id is missing");
+            }
+
+            var user = await _context.Users
+                .FindAsync(status.Id);
+            if (user != null)
+            {
+                user.Active = status.Active;
+                _context.Users.Update(user);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            throw new KeyNotFoundException("User not found");
+        }
+
+        public Task<bool> ExistsAsync(RootDuplicate data) => _context.ExistsAsync<User>(data);
+
+        public Task<bool> ValidateAsync(UserDto model) => throw new NotImplementedException();
 
         #region Role specific
 

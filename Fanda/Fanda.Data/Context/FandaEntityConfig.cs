@@ -84,7 +84,7 @@ namespace Fanda.Data.Context
             builder.HasKey(u => u.Id);
 
             // columns
-            builder.Property(u => u.UserName)
+            builder.Property(u => u.Name)
                 .IsRequired()
                 .HasMaxLength(25);
             builder.Property(u => u.Email)
@@ -102,7 +102,7 @@ namespace Fanda.Data.Context
             //builder.Property(o => o.DateModified).ValueGeneratedOnUpdate();
 
             // index
-            builder.HasIndex(u => u.UserName)
+            builder.HasIndex(u => u.Name)
                 .IsUnique();
             builder.HasIndex(u => u.Email)
                 .IsUnique();
