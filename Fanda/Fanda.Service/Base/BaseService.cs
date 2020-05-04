@@ -11,17 +11,6 @@ namespace Fanda.Service.Base
         Task<TModel> GetByIdAsync(Guid id, bool includeChildren = false);
         Task<bool> DeleteAsync(Guid id);
         Task<bool> ChangeStatusAsync(ActiveStatus status);
-        Task<bool> ValidateAsync(TModel model);
-    }
-
-    public interface IListService<TList>
-    {
-        IQueryable<TList> GetAll();
-    }
-
-    public interface IOrgListService<TList>
-    {
-        IQueryable<TList> GetAll(Guid parentId);
     }
 
     public interface IRootService<TModel, TList> : IBaseService<TModel>, IListService<TList>
@@ -29,7 +18,8 @@ namespace Fanda.Service.Base
         where TList : RootListDto
     {
         Task<TModel> SaveAsync(TModel model);
-        Task<bool> ExistsAsync(RootDuplicate data);
+        Task<bool> ExistsAsync(BaseDuplicate data);
+        Task<bool> ValidateAsync(TModel model);
     }
 
     public interface IService<TModel, TList> : IBaseService<TModel>, IListService<TList>
@@ -38,13 +28,27 @@ namespace Fanda.Service.Base
     {
         Task<TModel> SaveAsync(TModel model);
         Task<bool> ExistsAsync(BaseDuplicate data);
+        Task<bool> ValidateAsync(TModel model);
     }
 
     public interface IOrgService<TModel, TList> : IBaseService<TModel>, IOrgListService<TList>
         where TModel : BaseDto
         where TList : BaseListDto
     {
-        Task<TModel> SaveAsync(Guid parentId, TModel model);
+        Task<TModel> SaveAsync(Guid orgId, TModel model);
         Task<bool> ExistsAsync(BaseOrgDuplicate data);
+        Task<bool> ValidateAsync(Guid orgId, TModel model);
     }
+
+    #region List Services
+    public interface IListService<TList>
+    {
+        IQueryable<TList> GetAll();
+    }
+
+    public interface IOrgListService<TList>
+    {
+        IQueryable<TList> GetAll(Guid orgId);
+    }
+    #endregion
 }

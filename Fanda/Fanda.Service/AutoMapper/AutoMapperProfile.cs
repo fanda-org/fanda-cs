@@ -199,6 +199,9 @@ namespace Fanda.Service.AutoMapperProfile
             CreateMap<PartyCategory, PartyCategoryListDto>()
                 .ReverseMap();
 
+            CreateMap<Unit, UnitListDto>()
+                .ReverseMap();
+
             CreateMap<User, UserListDto>()
                 .ForPath(vm => vm.OrgId,
                     opt => opt.MapFrom(src => src.OrgUsers.Select(ou => ou.OrgId).First()));

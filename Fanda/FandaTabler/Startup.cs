@@ -381,7 +381,7 @@ namespace FandaTabler
             app.UseAuthorization();
 
             /* Middleware */
-            app.UseAntiXss();
+            //app.UseAntiXss();
 
             app.UseEndpoints(endpoints =>
             {

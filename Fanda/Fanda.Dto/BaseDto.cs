@@ -40,7 +40,6 @@ namespace Fanda.Dto
             StringLength(16, ErrorMessage = "{0} length must be between {2} and {1}.", MinimumLength = 3)]
         public string Code { get; set; }
 
-
         [Display(Name = "Description"),
             //RegularExpression(@"^[a-zA-Z0-9\s~!@#$()_+-{}|:<>.?\/]*$", ErrorMessage = @"{0} must not contain special characters"),
             StringLength(255, ErrorMessage = "{0} cannot exceeed {2} characters")]
@@ -57,6 +56,8 @@ namespace Fanda.Dto
         public string Name { get; set; }
 
         public bool? Active { get; set; }
+        public DateTime DateCreated { get; set; }
+        public DateTime? DateModified { get; set; }
     }
 
     public class BaseListDto : RootListDto

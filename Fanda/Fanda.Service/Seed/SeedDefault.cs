@@ -129,10 +129,10 @@ namespace Fanda.Service.Seed
                     //LocationId = loc.LocationId,
                     Active = true
                 };
-                if (!await service.ExistsAsync(new RootDuplicate { Field = DuplicateField.Name, Value = superAdmin.Name }))
+                if (!await service.ExistsAsync(new BaseDuplicate { Field = DuplicateField.Name, Value = superAdmin.Name }))
                 {
                     var user = await service.SaveAsync(superAdmin);
-                    await service.AddToOrgAsync(user.Id, org.Id );
+                    await service.AddToOrgAsync(user.Id, org.Id);
                     await service.AddToRoleAsync(user.Id, "SuperAdmin", org.Id);
                 }
             }
@@ -152,7 +152,12 @@ namespace Fanda.Service.Seed
             try
             {
                 IUnitService service = _provider.GetRequiredService<IUnitService>();
-                if (!service.Exists(org.Id, "DEFAULT"))
+                if (!await service.ExistsAsync(new BaseOrgDuplicate
+                {
+                    Field = DuplicateField.Code,
+                    Value = "DEFAULT",
+                    OrgId = org.Id
+                }))
                 {
                     var unit = new UnitDto
                     {

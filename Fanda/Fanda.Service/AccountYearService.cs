@@ -120,6 +120,6 @@ namespace Fanda.Service
 
         public Task<bool> ExistsAsync(BaseOrgDuplicate data) => _context.ExistsAsync<AccountYear>(data);
 
-        public Task<bool> ValidateAsync(AccountYearDto model) => throw new NotImplementedException();
+        public Task<bool> ValidateAsync(Guid orgId, AccountYearDto model) => throw new NotImplementedException();
     }
 }

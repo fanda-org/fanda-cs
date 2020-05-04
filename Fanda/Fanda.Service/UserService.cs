@@ -338,7 +338,7 @@ namespace Fanda.Service
             throw new KeyNotFoundException("User not found");
         }
 
-        public Task<bool> ExistsAsync(RootDuplicate data) => _context.ExistsAsync<User>(data);
+        public async Task<bool> ExistsAsync(BaseDuplicate data) => await _context.ExistsAsync<User>(data, true);
 
         public Task<bool> ValidateAsync(UserDto model) => throw new NotImplementedException();
 

@@ -3,7 +3,7 @@
 @if (Model == null)
 {
     <p class="ml-auto align-content-center text-center mt-4">Error occured. Please contact system administrators.</p>
-    <p class="m-2">@ViewBag.Error</p>
+    <p class="ml-auto align-content-center text-center text-danger">@ViewBag.Error</p>
 }
 else
 {
@@ -29,7 +29,7 @@ else
                         </div>*@
 
                     <div class="col-md-3">
-                        <label class="imagecheck mb-4">
+                        <label class="imagecheck">
                             <input id="active-@org.Id" @(org.Active.HasValue && (bool)org.Active ? "checked" : "") type="checkbox" class="imagecheck-input" readonly disabled />
                             <figure class="imagecheck-figure">
                                 <img src="~/demo/photos/grant-ritchie-338179-500.jpg" alt="Organization logo" class="imagecheck-image object-cover w-100 h-100">
@@ -84,6 +84,6 @@ else
     else
     {
         <p class="ml-auto align-content-center text-center mt-4">No organizations</p>
-        <p class="m-2">@ViewBag.Error</p>
+        <p class="ml-auto align-content-center tex-center text-danger">@ViewBag.Error</p>
     }
 }

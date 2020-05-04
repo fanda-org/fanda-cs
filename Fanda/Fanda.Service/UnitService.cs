@@ -3,6 +3,8 @@ using AutoMapper.QueryableExtensions;
 using Fanda.Data;
 using Fanda.Data.Context;
 using Fanda.Dto;
+using Fanda.Service.Base;
+using Fanda.Shared;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,16 +13,7 @@ using System.Threading.Tasks;
 
 namespace Fanda.Service
 {
-    public interface IUnitService
-    {
-        Task<List<UnitDto>> GetAllAsync(Guid orgId);
-        Task<UnitDto> GetByIdAsync(Guid unitId);
-        Task SaveAsync(Guid orgId, UnitDto model);
-        Task<bool> DeleteAsync(Guid unitId);
-        bool Exists(Guid orgId, string unitCode);
-
-        string ErrorMessage { get; }
-    }
+    public interface IUnitService : IOrgService<UnitDto, UnitListDto> { }
 
     public class UnitService : IUnitService
     {
@@ -33,81 +26,70 @@ namespace Fanda.Service
             _mapper = mapper;
         }
 
-        public string ErrorMessage { get; private set; }
-
-        public async Task<List<UnitDto>> GetAllAsync(Guid orgId)
+        public IQueryable<UnitListDto> GetAll(Guid orgId)
         {
             if (orgId == null || orgId == Guid.Empty)
             {
-                throw new ArgumentNullException("OrgId", "Org id is missing");
+                throw new ArgumentNullException("orgId", "Org id is missing");
             }
-
-            List<UnitDto> units = await _context.Units
-                .Where(p => p.OrgId == p.OrgId)
+            IQueryable<UnitListDto> units = _context.Units
                 .AsNoTracking()
-                .ProjectTo<UnitDto>(_mapper.ConfigurationProvider)
-                .ToListAsync();
+                .Where(p => p.OrgId == orgId)
+                .ProjectTo<UnitListDto>(_mapper.ConfigurationProvider);
+
             return units;
         }
 
-        public async Task<UnitDto> GetByIdAsync(Guid unitId)
+        public async Task<UnitDto> GetByIdAsync(Guid id, bool includeChildren = false)
         {
-            UnitDto unit = null;
-            if (unitId == null || unitId == Guid.Empty)
+            if (id == null || id == Guid.Empty)
             {
-                unit = await _context.Units
-                .ProjectTo<UnitDto>(_mapper.ConfigurationProvider)
-                .AsNoTracking()
-                .SingleOrDefaultAsync(u => u.Id == unitId);
+                throw new ArgumentNullException("id", "Id is missing");
             }
-
+            var unit = await _context.Units
+                .AsNoTracking()
+                .ProjectTo<UnitDto>(_mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync(pc => pc.Id == id);
             if (unit != null)
             {
                 return unit;
             }
-
             throw new KeyNotFoundException("Unit not found");
         }
 
-        public async Task SaveAsync(Guid orgId, UnitDto model)
+        public async Task<UnitDto> SaveAsync(Guid orgId, UnitDto model)
         {
             if (orgId == null || orgId == Guid.Empty)
             {
-                throw new ArgumentNullException("OrgId", "Org id is missing");
+                throw new ArgumentNullException("orgId", "Org id is missing");
             }
 
-            Unit unit = null;
-            if (model.Id == null || model.Id == Guid.Empty)
+            var unit = _mapper.Map<Unit>(model);
+            unit.OrgId = orgId;
+            if (unit.Id == Guid.Empty)
             {
-                unit = await _context.Units.FindAsync(model.Id);
-            }
-
-            if (unit == null)
-            {
-                model.DateCreated = DateTime.Now;
-                model.DateModified = null;
-                unit = _mapper.Map<Unit>(model);
-                unit.OrgId = orgId;
+                unit.DateCreated = DateTime.Now;
+                unit.DateModified = null;
                 await _context.Units.AddAsync(unit);
             }
             else
             {
                 unit.DateModified = DateTime.Now;
-                _mapper.Map(model, unit);
                 _context.Units.Update(unit);
             }
             await _context.SaveChangesAsync();
+            return _mapper.Map<UnitDto>(unit); //categoryVM;
         }
 
-        public async Task<bool> DeleteAsync(Guid unitId)
+        public async Task<bool> DeleteAsync(Guid id)
         {
-            Unit unit = null;
-            if (unitId == null || unitId == Guid.Empty)
+            if (id == null || id == Guid.Empty)
             {
-                unit = await _context.Units
-                    .FindAsync(unitId);
+                throw new ArgumentNullException("Id", "Id is missing");
             }
 
+            var unit = await _context.Units
+                .FindAsync(id);
             if (unit != null)
             {
                 _context.Units.Remove(unit);
@@ -117,6 +99,54 @@ namespace Fanda.Service
             throw new KeyNotFoundException("Unit not found");
         }
 
-        public bool Exists(Guid orgId, string unitCode) => _context.Units.Any(u => u.Code == unitCode && u.OrgId == orgId);
+        public async Task<bool> ChangeStatusAsync(ActiveStatus status)
+        {
+            if (status.Id == null || status.Id == Guid.Empty)
+            {
+                throw new ArgumentNullException("Id", "Id is missing");
+            }
+
+            var unit = await _context.Units
+                .FindAsync(status.Id);
+            if (unit != null)
+            {
+                unit.Active = status.Active;
+                _context.Units.Update(unit);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            throw new KeyNotFoundException("Unit not found");
+        }
+
+        public async Task<bool> ExistsAsync(BaseOrgDuplicate data) => await _context.ExistsAsync<Unit>(data);
+
+        public async Task<bool> ValidateAsync(Guid orgId, UnitDto model)
+        {
+            // Reset validation errors
+            model.Errors.Clear();
+
+            #region Formatting: Cleansing and formatting
+            model.Code = model.Code.ToUpper();
+            model.Name = model.Name.TrimExtraSpaces();
+            model.Description = model.Description.TrimExtraSpaces();
+            #endregion
+
+            #region Validation: Dupllicate
+            // Check code duplicate
+            var duplCode = new BaseOrgDuplicate { Field = DuplicateField.Code, Value = model.Code, Id = model.Id, OrgId = orgId };
+            if (await ExistsAsync(duplCode))
+            {
+                model.Errors.Add(nameof(model.Code), $"{nameof(model.Code)} already exists");
+            }
+            // Check name duplicate
+            var duplName = new BaseOrgDuplicate { Field = DuplicateField.Name, Value = model.Name, Id = model.Id, OrgId = orgId };
+            if (await ExistsAsync(duplName))
+            {
+                model.Errors.Add(nameof(model.Name), $"{nameof(model.Name)} already exists");
+            }
+            #endregion
+
+            return model.IsValid();
+        }
     }
 }

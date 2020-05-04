@@ -52,9 +52,9 @@
         </div>
     </div>
     <div class="card-body">
-        <div class="row align-items-center mb-3">
-            <div class="col-auto">
-                <div class="row">
+        <div class="row align-items-center">
+            <div class="col-auto mb-3">
+                <div class="row align-items-center">
                     <div class="form-inline">
                         <label class="col col-form-label">Show</label>
                         <select class="col form-control page-size">
@@ -68,11 +68,25 @@
                     </div>
                 </div>
             </div>
-            @*<div class="col text-center">
-                    <button type="button" class="btn btn-secondary" id="prevPage1"><i class="fe fe-arrow-left"></i></button>
-                    <button type="button" class="btn btn-secondary" id="nextPage1"><i class="fe fe-arrow-right"></i></button>
-                </div>*@
-            <div class="col text-right float-right">
+            <div class="col-auto mb-3">
+                <div class="row align-items-center">
+                    <div class="form-inline">
+                        <label class="col-auto col-form-label">Sort</label>
+                        <select class="col form-control sort-fields">
+                            <option value="Code" selected>Code</option>
+                            <option value="Name">Name</option>
+                            <option value="Description">Description</option>
+                            <option value="DateCreated">Date Created</option>
+                            <option value="DateModified">Date Modified</option>
+                        </select>
+                        <select class="col form-control sort-order">
+                            <option value="asc" selected>Ascending</option>
+                            <option value="desc">Descending</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col mb-3 text-right float-right">
                 <form>
                     <div class="input-group">
                         <input type="search" class="form-control" placeholder="Search&hellip;" tabindex="1"
@@ -110,7 +124,11 @@
     <script type="text/javascript">
         require(['jquery', 'jsgrid', 'bootbox', 'toastr'],
             function ($, _, bootbox, toastr, _) {
-                var salutations = ["Mr.", "Mrs.", "Ms."];
+                var salutations = [
+                    { Id: "Mr.", Text: "Mr." },
+                    { Id: "Mrs.", Text: "Mrs." },
+                    { Id: "Ms.", Text: "Ms." }
+                ];
                 var addrTypes = [];
                 var contacts = [];
                 var addresses = [];
@@ -119,6 +137,8 @@
                 var pageIndex = 1;
                 var pageSize = 5;
                 var pageCount = 1;
+                var sortField = 'Code';
+                var sortOrder = 'asc';
 
                 $(document).ready(function () {
                     var listPlaceholderElement = $("#list-placeholder");
@@ -137,8 +157,9 @@
                     // listOrgs function
                     function listOrgs() {
                         // debugger;
-                        $.get('@Url.Action("List")', { search: searchText, pageIndex: pageIndex, pageSize: pageSize })
+                        $.get('@Url.Action("List")', { search: searchText, pageIndex: pageIndex, pageSize: pageSize, sortField: sortField, sortOrder: sortOrder })
                             .done(function (data) {
+                                debugger;
                                 listPlaceholderElement.html(data);
 
                                 // debugger;
@@ -186,11 +207,21 @@
                             $pageList.append('<option value="' + (p + 1) + '">' + (p + 1) + '</option>');
                         }
                         $pageList.val(pageIndex);
-                    };                    
+                    };
 
                     // Page size
                     $("select.page-size").change(function () {
                         pageSize = this.value;
+                        listOrgs();
+                    });
+
+                    // Sort options
+                    $('select.sort-fields').change(function () {
+                        sortField = this.value;
+                        listOrgs();
+                    });
+                    $('select.sort-order').change(function () {
+                        sortOrder = this.value;
                         listOrgs();
                     });
 
@@ -342,7 +373,7 @@
                                     $.post(url)
                                         .done(function (_) {
                                             listOrgs();
-                                            toastr.success("Organization deleted successfully!", "Success");                                            
+                                            toastr.success("Organization deleted successfully!", "Success");
                                         })
                                         .fail(function (error) {
                                             console.log("Error on delete organization", error);
@@ -451,7 +482,7 @@
                         fields: [
                             {
                                 name: "salutation", type: "select", title: "Salutation", width: 100, validate: "required",
-                                items: salutations
+                                items: salutations, valueField: "Id", textField: "Text", align: "left"
                             },
                             { name: "firstName", type: "text", title: "First Name", width: 200, validate: "required" },
                             { name: "lastName", type: "text", title: "Last Name", width: 200, validate: "required" },
@@ -570,7 +601,7 @@
                             { name: "fax", type: "text", title: "Fax", width: 100 },
                             {
                                 name: "addressType", type: "select", title: "Addr. Type", width: 100,
-                                items: addrTypes, valueField: "text", textField: "displayText"
+                                items: addrTypes, valueField: "text", textField: "displayText", align: "left"
                             },
                             { name: "id", visible: false, width: 0 },
                             { type: "control", width: 100 }

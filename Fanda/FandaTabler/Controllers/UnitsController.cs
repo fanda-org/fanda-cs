@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Threading.Tasks;
 using System.Web;
@@ -15,11 +14,11 @@ using System.Web;
 namespace FandaTabler.Controllers
 {
     [Authorize]
-    public class PartyCategoriesController : Controller
+    public class UnitsController : Controller
     {
-        private readonly IPartyCategoryService _service;
+        private readonly IUnitService _service;
 
-        public PartyCategoriesController(IPartyCategoryService service)
+        public UnitsController(IUnitService service)
         {
             _service = service;
         }
@@ -49,7 +48,7 @@ namespace FandaTabler.Controllers
                 NameValueCollection qFilter = HttpUtility.ParseQueryString(Request.QueryString.Value);
                 string search = qFilter["search"];
 
-                var filter = new OrgFilter<IPartyCategoryService, PartyCategoryListDto>(_service, qFilter, search);
+                var filter = new OrgFilter<IUnitService, UnitListDto>(_service, qFilter, search);
                 var result = await filter.ApplyAsync(org.Id);
                 return Ok(result);
             }
@@ -61,7 +60,7 @@ namespace FandaTabler.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Save(PartyCategoryDto model)
+        public async Task<ActionResult> Save(UnitDto model)
         {
             try
             {

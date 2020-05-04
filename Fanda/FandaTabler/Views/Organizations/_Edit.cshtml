@@ -3,11 +3,10 @@
 @if (Model == null)
 {
     <p class="ml-auto align-content-center text-center mt-4">Error occured. Please contact system administrators.</p>
-    <p class="m-2">@ViewBag.Error</p>
+    <p class="ml-auto align-content-center text-center text-danger">@ViewBag.Error</p>
 }
 else
 {
-
     <!-- Modals -->
     <div class="modal modal-blur fade" id="modal-edit" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">

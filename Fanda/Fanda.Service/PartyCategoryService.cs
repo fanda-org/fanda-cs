@@ -119,8 +119,35 @@ namespace Fanda.Service
             throw new KeyNotFoundException("Party category not found");
         }
 
-        public Task<bool> ExistsAsync(BaseOrgDuplicate data) => _context.ExistsAsync<PartyCategory>(data);
+        public async Task<bool> ExistsAsync(BaseOrgDuplicate data) => await _context.ExistsAsync<PartyCategory>(data);
 
-        public Task<bool> ValidateAsync(PartyCategoryDto model) => throw new NotImplementedException();
+        public async Task<bool> ValidateAsync(Guid orgId, PartyCategoryDto model)
+        {
+            // Reset validation errors
+            model.Errors.Clear();
+
+            #region Formatting: Cleansing and formatting
+            model.Code = model.Code.ToUpper();
+            model.Name = model.Name.TrimExtraSpaces();
+            model.Description = model.Description.TrimExtraSpaces();
+            #endregion
+
+            #region Validation: Dupllicate
+            // Check code duplicate
+            var duplCode = new BaseOrgDuplicate { Field = DuplicateField.Code, Value = model.Code, Id = model.Id, OrgId = orgId };
+            if (await ExistsAsync(duplCode))
+            {
+                model.Errors.Add(nameof(model.Code), $"{nameof(model.Code)} already exists");
+            }
+            // Check name duplicate
+            var duplName = new BaseOrgDuplicate { Field = DuplicateField.Name, Value = model.Name, Id = model.Id, OrgId = orgId };
+            if (await ExistsAsync(duplName))
+            {
+                model.Errors.Add(nameof(model.Name), $"{nameof(model.Name)} already exists");
+            }
+            #endregion
+
+            return model.IsValid();
+        }
     }
 }
