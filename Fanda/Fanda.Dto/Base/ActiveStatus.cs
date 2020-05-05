@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Fanda.Shared
+namespace Fanda.Dto.Base
 {
     public class ActiveStatus
     {

@@ -1,3 +1,5 @@
+using Fanda.Dto.Base;
+
 namespace Fanda.Dto
 {
     public class RoleDto : BaseDto

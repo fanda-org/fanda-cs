@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Fanda.Shared
+namespace Fanda.Dto.Base
 {
     public class DtoErrors : Dictionary<string, string>
     {

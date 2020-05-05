@@ -1,4 +1,5 @@
-﻿using Fanda.Shared;
+﻿using Fanda.Dto.Base;
+using Fanda.Shared;
 using System;
 using System.Collections.Generic;
 

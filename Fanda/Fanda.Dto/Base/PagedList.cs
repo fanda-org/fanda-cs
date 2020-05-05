@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 
-namespace Fanda.Shared
+namespace Fanda.Dto.Base
 {
     public abstract class PagedListBase
     {

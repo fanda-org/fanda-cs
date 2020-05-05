@@ -1,12 +1,11 @@
 ﻿using DataTables.Queryable;
 using Fanda.Dto;
+using Fanda.Dto.Base;
 using Fanda.Service;
-using Fanda.Shared;
 using FandaCoreUI.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Data.SqlClient;
 using System.Threading.Tasks;
 namespace Fanda.Controllers
 {

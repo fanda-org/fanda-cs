@@ -36,10 +36,13 @@ namespace Fanda.Shared
             foreach (FieldInfo fi in typeof(T).GetFields(BindingFlags.Static | BindingFlags.Public))
             {
                 #region Read Description and Display attributes
+
                 var descriptionAttribute = fi.GetCustomAttribute(
                     typeof(DescriptionAttribute), false) as DescriptionAttribute;
+
                 var displayAttribute = fi.GetCustomAttribute(
                     typeof(DisplayAttribute), false) as DisplayAttribute;
+
                 string displayText;
                 if (descriptionAttribute != null && string.IsNullOrEmpty(descriptionAttribute.Description))
                 {

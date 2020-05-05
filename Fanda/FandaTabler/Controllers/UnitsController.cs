@@ -1,7 +1,6 @@
 ﻿using Fanda.Dto;
 using Fanda.Service;
 using Fanda.Service.Base;
-using Fanda.Shared;
 using FandaTabler.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -73,13 +72,10 @@ namespace FandaTabler.Controllers
                 #region Validation
                 if (ModelState.IsValid)
                 {
-                    bool isValid = await _service.ValidateAsync(org.Id, model);
-                    if (!isValid)
+                    var errors = await _service.ValidateAsync(org.Id, model);
+                    foreach (var err in errors)
                     {
-                        foreach (var err in org.Errors)
-                        {
-                            ModelState.AddModelError(err.Key, err.Value);
-                        }
+                        ModelState.AddModelError(err.Key, err.Value);
                     }
                 }
                 #endregion

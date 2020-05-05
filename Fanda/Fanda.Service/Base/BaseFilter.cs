@@ -1,13 +1,13 @@
-﻿using Fanda.Dto;
+﻿using Fanda.Dto.Base;
 using Fanda.Shared;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
 //using Microsoft.EntityFrameworkCore.DynamicLinq;
 using System.Linq.Dynamic.Core;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Fanda.Service.Base
 {
@@ -50,7 +50,7 @@ namespace Fanda.Service.Base
 
             Search = search;
         }
-        protected IQueryable<TList> Filter(IQueryable<TList> query) 
+        protected IQueryable<TList> Filter(IQueryable<TList> query)
             => string.IsNullOrEmpty(Search) ? FilterAll(query) : FilterAny(query);
         private IQueryable<TList> FilterAll(IQueryable<TList> query)
         {

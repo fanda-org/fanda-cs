@@ -1,7 +1,7 @@
 ﻿using Fanda.Dto;
+using Fanda.Dto.Base;
 using Fanda.Service;
 using Fanda.Service.Base;
-using Fanda.Shared;
 using FandaCoreUI.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -46,6 +46,6 @@ namespace FandaCoreUI.Controllers
         public IActionResult Privacy() => View();
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error() => View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        public IActionResult Error() => View(new ErrorDto { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }

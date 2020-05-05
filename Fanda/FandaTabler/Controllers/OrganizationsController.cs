@@ -1,7 +1,7 @@
 ﻿using Fanda.Dto;
+using Fanda.Dto.Base;
 using Fanda.Service;
 using Fanda.Service.Base;
-using Fanda.Shared;
 using FandaTabler.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -142,13 +142,10 @@ namespace FandaTabler.Controllers
                 if (ModelState.IsValid)
                 {
                     #region
-                    bool isValid = await _service.ValidateAsync(org);
-                    if (!isValid)
+                    var errors = await _service.ValidateAsync(org);
+                    foreach (var err in errors)
                     {
-                        foreach (var err in org.Errors)
-                        {
-                            ModelState.AddModelError(err.Key, err.Value);
-                        }
+                        ModelState.AddModelError(err.Key, err.Value);
                     }
                     #endregion
                     if (ModelState.IsValid)
@@ -156,6 +153,7 @@ namespace FandaTabler.Controllers
                         org = await _service.SaveAsync(org);
 
                         // Refresh org session value
+                        // TODO: for accounting year
                         var orgOpened = HttpContext.Session.Get<OrganizationDto>("CurrentOrg");
                         if (org.Id == orgOpened?.Id)
                         {

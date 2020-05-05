@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using Fanda.Data;
 using Fanda.Data.Context;
 using Fanda.Dto;
+using Fanda.Dto.Base;
 using Fanda.Service.Base;
 using Fanda.Shared;
 using Microsoft.EntityFrameworkCore;
@@ -121,7 +122,7 @@ namespace Fanda.Service
 
         public async Task<bool> ExistsAsync(BaseOrgDuplicate data) => await _context.ExistsAsync<PartyCategory>(data);
 
-        public async Task<bool> ValidateAsync(Guid orgId, PartyCategoryDto model)
+        public async Task<DtoErrors> ValidateAsync(Guid orgId, PartyCategoryDto model)
         {
             // Reset validation errors
             model.Errors.Clear();
@@ -137,17 +138,17 @@ namespace Fanda.Service
             var duplCode = new BaseOrgDuplicate { Field = DuplicateField.Code, Value = model.Code, Id = model.Id, OrgId = orgId };
             if (await ExistsAsync(duplCode))
             {
-                model.Errors.Add(nameof(model.Code), $"{nameof(model.Code)} already exists");
+                model.Errors.Add(nameof(model.Code), $"{nameof(model.Code)} '{model.Code}' already exists");
             }
             // Check name duplicate
             var duplName = new BaseOrgDuplicate { Field = DuplicateField.Name, Value = model.Name, Id = model.Id, OrgId = orgId };
             if (await ExistsAsync(duplName))
             {
-                model.Errors.Add(nameof(model.Name), $"{nameof(model.Name)} already exists");
+                model.Errors.Add(nameof(model.Name), $"{nameof(model.Name)} '{model.Name}' already exists");
             }
             #endregion
 
-            return model.IsValid();
+            return model.Errors;
         }
     }
 }

@@ -3,8 +3,8 @@ using AutoMapper.QueryableExtensions;
 using Fanda.Data;
 using Fanda.Data.Context;
 using Fanda.Dto;
+using Fanda.Dto.Base;
 using Fanda.Service.Base;
-using Fanda.Shared;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -120,6 +120,6 @@ namespace Fanda.Service
 
         public Task<bool> ExistsAsync(BaseOrgDuplicate data) => _context.ExistsAsync<AccountYear>(data);
 
-        public Task<bool> ValidateAsync(Guid orgId, AccountYearDto model) => throw new NotImplementedException();
+        public Task<DtoErrors> ValidateAsync(Guid orgId, AccountYearDto model) => throw new NotImplementedException();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Fanda.Dto;
+using Fanda.Dto.Base;
 using Fanda.Service;
 using Fanda.Service.Base;
 using Microsoft.AspNetCore.Mvc;
@@ -153,6 +154,6 @@ namespace Fanda.Controllers
         }
 
         private async Task<bool> OrganizationExists(Guid id) =>
-            await _service.ExistsAsync(new Shared.BaseDuplicate { Field = Shared.DuplicateField.Id, Id = id });
+            await _service.ExistsAsync(new BaseDuplicate { Field = DuplicateField.Id, Id = id });
     }
 }

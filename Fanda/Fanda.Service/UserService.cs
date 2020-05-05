@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using Fanda.Data;
 using Fanda.Data.Context;
 using Fanda.Dto;
+using Fanda.Dto.Base;
 using Fanda.Dto.ViewModels;
 using Fanda.Service.Base;
 using Fanda.Shared;
@@ -191,7 +192,9 @@ namespace Fanda.Service
                 {
                     // username has changed so check if the new username is already taken
                     if (_context.Users.Any(x => x.Name == dto.Name))
+                    {
                         throw new AppException("Username '" + dto.Name + "' is already taken");
+                    }
                 }
                 user.DateModified = DateTime.Now;
                 user.PasswordHash = passwordHash;
@@ -245,7 +248,9 @@ namespace Fanda.Service
                 .FindAsync(orgId, userId);
 
             if (orgUser == null)
+            {
                 throw new KeyNotFoundException("User not found in organization");
+            }
 
             OrgUsers.Remove(orgUser);
             await _context.SaveChangesAsync();
@@ -261,7 +266,9 @@ namespace Fanda.Service
             var user = await _context.Users
                 .FindAsync(id);
             if (user == null)
+            {
                 throw new KeyNotFoundException("User not found");
+            }
 
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
@@ -340,7 +347,7 @@ namespace Fanda.Service
 
         public async Task<bool> ExistsAsync(BaseDuplicate data) => await _context.ExistsAsync<User>(data, true);
 
-        public Task<bool> ValidateAsync(UserDto model) => throw new NotImplementedException();
+        public Task<DtoErrors> ValidateAsync(UserDto model) => throw new NotImplementedException();
 
         #region Role specific
 

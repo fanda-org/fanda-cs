@@ -1,5 +1,4 @@
-﻿using Fanda.Dto;
-using Fanda.Shared;
+﻿using Fanda.Dto.Base;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,7 +18,7 @@ namespace Fanda.Service.Base
     {
         Task<TModel> SaveAsync(TModel model);
         Task<bool> ExistsAsync(BaseDuplicate data);
-        Task<bool> ValidateAsync(TModel model);
+        Task<DtoErrors> ValidateAsync(TModel model);
     }
 
     public interface IService<TModel, TList> : IBaseService<TModel>, IListService<TList>
@@ -28,7 +27,7 @@ namespace Fanda.Service.Base
     {
         Task<TModel> SaveAsync(TModel model);
         Task<bool> ExistsAsync(BaseDuplicate data);
-        Task<bool> ValidateAsync(TModel model);
+        Task<DtoErrors> ValidateAsync(TModel model);
     }
 
     public interface IOrgService<TModel, TList> : IBaseService<TModel>, IOrgListService<TList>
@@ -37,7 +36,7 @@ namespace Fanda.Service.Base
     {
         Task<TModel> SaveAsync(Guid orgId, TModel model);
         Task<bool> ExistsAsync(BaseOrgDuplicate data);
-        Task<bool> ValidateAsync(Guid orgId, TModel model);
+        Task<DtoErrors> ValidateAsync(Guid orgId, TModel model);
     }
 
     #region List Services

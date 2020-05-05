@@ -12,8 +12,8 @@ namespace Fanda.Data
     }
 
     public class BaseModel : RootModel
-    {        
-        public string Code { get; set; }        
+    {
+        public string Code { get; set; }
         public string Description { get; set; }
     }
 

@@ -1,5 +1,4 @@
-﻿using Fanda.Dto;
-using Fanda.Shared;
+﻿using Fanda.Dto.Base;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;

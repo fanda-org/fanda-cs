@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using Fanda.Data;
 using Fanda.Data.Context;
 using Fanda.Dto;
+using Fanda.Dto.Base;
 using Fanda.Service.Base;
 using Fanda.Shared;
 using Microsoft.EntityFrameworkCore;
@@ -100,11 +101,6 @@ namespace Fanda.Service
 
         public async Task<OrganizationDto> SaveAsync(OrganizationDto model)
         {
-            //try
-            //{
-            //var isValid = await ValidateAsync(model);
-            //if (!isValid)
-            //    throw new DtoValidationException<OrganizationDto>(model);
             Organization org = _mapper.Map<Organization>(model);
             if (org.Id == Guid.Empty)
             {
@@ -210,14 +206,9 @@ namespace Fanda.Service
             await _context.SaveChangesAsync();
             model = _mapper.Map<OrganizationDto>(org);
             return model;
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw;
-            //}
         }
 
-        public async Task<bool> ValidateAsync(OrganizationDto model)
+        public async Task<DtoErrors> ValidateAsync(OrganizationDto model)
         {
             // Reset validation errors
             model.Errors.Clear();
@@ -233,23 +224,21 @@ namespace Fanda.Service
             var duplCode = new BaseDuplicate { Field = DuplicateField.Code, Value = model.Code, Id = model.Id };
             if (await ExistsAsync(duplCode))
             {
-                model.Errors.Add(nameof(model.Code), $"{nameof(model.Code)} already exists");
+                model.Errors.Add(nameof(model.Code), $"{nameof(model.Code)} '{model.Code}' already exists");
             }
             // Check name duplicate
             var duplName = new BaseDuplicate { Field = DuplicateField.Name, Value = model.Name, Id = model.Id };
             if (await ExistsAsync(duplName))
             {
-                model.Errors.Add(nameof(model.Name), $"{nameof(model.Name)} already exists");
+                model.Errors.Add(nameof(model.Name), $"{nameof(model.Name)} '{model.Name}' already exists");
             }
             #endregion
 
-            return model.IsValid();
+            return model.Errors;
         }
 
         public async Task<bool> DeleteAsync(Guid id)
         {
-            //try
-            //{
             if (id == null || id == Guid.Empty)
             {
                 throw new ArgumentNullException("Id", "Id is missing");
@@ -274,11 +263,6 @@ namespace Fanda.Service
                 return true;
             }
             throw new KeyNotFoundException("Organization not found");
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw new ApplicationException(ex.Message, ex);
-            //}
         }
 
         public async Task<bool> ChangeStatusAsync(ActiveStatus status)
@@ -303,12 +287,6 @@ namespace Fanda.Service
         public Task<bool> ExistsAsync(BaseDuplicate data) => _context.ExistsAsync<Organization>(data);
 
         #region List
-        private IQueryable<T> GetAll<T>(IQueryable<T> query)
-            where T : BaseListDto
-        {
-            query = query.Where(c => c.Code != "FANDA");
-            return query;
-        }
         public IQueryable<OrgListDto> GetAll()
         {
             IQueryable<OrgListDto> query = _context.Organizations
@@ -316,7 +294,6 @@ namespace Fanda.Service
                 .ProjectTo<OrgListDto>(_mapper.ConfigurationProvider);
             return GetAll(query);
         }
-
         IQueryable<OrgYearListDto> IListService<OrgYearListDto>.GetAll()
         {
             IQueryable<OrgYearListDto> query = _context.Organizations
@@ -324,6 +301,12 @@ namespace Fanda.Service
                 .AsNoTracking()
                 .ProjectTo<OrgYearListDto>(_mapper.ConfigurationProvider);
             return GetAll(query);
+        }
+        private IQueryable<T> GetAll<T>(IQueryable<T> query)
+            where T : BaseListDto
+        {
+            query = query.Where(c => c.Code != "FANDA");
+            return query;
         }
         #endregion
     }

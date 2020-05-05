@@ -1,4 +1,6 @@
-﻿namespace Fanda.Dto
+﻿using Fanda.Dto.Base;
+
+namespace Fanda.Dto
 {
     public class ProductBrandDto : BaseDto
     {

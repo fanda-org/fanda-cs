@@ -1,6 +1,6 @@
 ﻿using Fanda.Data;
 using Fanda.Data.Context;
-using Fanda.Shared;
+using Fanda.Dto.Base;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
@@ -13,7 +13,9 @@ namespace Fanda.Service.Base
             where TModel : RootModel
         {
             if (isRoot && data.Field == DuplicateField.Code)
+            {
                 throw new ArgumentException("Root should not have field 'code' for exist validation");
+            }
 
             bool result = true;
             switch (data.Field)
@@ -100,7 +102,9 @@ namespace Fanda.Service.Base
                     return result;
                 case DuplicateField.Code:
                     if (data.OrgId == null || data.OrgId == Guid.Empty)
-                        throw new ArgumentNullException("orgId","Org Id is missing");
+                    {
+                        throw new ArgumentNullException("orgId", "Org Id is missing");
+                    }
 
                     if (data.Id == Guid.Empty && data.OrgId != Guid.Empty)
                     {
@@ -115,7 +119,9 @@ namespace Fanda.Service.Base
                     return result;
                 case DuplicateField.Name:
                     if (data.OrgId == null || data.OrgId == Guid.Empty)
+                    {
                         throw new ArgumentNullException("orgId", "Org Id is missing");
+                    }
 
                     if (data.Id == Guid.Empty && data.OrgId != Guid.Empty)
                     {

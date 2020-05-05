@@ -1,4 +1,4 @@
-﻿using Fanda.Dto;
+﻿using Fanda.Dto.Base;
 using System;
 
 namespace Fanda.Service.Base

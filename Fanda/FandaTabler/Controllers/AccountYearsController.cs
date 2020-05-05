@@ -1,13 +1,11 @@
 ﻿using Fanda.Dto;
 using Fanda.Service;
 using Fanda.Service.Base;
-using Fanda.Shared;
 using FandaTabler.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Threading.Tasks;
 using System.Web;
@@ -44,7 +42,7 @@ namespace FandaTabler.Controllers
 
                 NameValueCollection qFilter = HttpUtility.ParseQueryString(Request.QueryString.Value);
                 string search = qFilter["search"];
-                
+
                 var filter = new OrgFilter<IAccountYearService, YearListDto>(_service, qFilter, search);
                 var result = await filter.ApplyAsync(id);
                 return Ok(result);

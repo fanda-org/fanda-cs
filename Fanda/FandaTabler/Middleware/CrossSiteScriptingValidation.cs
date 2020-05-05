@@ -57,10 +57,16 @@ public static class CrossSiteScriptingValidation
             var n = s.IndexOfAny(StartingChars, i);
 
             // If not found, the string is safe
-            if (n < 0) return false;
+            if (n < 0)
+            {
+                return false;
+            }
 
             // If it's the last char, it's safe 
-            if (n == s.Length - 1) return false;
+            if (n == s.Length - 1)
+            {
+                return false;
+            }
 
             matchIndex = n;
 
@@ -68,11 +74,19 @@ public static class CrossSiteScriptingValidation
             {
                 case '<':
                     // If the < is followed by a letter or '!', it's unsafe (looks like a tag or HTML comment)
-                    if (IsAtoZ(s[n + 1]) || s[n + 1] == '!' || s[n + 1] == '/' || s[n + 1] == '?') return true;
+                    if (IsAtoZ(s[n + 1]) || s[n + 1] == '!' || s[n + 1] == '/' || s[n + 1] == '?')
+                    {
+                        return true;
+                    }
+
                     break;
                 case '&':
                     // If the & is followed by a #, it's unsafe (e.g. S) 
-                    if (s[n + 1] == '#') return true;
+                    if (s[n + 1] == '#')
+                    {
+                        return true;
+                    }
+
                     break;
             }
 
@@ -85,7 +99,7 @@ public static class CrossSiteScriptingValidation
 
     #region Private methods
 
-    private static bool IsAtoZ(char c) 
+    private static bool IsAtoZ(char c)
         => (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
 
     #endregion

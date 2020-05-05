@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
-using Fanda.Shared;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 
-namespace Fanda.Dto
+namespace Fanda.Dto.Base
 {
     public class RootDto
     {
