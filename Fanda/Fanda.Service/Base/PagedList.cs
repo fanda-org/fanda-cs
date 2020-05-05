@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Fanda.Dto.Base
+namespace Fanda.Service.Base
 {
     public abstract class PagedListBase
     {

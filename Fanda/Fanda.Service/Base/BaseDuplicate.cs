@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Fanda.Dto.Base
+namespace Fanda.Service.Base
 {
     //public class RootDuplicate
     //{

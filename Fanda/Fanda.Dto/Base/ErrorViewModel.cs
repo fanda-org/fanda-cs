@@ -1,6 +1,6 @@
 namespace Fanda.Dto.Base
 {
-    public class ErrorDto
+    public class ErrorViewModel
     {
         public string RequestId { get; set; }
 
