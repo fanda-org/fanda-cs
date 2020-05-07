@@ -89,4 +89,3 @@ Category: Beverages
 Brand: Coke / Sprite / Fanta / Diet coke / Coke zero
 Segment: 2ltr bottle
 Variety: Regular / Cherry / Lemon / Lime / Vanilla
----------------------------------------------------------------------------------------
