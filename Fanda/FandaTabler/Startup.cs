@@ -285,12 +285,14 @@ namespace FandaTabler
             services.AddTransient<IEmailSender, EmailSender>();
 
             services.AddScoped<IOrganizationService, OrganizationService>();
-            services.AddScoped<IRoleService, RoleService>();
-            //services.AddScoped<ILocationService, LocationService>();
             services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IUnitService, UnitService>();
+
+            services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IPartyCategoryService, PartyCategoryService>();
-            //services.AddScoped<IPartyService, PartyService>();
+            
+            services.AddScoped<IUnitService, UnitService>();
+            services.AddScoped<IProductBrandService, ProductBrandService>();
+            
             services.AddScoped<IAccountYearService, AccountYearService>();
             services.AddHttpContextAccessor();
             #endregion

@@ -199,8 +199,12 @@ namespace Fanda.Service.AutoMapperProfile
             CreateMap<PartyCategory, PartyCategoryListDto>()
                 .ReverseMap();
 
+            CreateMap<ProductCategory, ProductCategoryListDto>()
+                .ReverseMap();
             CreateMap<Unit, UnitListDto>()
                 .ReverseMap();
+            CreateMap<ProductBrand, ProductBrandListDto>()
+                .ReverseMap();            
 
             CreateMap<User, UserListDto>()
                 .ForPath(vm => vm.OrgId,

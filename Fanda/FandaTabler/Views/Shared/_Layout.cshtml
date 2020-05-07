@@ -192,13 +192,13 @@
                                             </div>
                                         </li>
                                         <li class="nav-item dropdown">
-                                            <a href="javascript:void(0)" class="nav-link @Html.IsSelected("Units", "Index")" data-toggle="dropdown"><i class="fe fe-box"></i> Inventory</a>
+                                            <a href="javascript:void(0)" class="nav-link @Html.IsSelected("Units,ProductBrands", "Index")" data-toggle="dropdown"><i class="fe fe-box"></i> Inventory</a>
                                             <div class="dropdown-menu dropdown-menu-arrow">
                                                 <a href="#" class="dropdown-item ">Goods and Services</a>
                                                 <a href="#" class="dropdown-item ">Categories</a>
                                                 <a href="@Url.Action("Index", "Units")" class="dropdown-item @Html.IsSelected("Units", actions: "Index")">Units</a>
                                                 <div class="dropdown-divider"></div>
-                                                <a href="#" class="dropdown-item ">Brands</a>
+                                                <a href="@Url.Action("Index", "ProductBrands")" class="dropdown-item @Html.IsSelected("ProductBrands", actions: "Index")">Brands</a>
                                                 <a href="#" class="dropdown-item ">Segments</a>
                                                 <a href="#" class="dropdown-item ">Varieties</a>
                                             </div>

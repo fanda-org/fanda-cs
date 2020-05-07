@@ -24,16 +24,24 @@ Refit - REST
 LazyCache
 
 from Master to Transaction: Functionalities apart from Create/Edit/Delete
--------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------
+https://crowdin.com/ - Agile localization for tech companies
+https://github.com/akaunting/akaunting
+---------------------------------------------------------------------------------------
+FancyTree - Treeview and list jquery control
+Selectize
+Select2
+bootstrap-table
+---------------------------------------------------------------------------------------
 Clone
 Deep clone
 Merge
-===============================================================================
+=======================================================================================
 Loader
 Breadcrumbs
 Reset option for add/edit
 HTML formatted description for **Goods and Services** & **Business Contacts** (parties)
--------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------
 Product: Samsung LED 32" Television
 Category: Electronics
 Brand: Samsung
@@ -81,4 +89,4 @@ Category: Beverages
 Brand: Coke / Sprite / Fanta / Diet coke / Coke zero
 Segment: 2ltr bottle
 Variety: Regular / Cherry / Lemon / Lime / Vanilla
--------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------

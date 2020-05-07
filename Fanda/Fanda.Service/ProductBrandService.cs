@@ -3,6 +3,9 @@ using AutoMapper.QueryableExtensions;
 using Fanda.Data;
 using Fanda.Data.Context;
 using Fanda.Dto;
+using Fanda.Dto.Base;
+using Fanda.Service.Base;
+using Fanda.Shared;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,18 +14,7 @@ using System.Threading.Tasks;
 
 namespace Fanda.Service
 {
-    public interface IProductBrandService
-    {
-        Task<List<ProductBrandDto>> GetAllAsync(Guid orgId, bool? active);
-
-        Task<ProductBrandDto> GetByIdAsync(Guid brandId);
-
-        Task<ProductBrandDto> SaveAsync(Guid orgId, ProductBrandDto dto);
-
-        Task<bool> DeleteAsync(Guid brandId);
-
-        string ErrorMessage { get; }
-    }
+    public interface IProductBrandService : IOrgService<ProductBrandDto, ProductBrandListDto> { }
 
     public class ProductBrandService : IProductBrandService
     {
@@ -35,75 +27,127 @@ namespace Fanda.Service
             _mapper = mapper;
         }
 
-        public string ErrorMessage { get; private set; }
-
-        public async Task<List<ProductBrandDto>> GetAllAsync(Guid orgId, bool? active)
+        public IQueryable<ProductBrandListDto> GetAll(Guid orgId)
         {
             if (orgId == null || orgId == Guid.Empty)
             {
                 throw new ArgumentNullException("orgId", "Org id is missing");
             }
-
-            List<ProductBrandDto> brands = await _context.ProductBrands
-                .Where(p => p.OrgId == p.OrgId)
-                .Where(p => p.Active == ((active == null) ? p.Active : active))
+            IQueryable<ProductBrandListDto> items = _context.ProductBrands
                 .AsNoTracking()
-                .ProjectTo<ProductBrandDto>(_mapper.ConfigurationProvider)
-                .ToListAsync();
-            return brands;
+                .Where(p => p.OrgId == orgId)
+                .ProjectTo<ProductBrandListDto>(_mapper.ConfigurationProvider);
+
+            return items;
         }
 
-        public async Task<ProductBrandDto> GetByIdAsync(Guid brandId)
+        public async Task<ProductBrandDto> GetByIdAsync(Guid id, bool includeChildren = false)
         {
-            ProductBrandDto brand = await _context.ProductBrands
-                .ProjectTo<ProductBrandDto>(_mapper.ConfigurationProvider)
-                .AsNoTracking()
-                .SingleOrDefaultAsync(pc => pc.Id == brandId);
-
-            if (brand != null)
+            if (id == null || id == Guid.Empty)
             {
-                return brand;
+                throw new ArgumentNullException("id", "Id is missing");
             }
-
+            var item = await _context.ProductBrands
+                .AsNoTracking()
+                .ProjectTo<ProductBrandDto>(_mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync(pc => pc.Id == id);
+            if (item != null)
+            {
+                return item;
+            }
             throw new KeyNotFoundException("Product brand not found");
         }
 
-        public async Task<ProductBrandDto> SaveAsync(Guid orgId, ProductBrandDto dto)
+        public async Task<ProductBrandDto> SaveAsync(Guid orgId, ProductBrandDto model)
         {
             if (orgId == null || orgId == Guid.Empty)
             {
                 throw new ArgumentNullException("orgId", "Org id is missing");
             }
 
-            ProductBrand brand = _mapper.Map<ProductBrand>(dto);
-            if (brand.Id == Guid.Empty)
+            var item = _mapper.Map<ProductBrand>(model);
+            item.OrgId = orgId;
+            if (item.Id == Guid.Empty)
             {
-                brand.OrgId = orgId;
-                brand.DateCreated = DateTime.Now;
-                brand.DateModified = null;
-                await _context.ProductBrands.AddAsync(brand);
+                item.DateCreated = DateTime.Now;
+                item.DateModified = null;
+                await _context.ProductBrands.AddAsync(item);
             }
             else
             {
-                brand.DateModified = DateTime.Now;
-                _context.ProductBrands.Update(brand);
+                item.DateModified = DateTime.Now;
+                _context.ProductBrands.Update(item);
             }
             await _context.SaveChangesAsync();
-            dto = _mapper.Map<ProductBrandDto>(brand);
-            return dto;
+            return _mapper.Map<ProductBrandDto>(item);
         }
 
-        public async Task<bool> DeleteAsync(Guid brandId)
+        public async Task<bool> DeleteAsync(Guid id)
         {
-            ProductBrand brand = await _context.ProductBrands
-                .FindAsync(brandId);
-            if (brand != null)
+            if (id == null || id == Guid.Empty)
             {
-                _context.ProductBrands.Remove(brand);
+                throw new ArgumentNullException("Id", "Id is missing");
+            }
+
+            var item = await _context.ProductBrands
+                .FindAsync(id);
+            if (item != null)
+            {
+                _context.ProductBrands.Remove(item);
                 await _context.SaveChangesAsync();
                 return true;
             }
             throw new KeyNotFoundException("Product brand not found");
+        }
+
+        public async Task<bool> ChangeStatusAsync(ActiveStatus status)
+        {
+            if (status.Id == null || status.Id == Guid.Empty)
+            {
+                throw new ArgumentNullException("Id", "Id is missing");
+            }
+
+            var item = await _context.ProductBrands
+                .FindAsync(status.Id);
+            if (item != null)
+            {
+                item.Active = status.Active;
+                _context.ProductBrands.Update(item);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            throw new KeyNotFoundException("Product brand not found");
+        }
+
+        public async Task<bool> ExistsAsync(BaseOrgDuplicate data) => await _context.ExistsAsync<ProductBrand>(data);
+
+        public async Task<DtoErrors> ValidateAsync(Guid orgId, ProductBrandDto model)
+        {
+            // Reset validation errors
+            model.Errors.Clear();
+
+            #region Formatting: Cleansing and formatting
+            model.Code = model.Code.ToUpper();
+            model.Name = model.Name.TrimExtraSpaces();
+            model.Description = model.Description.TrimExtraSpaces();
+            #endregion
+
+            #region Validation: Dupllicate
+            // Check code duplicate
+            var duplCode = new BaseOrgDuplicate { Field = DuplicateField.Code, Value = model.Code, Id = model.Id, OrgId = orgId };
+            if (await ExistsAsync(duplCode))
+            {
+                model.Errors.Add(nameof(model.Code), $"{nameof(model.Code)} '{model.Code}' already exists");
+            }
+            // Check name duplicate
+            var duplName = new BaseOrgDuplicate { Field = DuplicateField.Name, Value = model.Name, Id = model.Id, OrgId = orgId };
+            if (await ExistsAsync(duplName))
+            {
+                model.Errors.Add(nameof(model.Name), $"{nameof(model.Name)} '{model.Name}' already exists");
+            }
+            #endregion
+
+            return model.Errors;
         }
     }
 }
