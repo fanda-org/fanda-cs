@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Fanda.Service
 {
-    public interface IPartyCategoryService : IOrgService<PartyCategoryDto, PartyCategoryListDto> { }
+    public interface IPartyCategoryService : IChildService<PartyCategoryDto>, IChildListService<PartyCategoryListDto> { }
 
     public class PartyCategoryService : IPartyCategoryService
     {
@@ -120,7 +120,7 @@ namespace Fanda.Service
             throw new KeyNotFoundException("Party category not found");
         }
 
-        public async Task<bool> ExistsAsync(BaseOrgDuplicate data) => await _context.ExistsAsync<PartyCategory>(data);
+        public async Task<bool> ExistsAsync(ChildDuplicate data) => await _context.ExistsAsync<PartyCategory>(data);
 
         public async Task<DtoErrors> ValidateAsync(Guid orgId, PartyCategoryDto model)
         {
@@ -135,13 +135,13 @@ namespace Fanda.Service
 
             #region Validation: Dupllicate
             // Check code duplicate
-            var duplCode = new BaseOrgDuplicate { Field = DuplicateField.Code, Value = model.Code, Id = model.Id, OrgId = orgId };
+            var duplCode = new ChildDuplicate { Field = DuplicateField.Code, Value = model.Code, Id = model.Id, ParentId = orgId };
             if (await ExistsAsync(duplCode))
             {
                 model.Errors.Add(nameof(model.Code), $"{nameof(model.Code)} '{model.Code}' already exists");
             }
             // Check name duplicate
-            var duplName = new BaseOrgDuplicate { Field = DuplicateField.Name, Value = model.Name, Id = model.Id, OrgId = orgId };
+            var duplName = new ChildDuplicate { Field = DuplicateField.Name, Value = model.Name, Id = model.Id, ParentId = orgId };
             if (await ExistsAsync(duplName))
             {
                 model.Errors.Add(nameof(model.Name), $"{nameof(model.Name)} '{model.Name}' already exists");

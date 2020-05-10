@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Specialized;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -149,7 +150,15 @@ namespace FandaTabler.Controllers
                     #endregion
                     if (ModelState.IsValid)
                     {
+                        bool isAdding = org.Id == null || org.Id == Guid.Empty;
+
                         org = await _service.SaveAsync(org);
+
+                        if (isAdding)
+                        {
+                            Guid userId = GetCurrentUserId();
+                            await _service.MapUserAsync(org.Id, userId);
+                        }
 
                         // Refresh org session value
                         // TODO: for accounting year
@@ -200,13 +209,26 @@ namespace FandaTabler.Controllers
         #region Private methods
         private async Task<PagedList<OrgYearListDto>> GetAll()
         {
+            Guid userId = GetCurrentUserId();
+
             NameValueCollection qFilter = HttpUtility.ParseQueryString(Request.QueryString.Value);
             string search = qFilter["search"];
 
-            var filter = new Filter<IOrganizationService, OrgYearListDto>(_service, qFilter, search);
-            var result = await filter.ApplyAsync();
+            var filter = new ChildFilter<IOrganizationService, OrgYearListDto>(_service, qFilter, search);
+            var result = await filter.ApplyAsync(userId);
             return result;
         }
+
+        private Guid GetCurrentUserId()
+        {
+            string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+            Guid userGuid = new Guid(userId);
+            if (userGuid == null || userGuid == Guid.Empty)
+                throw new ApplicationException("UserId not found in logged in user identity");
+
+            return userGuid;
+        }
+
         private async Task Open(Guid orgId, Guid yearId)
         {
             #region Open org

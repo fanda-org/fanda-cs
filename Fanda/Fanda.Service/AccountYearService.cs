@@ -13,7 +13,11 @@ using System.Threading.Tasks;
 
 namespace Fanda.Service
 {
-    public interface IAccountYearService : IOrgService<AccountYearDto, YearListDto> { }
+    public interface IAccountYearService : 
+        IChildService<AccountYearDto>, 
+        IChildListService<YearListDto> 
+    { 
+    }
 
     public class AccountYearService : IAccountYearService
     {
@@ -118,7 +122,7 @@ namespace Fanda.Service
             throw new KeyNotFoundException("Account year not found");
         }
 
-        public Task<bool> ExistsAsync(BaseOrgDuplicate data) => _context.ExistsAsync<AccountYear>(data);
+        public Task<bool> ExistsAsync(ChildDuplicate data) => _context.ExistsAsync<AccountYear>(data);
 
         public Task<DtoErrors> ValidateAsync(Guid orgId, AccountYearDto model) => throw new NotImplementedException();
     }

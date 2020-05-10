@@ -15,27 +15,27 @@ using System.Threading.Tasks;
 
 namespace Fanda.Service
 {
-    public interface IOrgChildrenService<TModel>
+    public interface IOrgListService : IChildListService<OrgListDto>, IChildListService<OrgYearListDto> { }
+
+    public interface IOrganizationService : IService<OrganizationDto>,
+        IChildDataService<OrgChildrenDto>,
+        IOrgListService
     {
-        Task<TModel> GetChildrenByIdAsync(Guid id);
+        Task<bool> MapUserAsync(Guid orgId, Guid userId);
+        Task<bool> UnmapUserAsync(Guid orgId, Guid userId);
     }
-
-    public interface IOrgYearListService : IListService<OrgYearListDto> { }
-
-    public interface IOrganizationService : IService<OrganizationDto, OrgListDto>,
-        IOrgChildrenService<OrgChildrenDto>,
-        IOrgYearListService
-    { }
 
     public class OrganizationService : IOrganizationService
     {
         private readonly FandaContext _context;
         private readonly IMapper _mapper;
+        private readonly IUserService _userService;
 
-        public OrganizationService(FandaContext context, IMapper mapper)
+        public OrganizationService(FandaContext context, IMapper mapper, IUserService userService)
         {
             _context = context;
             _mapper = mapper;
+            _userService = userService;
         }
 
         public async Task<OrganizationDto> GetByIdAsync(Guid id, bool includeChildren = false)
@@ -221,13 +221,13 @@ namespace Fanda.Service
 
             #region Validation: Dupllicate
             // Check code duplicate
-            var duplCode = new BaseDuplicate { Field = DuplicateField.Code, Value = model.Code, Id = model.Id };
+            var duplCode = new Duplicate { Field = DuplicateField.Code, Value = model.Code, Id = model.Id };
             if (await ExistsAsync(duplCode))
             {
                 model.Errors.Add(nameof(model.Code), $"{nameof(model.Code)} '{model.Code}' already exists");
             }
             // Check name duplicate
-            var duplName = new BaseDuplicate { Field = DuplicateField.Name, Value = model.Name, Id = model.Id };
+            var duplName = new Duplicate { Field = DuplicateField.Name, Value = model.Name, Id = model.Id };
             if (await ExistsAsync(duplName))
             {
                 model.Errors.Add(nameof(model.Name), $"{nameof(model.Name)} '{model.Name}' already exists");
@@ -284,21 +284,31 @@ namespace Fanda.Service
             throw new KeyNotFoundException("Organization not found");
         }
 
-        public Task<bool> ExistsAsync(BaseDuplicate data) => _context.ExistsAsync<Organization>(data);
+        public Task<bool> ExistsAsync(Duplicate data) => _context.ExistsAsync<Organization>(data);
 
         #region List
-        public IQueryable<OrgListDto> GetAll()
+        public IQueryable<OrgListDto> GetAll(Guid userId)
         {
+            if (userId == null || userId == Guid.Empty)
+                throw new ArgumentNullException("userId", "User id is missing");
+
             IQueryable<OrgListDto> query = _context.Organizations
+                .Include(o => o.OrgUsers)
                 .AsNoTracking()
+                .Where(o => o.OrgUsers.Select(ou => ou.UserId).Any(uid => uid == userId))
                 .ProjectTo<OrgListDto>(_mapper.ConfigurationProvider);
             return GetAll(query);
         }
-        IQueryable<OrgYearListDto> IListService<OrgYearListDto>.GetAll()
+        IQueryable<OrgYearListDto> IChildListService<OrgYearListDto>.GetAll(Guid userId)
         {
+            if (userId == null || userId == Guid.Empty)
+                throw new ArgumentNullException("userId", "User id is missing");
+
             IQueryable<OrgYearListDto> query = _context.Organizations
                 .Include(o => o.AccountYears)
+                .Include(o => o.OrgUsers)
                 .AsNoTracking()
+                .Where(o => o.OrgUsers.Select(ou => ou.UserId).Any(uid => uid == userId))
                 .ProjectTo<OrgYearListDto>(_mapper.ConfigurationProvider);
             return GetAll(query);
         }
@@ -308,6 +318,10 @@ namespace Fanda.Service
             query = query.Where(c => c.Code != "FANDA");
             return query;
         }
+
+        public async Task<bool> MapUserAsync(Guid orgId, Guid userId) => await _userService.MapOrgAsync(userId, orgId);
+
+        public async Task<bool> UnmapUserAsync(Guid orgId, Guid userId) => await _userService.UnmapOrgAsync(userId, orgId);
         #endregion
     }
 }

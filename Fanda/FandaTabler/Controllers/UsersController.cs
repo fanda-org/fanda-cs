@@ -225,7 +225,7 @@ namespace FandaTabler.Controllers
         //[HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid orgId, Guid userId)
         {
-            await _userService.RemoveFromOrgAsync(userId, orgId);
+            await _userService.UnmapOrgAsync(userId, orgId);
             return Ok();
         }
 

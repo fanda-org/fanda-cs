@@ -13,6 +13,7 @@ namespace Fanda.Service.AutoMapperProfile
             CreateMap<User, RegisterViewModel>()
                 .ForMember(vm => vm.Password, opt => opt.Ignore())
                 .ForMember(vm => vm.ConfirmPassword, opt => opt.Ignore())
+                .ForMember(vm => vm.AgreeTerms, opt => opt.Ignore())
                 .ReverseMap();
             CreateMap<Role, RoleDto>()
                 .ForMember(vm => vm.Id, opt => opt.MapFrom(src => src.Id))
@@ -204,7 +205,7 @@ namespace Fanda.Service.AutoMapperProfile
             CreateMap<Unit, UnitListDto>()
                 .ReverseMap();
             CreateMap<ProductBrand, ProductBrandListDto>()
-                .ReverseMap();            
+                .ReverseMap();
 
             CreateMap<User, UserListDto>()
                 .ForPath(vm => vm.OrgId,

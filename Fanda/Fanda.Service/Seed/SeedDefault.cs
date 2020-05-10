@@ -31,7 +31,7 @@ namespace Fanda.Service.Seed
                 IOrganizationService service = _provider.GetRequiredService<IOrganizationService>();
 
                 string orgCode = orgName.ToUpper();
-                if (!await service.ExistsAsync(new BaseDuplicate { Field = DuplicateField.Code, Value = orgCode }))
+                if (!await service.ExistsAsync(new Duplicate { Field = DuplicateField.Code, Value = orgCode }))
                 {
                     OrganizationDto org = await service.SaveAsync(new OrganizationDto
                     {
@@ -51,7 +51,6 @@ namespace Fanda.Service.Seed
             {
                 _logger.LogError(ex, ex.Message);
             }
-
         }
         #endregion
 
@@ -69,7 +68,6 @@ namespace Fanda.Service.Seed
                         "SuperUser:Super users are have additional access than users",
                         "User:Users are prevented from making accidental or intentional system-wide changes and can run most"
                     };
-
 
                 foreach (string roleElement in rolesArray)
                 {
@@ -130,11 +128,11 @@ namespace Fanda.Service.Seed
                     //LocationId = loc.LocationId,
                     Active = true
                 };
-                if (!await service.ExistsAsync(new BaseDuplicate { Field = DuplicateField.Name, Value = superAdmin.Name }))
+                if (!await service.ExistsAsync(new Duplicate { Field = DuplicateField.Name, Value = superAdmin.Name }))
                 {
                     var user = await service.SaveAsync(superAdmin);
-                    await service.AddToOrgAsync(user.Id, org.Id);
-                    await service.AddToRoleAsync(user.Id, "SuperAdmin", org.Id);
+                    await service.MapOrgAsync(user.Id, org.Id);
+                    await service.MapRoleAsync(user.Id, "SuperAdmin", org.Id);
                 }
             }
             catch (Exception ex)
@@ -153,11 +151,11 @@ namespace Fanda.Service.Seed
             try
             {
                 IUnitService service = _provider.GetRequiredService<IUnitService>();
-                if (!await service.ExistsAsync(new BaseOrgDuplicate
+                if (!await service.ExistsAsync(new ChildDuplicate
                 {
                     Field = DuplicateField.Code,
                     Value = "DEFAULT",
-                    OrgId = org.Id
+                    ParentId = org.Id
                 }))
                 {
                     var unit = new UnitDto
@@ -180,11 +178,11 @@ namespace Fanda.Service.Seed
             try
             {
                 IPartyCategoryService service = _provider.GetRequiredService<IPartyCategoryService>();
-                if (!await service.ExistsAsync(new BaseOrgDuplicate
+                if (!await service.ExistsAsync(new ChildDuplicate
                 {
                     Field = DuplicateField.Code,
                     Value = "DEFAULT",
-                    OrgId = org.Id
+                    ParentId = org.Id
                 }))
                 {
                     await service.SaveAsync(org.Id, new PartyCategoryDto

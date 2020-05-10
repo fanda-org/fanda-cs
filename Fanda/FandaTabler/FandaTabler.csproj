@@ -10,12 +10,16 @@
   <ItemGroup>
     <Compile Remove="backup\**" />
     <Compile Remove="Views\Parties\**" />
+    <Compile Remove="wwwroot\assets\**" />
     <Content Remove="backup\**" />
     <Content Remove="Views\Parties\**" />
+    <Content Remove="wwwroot\assets\**" />
     <EmbeddedResource Remove="backup\**" />
     <EmbeddedResource Remove="Views\Parties\**" />
+    <EmbeddedResource Remove="wwwroot\assets\**" />
     <None Remove="backup\**" />
     <None Remove="Views\Parties\**" />
+    <None Remove="wwwroot\assets\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,70 +31,11 @@
     <Content Remove="Views\PartyCategories\Edit.cshtml" />
     <Content Remove="Views\PartyCategories\_Edit.cshtml" />
     <Content Remove="Views\PartyCategories\_List.cshtml" />
-    <Content Remove="wwwroot\assets\css\dashboard - Copy.css" />
+    <Content Remove="wwwroot\old-favicon.ico" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="jsgrid-fieldvalidation.js" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\accessor.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\accessor.min.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\ajax.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\ajax.min.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\calculation_colums.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\calculation_colums.min.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\clipboard.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\clipboard.min.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\data_tree.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\data_tree.min.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\download.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\download.min.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\edit.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\edit.min.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\filter.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\filter.min.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\format.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\format.min.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\frozen_columns.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\frozen_columns.min.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\frozen_rows.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\frozen_rows.min.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\group_rows.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\group_rows.min.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\history.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\history.min.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\html_table_import.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\html_table_import.min.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\keybindings.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\keybindings.min.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\moveable_columns.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\moveable_columns.min.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\moveable_rows.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\moveable_rows.min.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\mutator.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\mutator.min.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\page.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\page.min.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\persistence.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\persistence.min.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\reactive_data.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\reactive_data.min.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\resize_columns.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\resize_columns.min.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\resize_rows.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\resize_rows.min.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\resize_table.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\resize_table.min.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\responsive_layout.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\responsive_layout.min.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\select_row.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\select_row.min.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\sort.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\sort.min.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\validate.js" />
-    <None Include="wwwroot\assets\plugins\tabulator-tables\modules\validate.min.js" />
   </ItemGroup>
 
   <ItemGroup>
@@ -106,6 +51,10 @@
     <ProjectReference Include="..\Fanda.Dto\Fanda.Dto.csproj" PrivateAssets="All" />
     <ProjectReference Include="..\Fanda.Service\Fanda.Service.csproj" />
     <ProjectReference Include="..\Fanda.Shared\Fanda.Shared.csproj" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
 </Project>

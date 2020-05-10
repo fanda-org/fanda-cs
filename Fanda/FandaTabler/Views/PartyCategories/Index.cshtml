@@ -15,9 +15,10 @@
 
 
 @section scripts{
+    <script src="~/libs/vendors/jsgrid/js/jsgrid.min.js"></script>
     <script>
-        require(['jquery', 'bootstrap', 'jsgrid', 'bootbox', 'toastr'], function ($, _, _, bootbox, toastr) {
-            
+        $(document).ready(function () {
+
             //$(".model-dialog").draggable({
             //    handle: ".modal-header"
             //});
@@ -69,7 +70,7 @@
                             type: 'POST',
                             url: '@Url.Action("Save")',
                             data: item
-                        }).done(function(){
+                        }).done(function () {
                             toastr.success("Category inserted successfully!");
                         });
                     },
@@ -78,7 +79,7 @@
                             type: "POST",
                             url: "@Url.Action("Save")",
                             data: item
-                        }).done(function(){
+                        }).done(function () {
                             toastr.success("Category updated successfully!");
                         });
                     },
@@ -87,7 +88,7 @@
                             type: "POST",
                             url: '@Url.Action("Delete", new { id = "-1" })'.replace("-1", item.id),
                             data: item
-                        }).done(function(){
+                        }).done(function () {
                             toastr.success("Category deleted successfully!");
                         });
                     }
@@ -156,14 +157,14 @@
                             $input.addClass('text-uppercase');
                             setTimeout(function () {
                                 $input.focus();
-                            })
+                            });
                             return $input;
                         },
                         editTemplate: function (value, _) {
                             // To get the 'input' element.
                             var $input = this.__proto__.editTemplate.call(this, value); //original input
                             $input.addClass('text-uppercase');
-                                //jsGrid.fields.text.prototype.editTemplate.call(this, value);
+                            //jsGrid.fields.text.prototype.editTemplate.call(this, value);
                             // It only works with 'setTimeout' function.
                             setTimeout(function () {
                                 $input.focus();

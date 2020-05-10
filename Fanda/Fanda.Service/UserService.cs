@@ -17,14 +17,15 @@ using System.Threading.Tasks;
 
 namespace Fanda.Service
 {
-    public interface IUserService : IRootService<UserDto, UserListDto>
+    public interface IUserService : IRootService<UserDto>, IListService<UserListDto>
     {
         Task<UserDto> LoginAsync(LoginViewModel model);
         Task<UserDto> RegisterAsync(RegisterViewModel model, string callbackUrl);
         IQueryable<UserListDto> GetAll(Guid orgId);
-        Task<bool> AddToOrgAsync(Guid userId, Guid orgId);
-        Task<bool> RemoveFromOrgAsync(Guid userId, Guid orgId);
-        Task<bool> AddToRoleAsync(Guid userId, string roleName, Guid orgId);
+        Task<bool> MapOrgAsync(Guid userId, Guid orgId);
+        Task<bool> UnmapOrgAsync(Guid userId, Guid orgId);
+        Task<bool> MapRoleAsync(Guid userId, string roleName, Guid orgId);
+        Task<bool> UnmapRoleAsync(Guid userId, Guid roleId, Guid orgId);
     }
 
     public class UserService : IUserService
@@ -206,7 +207,7 @@ namespace Fanda.Service
             return _mapper.Map<UserDto>(user);
         }
 
-        public async Task<bool> AddToOrgAsync(Guid userId, Guid orgId)
+        public async Task<bool> MapOrgAsync(Guid userId, Guid orgId)
         {
             if (userId == null || userId == Guid.Empty)
             {
@@ -232,7 +233,7 @@ namespace Fanda.Service
             return true;
         }
 
-        public async Task<bool> RemoveFromOrgAsync(Guid userId, Guid orgId)
+        public async Task<bool> UnmapOrgAsync(Guid userId, Guid orgId)
         {
             if (userId == null || userId == Guid.Empty)
             {
@@ -300,10 +301,23 @@ namespace Fanda.Service
         //}
 
 
-        public async Task<bool> AddToRoleAsync(Guid userId, string roleName, Guid orgId)
+        public async Task<bool> MapRoleAsync(Guid userId, string roleName, Guid orgId)
         {
             try
             {
+                if (userId == null || userId == Guid.Empty)
+                {
+                    throw new ArgumentNullException("userId", "User Id is missing");
+                }
+                if (string.IsNullOrEmpty(roleName))
+                {
+                    throw new ArgumentNullException("roleName", "Role Name is missing");
+                }
+                if (orgId == null || orgId == Guid.Empty)
+                {
+                    throw new ArgumentNullException("orgId", "Role Id is missing");
+                }
+
                 Role role = await _context.Roles
                     .AsNoTracking()
                     .FirstOrDefaultAsync(r => r.Name == roleName && r.OrgId == orgId);
@@ -326,6 +340,35 @@ namespace Fanda.Service
             return false;
         }
 
+        public async Task<bool> UnmapRoleAsync(Guid userId, Guid roleId, Guid orgId)
+        {
+            if (userId == null || userId == Guid.Empty)
+            {
+                throw new ArgumentNullException("userId", "User Id is missing");
+            }
+            if (roleId == null || roleId == Guid.Empty)
+            {
+                throw new ArgumentNullException("roleId", "Role Id is missing");
+            }
+            if (orgId == null || orgId == Guid.Empty)
+            {
+                throw new ArgumentNullException("orgId", "Role Id is missing");
+            }
+            var OrgUserRoles = _context.Set<OrgUserRole>();
+
+            var orgUserRole = await OrgUserRoles
+                .FindAsync(orgId, userId, roleId);
+
+            if (orgUserRole == null)
+            {
+                throw new KeyNotFoundException("User not found in organization");
+            }
+
+            OrgUserRoles.Remove(orgUserRole);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
         public async Task<bool> ChangeStatusAsync(ActiveStatus status)
         {
             if (status.Id == null || status.Id == Guid.Empty)
@@ -345,7 +388,7 @@ namespace Fanda.Service
             throw new KeyNotFoundException("User not found");
         }
 
-        public async Task<bool> ExistsAsync(BaseDuplicate data) => await _context.ExistsAsync<User>(data, true);
+        public async Task<bool> ExistsAsync(Duplicate data) => await _context.ExistsAsync<User>(data, true);
 
         public Task<DtoErrors> ValidateAsync(UserDto model) => throw new NotImplementedException();
 

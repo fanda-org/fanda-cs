@@ -12,42 +12,45 @@ namespace Fanda.Service.Base
         Task<bool> ChangeStatusAsync(ActiveStatus status);
     }
 
-    public interface IRootService<TModel, TList> : IBaseService<TModel>, IListService<TList>
+    public interface IRootService<TModel> : IBaseService<TModel>     //, IListService<TList>
         where TModel : RootDto
-        where TList : RootListDto
     {
         Task<TModel> SaveAsync(TModel model);
-        Task<bool> ExistsAsync(BaseDuplicate data);
+        Task<bool> ExistsAsync(Duplicate data);
         Task<DtoErrors> ValidateAsync(TModel model);
     }
 
-    public interface IService<TModel, TList> : IBaseService<TModel>, IListService<TList>
-    where TModel : BaseDto
-    where TList : BaseListDto
-    {
-        Task<TModel> SaveAsync(TModel model);
-        Task<bool> ExistsAsync(BaseDuplicate data);
-        Task<DtoErrors> ValidateAsync(TModel model);
-    }
-
-    public interface IOrgService<TModel, TList> : IBaseService<TModel>, IOrgListService<TList>
+    public interface IService<TModel> : IBaseService<TModel>         //, IListService<TList>
         where TModel : BaseDto
-        where TList : BaseListDto
     {
-        Task<TModel> SaveAsync(Guid orgId, TModel model);
-        Task<bool> ExistsAsync(BaseOrgDuplicate data);
-        Task<DtoErrors> ValidateAsync(Guid orgId, TModel model);
+        Task<TModel> SaveAsync(TModel model);
+        Task<bool> ExistsAsync(Duplicate data);
+        Task<DtoErrors> ValidateAsync(TModel model);
     }
+
+    public interface IChildService<TModel> : IBaseService<TModel>    //, IArgListService<TList>
+        where TModel : BaseDto
+    {
+        Task<TModel> SaveAsync(Guid parentId, TModel model);
+        Task<bool> ExistsAsync(ChildDuplicate data);
+        Task<DtoErrors> ValidateAsync(Guid parentId, TModel model);
+    }
+
+    #region Get children data
+    public interface IChildDataService<TModel>
+    {
+        Task<TModel> GetChildrenByIdAsync(Guid parentId);
+    }
+    #endregion
 
     #region List Services
     public interface IListService<TList>
     {
         IQueryable<TList> GetAll();
     }
-
-    public interface IOrgListService<TList>
+    public interface IChildListService<TList>
     {
-        IQueryable<TList> GetAll(Guid orgId);
+        IQueryable<TList> GetAll(Guid parentId);
     }
     #endregion
 }

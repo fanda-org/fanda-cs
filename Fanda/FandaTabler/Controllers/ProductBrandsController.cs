@@ -47,7 +47,7 @@ namespace FandaTabler.Controllers
                 NameValueCollection qFilter = HttpUtility.ParseQueryString(Request.QueryString.Value);
                 string search = qFilter["search"];
 
-                var filter = new OrgFilter<IProductBrandService, ProductBrandListDto>(_service, qFilter, search);
+                var filter = new ChildFilter<IProductBrandService, ProductBrandListDto>(_service, qFilter, search);
                 var result = await filter.ApplyAsync(org.Id);
                 return Ok(result);
             }
