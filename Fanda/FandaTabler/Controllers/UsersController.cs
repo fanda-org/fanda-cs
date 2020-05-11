@@ -1,6 +1,6 @@
 ﻿using Fanda.Dto;
 using Fanda.Dto.ViewModels;
-using Fanda.Service;
+using Fanda.Repository;
 using Fanda.Shared;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -17,12 +17,12 @@ namespace FandaTabler.Controllers
     [Authorize]
     public class UsersController : Controller
     {
-        private readonly IUserService _userService;
+        private readonly IUserRepository _repository;
         //private readonly AppSettings _appSettings;
 
-        public UsersController(IUserService userService/*, IOptions<AppSettings> options*/)
+        public UsersController(IUserRepository repository/*, IOptions<AppSettings> options*/)
         {
-            _userService = userService;
+            _repository = repository;
             //_appSettings = options.Value;
         }
 
@@ -57,7 +57,7 @@ namespace FandaTabler.Controllers
                 TempData["Error"] = "Username or password is missing";
                 return View(model);
             }
-            var user = await _userService.LoginAsync(model);
+            var user = await _repository.LoginAsync(model);
             if (user == null)
             {
                 TempData["Error"] = "Invalid Username or password";
@@ -177,7 +177,7 @@ namespace FandaTabler.Controllers
             );
 
             // save
-            _ = await _userService.RegisterAsync(model, callbackUrl);
+            _ = await _repository.RegisterAsync(model, callbackUrl);
             return RedirectToAction(nameof(Login));
         }
 
@@ -192,7 +192,7 @@ namespace FandaTabler.Controllers
         //[HttpGet]
         public async Task<IActionResult> GetAll(Guid orgId/*, bool? active*/)
         {
-            var users = await _userService.GetAll()
+            var users = await _repository.GetAll()
                 .Where(u => u.OrgId == orgId)
                 .ToListAsync();
             return Ok(users);
@@ -201,7 +201,7 @@ namespace FandaTabler.Controllers
         //[HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var user = await _userService.GetByIdAsync(id);
+            var user = await _repository.GetByIdAsync(id);
             return Ok(user);
         }
 
@@ -212,7 +212,7 @@ namespace FandaTabler.Controllers
             {
                 // save 
                 model.Password = password;
-                await _userService.SaveAsync(model);
+                await _repository.SaveAsync(model);
                 return Ok();
             }
             catch (AppException ex)
@@ -225,7 +225,7 @@ namespace FandaTabler.Controllers
         //[HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid orgId, Guid userId)
         {
-            await _userService.UnmapOrgAsync(userId, orgId);
+            await _repository.UnmapOrgAsync(userId, orgId);
             return Ok();
         }
 

@@ -1,6 +1,7 @@
 ﻿using Fanda.Dto;
-using Fanda.Service;
-using Fanda.Service.Base;
+using Fanda.Repository;
+using Fanda.Repository.Base;
+using Fanda.Repository.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,17 +12,17 @@ namespace Fanda.Controllers
     public class OrganizationsController : Controller
     {
         //private readonly FandaContext _context;
-        private readonly IOrganizationService _service;
-        public OrganizationsController(IOrganizationService service /*FandaContext context*/)
+        private readonly IOrganizationRepository _repository;
+        public OrganizationsController(IOrganizationRepository repository /*FandaContext context*/)
         {
             //_context = context;
-            _service = service;
+            _repository = repository;
         }
 
         // GET: Organizations
         public async Task<IActionResult> Index()
         {
-            var list = await ((IListService<OrgListDto>)_service)
+            var list = await ((IRepositoryList<OrgListDto>)_repository)
                 .GetAll()
                 .ToListAsync();
             return View(list);
@@ -37,7 +38,7 @@ namespace Fanda.Controllers
 
             //var organization = await _context.Organizations
             //    .FirstOrDefaultAsync(m => m.OrgId == id);
-            OrganizationDto org = await _service.GetByIdAsync(id);
+            OrganizationDto org = await _repository.GetByIdAsync(id);
             if (org == null)
             {
                 return NotFound();
@@ -61,7 +62,7 @@ namespace Fanda.Controllers
                 //organization.OrgId = Guid.NewGuid();
                 //_context.Add(organization);
                 //await _context.SaveChangesAsync();
-                await _service.SaveAsync(dto);
+                await _repository.SaveAsync(dto);
                 return RedirectToAction(nameof(Index));
             }
             return View(dto);
@@ -76,7 +77,7 @@ namespace Fanda.Controllers
             }
 
             //var organization = await _context.Organizations.FindAsync(id);
-            OrganizationDto org = await _service.GetByIdAsync(id);
+            OrganizationDto org = await _repository.GetByIdAsync(id);
             if (org == null)
             {
                 return NotFound();
@@ -103,7 +104,7 @@ namespace Fanda.Controllers
                 {
                     //_context.Update(organization);
                     //await _context.SaveChangesAsync();
-                    await _service.SaveAsync(dto);
+                    await _repository.SaveAsync(dto);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -131,7 +132,7 @@ namespace Fanda.Controllers
 
             //var organization = await _context.Organizations
             //    .FirstOrDefaultAsync(m => m.OrgId == id);
-            OrganizationDto org = await _service.GetByIdAsync(id);
+            OrganizationDto org = await _repository.GetByIdAsync(id);
             if (org == null)
             {
                 return NotFound();
@@ -148,11 +149,11 @@ namespace Fanda.Controllers
             //var organization = await _context.Organizations.FindAsync(id);
             //_context.Organizations.Remove(organization);
             //await _context.SaveChangesAsync();
-            await _service.DeleteAsync(id);
+            await _repository.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
 
         private async Task<bool> OrganizationExists(Guid id) =>
-            await _service.ExistsAsync(new BaseDuplicate { Field = DuplicateField.Id, Id = id });
+            await _repository.ExistsAsync(new Duplicate { Field = DuplicateField.Id, Id = id });
     }
 }

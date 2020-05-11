@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29911.98
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fanda.Service", "Fanda.Service\Fanda.Service.csproj", "{5FFA524D-D5CE-45D5-90DB-08B115D06A9A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fanda.Repository", "Fanda.Repository\Fanda.Repository.csproj", "{5FFA524D-D5CE-45D5-90DB-08B115D06A9A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fanda.Data", "Fanda.Data\Fanda.Data.csproj", "{4BB505B2-BEB4-4FED-AAC5-68A753BDCB95}"
 EndProject
@@ -20,6 +20,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 		Readme.md = Readme.md
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FandaCoreUI", "FandaCoreUI\FandaCoreUI.csproj", "{D459465E-6043-4B96-996E-746B958D35B7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{156B599F-42A1-4A3C-AB99-6DCE69A741CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{156B599F-42A1-4A3C-AB99-6DCE69A741CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{156B599F-42A1-4A3C-AB99-6DCE69A741CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D459465E-6043-4B96-996E-746B958D35B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D459465E-6043-4B96-996E-746B958D35B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D459465E-6043-4B96-996E-746B958D35B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D459465E-6043-4B96-996E-746B958D35B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

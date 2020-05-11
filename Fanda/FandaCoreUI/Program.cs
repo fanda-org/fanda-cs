@@ -1,4 +1,4 @@
-﻿using Fanda.Service.Seed;
+﻿using Fanda.Repository.Seed;
 using Fanda.Shared;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;

@@ -1,6 +1,7 @@
 ﻿using Fanda.Dto;
-using Fanda.Service;
-using Fanda.Service.Base;
+using Fanda.Repository;
+using Fanda.Repository.Base;
+using Fanda.Repository.Utilities;
 using FandaTabler.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -16,13 +17,13 @@ namespace FandaTabler.Controllers
     [Authorize]
     public class OrganizationsController : Controller
     {
-        private readonly IOrganizationService _service;
-        private readonly IAccountYearService _yearService;
+        private readonly IOrganizationRepository _repository;
+        private readonly IAccountYearRepository _yearRepository;
 
-        public OrganizationsController(IOrganizationService service, IAccountYearService yearService)
+        public OrganizationsController(IOrganizationRepository repository, IAccountYearRepository yearRepository)
         {
-            _service = service;
-            _yearService = yearService;
+            _repository = repository;
+            _yearRepository = yearRepository;
         }
 
         // GET: Orgs
@@ -92,7 +93,7 @@ namespace FandaTabler.Controllers
                 {
                     return BadRequest(new { Error = "Id is missing" });
                 }
-                var org = await _service.GetByIdAsync(id);
+                var org = await _repository.GetByIdAsync(id);
                 if (org == null)
                 {
                     return NotFound(new { Error = "Organization not found" });
@@ -116,7 +117,7 @@ namespace FandaTabler.Controllers
                 {
                     return BadRequest();
                 }
-                var orgChildren = await _service.GetChildrenByIdAsync(id);
+                var orgChildren = await _repository.GetChildrenByIdAsync(id);
                 if (orgChildren == null)
                 {
                     return NotFound();
@@ -142,7 +143,7 @@ namespace FandaTabler.Controllers
                 if (ModelState.IsValid)
                 {
                     #region
-                    var errors = await _service.ValidateAsync(org);
+                    var errors = await _repository.ValidateAsync(org);
                     foreach (var err in errors)
                     {
                         ModelState.AddModelError(err.Key, err.Value);
@@ -152,12 +153,12 @@ namespace FandaTabler.Controllers
                     {
                         bool isAdding = org.Id == null || org.Id == Guid.Empty;
 
-                        org = await _service.SaveAsync(org);
+                        org = await _repository.SaveAsync(org);
 
                         if (isAdding)
                         {
                             Guid userId = GetCurrentUserId();
-                            await _service.MapUserAsync(org.Id, userId);
+                            await _repository.MapUserAsync(org.Id, userId);
                         }
 
                         // Refresh org session value
@@ -192,7 +193,7 @@ namespace FandaTabler.Controllers
                 {
                     return BadRequest();
                 }
-                var result = await _service.DeleteAsync(id);
+                var result = await _repository.DeleteAsync(id);
                 if (!result)
                 {
                     return NotFound();
@@ -214,7 +215,7 @@ namespace FandaTabler.Controllers
             NameValueCollection qFilter = HttpUtility.ParseQueryString(Request.QueryString.Value);
             string search = qFilter["search"];
 
-            var filter = new ChildFilter<IOrganizationService, OrgYearListDto>(_service, qFilter, search);
+            var filter = new ChildFilter<IOrganizationRepository, OrgYearListDto>(_repository, qFilter, search);
             var result = await filter.ApplyAsync(userId);
             return result;
         }
@@ -234,7 +235,7 @@ namespace FandaTabler.Controllers
             #region Open org
             if (orgId != Guid.Empty)
             {
-                var orgSelected = await _service.GetByIdAsync(orgId);
+                var orgSelected = await _repository.GetByIdAsync(orgId);
                 if (orgSelected.Active)
                 {
                     HttpContext.Session.Set("CurrentOrg", orgSelected);
@@ -252,7 +253,7 @@ namespace FandaTabler.Controllers
             #region Open year
             if (yearId != Guid.Empty)
             {
-                var yearSelected = await _yearService.GetByIdAsync(yearId);
+                var yearSelected = await _yearRepository.GetByIdAsync(yearId);
                 if (yearSelected.Active)
                 {
                     HttpContext.Session.Set("CurrentYear", yearSelected);

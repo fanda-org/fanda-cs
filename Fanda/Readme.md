@@ -22,6 +22,7 @@ https://docs.microsoft.com/en-us/aspnet/core/security/authentication/accconfirm?
 
 Refit - REST
 LazyCache
+https://hotchocolate.io/docs/dataloaders
 
 from Master to Transaction: Functionalities apart from Create/Edit/Delete
 ---------------------------------------------------------------------------------------

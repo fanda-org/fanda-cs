@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Fanda.Service;
-using Fanda.Service.Extensions;
+using Fanda.Repository;
+using Fanda.Repository.Extensions;
 using Fanda.Shared;
 //using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -123,7 +123,7 @@ namespace FandaCoreUI
             #endregion
 
             #region AutoMapper
-            services.AddAutoMapper(typeof(Fanda.Service.AutoMapperProfile.AutoMapperProfile));
+            services.AddAutoMapper(typeof(Fanda.Repository.AutoMapperProfile.AutoMapperProfile));
             #endregion
 
             #region AppSettings
@@ -169,12 +169,12 @@ namespace FandaCoreUI
             #endregion
 
             services.AddAuthorization();
-            #region Services
+            #region Repositories
             services.AddSingleton<IEmailSender, EmailSender>();
 
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IOrganizationService, OrganizationService>();
-            services.AddScoped<IPartyCategoryService, PartyCategoryService>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IOrganizationRepository, OrganizationRepository>();
+            services.AddScoped<IPartyCategoryRepository, PartyCategoryRepository>();
             //services.AddScoped<IPartyService, PartyService>();
 
             services.AddHttpContextAccessor();

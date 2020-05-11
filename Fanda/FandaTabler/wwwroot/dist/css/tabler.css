@@ -481,7 +481,7 @@ progress {
 
 @media (min-width: 75.25rem) {
   .container, .container-sm, .container-md, .container-lg, .container-xl {
-    max-width: 75.25rem; } }
+    /*max-width: 75.25rem;*/ } }
 
 .row {
   --bs-gutter-x: 1.5rem;
@@ -2878,7 +2878,7 @@ progress {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
   margin-right: 0;
-  font-size: 1rem;
+  font-size: 1.25rem;
   white-space: nowrap; }
 
 .navbar-nav {
@@ -7488,7 +7488,7 @@ Navbar brand
 
 .navbar-brand-image {
   display: block;
-  height: 2rem; }
+  height: 1.75rem; }
 
 /**
 Navbar toggler
@@ -7801,8 +7801,8 @@ Navbar vertical
       left: auto;
       right: 0; }
     .navbar-vertical.navbar-expand-lg .navbar-brand {
-      padding: 0.75rem 0;
-      justify-content: center; }
+      padding: 0.75rem 0 0;
+      justify-content: left; } /* center */
     .navbar-vertical.navbar-expand-lg .navbar-collapse {
       align-items: stretch; }
     .navbar-vertical.navbar-expand-lg .navbar-nav {

@@ -1,7 +1,7 @@
 ﻿using DataTables.Queryable;
 using Fanda.Dto;
 using Fanda.Dto.Base;
-using Fanda.Service;
+using Fanda.Repository;
 using FandaCoreUI.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,11 +12,11 @@ namespace Fanda.Controllers
     public class PartyCategoriesController : Controller
     {
         //private const string OrgId = "AAEFE9D0-A36E-46E0-1E19-08D5EA042032";
-        private readonly IPartyCategoryService _service;
+        private readonly IPartyCategoryRepository _repository;
 
-        public PartyCategoriesController(IPartyCategoryService service)
+        public PartyCategoriesController(IPartyCategoryRepository repository)
         {
-            _service = service;
+            _repository = repository;
         }
 
         // GET: PartyCategories
@@ -34,7 +34,7 @@ namespace Fanda.Controllers
             var request = new DataTablesRequest<PartyCategoryListDto>(
                 Request.QueryString.Value
                 );
-            IPagedList<PartyCategoryListDto> result = await _service
+            IPagedList<PartyCategoryListDto> result = await _repository
                 .GetAll(org.Id)
                 .ToPagedListAsync(request);
             //var dt = JsonDataTable(result, request.Draw); //result.JsonDataTable(request.Draw);
@@ -94,7 +94,7 @@ namespace Fanda.Controllers
         [HttpPatch]
         public async Task<IActionResult> ChangeStatus([FromBody] ActiveStatus status)
         {
-            await _service.ChangeStatusAsync(status);
+            await _repository.ChangeStatusAsync(status);
             return Ok();
         }
 
@@ -106,7 +106,7 @@ namespace Fanda.Controllers
                 return NotFound();
             }
 
-            PartyCategoryDto cat = await _service.GetByIdAsync(id);
+            PartyCategoryDto cat = await _repository.GetByIdAsync(id);
             if (cat == null)
             {
                 return NotFound();
@@ -134,7 +134,7 @@ namespace Fanda.Controllers
                 return NotFound();
             }
 
-            PartyCategoryDto party = await _service.GetByIdAsync(id);
+            PartyCategoryDto party = await _repository.GetByIdAsync(id);
             if (party == null)
             {
                 return NotFound();
@@ -159,7 +159,7 @@ namespace Fanda.Controllers
                 }
 
                 bool create = model.Id == null || model.Id == Guid.Empty;
-                await _service.SaveAsync(org.Id, model);
+                await _repository.SaveAsync(org.Id, model);
                 if (create) // Create
                 {
                     return RedirectToAction(nameof(Create));
@@ -210,7 +210,7 @@ namespace Fanda.Controllers
                 return NotFound();
             }
 
-            PartyCategoryDto cat = await _service.GetByIdAsync(id);
+            PartyCategoryDto cat = await _repository.GetByIdAsync(id);
             if (cat == null)
             {
                 return NotFound();
@@ -228,7 +228,7 @@ namespace Fanda.Controllers
         {
             try
             {
-                await _service.DeleteAsync(id);
+                await _repository.DeleteAsync(id);
                 return new JsonResult(new
                 {
                     ok = true,

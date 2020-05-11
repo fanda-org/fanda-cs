@@ -1,6 +1,6 @@
 using AutoMapper;
-using Fanda.Service;
-using Fanda.Service.Extensions;
+using Fanda.Repository;
+using Fanda.Repository.Extensions;
 using Fanda.Shared;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
@@ -222,7 +222,7 @@ namespace FandaTabler
             //#endregion
 
             #region AutoMapper
-            services.AddAutoMapper(typeof(Fanda.Service.AutoMapperProfile.AutoMapperProfile));
+            services.AddAutoMapper(typeof(Fanda.Repository.AutoMapperProfile.AutoMapperProfile));
             #endregion
 
             #region Cookie Authentication
@@ -281,19 +281,19 @@ namespace FandaTabler
             //});
             #endregion
 
-            #region Services
+            #region Repositories
             services.AddTransient<IEmailSender, EmailSender>();
 
-            services.AddScoped<IOrganizationService, OrganizationService>();
-            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IOrganizationRepository, OrganizationRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
-            services.AddScoped<IRoleService, RoleService>();
-            services.AddScoped<IPartyCategoryService, PartyCategoryService>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddScoped<IPartyCategoryRepository, PartyCategoryRepository>();
             
-            services.AddScoped<IUnitService, UnitService>();
-            services.AddScoped<IProductBrandService, ProductBrandService>();
+            services.AddScoped<IUnitRepository, UnitRepository>();
+            services.AddScoped<IProductBrandRepository, ProductBrandRepository>();
             
-            services.AddScoped<IAccountYearService, AccountYearService>();
+            services.AddScoped<IAccountYearRepository, AccountYearRepository>();
             services.AddHttpContextAccessor();
             #endregion
         }

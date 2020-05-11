@@ -1,6 +1,6 @@
 ﻿using Fanda.Dto;
-using Fanda.Service;
-using Fanda.Service.Base;
+using Fanda.Repository;
+using Fanda.Repository.Base;
 using FandaTabler.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -15,11 +15,11 @@ namespace FandaTabler.Controllers
     [Authorize]
     public class UnitsController : Controller
     {
-        private readonly IUnitService _service;
+        private readonly IUnitRepository _repository;
 
-        public UnitsController(IUnitService service)
+        public UnitsController(IUnitRepository repository)
         {
-            _service = service;
+            _repository = repository;
         }
 
         public ActionResult Index()
@@ -47,7 +47,7 @@ namespace FandaTabler.Controllers
                 NameValueCollection qFilter = HttpUtility.ParseQueryString(Request.QueryString.Value);
                 string search = qFilter["search"];
 
-                var filter = new ChildFilter<IUnitService, UnitListDto>(_service, qFilter, search);
+                var filter = new ChildFilter<IUnitRepository, UnitListDto>(_repository, qFilter, search);
                 var result = await filter.ApplyAsync(org.Id);
                 return Ok(result);
             }
@@ -72,7 +72,7 @@ namespace FandaTabler.Controllers
                 #region Validation
                 if (ModelState.IsValid)
                 {
-                    var errors = await _service.ValidateAsync(org.Id, model);
+                    var errors = await _repository.ValidateAsync(org.Id, model);
                     foreach (var err in errors)
                     {
                         ModelState.AddModelError(err.Key, err.Value);
@@ -82,7 +82,7 @@ namespace FandaTabler.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    model = await _service.SaveAsync(org.Id, model);
+                    model = await _repository.SaveAsync(org.Id, model);
                     return Ok(model);
                 }
                 else
@@ -102,7 +102,7 @@ namespace FandaTabler.Controllers
         {
             try
             {
-                await _service.DeleteAsync(new Guid(id));
+                await _repository.DeleteAsync(new Guid(id));
                 return Ok();
             }
             catch (Exception ex)

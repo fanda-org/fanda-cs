@@ -5,6 +5,14 @@
     <LangVersion>latest</LangVersion>
     <AspNetCoreModuleName>AspNetCoreModuleV2</AspNetCoreModuleName>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Version>1.0.0</Version>
+    <PackageId>Fanda</PackageId>
+    <Authors>FandaSoft</Authors>
+    <Product>Fanda</Product>
+    <Company>FandaSoft</Company>
+    <Copyright>Copyright © FandaSoft</Copyright>
+    <PackageTags>Finance, Accounting, Receipts, Payments, Inventory</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
@@ -49,7 +57,7 @@
   <ItemGroup>
     <ProjectReference Include="..\DataTables.Queryable\DataTables.Queryable.csproj" />
     <ProjectReference Include="..\Fanda.Dto\Fanda.Dto.csproj" PrivateAssets="All" />
-    <ProjectReference Include="..\Fanda.Service\Fanda.Service.csproj" />
+    <ProjectReference Include="..\Fanda.Repository\Fanda.Repository.csproj" />
     <ProjectReference Include="..\Fanda.Shared\Fanda.Shared.csproj" PrivateAssets="All" />
   </ItemGroup>
 

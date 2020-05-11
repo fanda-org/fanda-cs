@@ -1,6 +1,6 @@
 ﻿using Fanda.Dto;
-using Fanda.Service;
-using Fanda.Service.Base;
+using Fanda.Repository;
+using Fanda.Repository.Base;
 using FandaTabler.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -15,9 +15,9 @@ namespace FandaTabler.Controllers
     [Authorize]
     public class AccountYearsController : Controller
     {
-        private readonly IAccountYearService _service;
+        private readonly IAccountYearRepository _service;
 
-        public AccountYearsController(IAccountYearService service)
+        public AccountYearsController(IAccountYearRepository service)
         {
             _service = service;
         }
@@ -43,7 +43,7 @@ namespace FandaTabler.Controllers
                 NameValueCollection qFilter = HttpUtility.ParseQueryString(Request.QueryString.Value);
                 string search = qFilter["search"];
 
-                var filter = new ChildFilter<IAccountYearService, YearListDto>(_service, qFilter, search);
+                var filter = new ChildFilter<IAccountYearRepository, YearListDto>(_service, qFilter, search);
                 var result = await filter.ApplyAsync(id);
                 return Ok(result);
             }
