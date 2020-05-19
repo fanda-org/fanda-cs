@@ -69,21 +69,7 @@ namespace FandaTabler
             #endregion
 
             #region DbContext
-            switch (appSettings.DatabaseType)
-            {
-                case "MSSQL":
-                    services.InitializeContext(appSettings.DatabaseType, appSettings.ConnectionStrings.MsSqlConnection);
-                    break;
-                case "MYSQL":
-                    services.InitializeContext(appSettings.DatabaseType, appSettings.ConnectionStrings.MySqlConnection);
-                    break;
-                case "PGSQL":
-                    services.InitializeContext(appSettings.DatabaseType, appSettings.ConnectionStrings.PgSqlConnection);
-                    break;
-                default:
-                    services.InitializeContext("MSSQL", appSettings.ConnectionStrings.DefaultConnection);
-                    break;
-            }
+            services.AddFandaDbContextPool(appSettings);
             #endregion
 
             #region Commented DbContext
@@ -289,11 +275,13 @@ namespace FandaTabler
 
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IPartyCategoryRepository, PartyCategoryRepository>();
-            
+
             services.AddScoped<IUnitRepository, UnitRepository>();
             services.AddScoped<IProductBrandRepository, ProductBrandRepository>();
-            
+
             services.AddScoped<IAccountYearRepository, AccountYearRepository>();
+
+            services.AddSingleton<ISerialNumberRepository>(new SerialNumberRepository(appSettings));
             services.AddHttpContextAccessor();
             #endregion
         }

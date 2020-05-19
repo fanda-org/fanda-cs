@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29911.98
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fanda.Data", "Fanda.Data\Fanda.Data.csproj", "{4BB505B2-BEB4-4FED-AAC5-68A753BDCB95}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fanda.Models", "Fanda.Models\Fanda.Models.csproj", "{4BB505B2-BEB4-4FED-AAC5-68A753BDCB95}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fanda.Shared", "Fanda.Shared\Fanda.Shared.csproj", "{22A5D35E-ED75-4BC7-AD46-C9BAC976F7C3}"
 EndProject

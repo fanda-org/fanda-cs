@@ -33,8 +33,9 @@ namespace Fanda.Repository.Base
         {
             PageIndex = string.IsNullOrEmpty(qFilter["pageIndex"]) ? 1 : Convert.ToInt32(qFilter["pageIndex"]);
             PageSize = string.IsNullOrEmpty(qFilter["pageSize"]) ? 100 : Convert.ToInt32(qFilter["pageSize"]);
-            SortField = qFilter["sortField"];
-            SortOrder = qFilter["sortOrder"];
+            FilterBy = qFilter["filter"];
+            SortBy = $"{qFilter["sortField"]} {qFilter["sortOrder"]}";
+            //SortOrder = qFilter["sortOrder"];
             Code = string.IsNullOrEmpty(qFilter["code"]) ? search : qFilter["code"];
             Name = string.IsNullOrEmpty(qFilter["name"]) ? search : qFilter["name"];
             Description = string.IsNullOrEmpty(qFilter["description"]) ? search : qFilter["description"];

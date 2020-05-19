@@ -34,9 +34,16 @@ Selectize
 Select2
 bootstrap-table
 ---------------------------------------------------------------------------------------
-Clone
+Clone / Duplicate
 Deep clone
 Merge
+Log
+Serial Number Generators - for invoices, bills, receipts, payments and tag numbers
+Order management
+Warehouse management
+Branches
+Credit score
+Discounts & offers
 =======================================================================================
 Loader
 Breadcrumbs

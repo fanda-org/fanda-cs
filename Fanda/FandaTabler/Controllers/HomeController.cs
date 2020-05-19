@@ -1,8 +1,10 @@
 ﻿using Fanda.Dto;
 using Fanda.Dto.Base;
+using Fanda.Repository;
 using FandaTabler.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Diagnostics;
 
 namespace FandaTabler.Controllers
@@ -10,9 +12,6 @@ namespace FandaTabler.Controllers
     [Authorize]
     public class HomeController : Controller
     {
-        public HomeController()
-        {
-        }
 
         [Authorize]
         //[ResponseCache(CacheProfileName = "Default")]

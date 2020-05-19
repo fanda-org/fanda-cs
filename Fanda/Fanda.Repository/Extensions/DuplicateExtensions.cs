@@ -1,5 +1,5 @@
-﻿using Fanda.Data;
-using Fanda.Data.Context;
+﻿using Fanda.Models;
+using Fanda.Models.Context;
 using Fanda.Repository.Utilities;
 using Microsoft.EntityFrameworkCore;
 using System;

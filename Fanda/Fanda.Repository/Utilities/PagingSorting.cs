@@ -11,14 +11,19 @@ namespace Fanda.Repository.Utilities
     {
         public int PageIndex { get; set; } = 1;
         public int PageSize { get; set; } = 100;
-        public string SortField { get; set; } = "Code";
-        public string SortOrder { get; set; } = "asc";
+        public string FilterBy { get; set; }
+        public string SortBy { get; set; } = "Code asc";
+        //public string SortOrder { get; set; } = "asc";
 
         protected virtual async Task<PagedList<TList>> ApplyAsync(IQueryable<TList> query)
         {
-            if (SortField != null)
+            if (!string.IsNullOrEmpty(FilterBy))
             {
-                query = query.OrderBy($"{SortField} {SortOrder}");
+                query = query.Where(FilterBy);
+            }
+            if (!string.IsNullOrEmpty(SortBy))
+            {
+                query = query.OrderBy($"{SortBy}");
             }
             else
             {

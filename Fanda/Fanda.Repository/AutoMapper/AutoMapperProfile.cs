@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Fanda.Data;
+using Fanda.Models;
 using Fanda.Dto;
 using Fanda.Dto.ViewModels;
 using System.Linq;

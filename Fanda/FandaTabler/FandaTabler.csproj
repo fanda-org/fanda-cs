@@ -32,6 +32,7 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\PartiesController.cs" />
+    <Compile Remove="Extensions\JsonPagedResult.cs" />
     <Compile Remove="IdentityServerConfig.cs" />
   </ItemGroup>
 
@@ -55,7 +56,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataTables.Queryable\DataTables.Queryable.csproj" />
     <ProjectReference Include="..\Fanda.Dto\Fanda.Dto.csproj" PrivateAssets="All" />
     <ProjectReference Include="..\Fanda.Repository\Fanda.Repository.csproj" />
     <ProjectReference Include="..\Fanda.Shared\Fanda.Shared.csproj" PrivateAssets="All" />

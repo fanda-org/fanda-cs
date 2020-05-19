@@ -1,0 +1,127 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp5.0</TargetFramework>
+    <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
+    <IsPackable>false</IsPackable>
+    <SpaRoot>ClientApp\</SpaRoot>
+    <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
+
+    <!-- Set this to true if you enable server-side prerendering -->
+    <BuildServerSideRenderer>false</BuildServerSideRenderer>
+    <AssemblyName>Fanda</AssemblyName>
+    <RootNamespace>Fanda</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.0-preview.2.20167.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Don't publish the SPA source files, but do show them in the project files list -->
+    <Compile Remove="ClientApp\dist\**" />
+    <Content Remove="$(SpaRoot)**" />
+    <Content Remove="ClientApp\dist\**" />
+    <EmbeddedResource Remove="ClientApp\dist\**" />
+    <None Remove="$(SpaRoot)**" />
+    <None Remove="ClientApp\dist\**" />
+    <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="ClientApp\dist\out-tsc\e2e\src\app.e2e-spec.js" />
+    <None Remove="ClientApp\dist\out-tsc\e2e\src\app.e2e-spec.js.map" />
+    <None Remove="ClientApp\dist\out-tsc\e2e\src\app.po.js" />
+    <None Remove="ClientApp\dist\out-tsc\e2e\src\app.po.js.map" />
+    <None Remove="ClientApp\dist\out-tsc\src\app\app.module.js" />
+    <None Remove="ClientApp\dist\out-tsc\src\app\app.module.js.map" />
+    <None Remove="ClientApp\dist\out-tsc\src\app\app.routing.js" />
+    <None Remove="ClientApp\dist\out-tsc\src\app\app.routing.js.map" />
+    <None Remove="ClientApp\dist\out-tsc\src\app\containers\default-layout\default-layout.component.js" />
+    <None Remove="ClientApp\dist\out-tsc\src\app\containers\default-layout\default-layout.component.js.map" />
+    <None Remove="ClientApp\dist\out-tsc\src\app\containers\default-layout\index.js" />
+    <None Remove="ClientApp\dist\out-tsc\src\app\containers\default-layout\index.js.map" />
+    <None Remove="ClientApp\dist\out-tsc\src\app\containers\index.js" />
+    <None Remove="ClientApp\dist\out-tsc\src\app\containers\index.js.map" />
+    <None Remove="ClientApp\dist\out-tsc\src\app\views\units\units-routing.module.js" />
+    <None Remove="ClientApp\dist\out-tsc\src\app\views\units\units-routing.module.js.map" />
+    <None Remove="ClientApp\dist\out-tsc\src\app\views\units\units.component.js" />
+    <None Remove="ClientApp\dist\out-tsc\src\app\views\units\units.component.js.map" />
+    <None Remove="ClientApp\dist\out-tsc\src\app\views\units\units.module.js" />
+    <None Remove="ClientApp\dist\out-tsc\src\app\views\units\units.module.js.map" />
+    <None Remove="ClientApp\dist\out-tsc\src\app\_models\index.js" />
+    <None Remove="ClientApp\dist\out-tsc\src\app\_models\index.js.map" />
+    <None Remove="ClientApp\dist\out-tsc\src\app\_models\unit.js" />
+    <None Remove="ClientApp\dist\out-tsc\src\app\_models\unit.js.map" />
+    <None Remove="ClientApp\dist\out-tsc\src\app\_models\user.js" />
+    <None Remove="ClientApp\dist\out-tsc\src\app\_models\user.js.map" />
+    <None Remove="ClientApp\dist\out-tsc\src\app\_nav.js" />
+    <None Remove="ClientApp\dist\out-tsc\src\app\_nav.js.map" />
+    <None Remove="ClientApp\dist\out-tsc\src\app\_services\account.service.js" />
+    <None Remove="ClientApp\dist\out-tsc\src\app\_services\account.service.js.map" />
+    <None Remove="ClientApp\dist\out-tsc\src\app\_services\alert.service.js" />
+    <None Remove="ClientApp\dist\out-tsc\src\app\_services\alert.service.js.map" />
+    <None Remove="ClientApp\dist\out-tsc\src\app\_services\index.js" />
+    <None Remove="ClientApp\dist\out-tsc\src\app\_services\index.js.map" />
+    <None Remove="ClientApp\dist\out-tsc\src\app\_services\unit.service.js" />
+    <None Remove="ClientApp\dist\out-tsc\src\app\_services\unit.service.js.map" />
+    <None Remove="ClientApp\src\app\_models\alert.ts" />
+    <None Remove="ClientApp\src\app\_models\index.ts" />
+    <None Remove="ClientApp\src\app\_models\unit.ts" />
+    <None Remove="ClientApp\src\app\_models\user.ts" />
+    <None Remove="ClientApp\src\app\_services\account.service.ts" />
+    <None Remove="ClientApp\src\app\_services\alert.service.ts" />
+    <None Remove="ClientApp\src\app\_services\index.ts" />
+    <None Remove="ClientApp\src\app\_services\unit.service.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Fanda.Dto\Fanda.Dto.csproj" />
+    <ProjectReference Include="..\Fanda.Repository\Fanda.Repository.csproj" />
+    <ProjectReference Include="..\Fanda.Shared\Fanda.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\_models\alert.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\_models\index.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\_models\unit.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\_models\user.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\_services\alert.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\_services\index.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\_services\unit.service.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\_services\account.service.ts" />
+  </ItemGroup>
+
+  <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
+    <!-- Ensure Node.js is installed -->
+    <Exec Command="node --version" ContinueOnError="true">
+      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+    </Exec>
+    <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
+    <Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
+  </Target>
+
+  <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
+    <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build -- --prod" />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build:ssr -- --prod" Condition=" '$(BuildServerSideRenderer)' == 'true' " />
+
+    <!-- Include the newly-built files in the publish output -->
+    <ItemGroup>
+      <DistFiles Include="$(SpaRoot)dist\**; $(SpaRoot)dist-server\**" />
+      <DistFiles Include="$(SpaRoot)node_modules\**" Condition="'$(BuildServerSideRenderer)' == 'true'" />
+      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+        <RelativePath>%(DistFiles.Identity)</RelativePath>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      </ResolvedFileToPublish>
+    </ItemGroup>
+  </Target>
+
+</Project>

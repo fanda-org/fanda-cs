@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29911.98
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fanda.Repository", "Fanda.Repository\Fanda.Repository.csproj", "{5FFA524D-D5CE-45D5-90DB-08B115D06A9A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fanda.Data", "Fanda.Data\Fanda.Data.csproj", "{4BB505B2-BEB4-4FED-AAC5-68A753BDCB95}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fanda.Models", "Fanda.Models\Fanda.Models.csproj", "{4BB505B2-BEB4-4FED-AAC5-68A753BDCB95}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fanda.Shared", "Fanda.Shared\Fanda.Shared.csproj", "{22A5D35E-ED75-4BC7-AD46-C9BAC976F7C3}"
 EndProject
@@ -22,6 +22,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FandaCoreUI", "FandaCoreUI\FandaCoreUI.csproj", "{D459465E-6043-4B96-996E-746B958D35B7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{BB267BE1-1BD0-4FFE-9E8A-2086D6BF7BC0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fanda.Tests", "Fanda.Test\Fanda.Tests.csproj", "{322FA2C3-D797-4988-9C3A-4298031750B3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fanda.Ng", "Fanda.Ng\Fanda.Ng.csproj", "{92A5ECD3-394C-49B5-93EB-68B3880C872E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,9 +63,20 @@ Global
 		{D459465E-6043-4B96-996E-746B958D35B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D459465E-6043-4B96-996E-746B958D35B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D459465E-6043-4B96-996E-746B958D35B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{322FA2C3-D797-4988-9C3A-4298031750B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{322FA2C3-D797-4988-9C3A-4298031750B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{322FA2C3-D797-4988-9C3A-4298031750B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{322FA2C3-D797-4988-9C3A-4298031750B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92A5ECD3-394C-49B5-93EB-68B3880C872E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92A5ECD3-394C-49B5-93EB-68B3880C872E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92A5ECD3-394C-49B5-93EB-68B3880C872E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92A5ECD3-394C-49B5-93EB-68B3880C872E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{322FA2C3-D797-4988-9C3A-4298031750B3} = {BB267BE1-1BD0-4FFE-9E8A-2086D6BF7BC0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {378F5CA3-14DC-43F3-B3CA-7D9C2DDF26AF}

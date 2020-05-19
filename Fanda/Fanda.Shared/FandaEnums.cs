@@ -204,4 +204,26 @@ namespace Fanda.Shared
         Income = 3,
         Expense = 4
     }
+
+    public enum SerialNumberModule
+    {
+        SalesInvoice,
+        CreditNote,
+        PurchaseBill,
+        DebitNote,
+        BatchNumber,
+        Receipts,
+        Payments,
+        Journals
+    }
+
+    public enum SerialNumberReset
+    {
+        NoReset,
+        Max,
+        Daily,
+        Monthly,
+        CalendarYear,
+        AccountingYear
+    }
 }

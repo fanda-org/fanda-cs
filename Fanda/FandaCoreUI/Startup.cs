@@ -55,21 +55,7 @@ namespace FandaCoreUI
             #endregion
 
             #region DbContext
-            switch (appSettings.DatabaseType)
-            {
-                case "MSSQL":
-                    services.InitializeContext(appSettings.DatabaseType, appSettings.ConnectionStrings.MsSqlConnection);
-                    break;
-                case "MYSQL":
-                    services.InitializeContext(appSettings.DatabaseType, appSettings.ConnectionStrings.MySqlConnection);
-                    break;
-                case "PGSQL":
-                    services.InitializeContext(appSettings.DatabaseType, appSettings.ConnectionStrings.PgSqlConnection);
-                    break;
-                default:
-                    services.InitializeContext("MSSQL", appSettings.ConnectionStrings.DefaultConnection);
-                    break;
-            }
+            services.AddFandaDbContextPool(appSettings);
             #endregion
 
             #region Response compression

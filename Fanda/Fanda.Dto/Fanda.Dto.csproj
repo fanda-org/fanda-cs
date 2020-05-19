@@ -6,6 +6,7 @@
 
 	<ItemGroup>
 		<Compile Remove="LocationDto.cs" />
+		<Compile Remove="SerialNumberDto.cs" />
 	</ItemGroup>
 
 	<ItemGroup>

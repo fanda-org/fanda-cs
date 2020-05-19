@@ -4,14 +4,14 @@
     "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\FandaTabler\\FandaTabler.csproj": {}
   },
   "projects": {
-    "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\DataTables.Queryable\\DataTables.Queryable.csproj": {
+    "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Dto\\Fanda.Dto.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\DataTables.Queryable\\DataTables.Queryable.csproj",
-        "projectName": "DataTables.Queryable",
-        "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\DataTables.Queryable\\DataTables.Queryable.csproj",
+        "projectUniqueName": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Dto\\Fanda.Dto.csproj",
+        "projectName": "Fanda.Dto",
+        "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Dto\\Fanda.Dto.csproj",
         "packagesPath": "C:\\Users\\tbala\\.nuget\\packages\\",
-        "outputPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\DataTables.Queryable\\obj\\",
+        "outputPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Dto\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -21,15 +21,20 @@
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "netstandard2.1"
+          "net5.0"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "netstandard2.1": {
-            "projectReferences": {}
+          "net5.0": {
+            "projectReferences": {
+              "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Shared\\Fanda.Shared.csproj": {
+                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Shared\\Fanda.Shared.csproj",
+                "privateAssets": "all"
+              }
+            }
           }
         },
         "warningProperties": {
@@ -39,11 +44,15 @@
         }
       },
       "frameworks": {
-        "netstandard2.1": {
+        "net5.0": {
           "dependencies": {
-            "Microsoft.EntityFrameworkCore": {
+            "AutoMapper": {
               "target": "Package",
-              "version": "[3.1.3, )"
+              "version": "[9.0.0, )"
+            },
+            "System.ComponentModel.Annotations": {
+              "target": "Package",
+              "version": "[4.7.0, )"
             }
           },
           "imports": [
@@ -57,7 +66,7 @@
           "assetTargetFallback": true,
           "warn": true,
           "frameworkReferences": {
-            "NETStandard.Library": {
+            "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
@@ -65,14 +74,14 @@
         }
       }
     },
-    "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Data\\Fanda.Data.csproj": {
+    "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Models\\Fanda.Models.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Data\\Fanda.Data.csproj",
-        "projectName": "Fanda.Data",
-        "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Data\\Fanda.Data.csproj",
+        "projectUniqueName": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Models\\Fanda.Models.csproj",
+        "projectName": "Fanda.Models",
+        "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Models\\Fanda.Models.csproj",
         "packagesPath": "C:\\Users\\tbala\\.nuget\\packages\\",
-        "outputPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Data\\obj\\",
+        "outputPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Models\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -163,76 +172,6 @@
         }
       }
     },
-    "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Dto\\Fanda.Dto.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Dto\\Fanda.Dto.csproj",
-        "projectName": "Fanda.Dto",
-        "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Dto\\Fanda.Dto.csproj",
-        "packagesPath": "C:\\Users\\tbala\\.nuget\\packages\\",
-        "outputPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Dto\\obj\\",
-        "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
-        "configFilePaths": [
-          "C:\\Users\\tbala\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
-        ],
-        "originalTargetFrameworks": [
-          "net5.0"
-        ],
-        "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {}
-        },
-        "frameworks": {
-          "net5.0": {
-            "projectReferences": {
-              "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Shared\\Fanda.Shared.csproj": {
-                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Shared\\Fanda.Shared.csproj",
-                "privateAssets": "all"
-              }
-            }
-          }
-        },
-        "warningProperties": {
-          "warnAsError": [
-            "NU1605"
-          ]
-        }
-      },
-      "frameworks": {
-        "net5.0": {
-          "dependencies": {
-            "AutoMapper": {
-              "target": "Package",
-              "version": "[9.0.0, )"
-            },
-            "System.ComponentModel.Annotations": {
-              "target": "Package",
-              "version": "[4.7.0, )"
-            }
-          },
-          "imports": [
-            "net461",
-            "net462",
-            "net47",
-            "net471",
-            "net472",
-            "net48"
-          ],
-          "assetTargetFallback": true,
-          "warn": true,
-          "frameworkReferences": {
-            "Microsoft.NETCore.App": {
-              "privateAssets": "all"
-            }
-          },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.100-preview.2.20176.6\\RuntimeIdentifierGraph.json"
-        }
-      }
-    },
     "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Repository\\Fanda.Repository.csproj": {
       "version": "1.0.0",
       "restore": {
@@ -259,13 +198,12 @@
         "frameworks": {
           "net5.0": {
             "projectReferences": {
-              "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Data\\Fanda.Data.csproj": {
-                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Data\\Fanda.Data.csproj",
-                "privateAssets": "all"
-              },
               "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Dto\\Fanda.Dto.csproj": {
                 "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Dto\\Fanda.Dto.csproj",
                 "privateAssets": "all"
+              },
+              "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Models\\Fanda.Models.csproj": {
+                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Models\\Fanda.Models.csproj"
               },
               "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Shared\\Fanda.Shared.csproj": {
                 "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Shared\\Fanda.Shared.csproj",
@@ -283,6 +221,10 @@
       "frameworks": {
         "net5.0": {
           "dependencies": {
+            "Dapper": {
+              "target": "Package",
+              "version": "[2.0.35, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[3.1.3, )"
@@ -414,9 +356,6 @@
         "frameworks": {
           "net5.0": {
             "projectReferences": {
-              "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\DataTables.Queryable\\DataTables.Queryable.csproj": {
-                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\DataTables.Queryable\\DataTables.Queryable.csproj"
-              },
               "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Dto\\Fanda.Dto.csproj": {
                 "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\Fanda\\Fanda.Dto\\Fanda.Dto.csproj",
                 "privateAssets": "all"
