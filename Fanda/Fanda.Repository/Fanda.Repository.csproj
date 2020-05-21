@@ -6,6 +6,8 @@
 
 	<ItemGroup>
 		<Compile Remove="BankService.cs" />
+		<Compile Remove="Base\FilterBase.cs" />
+		<Compile Remove="Base\PagingSorting.cs" />
 		<Compile Remove="Extensions\Message.cs" />
 		<Compile Remove="Extensions\PagedList.cs" />
 		<Compile Remove="IdentityServerConfig.cs" />
@@ -15,6 +17,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Dapper" Version="2.0.35" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.3" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.3" />
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.3" />

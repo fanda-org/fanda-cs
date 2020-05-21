@@ -16,16 +16,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using System.Linq.Dynamic.Core;
+using System.Linq.Expressions;
 
 namespace Fanda.Repository
 {
     public interface IUserRepository :
         IRepositoryRoot<UserDto>,
-        IRepositoryList<UserListDto>
+        IRepositoryChildList<UserListDto>
     {
         Task<UserDto> LoginAsync(LoginViewModel model);
         Task<UserDto> RegisterAsync(RegisterViewModel model, string callbackUrl);
-        IQueryable<UserListDto> GetAll(Guid orgId);
+        //IQueryable<UserListDto> GetAll(Guid orgId);
         Task<bool> MapOrgAsync(Guid userId, Guid orgId);
         Task<bool> UnmapOrgAsync(Guid userId, Guid orgId);
         Task<bool> MapRoleAsync(Guid userId, string roleName, Guid orgId);
@@ -111,21 +113,25 @@ namespace Fanda.Repository
             return userModel;
         }
 
-        public IQueryable<UserListDto> GetAll() => GetAll(Guid.Empty);
+        //public IQueryable<UserListDto> GetAll() => GetAll(Guid.Empty);
 
         public IQueryable<UserListDto> GetAll(Guid orgId)
         {
+            if (orgId == null || orgId == Guid.Empty)
+            {
+                throw new ArgumentNullException("orgId", "Org id is missing");
+            }
             IQueryable<UserListDto> userQry = _context.Users
-                //.Include(u => u.OrgUsers)
+                .AsNoTracking()
+                .Include(u => u.OrgUsers)
                 //.SelectMany(u => u.OrgUsers.Select(ou => ou.Organization))
                 //.Where(u => u.OrgUsers.Any(ou => ou.OrgId == orgId))
-                .ProjectTo<UserListDto>(_mapper.ConfigurationProvider);
-
-            if (orgId != null && orgId != Guid.Empty)
-            {
-                userQry = userQry.Where(u => u.OrgId == orgId);
-            }
-
+                .ProjectTo<UserListDto>(_mapper.ConfigurationProvider)
+                .Where(u => u.OrgId == orgId);
+            //if (orgId != null && orgId != Guid.Empty)
+            //{
+            //    userQry = userQry.Where(u => u.OrgId == orgId);
+            //}
             return userQry;
         }
 

@@ -5,7 +5,9 @@ using Fanda.Repository.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
+using Fanda.Repository.Extensions;
 
 namespace Fanda.Controllers
 {
@@ -20,11 +22,12 @@ namespace Fanda.Controllers
         }
 
         // GET: Organizations
-        public async Task<IActionResult> Index()
+        public Task<IActionResult> Index()
         {
-            var list = await ((IRepositoryList<OrgListDto>)_repository)
-                .GetAll()
-                .ToListAsync();
+            var list = await _repository
+                .GetAll(new Guid(), new Query { });
+
+                
             return View(list);
         }
 

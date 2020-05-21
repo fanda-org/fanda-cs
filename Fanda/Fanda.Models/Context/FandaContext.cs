@@ -84,6 +84,8 @@ namespace Fanda.Models.Context
             //    property.SetColumnType("decimal(16, 4)");
             //    //.Relational().ColumnType = "decimal(16, 4)";
             //}
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

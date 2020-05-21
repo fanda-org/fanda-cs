@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 //using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
+using System.Linq.Dynamic.Core;
 
 namespace Fanda.Repository
 {
