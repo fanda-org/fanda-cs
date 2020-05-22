@@ -16,8 +16,7 @@ namespace Fanda.Repository.Base
         Task<bool> ChangeStatusAsync(ActiveStatus status);
     }
 
-    public interface IRepositoryRoot<TModel> : IRepositoryBase<TModel>
-        where TModel : RootDto
+    public interface IParentRepository<TModel> : IRepositoryBase<TModel>
     {
         // POST and PUT
         Task<TModel> SaveAsync(TModel model);
@@ -27,17 +26,6 @@ namespace Fanda.Repository.Base
     }
 
     public interface IRepository<TModel> : IRepositoryBase<TModel>
-        where TModel : BaseDto
-    {
-        // POST and PUT
-        Task<TModel> SaveAsync(TModel model);
-        // GET
-        Task<bool> ExistsAsync(Duplicate data);
-        Task<DtoErrors> ValidateAsync(TModel model);
-    }
-
-    public interface IRepositoryChild<TModel> : IRepositoryBase<TModel>
-        where TModel : BaseDto
     {
         // POST and PUT
         Task<TModel> SaveAsync(Guid parentId, TModel model);
@@ -55,15 +43,10 @@ namespace Fanda.Repository.Base
     #endregion
 
     #region List Repository
-    public interface IRepositoryList<TList>
+    public interface IListRepository<TModel>
     {
         // GET
-        IQueryable<TList> GetAll();
-    }
-    public interface IRepositoryChildList<TList>
-    {
-        // GET
-        IQueryable<TList> GetAll(Guid parentId);
+        IQueryable<TModel> GetAll(Guid parentId);
     }
     #endregion
 }

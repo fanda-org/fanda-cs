@@ -17,8 +17,8 @@ using System.Threading.Tasks;
 namespace Fanda.Repository
 {
     public interface IUnitRepository :
-        IRepositoryChild<UnitDto>,
-        IRepositoryChildList<UnitListDto>
+        IRepository<UnitDto>,
+        IListRepository<UnitListDto>
     { }
 
     public class UnitRepository : IUnitRepository

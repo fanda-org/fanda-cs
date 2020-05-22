@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Net;
 
 namespace Fanda.Repository.Base
 {
@@ -14,18 +12,18 @@ namespace Fanda.Repository.Base
 
     public interface ISingleResponse<TModel> : IResponse
     {
-        TModel Model { get; set; }
+        TModel Data { get; set; }
     }
 
     public interface IListResponse<TModel> : IResponse
     {
-        IEnumerable<TModel> Model { get; set; }
+        IEnumerable<TModel> Data { get; set; }
     }
 
     public interface IPagedResponse<TModel> : IListResponse<TModel>
     {
         public int PageSize { get; set; }
-        public int PageNumber { get; set; }
+        public int Page { get; set; }
         int ItemsCount { get; set; }
         int PageCount { get; }
         public int FirstRowOnPage { get; }
@@ -44,7 +42,7 @@ namespace Fanda.Repository.Base
         public string Message { get; set; }
         public bool HasError { get; set; }
         public string ErrorMessage { get; set; }
-        public TModel Model { get; set; }
+        public TModel Data { get; set; }
     }
 
     public class ListResponse<TModel> : IListResponse<TModel>
@@ -52,7 +50,7 @@ namespace Fanda.Repository.Base
         public string Message { get; set; }
         public bool HasError { get; set; }
         public string ErrorMessage { get; set; }
-        public IEnumerable<TModel> Model { get; set; }
+        public IEnumerable<TModel> Data { get; set; }
     }
 
     public class PagedResponse<TModel> : IPagedResponse<TModel>
@@ -60,17 +58,17 @@ namespace Fanda.Repository.Base
         public string Message { get; set; }
         public bool HasError { get; set; }
         public string ErrorMessage { get; set; }
-        public IEnumerable<TModel> Model { get; set; }
+        public IEnumerable<TModel> Data { get; set; }
         public int PageSize { get; set; }
-        public int PageNumber { get; set; }
+        public int Page { get; set; }
         public int ItemsCount { get; set; }
         public int PageCount
             => ItemsCount < PageSize ? 1 : (int)(((double)ItemsCount / PageSize) + 1);
         public int FirstRowOnPage
-            => Math.Min(ItemsCount, ((PageNumber - 1) * PageSize) + 1);
+            => Math.Min(ItemsCount, ((Page - 1) * PageSize) + 1);
         //=> Math.Min((int)(((PageNumber - 1) * PageSize) + 1), (int)LastRowOnPage);
         public int LastRowOnPage
-            => FirstRowOnPage + ItemsCount - 1;
+            => Math.Min(ItemsCount, FirstRowOnPage + PageSize - 1);
         //=> Math.Min((int)PageNumber * (int)PageSize, (int)ItemsCount);
     }
 #pragma warning restore CS1591

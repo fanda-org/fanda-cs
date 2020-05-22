@@ -16,8 +16,8 @@ using System.Threading.Tasks;
 namespace Fanda.Repository
 {
     public interface IAccountYearRepository :
-        IRepositoryChild<AccountYearDto>,
-        IRepositoryChildList<YearListDto>
+        IRepository<AccountYearDto>,
+        IListRepository<YearListDto>
     { }
 
     public class AccountYearRepository : IAccountYearRepository

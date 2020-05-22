@@ -192,8 +192,8 @@ namespace FandaTabler.Controllers
         //[HttpGet]
         public async Task<IActionResult> GetAll(Guid orgId/*, bool? active*/)
         {
-            var users = await _repository.GetAll()
-                .Where(u => u.OrgId == orgId)
+            var users = await _repository
+                .GetAll(orgId)
                 .ToListAsync();
             return Ok(users);
         }

@@ -17,8 +17,8 @@ using System.Threading.Tasks;
 namespace Fanda.Repository
 {
     public interface IPartyCategoryRepository :
-        IRepositoryChild<PartyCategoryDto>,
-        IRepositoryChildList<PartyCategoryListDto>
+        IRepository<PartyCategoryDto>,
+        IListRepository<PartyCategoryListDto>
     { }
 
     public class PartyCategoryRepository : IPartyCategoryRepository

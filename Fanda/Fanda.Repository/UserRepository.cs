@@ -22,8 +22,8 @@ using System.Linq.Expressions;
 namespace Fanda.Repository
 {
     public interface IUserRepository :
-        IRepositoryRoot<UserDto>,
-        IRepositoryChildList<UserListDto>
+        IParentRepository<UserDto>,
+        IListRepository<UserListDto>
     {
         Task<UserDto> LoginAsync(LoginViewModel model);
         Task<UserDto> RegisterAsync(RegisterViewModel model, string callbackUrl);

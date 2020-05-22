@@ -17,8 +17,8 @@ using System.Threading.Tasks;
 namespace Fanda.Repository
 {
     public interface IProductBrandRepository :
-        IRepositoryChild<ProductBrandDto>,
-        IRepositoryChildList<ProductBrandListDto>
+        IRepository<ProductBrandDto>,
+        IListRepository<ProductBrandListDto>
     { }
 
     public class ProductBrandRepository : IProductBrandRepository

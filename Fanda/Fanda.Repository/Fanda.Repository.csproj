@@ -7,9 +7,11 @@
 	<ItemGroup>
 		<Compile Remove="BankService.cs" />
 		<Compile Remove="Base\FilterBase.cs" />
+		<Compile Remove="Base\PagedList.cs" />
 		<Compile Remove="Base\PagingSorting.cs" />
 		<Compile Remove="Extensions\Message.cs" />
 		<Compile Remove="Extensions\PagedList.cs" />
+		<Compile Remove="Extensions\PagedResultExtension.cs" />
 		<Compile Remove="IdentityServerConfig.cs" />
 		<Compile Remove="LocationService.cs" />
 		<Compile Remove="PartyService.cs" />

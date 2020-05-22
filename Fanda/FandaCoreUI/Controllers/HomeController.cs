@@ -24,10 +24,10 @@ namespace FandaCoreUI.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            var fandaAdmin = await _userRepository.GetAll()
-                .FirstOrDefaultAsync(u => u.Name == "FandaAdmin");
+            var fandaAdmin = await _userRepository.GetByIdAsync(new Guid("F5A538C7-9627-4B09-8D38-08D7CED44722"));
+                //.FirstOrDefaultAsync(u => u.Name == "FandaAdmin");
 
-            var demoOrg = await ((IRepositoryChildList<OrgListDto>)_repository)
+            var demoOrg = await ((IListRepository<OrgListDto>)_repository)
                 .GetAll(fandaAdmin.Id)
                 .FirstOrDefaultAsync(o => o.Code == "DEMO");
 

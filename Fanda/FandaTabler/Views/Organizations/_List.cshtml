@@ -1,4 +1,4 @@
-﻿@model PagedList<OrgYearListDto>
+﻿@model Fanda.Repository.Base.PagedResponse<OrgYearListDto>
 
 @if (Model == null)
 {
@@ -14,7 +14,7 @@ else
         <input type="hidden" asp-for="LastRowOnPage" />
         <input type="hidden" asp-for="ItemsCount" />
     </div>
-    @if (Model.Data != null && Model.Data.Count > 0)
+    @if (Model.Data != null && Model.ItemsCount > 0)
     {
         @foreach (var org in Model.Data)
         {

@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Linq.Dynamic.Core;
-using System.Threading.Tasks;
-using System.Web;
-using Fanda.Dto;
+﻿using Fanda.Dto;
 using Fanda.Repository;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Fanda.Repository.Extensions;
 using Fanda.Repository.Base;
+using Fanda.Repository.Extensions;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -28,12 +23,16 @@ namespace Fanda.Controllers
 
         // GET: api/<UnitsController>
         [HttpGet]
-        public Task<PagedList> Get()
+        public async Task<IEnumerable<UnitListDto>> Get()
         {
-            return repository
-                .GetAll(new Guid("3F60039B-8EAF-49B2-4D14-08D7CED444AC"),
-                new Query {Filter="Code==@0",FilterArgs=new[] { "KGM" } });
-
+            var response = await repository
+                .GetList(new Guid("3F60039B-8EAF-49B2-4D14-08D7CED444AC"),
+                    new Query
+                    {
+                        Filter = "Code==@0",
+                        FilterArgs = new[] { "KGM" }
+                    });
+            return response.Data;
             //NameValueCollection qFilter = HttpUtility.ParseQueryString(Request.QueryString.Value);
             //if (!string.IsNullOrEmpty(qFilter["filterBy"]))
             //{

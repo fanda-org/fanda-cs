@@ -24,7 +24,7 @@ namespace Fanda.Api.Base
             {
                 status = HttpStatusCode.InternalServerError;
             }
-            else if (response.Model == null)
+            else if (response.Data == null)
             {
                 status = HttpStatusCode.NotFound;
             }
@@ -43,7 +43,7 @@ namespace Fanda.Api.Base
             {
                 status = HttpStatusCode.InternalServerError;
             }
-            else if (response.Model == null)
+            else if (response.Data == null)
             {
                 status = HttpStatusCode.NoContent;
             }

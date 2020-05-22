@@ -22,12 +22,10 @@ namespace Fanda.Controllers
         }
 
         // GET: Organizations
-        public Task<IActionResult> Index()
+        public async Task<IActionResult> Index()
         {
             var list = await _repository
-                .GetAll(new Guid(), new Query { });
-
-                
+                .GetList(new Guid(), new Query { });                
             return View(list);
         }
 

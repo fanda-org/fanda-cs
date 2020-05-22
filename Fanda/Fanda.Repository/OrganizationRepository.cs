@@ -18,10 +18,11 @@ using System.Linq.Dynamic.Core;
 
 namespace Fanda.Repository
 {
-    public interface IOrganizationRepository : IRepository<OrganizationDto>,
+    public interface IOrganizationRepository : 
+        IParentRepository<OrganizationDto>,
         IRepositoryChildData<OrgChildrenDto>,
-        IRepositoryChildList<OrgListDto>,
-        IRepositoryChildList<OrgYearListDto>
+        //IListRepository<OrgListDto>,
+        IListRepository<OrgYearListDto>
     {
         Task<bool> MapUserAsync(Guid orgId, Guid userId);
         Task<bool> UnmapUserAsync(Guid orgId, Guid userId);
@@ -289,19 +290,19 @@ namespace Fanda.Repository
         public Task<bool> ExistsAsync(Duplicate data) => _context.ExistsAsync<Organization>(data);
 
         #region List
-        public IQueryable<OrgListDto> GetAll(Guid userId)
-        {
-            if (userId == null || userId == Guid.Empty)
-                throw new ArgumentNullException("userId", "User id is missing");
+        //public IQueryable<OrgListDto> GetAll(Guid userId)
+        //{
+        //    if (userId == null || userId == Guid.Empty)
+        //        throw new ArgumentNullException("userId", "User id is missing");
 
-            IQueryable<OrgListDto> query = _context.Organizations
-                .Include(o => o.OrgUsers)
-                .AsNoTracking()
-                .Where(o => o.OrgUsers.Select(ou => ou.UserId).Any(uid => uid == userId))
-                .ProjectTo<OrgListDto>(_mapper.ConfigurationProvider);
-            return GetAll(query);
-        }
-        IQueryable<OrgYearListDto> IRepositoryChildList<OrgYearListDto>.GetAll(Guid userId)
+        //    IQueryable<OrgListDto> query = _context.Organizations
+        //        .Include(o => o.OrgUsers)
+        //        .AsNoTracking()
+        //        .Where(o => o.OrgUsers.Select(ou => ou.UserId).Any(uid => uid == userId))
+        //        .ProjectTo<OrgListDto>(_mapper.ConfigurationProvider);
+        //    return GetAll(query);
+        //}
+        IQueryable<OrgYearListDto> IListRepository<OrgYearListDto>.GetAll(Guid userId)
         {
             if (userId == null || userId == Guid.Empty)
                 throw new ArgumentNullException("userId", "User id is missing");

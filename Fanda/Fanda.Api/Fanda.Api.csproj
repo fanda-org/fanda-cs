@@ -9,6 +9,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.4.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Fanda.Dto\Fanda.Dto.csproj" />
     <ProjectReference Include="..\Fanda.Repository\Fanda.Repository.csproj" />
     <ProjectReference Include="..\Fanda.Shared\Fanda.Shared.csproj" />

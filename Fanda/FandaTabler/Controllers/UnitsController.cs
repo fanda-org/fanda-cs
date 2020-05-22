@@ -1,6 +1,7 @@
 ﻿using Fanda.Dto;
 using Fanda.Repository;
 using Fanda.Repository.Base;
+using Fanda.Repository.Extensions;
 using FandaTabler.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -45,11 +46,18 @@ namespace FandaTabler.Controllers
                 }
 
                 NameValueCollection qFilter = HttpUtility.ParseQueryString(Request.QueryString.Value);
-                string search = qFilter["search"];
-
-                var filter = new ChildFilter<IUnitRepository, UnitListDto>(_repository, qFilter, search);
-                var result = await filter.ApplyAsync(org.Id);
-                return Ok(result);
+                //string search = qFilter["search"];
+                //var filter = new ChildFilter<IUnitRepository, UnitListDto>(_repository, qFilter, search);
+                //var result = await filter.ApplyAsync(org.Id);
+                //return Ok(result);
+                var response = await _repository
+                    .GetPaged(org.Id, new Query
+                    {
+                        Page = Convert.ToInt32(qFilter["pageIndex"]),
+                        PageSize = Convert.ToInt32(qFilter["pageSize"]),
+                        Search = qFilter["search"]
+                    });
+                return Ok(response);
             }
             catch (Exception ex)
             {

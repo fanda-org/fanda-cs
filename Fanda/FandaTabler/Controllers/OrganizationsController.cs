@@ -1,7 +1,7 @@
 ﻿using Fanda.Dto;
 using Fanda.Repository;
 using Fanda.Repository.Base;
-using Fanda.Repository.Utilities;
+using Fanda.Repository.Extensions;
 using FandaTabler.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -208,16 +208,21 @@ namespace FandaTabler.Controllers
         }
 
         #region Private methods
-        private async Task<PagedList<OrgYearListDto>> GetAll()
+        private async Task<PagedResponse<OrgYearListDto>> GetAll()
         {
             Guid userId = GetCurrentUserId();
 
             NameValueCollection qFilter = HttpUtility.ParseQueryString(Request.QueryString.Value);
-            string search = qFilter["search"];
-
-            var filter = new ChildFilter<IOrganizationRepository, OrgYearListDto>(_repository, qFilter, search);
-            var result = await filter.ApplyAsync(userId);
-            return result;
+            //string search = qFilter["search"];
+            //var filter = new ChildFilter<IOrganizationRepository, OrgYearListDto>(_repository, qFilter, search);
+            //var result = await filter.ApplyAsync(userId);
+            var response = await _repository
+                .GetPaged(userId, new Query { 
+                    Page = Convert.ToInt32(qFilter["pageIndex"]),
+                    PageSize = Convert.ToInt32(qFilter["pageSize"]),
+                    Search = qFilter["search"]
+                });
+            return response;
         }
 
         private Guid GetCurrentUserId()
@@ -225,7 +230,9 @@ namespace FandaTabler.Controllers
             string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
             Guid userGuid = new Guid(userId);
             if (userGuid == null || userGuid == Guid.Empty)
+            {
                 throw new ApplicationException("UserId not found in logged in user identity");
+            }
 
             return userGuid;
         }

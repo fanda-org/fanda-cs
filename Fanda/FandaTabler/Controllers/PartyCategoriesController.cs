@@ -1,11 +1,13 @@
 ﻿using Fanda.Dto;
 using Fanda.Repository;
 using Fanda.Repository.Base;
+using Fanda.Repository.Extensions;
 using FandaTabler.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Threading.Tasks;
 using System.Web;
@@ -45,11 +47,26 @@ namespace FandaTabler.Controllers
                 }
 
                 NameValueCollection qFilter = HttpUtility.ParseQueryString(Request.QueryString.Value);
-                string search = qFilter["search"];
+                //string search = qFilter["search"];
+                //var filter = new ChildFilter<IPartyCategoryRepository, PartyCategoryListDto>(_repository, qFilter, search);
+                //var result = await filter.ApplyAsync(org.Id);
+                string filter = "1 == 1";
+                if (!string.IsNullOrEmpty(qFilter["code"]))
+                    filter += $" and Code.Contains(\"{qFilter["code"]}\")";
+                if (!string.IsNullOrEmpty(qFilter["name"]))
+                    filter += $" and Name.Contains(\"{qFilter["name"]}\")";
+                if (!string.IsNullOrEmpty(qFilter["description"]))
+                    filter += $" and Description.Contains(\"{qFilter["description"]}\")";
 
-                var filter = new ChildFilter<IPartyCategoryRepository, PartyCategoryListDto>(_repository, qFilter, search);
-                var result = await filter.ApplyAsync(org.Id);
-                return Ok(result);
+                var response = await _repository.GetPaged(org.Id,
+                    new Query
+                    {
+                        Filter = filter,
+                        Page = Convert.ToInt32(qFilter["pageIndex"]),
+                        PageSize = Convert.ToInt32(qFilter["pageSize"]),
+                        Search = qFilter["search"]
+                    });
+                return Ok(response);
             }
             catch (Exception ex)
             {
