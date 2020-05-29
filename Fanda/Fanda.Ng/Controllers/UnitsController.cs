@@ -2,15 +2,19 @@
 using Fanda.Repository;
 using Fanda.Repository.Base;
 using Fanda.Repository.Extensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Threading.Tasks;
+using System.Web;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Fanda.Controllers
 {
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UnitsController : ControllerBase
@@ -25,12 +29,17 @@ namespace Fanda.Controllers
         [HttpGet]
         public async Task<IEnumerable<UnitListDto>> Get()
         {
+            NameValueCollection queryString = HttpUtility.ParseQueryString(Request.QueryString.Value);
             var response = await repository
                 .GetList(new Guid("3F60039B-8EAF-49B2-4D14-08D7CED444AC"),
                     new Query
                     {
-                        Filter = "Code==@0",
-                        FilterArgs = new[] { "KGM" }
+                        Filter = queryString["filter"],
+                        FilterArgs = queryString["filterArgs"]?.Split(','),
+                        Page = Convert.ToInt32(queryString["page"]),
+                        PageSize = Convert.ToInt32(queryString["pageSize"]),
+                        Search = queryString["search"],
+                        Sort = queryString["sort"],
                     });
             return response.Data;
             //NameValueCollection qFilter = HttpUtility.ParseQueryString(Request.QueryString.Value);

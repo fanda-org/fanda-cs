@@ -6,6 +6,7 @@
         public ConnectionStrings ConnectionStrings { get; set; }
         public FandaSettings FandaSettings { get; set; }
     }
+
     public class ConnectionStrings
     {
         public string DefaultConnection { get; set; }
@@ -13,6 +14,7 @@
         public string MySqlConnection { get; set; }
         public string PgSqlConnection { get; set; }
     }
+
     public class FandaSettings
     {
         public string UserName { get; set; }

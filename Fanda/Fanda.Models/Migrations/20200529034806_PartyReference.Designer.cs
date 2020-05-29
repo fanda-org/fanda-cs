@@ -4,14 +4,16 @@ using Fanda.Models.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Fanda.Models.Migrations
 {
     [DbContext(typeof(FandaContext))]
-    partial class FandaContextModelSnapshot : ModelSnapshot
+    [Migration("20200529034806_PartyReference")]
+    partial class PartyReference
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

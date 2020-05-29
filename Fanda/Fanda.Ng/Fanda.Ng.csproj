@@ -16,7 +16,10 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.4" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.0-preview.2.20167.3" />
+    <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.4.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,42 +34,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="ClientApp\dist\out-tsc\e2e\src\app.e2e-spec.js" />
-    <None Remove="ClientApp\dist\out-tsc\e2e\src\app.e2e-spec.js.map" />
-    <None Remove="ClientApp\dist\out-tsc\e2e\src\app.po.js" />
-    <None Remove="ClientApp\dist\out-tsc\e2e\src\app.po.js.map" />
-    <None Remove="ClientApp\dist\out-tsc\src\app\app.module.js" />
-    <None Remove="ClientApp\dist\out-tsc\src\app\app.module.js.map" />
-    <None Remove="ClientApp\dist\out-tsc\src\app\app.routing.js" />
-    <None Remove="ClientApp\dist\out-tsc\src\app\app.routing.js.map" />
-    <None Remove="ClientApp\dist\out-tsc\src\app\containers\default-layout\default-layout.component.js" />
-    <None Remove="ClientApp\dist\out-tsc\src\app\containers\default-layout\default-layout.component.js.map" />
-    <None Remove="ClientApp\dist\out-tsc\src\app\containers\default-layout\index.js" />
-    <None Remove="ClientApp\dist\out-tsc\src\app\containers\default-layout\index.js.map" />
-    <None Remove="ClientApp\dist\out-tsc\src\app\containers\index.js" />
-    <None Remove="ClientApp\dist\out-tsc\src\app\containers\index.js.map" />
-    <None Remove="ClientApp\dist\out-tsc\src\app\views\units\units-routing.module.js" />
-    <None Remove="ClientApp\dist\out-tsc\src\app\views\units\units-routing.module.js.map" />
-    <None Remove="ClientApp\dist\out-tsc\src\app\views\units\units.component.js" />
-    <None Remove="ClientApp\dist\out-tsc\src\app\views\units\units.component.js.map" />
-    <None Remove="ClientApp\dist\out-tsc\src\app\views\units\units.module.js" />
-    <None Remove="ClientApp\dist\out-tsc\src\app\views\units\units.module.js.map" />
-    <None Remove="ClientApp\dist\out-tsc\src\app\_models\index.js" />
-    <None Remove="ClientApp\dist\out-tsc\src\app\_models\index.js.map" />
-    <None Remove="ClientApp\dist\out-tsc\src\app\_models\unit.js" />
-    <None Remove="ClientApp\dist\out-tsc\src\app\_models\unit.js.map" />
-    <None Remove="ClientApp\dist\out-tsc\src\app\_models\user.js" />
-    <None Remove="ClientApp\dist\out-tsc\src\app\_models\user.js.map" />
-    <None Remove="ClientApp\dist\out-tsc\src\app\_nav.js" />
-    <None Remove="ClientApp\dist\out-tsc\src\app\_nav.js.map" />
-    <None Remove="ClientApp\dist\out-tsc\src\app\_services\account.service.js" />
-    <None Remove="ClientApp\dist\out-tsc\src\app\_services\account.service.js.map" />
-    <None Remove="ClientApp\dist\out-tsc\src\app\_services\alert.service.js" />
-    <None Remove="ClientApp\dist\out-tsc\src\app\_services\alert.service.js.map" />
-    <None Remove="ClientApp\dist\out-tsc\src\app\_services\index.js" />
-    <None Remove="ClientApp\dist\out-tsc\src\app\_services\index.js.map" />
-    <None Remove="ClientApp\dist\out-tsc\src\app\_services\unit.service.js" />
-    <None Remove="ClientApp\dist\out-tsc\src\app\_services\unit.service.js.map" />
+    <None Remove="ClientApp\dist\out-tsc\src\main.js" />
+    <None Remove="ClientApp\dist\out-tsc\src\main.js.map" />
     <None Remove="ClientApp\src\app\_models\alert.ts" />
     <None Remove="ClientApp\src\app\_models\index.ts" />
     <None Remove="ClientApp\src\app\_models\unit.ts" />
