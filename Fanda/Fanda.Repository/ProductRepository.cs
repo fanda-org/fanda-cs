@@ -77,7 +77,7 @@ namespace Fanda.Repository
             if (product.Id == Guid.Empty)
             {
                 product.OrgId = orgId;
-                product.DateCreated = DateTime.Now;
+                product.DateCreated = DateTime.UtcNow;
                 product.DateModified = null;
                 await _context.Products.AddAsync(product);
             }
@@ -90,13 +90,13 @@ namespace Fanda.Repository
                     .SingleOrDefaultAsync();
                 if (dbProd == null)
                 {
-                    product.DateCreated = DateTime.Now;
+                    product.DateCreated = DateTime.UtcNow;
                     product.DateModified = null;
                     await _context.Products.AddAsync(product);
                 }
                 else
                 {
-                    product.DateModified = DateTime.Now;
+                    product.DateModified = DateTime.UtcNow;
                     // delete all ingredients that no longer exists
                     foreach (ProductIngredient dbIngredient in dbProd.ParentIngredients)
                     {

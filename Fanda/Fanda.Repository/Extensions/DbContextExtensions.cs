@@ -114,7 +114,7 @@ namespace Fanda.Repository.Extensions
                 //sqlopt.UseRowNumberForPaging();
             });
             //.UseInternalServiceProvider(serviceProvider);
-            options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            //options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             //options.EnableDetailedErrors();
             //options.EnableSensitiveDataLogging();
             //options.EnableServiceProviderCaching();
@@ -127,7 +127,7 @@ namespace Fanda.Repository.Extensions
                 mysqlOptions.ServerVersion(new ServerVersion(new Version(10, 4), ServerType.MariaDb));
             });
             //.UseInternalServiceProvider(serviceProvider);
-            options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            //options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             //options.EnableDetailedErrors();
             //options.EnableSensitiveDataLogging();
             //options.EnableServiceProviderCaching();
@@ -140,7 +140,7 @@ namespace Fanda.Repository.Extensions
                 pgsqlOptions.EnableRetryOnFailure();
             });
             //.UseInternalServiceProvider(serviceProvider);
-            options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            //options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             //options.EnableDetailedErrors();
             //options.EnableSensitiveDataLogging();
             //options.EnableServiceProviderCaching();

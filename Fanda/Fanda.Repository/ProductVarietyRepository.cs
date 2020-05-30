@@ -75,13 +75,13 @@ namespace Fanda.Repository
             if (variety.Id == Guid.Empty)
             {
                 variety.OrgId = orgId;
-                variety.DateCreated = DateTime.Now;
+                variety.DateCreated = DateTime.UtcNow;
                 variety.DateModified = null;
                 await _context.ProductVarieties.AddAsync(variety);
             }
             else
             {
-                variety.DateModified = DateTime.Now;
+                variety.DateModified = DateTime.UtcNow;
                 _context.ProductVarieties.Update(variety);
             }
             await _context.SaveChangesAsync();

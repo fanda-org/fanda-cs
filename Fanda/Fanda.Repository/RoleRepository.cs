@@ -87,13 +87,13 @@ namespace Fanda.Repository
             if (role.Id == Guid.Empty)
             {
                 role.OrgId = orgId;
-                role.DateCreated = DateTime.Now;
+                role.DateCreated = DateTime.UtcNow;
                 role.DateModified = null;
                 await _context.Roles.AddAsync(role);
             }
             else
             {
-                role.DateModified = DateTime.Now;
+                role.DateModified = DateTime.UtcNow;
                 _context.Roles.Update(role);
             }
             await _context.SaveChangesAsync();

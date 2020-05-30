@@ -75,13 +75,13 @@ namespace Fanda.Repository
             if (segment.Id == Guid.Empty)
             {
                 segment.OrgId = orgId;
-                segment.DateCreated = DateTime.Now;
+                segment.DateCreated = DateTime.UtcNow;
                 segment.DateModified = null;
                 await _context.ProductSegments.AddAsync(segment);
             }
             else
             {
-                segment.DateModified = DateTime.Now;
+                segment.DateModified = DateTime.UtcNow;
                 _context.ProductSegments.Update(segment);
             }
             await _context.SaveChangesAsync();

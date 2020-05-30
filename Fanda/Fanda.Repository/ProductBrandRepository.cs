@@ -74,13 +74,13 @@ namespace Fanda.Repository
             item.OrgId = orgId;
             if (item.Id == Guid.Empty)
             {
-                item.DateCreated = DateTime.Now;
+                item.DateCreated = DateTime.UtcNow;
                 item.DateModified = null;
                 await _context.ProductBrands.AddAsync(item);
             }
             else
             {
-                item.DateModified = DateTime.Now;
+                item.DateModified = DateTime.UtcNow;
                 _context.ProductBrands.Update(item);
             }
             await _context.SaveChangesAsync();

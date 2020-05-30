@@ -20,6 +20,10 @@ https://andrewlock.net/introduction-to-authentication-with-asp-net-core/
 Account confirmation and password recovery in ASP.NET Core - Send Email using SendGrid
 https://docs.microsoft.com/en-us/aspnet/core/security/authentication/accconfirm?view=aspnetcore-2.2&tabs=visual-studio
 
+ASP.NET Core 3 - JWT token and refresh token - Angular
+https://jasonwatmore.com/post/2020/05/25/aspnet-core-3-api-jwt-authentication-with-refresh-tokens
+https://jasonwatmore.com/post/2020/05/22/angular-9-jwt-authentication-with-refresh-tokens
+
 Refit - REST
 LazyCache
 https://hotchocolate.io/docs/dataloaders

@@ -107,7 +107,7 @@ namespace Fanda.Repository
             Organization org = _mapper.Map<Organization>(model);
             if (org.Id == Guid.Empty)
             {
-                org.DateCreated = DateTime.Now;
+                org.DateCreated = DateTime.UtcNow;
                 org.DateModified = null;
                 await _context.Organizations.AddAsync(org);
             }
@@ -120,7 +120,7 @@ namespace Fanda.Repository
                     .FirstOrDefaultAsync();
                 if (dbOrg == null)
                 {
-                    org.DateCreated = DateTime.Now;
+                    org.DateCreated = DateTime.UtcNow;
                     org.DateModified = null;
                     await _context.Organizations.AddAsync(org);
                 }
@@ -145,7 +145,7 @@ namespace Fanda.Repository
                         }
                     }
                     // copy current (incoming) values to db
-                    org.DateModified = DateTime.Now;
+                    org.DateModified = DateTime.UtcNow;
                     _context.Entry(dbOrg).CurrentValues.SetValues(org);
 
                     #region Contacts

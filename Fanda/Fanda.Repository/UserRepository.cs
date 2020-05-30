@@ -1,23 +1,28 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Fanda.Models;
-using Fanda.Models.Context;
 using Fanda.Dto;
 using Fanda.Dto.Base;
 using Fanda.Dto.ViewModels;
+using Fanda.Models;
+using Fanda.Models.Context;
 using Fanda.Repository.Base;
 using Fanda.Repository.Extensions;
 using Fanda.Repository.Utilities;
 using Fanda.Shared;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Linq.Dynamic.Core;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using System.Linq.Dynamic.Core;
-using System.Linq.Expressions;
 
 namespace Fanda.Repository
 {
@@ -27,6 +32,10 @@ namespace Fanda.Repository
     {
         Task<UserDto> LoginAsync(LoginViewModel model);
         Task<UserDto> RegisterAsync(RegisterViewModel model, string callbackUrl);
+        Task<AuthenticateResponse> Authenticate(AuthenticateRequest model, string ipAddress);
+        Task<AuthenticateResponse> RefreshToken(string token, string ipAddress);
+        Task<bool> RevokeToken(string token, string ipAddress);
+
         //IQueryable<UserListDto> GetAll(Guid orgId);
         Task<bool> MapOrgAsync(Guid userId, Guid orgId);
         Task<bool> UnmapOrgAsync(Guid userId, Guid orgId);
@@ -40,14 +49,17 @@ namespace Fanda.Repository
         private readonly IMapper _mapper;
         private readonly IEmailSender _emailSender;
         private readonly ILogger<UserRepository> _logger;
+        private readonly AppSettings _appSettings;
 
         public UserRepository(FandaContext context, IMapper mapper,
-            IEmailSender emailSender, ILogger<UserRepository> logger)
+            IEmailSender emailSender, ILogger<UserRepository> logger,
+            IOptions<AppSettings> options)
         {
             _context = context;
             _mapper = mapper;
             _emailSender = emailSender;
             _logger = logger;
+            _appSettings = options.Value;
         }
 
         public async Task<UserDto> LoginAsync(LoginViewModel model)
@@ -113,6 +125,100 @@ namespace Fanda.Repository
             return userModel;
         }
 
+        public async Task<AuthenticateResponse> Authenticate(AuthenticateRequest model, string ipAddress)
+        {
+            var user = await _context.Users
+                .SingleOrDefaultAsync(x => x.Name == model.Username /*&& x.Password == model.Password*/);
+
+            // return null if user not found
+            if (user == null)
+            {
+                return null;
+            }
+
+            // check if password is correct
+            if (!PasswordStorage.VerifyPasswordHash(model.Password, user.PasswordHash, user.PasswordSalt))
+            {
+                return null;
+            }
+
+            // authentication successful so generate jwt and refresh tokens
+            var jwtToken = GenerateJwtToken(user);
+            var refreshToken = GenerateRefreshToken(ipAddress);
+
+            // save refresh token
+            user.DateLastLogin = DateTime.UtcNow;
+            user.RefreshTokens.Add(refreshToken);
+            _context.Update(user);
+            await _context.SaveChangesAsync();
+
+            var userDto = _mapper.Map<UserDto>(user);
+            return new AuthenticateResponse(userDto, jwtToken, refreshToken.Token);
+        }
+
+        public async Task<AuthenticateResponse> RefreshToken(string token, string ipAddress)
+        {
+            var user = await _context.Users
+                .SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == token));
+
+            // return null if no user found with token
+            if (user == null)
+            {
+                return null;
+            }
+
+            var refreshToken = user.RefreshTokens.Single(x => x.Token == token);
+
+            // return null if token is no longer active
+            if (!refreshToken.IsActive)
+            {
+                return null;
+            }
+
+            // replace old refresh token with a new one and save
+            var newRefreshToken = GenerateRefreshToken(ipAddress);
+            refreshToken.Revoked = DateTime.UtcNow;
+            refreshToken.RevokedByIp = ipAddress;
+            refreshToken.ReplacedByToken = newRefreshToken.Token;
+            user.RefreshTokens.Add(newRefreshToken);
+            _context.Update(user);
+            await _context.SaveChangesAsync();
+
+            // generate new jwt
+            var jwtToken = GenerateJwtToken(user);
+
+            var userDto = _mapper.Map<UserDto>(user);
+            return new AuthenticateResponse(userDto, jwtToken, newRefreshToken.Token);
+        }
+
+        public async Task<bool> RevokeToken(string token, string ipAddress)
+        {
+            var user = await _context.Users
+                .SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == token));
+
+            // return false if no user found with token
+            if (user == null)
+            {
+                return false;
+            }
+
+            var refreshToken = user.RefreshTokens.Single(x => x.Token == token);
+
+            // return false if token is not active
+            if (!refreshToken.IsActive)
+            {
+                return false;
+            }
+
+            // revoke token and save
+            refreshToken.Revoked = DateTime.UtcNow;
+            refreshToken.RevokedByIp = ipAddress;
+            _context.Update(user);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
         //public IQueryable<UserListDto> GetAll() => GetAll(Guid.Empty);
 
         public IQueryable<UserListDto> GetAll(Guid orgId)
@@ -123,11 +229,12 @@ namespace Fanda.Repository
             }
             IQueryable<UserListDto> userQry = _context.Users
                 .AsNoTracking()
-                .Include(u => u.OrgUsers)
+                //.Include(u => u.OrgUsers)
+                //.ThenInclude(ou => ou.Organization)
                 //.SelectMany(u => u.OrgUsers.Select(ou => ou.Organization))
-                //.Where(u => u.OrgUsers.Any(ou => ou.OrgId == orgId))
-                .ProjectTo<UserListDto>(_mapper.ConfigurationProvider)
-                .Where(u => u.OrgId == orgId);
+                .Where(u => u.OrgUsers.Any(ou => ou.OrgId == orgId))
+                .ProjectTo<UserListDto>(_mapper.ConfigurationProvider);
+                //.Where(u => u.OrgId == orgId);
             //if (orgId != null && orgId != Guid.Empty)
             //{
             //    userQry = userQry.Where(u => u.OrgId == orgId);
@@ -185,7 +292,7 @@ namespace Fanda.Repository
             if (user == null)
             {
                 user = _mapper.Map<User>(dto);
-                user.DateCreated = DateTime.Now;
+                user.DateCreated = DateTime.UtcNow;
                 user.DateModified = null;
                 user.PasswordHash = passwordHash;
                 user.PasswordSalt = passwordSalt;
@@ -207,7 +314,7 @@ namespace Fanda.Repository
                         throw new AppException("Username '" + dto.Name + "' is already taken");
                     }
                 }
-                user.DateModified = DateTime.Now;
+                user.DateModified = DateTime.UtcNow;
                 user.PasswordHash = passwordHash;
                 user.PasswordSalt = passwordSalt;
 
@@ -401,6 +508,44 @@ namespace Fanda.Repository
         public async Task<bool> ExistsAsync(Duplicate data) => await _context.ExistsAsync<User>(data, true);
 
         public Task<DtoErrors> ValidateAsync(UserDto model) => throw new NotImplementedException();
+
+        #region Privates
+        private string GenerateJwtToken(User user)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_appSettings.FandaSettings.Secret);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                    new Claim(ClaimTypes.Name, user.Name),
+                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim(ClaimTypes.GivenName, $"{user.FirstName} {user.LastName}"),
+                }),
+                Expires = DateTime.UtcNow.AddMinutes(15),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateJwtSecurityToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
+
+        private RefreshToken GenerateRefreshToken(string ipAddress)
+        {
+            using (var rngCryptoServiceProvider = new RNGCryptoServiceProvider())
+            {
+                var randomBytes = new byte[64];
+                rngCryptoServiceProvider.GetBytes(randomBytes);
+                return new RefreshToken
+                {
+                    Token = Convert.ToBase64String(randomBytes),
+                    Expires = DateTime.UtcNow.AddDays(7),
+                    Created = DateTime.UtcNow,
+                    CreatedByIp = ipAddress
+                };
+            }
+        }
+        #endregion
 
         #region Role specific
 

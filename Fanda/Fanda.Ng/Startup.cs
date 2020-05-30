@@ -8,20 +8,19 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace Fanda
 {
@@ -46,38 +45,39 @@ namespace Fanda
             AppSettings appSettings = Configuration.Get<AppSettings>();
             #endregion
 
-            #region CORS
-            services.AddCors(options =>
-            {
-                options.AddPolicy("AllowAll", builder =>
-                {
-                    builder
-                    .AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader();
-                    //.AllowCredentials();
-                });
-
-                //var urls = new[]
-                //{
-                //    Configuration["Order.Web.Url"],
-                //    Configuration["Order.Ng.Url"]
-                //};
-                //options.AddPolicy("_MyAllowedOrigins", builder =>
-                //{
-                //    builder.WithOrigins(urls)
-                //    .AllowAnyHeader()
-                //    .AllowAnyMethod();
-                //});
-            });
-            #endregion
-
             #region DbContext
             services.AddFandaDbContextPool(appSettings);
             #endregion
 
-            #region Response Caching
-            services.AddResponseCaching();
+            #region CORS
+            services.AddCors();
+            //options =>
+            //{
+            //    options.AddPolicy("AllowAll", builder =>
+            //    {
+            //        builder
+            //        .AllowAnyOrigin()
+            //        .AllowAnyMethod()
+            //        .AllowAnyHeader();
+            //        //.AllowCredentials();
+            //    });
+
+            //var urls = new[]
+            //{
+            //    Configuration["Order.Web.Url"],
+            //    Configuration["Order.Ng.Url"]
+            //};
+            //options.AddPolicy("_MyAllowedOrigins", builder =>
+            //{
+            //    builder.WithOrigins(urls)
+            //    .AllowAnyHeader()
+            //    .AllowAnyMethod();
+            //});
+            //});
+            #endregion
+
+            #region Commented - Response Caching
+            //services.AddResponseCaching();
             #endregion
 
             #region Response compression
@@ -92,14 +92,14 @@ namespace Fanda
             });
             #endregion Response compression
 
-            #region DistributedMemoryCache, DataProtection and Session
+            #region Commented - DistributedMemoryCache, DataProtection and Session
             // Adds a default in-memory implementation of IDistributedCache.
-            services.AddDistributedMemoryCache(options =>
-            {
-                //options.ExpirationScanFrequency = TimeSpan.FromMinutes(appSettings.Cache.ExpirationMinute);
-                // Default size limit of 200 MB
-                //options.SizeLimit = appSettings.Cache.SizeLimitMB * 1024L * 1024L;
-            });
+            //services.AddDistributedMemoryCache(options =>
+            //{
+            //    //options.ExpirationScanFrequency = TimeSpan.FromMinutes(appSettings.Cache.ExpirationMinute);
+            //    // Default size limit of 200 MB
+            //    //options.SizeLimit = appSettings.Cache.SizeLimitMB * 1024L * 1024L;
+            //});
 
             //Distributed Cache
             //services.AddSingleton<IWebCache, WebCache>();
@@ -113,17 +113,17 @@ namespace Fanda
                 });
             #endregion
 
-            services.AddSession(options =>
-            {
-                //options.Cookie.HttpOnly = false;
-                //options.Cookie.Name = ".Fanda.Session";
-                //options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
-                //options.Cookie.SameSite = SameSiteMode.Lax;
-                //options.IdleTimeout = TimeSpan.FromMinutes(20);
+            //services.AddSession(options =>
+            //{
+            //    //options.Cookie.HttpOnly = false;
+            //    //options.Cookie.Name = ".Fanda.Session";
+            //    //options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+            //    //options.Cookie.SameSite = SameSiteMode.Lax;
+            //    //options.IdleTimeout = TimeSpan.FromMinutes(20);
 
-                //options.Cookie.IsEssential = true;
-                //options.Cookie.Path = "/";
-            });
+            //    //options.Cookie.IsEssential = true;
+            //    //options.Cookie.Path = "/";
+            //});
             #endregion
 
             #region AutoMapper
@@ -134,7 +134,7 @@ namespace Fanda
             services.AddAuthorization();
             #endregion
 
-            #region Commented - JWT Authentication
+            #region JWT Authentication
             var key = Encoding.ASCII.GetBytes(appSettings.FandaSettings.Secret);
             services.AddAuthentication(x =>
             {
@@ -143,21 +143,21 @@ namespace Fanda
             })
             .AddJwtBearer(x =>
             {
-                x.Events = new JwtBearerEvents
-                {
-                    OnTokenValidated = (context) =>
-                    {
-                        var userService = context.HttpContext.RequestServices.GetRequiredService<IUserRepository>();
-                        Guid userId = new Guid(context.Principal.Identity.Name);
-                        var user = userService.GetByIdAsync(userId).Result;
-                        if (user == null)
-                        {
-                            // return unauthorized if user no longer exists
-                            context.Fail("Unauthorized");
-                        }
-                        return Task.CompletedTask;
-                    }
-                };
+                //x.Events = new JwtBearerEvents
+                //{
+                //    OnTokenValidated = (context) =>
+                //    {
+                //        var userService = context.HttpContext.RequestServices.GetRequiredService<IUserRepository>();
+                //        Guid userId = new Guid(context.Principal.Identity.Name);
+                //        var user = userService.GetByIdAsync(userId).Result;
+                //        if (user == null)
+                //        {
+                //            // return unauthorized if user no longer exists
+                //            context.Fail("Unauthorized");
+                //        }
+                //        return Task.CompletedTask;
+                //    }
+                //};
                 x.RequireHttpsMetadata = false;
                 x.SaveToken = true;
                 x.TokenValidationParameters = new TokenValidationParameters
@@ -165,12 +165,17 @@ namespace Fanda
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = false,
-                    ValidateAudience = false
+                    ValidateAudience = false,
+                    // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
+                    ClockSkew = TimeSpan.Zero
                 };
             });
             #endregion
 
             #region Repositorires
+            services.AddTransient<IEmailSender, EmailSender>();
+
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUnitRepository, UnitRepository>();
             #endregion
 
@@ -190,11 +195,11 @@ namespace Fanda
                     options.JsonSerializerOptions.AllowTrailingCommas = true;
                     //options.JsonSerializerOptions.Converters.Add(new JsonStringTrimConverter());
                 })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
-                .AddSessionStateTempDataProvider()
-                .AddViewLocalization(Microsoft.AspNetCore.Mvc.Razor.LanguageViewLocationExpanderFormat.Suffix)
+                //.SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+                //.AddSessionStateTempDataProvider()
+                //.AddViewLocalization(Microsoft.AspNetCore.Mvc.Razor.LanguageViewLocationExpanderFormat.Suffix)
                 .AddDataAnnotationsLocalization();
-                //.AddRazorRuntimeCompilation();
+            //.AddRazorRuntimeCompilation();
 
             //services.AddControllersWithViews();
             //// In production, the Angular files will be served from this directory
@@ -202,6 +207,62 @@ namespace Fanda
             //{
             //    configuration.RootPath = "ClientApp/dist";
             //});
+            #endregion
+
+            #region Swagger
+            // Register the Swagger generator, defining 1 or more Swagger documents
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "Fanda API",
+                    Version = "v1",
+                    Description = "Communicate to Fanda backend from third party background services",
+                    TermsOfService = new Uri("https://fanda.in/terms"),
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Balamurugan Thanikachalam",
+                        Email = "software.balu@gmail.com",
+                        Url = new Uri("https://twitter.com/tbalakpm"),
+                    },
+                    License = new OpenApiLicense
+                    {
+                        Name = "Use under MIT",
+                        Url = new Uri("https://fanda.in/license"),
+                    }
+                });
+
+                // Set the comments path for the Swagger JSON and UI.
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "JWT Authorization header using the Bearer scheme."
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                          new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference
+                                {
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = "Bearer"
+                                }
+                            },
+                            new string[] {}
+
+                    }
+                });
+            });
             #endregion
         }
 
@@ -219,8 +280,20 @@ namespace Fanda
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            app.UseHttpsRedirection();
+            //app.UseStaticFiles();
 
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Fanda API V1");
+                //c.RoutePrefix = string.Empty;
+            });
+
+            app.UseHttpsRedirection();
             autoMapperConfigProvider.AssertConfigurationIsValid();
 
             #region Angular SPA
@@ -231,11 +304,16 @@ namespace Fanda
             //}
             #endregion
 
-            app.UseStaticFiles();
             app.UseRouting();
             app.UseResponseCaching();
             app.UseResponseCompression();
-            app.UseCors("AllowAll");
+            //app.UseCors("AllowAll");
+            // global cors policy
+            app.UseCors(x => x
+                .SetIsOriginAllowed(origin => true)
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials());
             app.UseAuthentication();
             app.UseAuthorization();
 

@@ -78,7 +78,7 @@ namespace Fanda.Repository
             if (invoice.Id == Guid.Empty)
             {
                 invoice.YearId = yearId;
-                invoice.DateCreated = DateTime.Now;
+                invoice.DateCreated = DateTime.UtcNow;
                 invoice.DateModified = null;
                 await _context.Invoices.AddAsync(invoice);
             }
@@ -90,13 +90,13 @@ namespace Fanda.Repository
                     .SingleOrDefaultAsync();
                 if (dbInvoice == null)
                 {
-                    invoice.DateCreated = DateTime.Now;
+                    invoice.DateCreated = DateTime.UtcNow;
                     invoice.DateModified = null;
                     await _context.Invoices.AddAsync(invoice);
                 }
                 else
                 {
-                    invoice.DateModified = DateTime.Now;
+                    invoice.DateModified = DateTime.UtcNow;
                     // delete all linet items that no longer exists
                     foreach (InvoiceItem dbLineItem in dbInvoice.InvoiceItems)
                     {

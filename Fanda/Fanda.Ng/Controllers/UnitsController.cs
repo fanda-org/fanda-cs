@@ -52,10 +52,7 @@ namespace Fanda.Controllers
 
         // GET api/<UnitsController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
+        public string Get(int id) => "value";
 
         // POST api/<UnitsController>
         [HttpPost]

@@ -42,6 +42,7 @@ namespace Fanda.Models.Context
             modelBuilder.ApplyConfiguration(new ContactConfig());
             modelBuilder.ApplyConfiguration(new AddressConfig());
             modelBuilder.ApplyConfiguration(new UserConfig());
+            //modelBuilder.ApplyConfiguration(new RefreshTokenConfig());
             modelBuilder.ApplyConfiguration(new OrganizationConfig());
             modelBuilder.ApplyConfiguration(new OrgContactConfig());
             modelBuilder.ApplyConfiguration(new OrgAddressConfig());

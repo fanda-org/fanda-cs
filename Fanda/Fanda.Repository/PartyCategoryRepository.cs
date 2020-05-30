@@ -74,13 +74,13 @@ namespace Fanda.Repository
             category.OrgId = orgId;
             if (category.Id == Guid.Empty)
             {
-                category.DateCreated = DateTime.Now;
+                category.DateCreated = DateTime.UtcNow;
                 category.DateModified = null;
                 await _context.PartyCategories.AddAsync(category);
             }
             else
             {
-                category.DateModified = DateTime.Now;
+                category.DateModified = DateTime.UtcNow;
                 _context.PartyCategories.Update(category);
             }
             await _context.SaveChangesAsync();

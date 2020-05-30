@@ -1,5 +1,7 @@
 using Fanda.Dto.Base;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Fanda.Dto
@@ -23,6 +25,8 @@ namespace Fanda.Dto
 
         public string Token { get; set; }
 
+        public virtual ICollection<RefreshTokenDto> RefreshTokens { get; set; }
+
         //public bool EmailConfirmed { get; set; }
         //public bool PhoneNumberConfirmed { get; set; }
         //public int AccessFailedCount { get; set; }
@@ -35,6 +39,6 @@ namespace Fanda.Dto
         //public string Password { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public Guid OrgId { get; set; }
+        //public Guid OrgId { get; set; }
     }
 }

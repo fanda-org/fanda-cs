@@ -17,6 +17,10 @@
     <Compile Remove="Migrations\20200512041803_SerialNumber.Designer.cs" />
     <Compile Remove="Migrations\20200529034632_test.cs" />
     <Compile Remove="Migrations\20200529034632_test.Designer.cs" />
+    <Compile Remove="Migrations\20200530033743_RefreshTokens.cs" />
+    <Compile Remove="Migrations\20200530033743_RefreshTokens.Designer.cs" />
+    <Compile Remove="Migrations\20200530034029_RefreshTokens.cs" />
+    <Compile Remove="Migrations\20200530034029_RefreshTokens.Designer.cs" />
     <Compile Remove="OrgBank.cs" />
     <Compile Remove="PartyBank.cs" />
   </ItemGroup>

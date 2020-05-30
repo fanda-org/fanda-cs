@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using Fanda.Models;
 using Fanda.Dto;
 using Fanda.Dto.ViewModels;
+using Fanda.Models;
 using System.Linq;
 
 namespace Fanda.Repository.AutoMapperProfile
@@ -14,6 +14,8 @@ namespace Fanda.Repository.AutoMapperProfile
                 .ForMember(vm => vm.Password, opt => opt.Ignore())
                 .ForMember(vm => vm.ConfirmPassword, opt => opt.Ignore())
                 .ForMember(vm => vm.AgreeTerms, opt => opt.Ignore())
+                .ReverseMap();
+            CreateMap<RefreshToken, RefreshTokenDto>()
                 .ReverseMap();
             CreateMap<Role, RoleDto>()
                 .ForMember(vm => vm.Id, opt => opt.MapFrom(src => src.Id))
@@ -189,27 +191,25 @@ namespace Fanda.Repository.AutoMapperProfile
                 .ReverseMap();
 
             #region List mappings
-            CreateMap<AccountYear, YearListDto>()
-                .ReverseMap();
-            CreateMap<Organization, OrgListDto>()
-                .ReverseMap();
+            CreateMap<AccountYear, YearListDto>();
+            //.ReverseMap();
+            CreateMap<Organization, OrgListDto>();
+            //.ReverseMap();
             CreateMap<Organization, OrgYearListDto>()
                 .ForMember(vm => vm.SelectedYearId, opt => opt.Ignore())
-                .ForMember(vm => vm.IsSelected, opt => opt.Ignore())
-                .ReverseMap();
-            CreateMap<PartyCategory, PartyCategoryListDto>()
-                .ReverseMap();
-
-            CreateMap<ProductCategory, ProductCategoryListDto>()
-                .ReverseMap();
-            CreateMap<Unit, UnitListDto>()
-                .ReverseMap();
-            CreateMap<ProductBrand, ProductBrandListDto>()
-                .ReverseMap();
-
-            CreateMap<User, UserListDto>()
-                .ForPath(vm => vm.OrgId,
-                    opt => opt.MapFrom(src => src.OrgUsers.Select(ou => ou.OrgId).First()));
+                .ForMember(vm => vm.IsSelected, opt => opt.Ignore());
+            //.ReverseMap();
+            CreateMap<PartyCategory, PartyCategoryListDto>();
+            //.ReverseMap();
+            CreateMap<ProductCategory, ProductCategoryListDto>();
+            //.ReverseMap();
+            CreateMap<Unit, UnitListDto>();
+            //.ReverseMap();
+            CreateMap<ProductBrand, ProductBrandListDto>();
+            //.ReverseMap();
+            CreateMap<User, UserListDto>();
+            //.ForPath(vm => vm.OrgId,
+            //    opt => opt.MapFrom(src => src.OrgUsers.Select(ou => ou.OrgId).First()));
             #endregion
         }
     }

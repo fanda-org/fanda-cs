@@ -21,7 +21,7 @@ namespace Fanda.Repository
     public sealed class SerialNumberRepository : ISerialNumberRepository
     {
         //private static volatile SerialNumberRepository _instance;
-        private static object syncRoot = new object();
+        private static readonly object syncRoot = new object();
         private readonly AppSettings _settings;
 
         public SerialNumberRepository(AppSettings settings)

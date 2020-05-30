@@ -73,13 +73,13 @@ namespace Fanda.Repository
             year.OrgId = orgId;
             if (year.Id == Guid.Empty)
             {
-                year.DateCreated = DateTime.Now;
+                year.DateCreated = DateTime.UtcNow;
                 year.DateModified = null;
                 await _context.AccountYears.AddAsync(year);
             }
             else
             {
-                year.DateModified = DateTime.Now;
+                year.DateModified = DateTime.UtcNow;
                 _context.AccountYears.Update(year);
             }
             await _context.SaveChangesAsync();

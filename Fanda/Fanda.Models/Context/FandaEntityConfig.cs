@@ -101,6 +101,9 @@ namespace Fanda.Models.Context
             //builder.Property(o => o.DateCreated).ValueGeneratedOnAdd();
             //builder.Property(o => o.DateModified).ValueGeneratedOnUpdate();
 
+            // Foreign keys - Owns
+            builder.OwnsMany(u => u.RefreshTokens);
+
             // index
             builder.HasIndex(u => u.Name)
                 .IsUnique();
