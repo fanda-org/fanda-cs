@@ -126,14 +126,28 @@ namespace Fanda.Controllers
             return Ok(user.RefreshTokens);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Create(UserDto model)
+        {
+            await _repository.CreateAsync(model);
+            return CreatedAtAction(nameof(GetById), model.Id);
+        }
+
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] UserDto model, string password)
+        public async Task<IActionResult> Update(Guid userId, UserDto model)
         {
             try
             {
+                if (userId != model.Id)
+                    return BadRequest(new { message = "User Id mismatch" });
+
+                var user = await _repository.GetByIdAsync(userId);
+                if (user == null)
+                    return NotFound(new { message = "User not found" });
+
                 // save 
-                model.Password = password;
-                await _repository.SaveAsync(model);
+                //model.Password = password;
+                await _repository.UpdateAsync(userId, model);
                 return Ok();
             }
             catch (AppException ex)

@@ -31,8 +31,6 @@ namespace Fanda.Repository
             _mapper = mapper;
         }
 
-        public string ErrorMessage { get; private set; }
-
         public IQueryable<YearListDto> GetAll(Guid orgId)
         {
             if (orgId == null || orgId == Guid.Empty)
@@ -62,7 +60,7 @@ namespace Fanda.Repository
             throw new KeyNotFoundException("Account year not found");
         }
 
-        public async Task<AccountYearDto> SaveAsync(Guid orgId, AccountYearDto model)
+        public async Task<AccountYearDto> CreateAsync(Guid orgId, AccountYearDto model)
         {
             if (orgId == null || orgId == Guid.Empty)
             {
@@ -71,19 +69,23 @@ namespace Fanda.Repository
 
             AccountYear year = _mapper.Map<AccountYear>(model);
             year.OrgId = orgId;
-            if (year.Id == Guid.Empty)
-            {
-                year.DateCreated = DateTime.UtcNow;
-                year.DateModified = null;
-                await _context.AccountYears.AddAsync(year);
-            }
-            else
-            {
-                year.DateModified = DateTime.UtcNow;
-                _context.AccountYears.Update(year);
-            }
+            year.DateCreated = DateTime.UtcNow;
+            year.DateModified = null;
+            await _context.AccountYears.AddAsync(year);
             await _context.SaveChangesAsync();
             return _mapper.Map<AccountYearDto>(year);
+        }
+
+        public async Task UpdateAsync(Guid id, AccountYearDto model)
+        {
+            if (id != model.Id)
+                throw new ArgumentException("Year Id mismatch");
+
+            AccountYear year = _mapper.Map<AccountYear>(model);
+            year.DateModified = DateTime.UtcNow;
+            _context.AccountYears.Update(year);
+            await _context.SaveChangesAsync();
+            //return _mapper.Map<AccountYearDto>(year);
         }
 
         public async Task<bool> DeleteAsync(Guid id)

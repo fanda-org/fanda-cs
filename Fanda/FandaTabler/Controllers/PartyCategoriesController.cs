@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Threading.Tasks;
 using System.Web;
@@ -52,11 +51,19 @@ namespace FandaTabler.Controllers
                 //var result = await filter.ApplyAsync(org.Id);
                 string filter = "1 == 1";
                 if (!string.IsNullOrEmpty(qFilter["code"]))
+                {
                     filter += $" and Code.Contains(\"{qFilter["code"]}\")";
+                }
+
                 if (!string.IsNullOrEmpty(qFilter["name"]))
+                {
                     filter += $" and Name.Contains(\"{qFilter["name"]}\")";
+                }
+
                 if (!string.IsNullOrEmpty(qFilter["description"]))
+                {
                     filter += $" and Description.Contains(\"{qFilter["description"]}\")";
+                }
 
                 var response = await _repository.GetPaged(org.Id,
                     new Query
@@ -99,7 +106,14 @@ namespace FandaTabler.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    model = await _repository.SaveAsync(org.Id, model);
+                    if (model.Id == null || model.Id == Guid.Empty)
+                    {
+                        model = await _repository.CreateAsync(org.Id, model);
+                    }
+                    else
+                    {
+                        await _repository.UpdateAsync(model.Id, model);
+                    }
                     return Ok(model);
                 }
                 else

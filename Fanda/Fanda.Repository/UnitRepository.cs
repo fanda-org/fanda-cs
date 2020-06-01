@@ -63,7 +63,7 @@ namespace Fanda.Repository
             throw new KeyNotFoundException("Unit not found");
         }
 
-        public async Task<UnitDto> SaveAsync(Guid orgId, UnitDto model)
+        public async Task<UnitDto> CreateAsync(Guid orgId, UnitDto model)
         {
             if (orgId == null || orgId == Guid.Empty)
             {
@@ -72,19 +72,25 @@ namespace Fanda.Repository
 
             var unit = _mapper.Map<Unit>(model);
             unit.OrgId = orgId;
-            if (unit.Id == Guid.Empty)
-            {
-                unit.DateCreated = DateTime.UtcNow;
-                unit.DateModified = null;
-                await _context.Units.AddAsync(unit);
-            }
-            else
-            {
-                unit.DateModified = DateTime.UtcNow;
-                _context.Units.Update(unit);
-            }
+            unit.DateCreated = DateTime.UtcNow;
+            unit.DateModified = null;
+            await _context.Units.AddAsync(unit);
             await _context.SaveChangesAsync();
-            return _mapper.Map<UnitDto>(unit); //categoryVM;
+            return _mapper.Map<UnitDto>(unit);
+        }
+
+        public async Task UpdateAsync(Guid id, UnitDto model)
+        {
+            if (id != model.Id)
+            {
+                throw new ArgumentException("Unit id mismatch");
+            }
+
+            var unit = _mapper.Map<Unit>(model);
+            unit.DateModified = DateTime.UtcNow;
+            _context.Units.Update(unit);
+            await _context.SaveChangesAsync();
+            //return _mapper.Map<UnitDto>(unit);
         }
 
         public async Task<bool> DeleteAsync(Guid id)

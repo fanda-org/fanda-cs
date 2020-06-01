@@ -63,7 +63,7 @@ namespace Fanda.Controllers
                 //organization.OrgId = Guid.NewGuid();
                 //_context.Add(organization);
                 //await _context.SaveChangesAsync();
-                await _repository.SaveAsync(dto);
+                await _repository.CreateAsync(dto);
                 return RedirectToAction(nameof(Index));
             }
             return View(dto);
@@ -105,7 +105,7 @@ namespace Fanda.Controllers
                 {
                     //_context.Update(organization);
                     //await _context.SaveChangesAsync();
-                    await _repository.SaveAsync(dto);
+                    await _repository.UpdateAsync(id, dto);
                 }
                 catch (DbUpdateConcurrencyException)
                 {

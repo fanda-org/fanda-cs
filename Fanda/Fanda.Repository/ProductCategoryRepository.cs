@@ -63,7 +63,7 @@ namespace Fanda.Repository
             throw new KeyNotFoundException("Product category not found");
         }
 
-        public async Task<ProductCategoryDto> SaveAsync(Guid orgId, ProductCategoryDto model)
+        public async Task<ProductCategoryDto> CreateAsync(Guid orgId, ProductCategoryDto model)
         {
             if (orgId == null || orgId == Guid.Empty)
             {
@@ -72,19 +72,25 @@ namespace Fanda.Repository
 
             var item = _mapper.Map<ProductCategory>(model);
             item.OrgId = orgId;
-            if (item.Id == Guid.Empty)
-            {
-                item.DateCreated = DateTime.UtcNow;
-                item.DateModified = null;
-                await _context.ProductCategories.AddAsync(item);
-            }
-            else
-            {
-                item.DateModified = DateTime.UtcNow;
-                _context.ProductCategories.Update(item);
-            }
+            item.DateCreated = DateTime.UtcNow;
+            item.DateModified = null;
+            await _context.ProductCategories.AddAsync(item);
             await _context.SaveChangesAsync();
             return _mapper.Map<ProductCategoryDto>(item);
+        }
+
+        public async Task UpdateAsync(Guid id, ProductCategoryDto model)
+        {
+            if (id != model.Id)
+            {
+                throw new ArgumentException("Product category id mismatch");
+            }
+
+            var item = _mapper.Map<ProductCategory>(model);
+            item.DateModified = DateTime.UtcNow;
+            _context.ProductCategories.Update(item);
+            await _context.SaveChangesAsync();
+            //return _mapper.Map<ProductCategoryDto>(item);
         }
 
         public async Task<bool> DeleteAsync(Guid id)

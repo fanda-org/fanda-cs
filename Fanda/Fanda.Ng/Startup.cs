@@ -24,6 +24,7 @@ using System.Text.Json.Serialization;
 
 namespace Fanda
 {
+#pragma warning restore CS1591
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -340,4 +341,5 @@ namespace Fanda
             #endregion
         }
     }
+#pragma warning restore CS1591
 }

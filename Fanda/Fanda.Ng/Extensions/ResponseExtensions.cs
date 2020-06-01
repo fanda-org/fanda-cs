@@ -8,7 +8,7 @@ namespace Fanda.Api.Base
     {
         public static IActionResult ToHttpResponse(this IResponse response)
         {
-            var status = response.HasError ? HttpStatusCode.InternalServerError : HttpStatusCode.OK;
+            var status = response.Success ? HttpStatusCode.OK : HttpStatusCode.InternalServerError ;
 
             return new ObjectResult(response)
             {
@@ -20,7 +20,7 @@ namespace Fanda.Api.Base
         {
             var status = HttpStatusCode.OK;
 
-            if (response.HasError)
+            if (!response.Success)
             {
                 status = HttpStatusCode.InternalServerError;
             }
@@ -39,7 +39,7 @@ namespace Fanda.Api.Base
         {
             var status = HttpStatusCode.OK;
 
-            if (response.HasError)
+            if (!response.Success)
             {
                 status = HttpStatusCode.InternalServerError;
             }

@@ -90,7 +90,14 @@ namespace FandaTabler.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    model = await _repository.SaveAsync(org.Id, model);
+                    if (model.Id == null || model.Id == Guid.Empty)
+                    {
+                        model = await _repository.CreateAsync(org.Id, model);
+                    }
+                    else
+                    {
+                        await _repository.UpdateAsync(model.Id, model);
+                    }
                     return Ok(model);
                 }
                 else

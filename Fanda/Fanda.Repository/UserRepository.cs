@@ -36,7 +36,6 @@ namespace Fanda.Repository
         Task<AuthenticateResponse> RefreshToken(string token, string ipAddress);
         Task<bool> RevokeToken(string token, string ipAddress);
 
-        //IQueryable<UserListDto> GetAll(Guid orgId);
         Task<bool> MapOrgAsync(Guid userId, Guid orgId);
         Task<bool> UnmapOrgAsync(Guid userId, Guid orgId);
         Task<bool> MapRoleAsync(Guid userId, string roleName, Guid orgId);
@@ -234,7 +233,7 @@ namespace Fanda.Repository
                 //.SelectMany(u => u.OrgUsers.Select(ou => ou.Organization))
                 .Where(u => u.OrgUsers.Any(ou => ou.OrgId == orgId))
                 .ProjectTo<UserListDto>(_mapper.ConfigurationProvider);
-                //.Where(u => u.OrgId == orgId);
+            //.Where(u => u.OrgId == orgId);
             //if (orgId != null && orgId != Guid.Empty)
             //{
             //    userQry = userQry.Where(u => u.OrgId == orgId);
@@ -260,20 +259,7 @@ namespace Fanda.Repository
             throw new KeyNotFoundException("User not found");
         }
 
-        //public async Task<UserDto> GetByNameAsync(string userName)
-        //{
-        //    UserDto user = null;
-        //    if (!string.IsNullOrEmpty(userName))
-        //    {
-        //        user = await _context.Users
-        //            .AsNoTracking()
-        //            .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
-        //            .SingleOrDefaultAsync(u => u.UserName == userName);
-        //    }
-        //    return user;
-        //}
-
-        public async Task<UserDto> SaveAsync(UserDto dto)
+        public async Task<UserDto> CreateAsync(UserDto dto)
         {
             if (string.IsNullOrWhiteSpace(dto.Password))
             {
@@ -282,46 +268,44 @@ namespace Fanda.Repository
 
             PasswordStorage.CreatePasswordHash(dto.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
-            User user = null;
-            if (dto.Id != null && dto.Id != Guid.Empty)
-            {
-                user = await _context.Users.FindAsync(dto.Id);
-            }
-
-            //var user = _mapper.Map<User>(dto);
-            if (user == null)
-            {
-                user = _mapper.Map<User>(dto);
-                user.DateCreated = DateTime.UtcNow;
-                user.DateModified = null;
-                user.PasswordHash = passwordHash;
-                user.PasswordSalt = passwordSalt;
-                //user.OrgUsers.Add(new OrgUser
-                //{
-                //    OrgId = parentId,
-                //    User = user
-                //});
-                await _context.Users.AddAsync(user);
-            }
-            else
-            {
-                user = _mapper.Map<User>(dto);
-                if (dto.Name != user.Name)
-                {
-                    // username has changed so check if the new username is already taken
-                    if (_context.Users.Any(x => x.Name == dto.Name))
-                    {
-                        throw new AppException("Username '" + dto.Name + "' is already taken");
-                    }
-                }
-                user.DateModified = DateTime.UtcNow;
-                user.PasswordHash = passwordHash;
-                user.PasswordSalt = passwordSalt;
-
-                _context.Users.Update(user);
-            }
+            var user = _mapper.Map<User>(dto);
+            user.DateCreated = DateTime.UtcNow;
+            user.DateModified = null;
+            user.PasswordHash = passwordHash;
+            user.PasswordSalt = passwordSalt;
+            await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
             return _mapper.Map<UserDto>(user);
+        }
+
+        public async Task UpdateAsync(Guid userId, UserDto dto)
+        {
+            if (userId != dto.Id)
+            {
+                throw new ArgumentException("User id mismatch");
+            }
+            if (string.IsNullOrWhiteSpace(dto.Password))
+            {
+                throw new ArgumentNullException("Password", "Password is missing");
+            }
+
+            PasswordStorage.CreatePasswordHash(dto.Password, out byte[] passwordHash, out byte[] passwordSalt);
+
+            var user = _mapper.Map<User>(dto);
+            if (dto.Name != user.Name)
+            {
+                // username has changed so check if the new username is already taken
+                if (_context.Users.Any(x => x.Name == dto.Name))
+                {
+                    throw new AppException("Username '" + dto.Name + "' is already taken");
+                }
+            }
+            user.DateModified = DateTime.UtcNow;
+            user.PasswordHash = passwordHash;
+            user.PasswordSalt = passwordSalt;
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+            //return _mapper.Map<UserDto>(user);
         }
 
         public async Task<bool> MapOrgAsync(Guid userId, Guid orgId)
@@ -416,7 +400,6 @@ namespace Fanda.Repository
         //        _logger.LogError(ex, ex.Message);
         //    }
         //}
-
 
         public async Task<bool> MapRoleAsync(Guid userId, string roleName, Guid orgId)
         {

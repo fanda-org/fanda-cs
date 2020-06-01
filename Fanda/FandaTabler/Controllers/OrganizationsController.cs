@@ -152,13 +152,15 @@ namespace FandaTabler.Controllers
                     if (ModelState.IsValid)
                     {
                         bool isAdding = org.Id == null || org.Id == Guid.Empty;
-
-                        org = await _repository.SaveAsync(org);
-
                         if (isAdding)
                         {
+                            org = await _repository.CreateAsync(org);
                             Guid userId = GetCurrentUserId();
                             await _repository.MapUserAsync(org.Id, userId);
+                        }
+                        else
+                        {
+                            await _repository.UpdateAsync(org.Id, org);
                         }
 
                         // Refresh org session value
@@ -217,7 +219,8 @@ namespace FandaTabler.Controllers
             //var filter = new ChildFilter<IOrganizationRepository, OrgYearListDto>(_repository, qFilter, search);
             //var result = await filter.ApplyAsync(userId);
             var response = await _repository
-                .GetPaged(userId, new Query { 
+                .GetPaged(userId, new Query
+                {
                     Page = Convert.ToInt32(qFilter["pageIndex"]),
                     PageSize = Convert.ToInt32(qFilter["pageSize"]),
                     Search = qFilter["search"]

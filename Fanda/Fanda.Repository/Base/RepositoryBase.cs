@@ -8,6 +8,8 @@ namespace Fanda.Repository.Base
 {
     public interface IRepositoryBase<TModel>
     {
+        // PUT
+        Task UpdateAsync(Guid id, TModel model);
         // GET
         Task<TModel> GetByIdAsync(Guid id, bool includeChildren = false);
         // DELETE
@@ -18,8 +20,8 @@ namespace Fanda.Repository.Base
 
     public interface IParentRepository<TModel> : IRepositoryBase<TModel>
     {
-        // POST and PUT
-        Task<TModel> SaveAsync(TModel model);
+        // POST
+        Task<TModel> CreateAsync(TModel model);
         // GET
         Task<bool> ExistsAsync(Duplicate data);
         Task<DtoErrors> ValidateAsync(TModel model);
@@ -27,8 +29,8 @@ namespace Fanda.Repository.Base
 
     public interface IRepository<TModel> : IRepositoryBase<TModel>
     {
-        // POST and PUT
-        Task<TModel> SaveAsync(Guid parentId, TModel model);
+        // POST
+        Task<TModel> CreateAsync(Guid parentId, TModel model);
         // GET
         Task<bool> ExistsAsync(ChildDuplicate data);
         Task<DtoErrors> ValidateAsync(Guid parentId, TModel model);

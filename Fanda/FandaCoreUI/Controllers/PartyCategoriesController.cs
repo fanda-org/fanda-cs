@@ -159,13 +159,14 @@ namespace Fanda.Controllers
                 }
 
                 bool create = model.Id == null || model.Id == Guid.Empty;
-                await _repository.SaveAsync(org.Id, model);
                 if (create) // Create
                 {
+                    await _repository.CreateAsync(org.Id, model);
                     return RedirectToAction(nameof(Create));
                 }
                 else
                 {
+                    await _repository.UpdateAsync(model.Id, model);
                     return RedirectToAction(nameof(Index));
                 }
             }

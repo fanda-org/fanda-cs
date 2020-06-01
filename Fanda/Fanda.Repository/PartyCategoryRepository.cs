@@ -63,7 +63,7 @@ namespace Fanda.Repository
             throw new KeyNotFoundException("Party category not found");
         }
 
-        public async Task<PartyCategoryDto> SaveAsync(Guid orgId, PartyCategoryDto model)
+        public async Task<PartyCategoryDto> CreateAsync(Guid orgId, PartyCategoryDto model)
         {
             if (orgId == null || orgId == Guid.Empty)
             {
@@ -72,20 +72,23 @@ namespace Fanda.Repository
 
             PartyCategory category = _mapper.Map<PartyCategory>(model);
             category.OrgId = orgId;
-            if (category.Id == Guid.Empty)
-            {
                 category.DateCreated = DateTime.UtcNow;
                 category.DateModified = null;
                 await _context.PartyCategories.AddAsync(category);
-            }
-            else
-            {
-                category.DateModified = DateTime.UtcNow;
-                _context.PartyCategories.Update(category);
-            }
             await _context.SaveChangesAsync();
-            //categoryVM = _mapper.Map<PartyCategoryViewModel>(category);
-            return _mapper.Map<PartyCategoryDto>(category); //categoryVM;
+            return _mapper.Map<PartyCategoryDto>(category);
+        }
+
+        public async Task UpdateAsync(Guid id, PartyCategoryDto model)
+        {
+            if (id != model.Id)
+                throw new ArgumentException("Party category id mismatch");
+
+            PartyCategory category = _mapper.Map<PartyCategory>(model);
+            category.DateModified = DateTime.UtcNow;
+            _context.PartyCategories.Update(category);
+            await _context.SaveChangesAsync();
+            //return _mapper.Map<PartyCategoryDto>(category);
         }
 
         public async Task<bool> DeleteAsync(Guid id)

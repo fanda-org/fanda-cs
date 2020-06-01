@@ -63,7 +63,7 @@ namespace Fanda.Repository
             throw new KeyNotFoundException("Product brand not found");
         }
 
-        public async Task<ProductBrandDto> SaveAsync(Guid orgId, ProductBrandDto model)
+        public async Task<ProductBrandDto> CreateAsync(Guid orgId, ProductBrandDto model)
         {
             if (orgId == null || orgId == Guid.Empty)
             {
@@ -72,19 +72,25 @@ namespace Fanda.Repository
 
             var item = _mapper.Map<ProductBrand>(model);
             item.OrgId = orgId;
-            if (item.Id == Guid.Empty)
-            {
-                item.DateCreated = DateTime.UtcNow;
-                item.DateModified = null;
-                await _context.ProductBrands.AddAsync(item);
-            }
-            else
-            {
-                item.DateModified = DateTime.UtcNow;
-                _context.ProductBrands.Update(item);
-            }
+            item.DateCreated = DateTime.UtcNow;
+            item.DateModified = null;
+            await _context.ProductBrands.AddAsync(item);
             await _context.SaveChangesAsync();
             return _mapper.Map<ProductBrandDto>(item);
+        }
+
+        public async Task UpdateAsync(Guid id, ProductBrandDto model)
+        {
+            if (id != model.Id)
+            {
+                throw new ArgumentException("Product brand id mismatch");
+            }
+
+            var item = _mapper.Map<ProductBrand>(model);
+            item.DateModified = DateTime.UtcNow;
+            _context.ProductBrands.Update(item);
+            await _context.SaveChangesAsync();
+            //return _mapper.Map<ProductBrandDto>(item);
         }
 
         public async Task<bool> DeleteAsync(Guid id)

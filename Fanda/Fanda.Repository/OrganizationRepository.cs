@@ -18,10 +18,9 @@ using System.Linq.Dynamic.Core;
 
 namespace Fanda.Repository
 {
-    public interface IOrganizationRepository : 
+    public interface IOrganizationRepository :
         IParentRepository<OrganizationDto>,
         IRepositoryChildData<OrgChildrenDto>,
-        //IListRepository<OrgListDto>,
         IListRepository<OrgYearListDto>
     {
         Task<bool> MapUserAsync(Guid orgId, Guid userId);
@@ -102,113 +101,121 @@ namespace Fanda.Repository
             return org;
         }
 
-        public async Task<OrganizationDto> SaveAsync(OrganizationDto model)
+        public async Task<OrganizationDto> CreateAsync(OrganizationDto model)
         {
             Organization org = _mapper.Map<Organization>(model);
-            if (org.Id == Guid.Empty)
-            {
-                org.DateCreated = DateTime.UtcNow;
-                org.DateModified = null;
-                await _context.Organizations.AddAsync(org);
-            }
-            else
-            {
-                Organization dbOrg = await _context.Organizations
-                    .Where(o => o.Id == org.Id)
-                    .Include(o => o.OrgContacts).ThenInclude(oc => oc.Contact)
-                    .Include(o => o.OrgAddresses).ThenInclude(oa => oa.Address)
-                    .FirstOrDefaultAsync();
-                if (dbOrg == null)
-                {
-                    org.DateCreated = DateTime.UtcNow;
-                    org.DateModified = null;
-                    await _context.Organizations.AddAsync(org);
-                }
-                else
-                {
-                    // delete all contacts that are no longer exists
-                    foreach (OrgContact dbOrgContact in dbOrg.OrgContacts)
-                    {
-                        Contact dbContact = dbOrgContact.Contact;
-                        if (org.OrgContacts.All(oc => oc.Contact.Id != dbContact.Id))
-                        {
-                            _context.Contacts.Remove(dbContact);
-                        }
-                    }
-                    // delete all addresses that are no longer exists
-                    foreach (OrgAddress dbOrgAddress in dbOrg.OrgAddresses)
-                    {
-                        Address dbAddress = dbOrgAddress.Address;
-                        if (org.OrgAddresses.All(oa => oa.Address.Id != dbAddress.Id))
-                        {
-                            _context.Addresses.Remove(dbAddress);
-                        }
-                    }
-                    // copy current (incoming) values to db
-                    org.DateModified = DateTime.UtcNow;
-                    _context.Entry(dbOrg).CurrentValues.SetValues(org);
-
-                    #region Contacts
-                    var contactPairs = from curr in org.OrgContacts.Select(oc => oc.Contact)
-                                       join db in dbOrg.OrgContacts.Select(oc => oc.Contact)
-                                            on curr.Id equals db.Id into grp
-                                       from db in grp.DefaultIfEmpty()
-                                       select new { curr, db };
-                    foreach (var pair in contactPairs)
-                    {
-                        if (pair.db != null)
-                        {
-                            _context.Entry(pair.db).CurrentValues.SetValues(pair.curr);
-                            _context.Contacts.Update(pair.db);
-                        }
-                        else
-                        {
-                            var orgContact = new OrgContact
-                            {
-                                OrgId = org.Id,
-                                Organization = org,
-                                ContactId = pair.curr.Id,
-                                Contact = pair.curr
-                            };
-                            dbOrg.OrgContacts.Add(orgContact);
-                        }
-                    }
-                    #endregion
-
-                    #region Addresses
-                    var addressPairs = from curr in org.OrgAddresses.Select(oa => oa.Address)
-                                       join db in dbOrg.OrgAddresses.Select(oa => oa.Address)
-                                            on curr.Id equals db.Id into grp
-                                       from db in grp.DefaultIfEmpty()
-                                       select new { curr, db };
-                    foreach (var pair in addressPairs)
-                    {
-                        if (pair.db != null)
-                        {
-                            _context.Entry(pair.db).CurrentValues.SetValues(pair.curr);
-                            _context.Addresses.Update(pair.db);
-                        }
-                        else
-                        {
-                            var orgAddress = new OrgAddress
-                            {
-                                OrgId = org.Id,
-                                Organization = org,
-                                AddressId = pair.curr.Id,
-                                Address = pair.curr
-                            };
-                            dbOrg.OrgAddresses.Add(orgAddress);
-                        }
-                    }
-
-                    _context.Organizations.Update(dbOrg);
-                    #endregion
-                }
-            }
-
+            org.DateCreated = DateTime.UtcNow;
+            org.DateModified = null;
+            await _context.Organizations.AddAsync(org);
             await _context.SaveChangesAsync();
             model = _mapper.Map<OrganizationDto>(org);
             return model;
+        }
+
+        public async Task UpdateAsync(Guid id, OrganizationDto model)
+        {
+            if (id != model.Id)
+            {
+                throw new ArgumentException("Org id mismatch");
+            }
+
+            Organization org = _mapper.Map<Organization>(model);
+
+            Organization dbOrg = await _context.Organizations
+                .Where(o => o.Id == org.Id)
+                .Include(o => o.OrgContacts).ThenInclude(oc => oc.Contact)
+                .Include(o => o.OrgAddresses).ThenInclude(oa => oa.Address)
+                .FirstOrDefaultAsync();
+
+            if (dbOrg == null)
+            {
+                //org.DateCreated = DateTime.UtcNow;
+                //org.DateModified = null;
+                //await _context.Organizations.AddAsync(org);
+                throw new KeyNotFoundException("Org id not found");
+            }
+
+            // delete all contacts that are no longer exists
+            foreach (OrgContact dbOrgContact in dbOrg.OrgContacts)
+            {
+                Contact dbContact = dbOrgContact.Contact;
+                if (org.OrgContacts.All(oc => oc.Contact.Id != dbContact.Id))
+                {
+                    _context.Contacts.Remove(dbContact);
+                }
+            }
+            // delete all addresses that are no longer exists
+            foreach (OrgAddress dbOrgAddress in dbOrg.OrgAddresses)
+            {
+                Address dbAddress = dbOrgAddress.Address;
+                if (org.OrgAddresses.All(oa => oa.Address.Id != dbAddress.Id))
+                {
+                    _context.Addresses.Remove(dbAddress);
+                }
+            }
+            // copy current (incoming) values to db
+            org.DateModified = DateTime.UtcNow;
+            _context.Entry(dbOrg).CurrentValues.SetValues(org);
+
+            #region Contacts
+            var contactPairs = from curr in org.OrgContacts.Select(oc => oc.Contact)
+                               join db in dbOrg.OrgContacts.Select(oc => oc.Contact)
+                                    on curr.Id equals db.Id into grp
+                               from db in grp.DefaultIfEmpty()
+                               select new { curr, db };
+            foreach (var pair in contactPairs)
+            {
+                if (pair.db != null)
+                {
+                    _context.Entry(pair.db).CurrentValues.SetValues(pair.curr);
+                    _context.Contacts.Update(pair.db);
+                }
+                else
+                {
+                    var orgContact = new OrgContact
+                    {
+                        OrgId = org.Id,
+                        Organization = org,
+                        ContactId = pair.curr.Id,
+                        Contact = pair.curr
+                    };
+                    dbOrg.OrgContacts.Add(orgContact);
+                }
+            }
+            #endregion
+
+            #region Addresses
+            var addressPairs = from curr in org.OrgAddresses.Select(oa => oa.Address)
+                               join db in dbOrg.OrgAddresses.Select(oa => oa.Address)
+                                    on curr.Id equals db.Id into grp
+                               from db in grp.DefaultIfEmpty()
+                               select new { curr, db };
+            foreach (var pair in addressPairs)
+            {
+                if (pair.db != null)
+                {
+                    _context.Entry(pair.db).CurrentValues.SetValues(pair.curr);
+                    _context.Addresses.Update(pair.db);
+                }
+                else
+                {
+                    var orgAddress = new OrgAddress
+                    {
+                        OrgId = org.Id,
+                        Organization = org,
+                        AddressId = pair.curr.Id,
+                        Address = pair.curr
+                    };
+                    dbOrg.OrgAddresses.Add(orgAddress);
+                }
+            }
+
+            _context.Organizations.Update(dbOrg);
+            #endregion
+
+            await _context.SaveChangesAsync();
+            //model = _mapper.Map<OrganizationDto>(org);
+            //return model;
         }
 
         public async Task<DtoErrors> ValidateAsync(OrganizationDto model)

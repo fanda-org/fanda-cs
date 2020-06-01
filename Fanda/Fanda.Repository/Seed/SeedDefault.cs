@@ -34,7 +34,7 @@ namespace Fanda.Repository.Seed
                 string orgCode = orgName.ToUpper();
                 if (!await repository.ExistsAsync(new Duplicate { Field = DuplicateField.Code, Value = orgCode }))
                 {
-                    OrganizationDto org = await repository.SaveAsync(new OrganizationDto
+                    OrganizationDto org = await repository.CreateAsync(new OrganizationDto
                     {
                         Code = orgCode,
                         Name = orgName,
@@ -131,7 +131,7 @@ namespace Fanda.Repository.Seed
                 };
                 if (!await repository.ExistsAsync(new Duplicate { Field = DuplicateField.Name, Value = superAdmin.Name }))
                 {
-                    var user = await repository.SaveAsync(superAdmin);
+                    var user = await repository.CreateAsync(superAdmin);
                     await repository.MapOrgAsync(user.Id, org.Id);
                     await repository.MapRoleAsync(user.Id, "SuperAdmin", org.Id);
                 }
@@ -165,7 +165,7 @@ namespace Fanda.Repository.Seed
                         Name = "Default",
                         Active = true,
                     };
-                    await repository.SaveAsync(org.Id, unit);
+                    await repository.CreateAsync(org.Id, unit);
                 }
             }
             catch (Exception ex)
@@ -186,7 +186,7 @@ namespace Fanda.Repository.Seed
                     ParentId = org.Id
                 }))
                 {
-                    await repository.SaveAsync(org.Id, new PartyCategoryDto
+                    await repository.CreateAsync(org.Id, new PartyCategoryDto
                     {
                         Code = "DEFAULT",
                         Name = "Default",
