@@ -144,9 +144,12 @@ namespace FandaTabler.Controllers
                 {
                     #region
                     var errors = await _repository.ValidateAsync(org);
-                    foreach (var err in errors)
+                    foreach (var field in errors)
                     {
-                        ModelState.AddModelError(err.Key, err.Value);
+                        foreach (var value in field.Value)
+                        {
+                            ModelState.AddModelError(field.Key, value);
+                        }
                     }
                     #endregion
                     if (ModelState.IsValid)

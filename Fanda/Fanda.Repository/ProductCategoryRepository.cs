@@ -148,13 +148,13 @@ namespace Fanda.Repository
             var duplCode = new ChildDuplicate { Field = DuplicateField.Code, Value = model.Code, Id = model.Id, ParentId = orgId };
             if (await ExistsAsync(duplCode))
             {
-                model.Errors.Add(nameof(model.Code), $"{nameof(model.Code)} '{model.Code}' already exists");
+                model.Errors.AddErrors(nameof(model.Code), $"{nameof(model.Code)} '{model.Code}' already exists");
             }
             // Check name duplicate
             var duplName = new ChildDuplicate { Field = DuplicateField.Name, Value = model.Name, Id = model.Id, ParentId = orgId };
             if (await ExistsAsync(duplName))
             {
-                model.Errors.Add(nameof(model.Name), $"{nameof(model.Name)} '{model.Name}' already exists");
+                model.Errors.AddErrors(nameof(model.Name), $"{nameof(model.Name)} '{model.Name}' already exists");
             }
             #endregion
 

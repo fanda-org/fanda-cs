@@ -1,21 +1,26 @@
-﻿using Fanda.Dto;
+﻿using Fanda.Base;
+using Fanda.Dto;
 using Fanda.Dto.ViewModels;
 using Fanda.Repository;
+using Fanda.Repository.Base;
 using Fanda.Shared;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Net.Mime;
 using System.Threading.Tasks;
 
 namespace Fanda.Controllers
 {
-    [Authorize]
-    [Produces("application/json")]
-    [ApiController]
-    [Route("api/[controller]")]
-    public class UsersController : ControllerBase
+    //[EnableCors("AllowAll")]
+    //[Authorize]
+    //[Produces(MediaTypeNames.Application.Json)]
+    //[ApiController]
+    //[Route("api/[controller]")]
+    public class UsersController : BaseController
     {
         private readonly IUserRepository _repository;
 
@@ -25,81 +30,126 @@ namespace Fanda.Controllers
         }
 
         [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPost("authenticate")]
         public async Task<IActionResult> Authenticate([FromBody] AuthenticateRequest model)
         {
-            var response = await _repository.Authenticate(model, IpAddress());
-
-            if (response == null)
+            try
             {
-                return BadRequest(new { message = "Username or password is incorrect" });
+                var response = await _repository.Authenticate(model, IpAddress());
+                if (response == null)
+                {
+                    return BadRequest(
+                        SingleResponse<AuthenticateResponse>.Failure("Username or password is incorrect"));
+                }
+
+                SetTokenCookie(response.RefreshToken);
+
+                return Ok(
+                    SingleResponse<AuthenticateResponse>.Succeeded(response));
             }
-
-            SetTokenCookie(response.RefreshToken);
-
-            return Ok(response);
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    SingleResponse<AuthenticateResponse>.Failure(ex.Message));
+            }
         }
 
         [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPost("refresh-token")]
         public async Task<IActionResult> RefreshToken()
         {
-            var refreshToken = Request.Cookies["refreshToken"];
-            var response = await _repository.RefreshToken(refreshToken, IpAddress());
-
-            if (response == null)
+            try
             {
-                return Unauthorized(new { message = "Invalid token" });
+                var refreshToken = Request.Cookies["refreshToken"];
+                var response = await _repository.RefreshToken(refreshToken, IpAddress());
+
+                if (response == null)
+                {
+                    return Unauthorized(
+                        SingleResponse<AuthenticateResponse>.Failure("Invalid token"));
+                }
+
+                SetTokenCookie(response.RefreshToken);
+
+                return Ok(
+                    SingleResponse<AuthenticateResponse>.Succeeded(response));
             }
-
-            SetTokenCookie(response.RefreshToken);
-
-            return Ok(response);
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    SingleResponse<AuthenticateResponse>.Failure(ex.Message));
+            }
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPost("revoke-token")]
         public async Task<IActionResult> RevokeToken([FromBody] RevokeTokenRequest model)
         {
-            // accept token from request body or cookie
-            var token = model.Token ?? Request.Cookies["refreshToken"];
-
-            if (string.IsNullOrEmpty(token))
+            try
             {
-                return BadRequest(new { message = "Token is required" });
+                // accept token from request body or cookie
+                var token = model.Token ?? Request.Cookies["refreshToken"];
+
+                if (string.IsNullOrEmpty(token))
+                {
+                    return BadRequest(
+                        Repository.Base.Response.Failure(errorMessage: "Token is required"));
+                }
+
+                var response = await _repository.RevokeToken(token, IpAddress());
+
+                if (!response)
+                {
+                    return NotFound(
+                        Repository.Base.Response.Failure(errorMessage: "Token not found"));
+                }
+
+                return Ok(Repository.Base.Response.Succeeded(message: "Token revoked"));
             }
-
-            var response = await _repository.RevokeToken(token, IpAddress());
-
-            if (!response)
+            catch (Exception ex)
             {
-                return NotFound(new { message = "Token not found" });
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    Repository.Base.Response.Failure(ex.Message));
             }
-
-            return Ok(new { message = "Token revoked" });
         }
 
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
+        public async Task<IActionResult> Register(RegisterViewModel model)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    return View(model);
-            //}
-
-            string token = Guid.NewGuid().ToString();
-            string callbackUrl = Url.Page(
-                "/Users/ConfirmEmail",
-                pageHandler: null,
-                values: new { userId = model.Name, code = token },
-                protocol: Request.Scheme
-            );
-
-            // save
-            var userDto = await _repository.RegisterAsync(model, callbackUrl);
-            return CreatedAtAction(nameof(GetById), userDto.Id); //Ok(response);
-            //return RedirectToAction(nameof(Login));
+            try
+            {
+                //if (!ModelState.IsValid)
+                //{
+                //    return View(model);
+                //}
+                string token = Guid.NewGuid().ToString();
+                string callbackUrl = Url.Page(
+                    pageName: "/Users/ConfirmEmail",
+                    pageHandler: null,
+                    values: new { userName = model.Username, code = token },
+                    protocol: Request.Scheme
+                );
+                // save
+                var userDto = await _repository.RegisterAsync(model, callbackUrl);
+                return CreatedAtAction(nameof(GetById), userDto.Id);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    Repository.Base.Response.Failure(ex.Message));
+            }
         }
 
         // users/getall/5
@@ -112,18 +162,18 @@ namespace Fanda.Controllers
         }
 
         // users/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(Guid id)
+        [HttpGet("{userId}")]
+        public async Task<IActionResult> GetById(Guid userId)
         {
-            var user = await _repository.GetByIdAsync(id);
+            var user = await _repository.GetByIdAsync(userId);
             return Ok(user);
         }
 
-        [HttpGet("{id}/refresh-tokens")]
-        public async Task<IActionResult> GetRefreshTokens(Guid id)
+        [HttpGet("{userId}/refresh-tokens")]
+        public async Task<IActionResult> GetRefreshTokens(Guid userId)
         {
-            var user = await _repository.GetByIdAsync(id);
-            return Ok(user.RefreshTokens);
+            var tokens = await _repository.GetRefreshTokens(userId);
+            return Ok(tokens);
         }
 
         [HttpPost]
@@ -139,21 +189,30 @@ namespace Fanda.Controllers
             try
             {
                 if (userId != model.Id)
+                {
                     return BadRequest(new { message = "User Id mismatch" });
+                }
 
                 var user = await _repository.GetByIdAsync(userId);
                 if (user == null)
+                {
                     return NotFound(new { message = "User not found" });
+                }
 
                 // save 
                 //model.Password = password;
                 await _repository.UpdateAsync(userId, model);
                 return Ok();
             }
-            catch (AppException ex)
+            catch (BadRequestException ex)
             {
                 // return error message if there was an exception
                 return BadRequest(new { message = ex.Message });
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    Repository.Base.Response.Failure(ex.Message));
             }
         }
 

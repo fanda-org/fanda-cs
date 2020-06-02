@@ -172,7 +172,7 @@ namespace FandaTabler.Controllers
             string callbackUrl = Url.Page(
                 "/Users/ConfirmEmail",
                 pageHandler: null,
-                values: new { userId = model.Name, code = token },
+                values: new { userId = model.Username, code = token },
                 protocol: Request.Scheme
             );
 
@@ -215,7 +215,7 @@ namespace FandaTabler.Controllers
                 await _repository.UpdateAsync(userId, model);
                 return Ok();
             }
-            catch (AppException ex)
+            catch (BadRequestException ex)
             {
                 // return error message if there was an exception
                 return BadRequest(new { message = ex.Message });

@@ -35,6 +35,7 @@ namespace Fanda.Repository
         Task<AuthenticateResponse> Authenticate(AuthenticateRequest model, string ipAddress);
         Task<AuthenticateResponse> RefreshToken(string token, string ipAddress);
         Task<bool> RevokeToken(string token, string ipAddress);
+        Task<IEnumerable<RefreshTokenDto>> GetRefreshTokens(Guid userId);
 
         Task<bool> MapOrgAsync(Guid userId, Guid orgId);
         Task<bool> UnmapOrgAsync(Guid userId, Guid orgId);
@@ -97,12 +98,11 @@ namespace Fanda.Repository
             // validation
             if (string.IsNullOrWhiteSpace(model.Password))
             {
-                throw new AppException("Password is required");
+                throw new BadRequestException("Password is required");
             }
-
-            if (_context.Users.Any(x => x.Name == model.Name))
+            if (_context.Users.Any(x => x.Name == model.Username))
             {
-                throw new AppException("Username \"" + model.Name + "\" is already taken");
+                throw new DuplicateException("Username \"" + model.Username + "\" is already taken");
             }
 
             PasswordStorage.CreatePasswordHash(model.Password, out byte[] passwordHash, out byte[] passwordSalt);
@@ -118,8 +118,13 @@ namespace Fanda.Repository
                 userModel = _mapper.Map<UserDto>(user);
             }
 
-            await _emailSender.SendEmailAsync(model.Email, "Fanda: Confirm your email",
-                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+            // Ignore if error occured while sending email
+            try
+            {
+                await _emailSender.SendEmailAsync(model.Email, "Fanda: Confirm your email",
+                    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+            }
+            catch { }
 
             return userModel;
         }
@@ -218,7 +223,11 @@ namespace Fanda.Repository
             return true;
         }
 
-        //public IQueryable<UserListDto> GetAll() => GetAll(Guid.Empty);
+        public async Task<IEnumerable<RefreshTokenDto>> GetRefreshTokens(Guid userId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            return _mapper.Map<IEnumerable<RefreshTokenDto>>(user.RefreshTokens);
+        }
 
         public IQueryable<UserListDto> GetAll(Guid orgId)
         {
@@ -297,7 +306,7 @@ namespace Fanda.Repository
                 // username has changed so check if the new username is already taken
                 if (_context.Users.Any(x => x.Name == dto.Name))
                 {
-                    throw new AppException("Username '" + dto.Name + "' is already taken");
+                    throw new DuplicateException("Username '" + dto.Name + "' is already taken");
                 }
             }
             user.DateModified = DateTime.UtcNow;

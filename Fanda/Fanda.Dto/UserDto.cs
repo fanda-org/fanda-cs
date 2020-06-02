@@ -25,7 +25,7 @@ namespace Fanda.Dto
 
         public string Token { get; set; }
 
-        public virtual ICollection<RefreshTokenDto> RefreshTokens { get; set; }
+        //public virtual ICollection<RefreshTokenDto> RefreshTokens { get; set; }
 
         //public bool EmailConfirmed { get; set; }
         //public bool PhoneNumberConfirmed { get; set; }

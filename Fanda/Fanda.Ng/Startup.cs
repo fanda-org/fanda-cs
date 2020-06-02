@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,9 +23,9 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
+[assembly: ApiController]
 namespace Fanda
 {
-#pragma warning restore CS1591
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -341,5 +342,4 @@ namespace Fanda
             #endregion
         }
     }
-#pragma warning restore CS1591
 }

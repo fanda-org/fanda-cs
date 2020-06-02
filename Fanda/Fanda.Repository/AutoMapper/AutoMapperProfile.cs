@@ -11,6 +11,7 @@ namespace Fanda.Repository.AutoMapperProfile
         public AutoMapperProfile()
         {
             CreateMap<User, RegisterViewModel>()
+                .ForMember(vm => vm.Username, opt => opt.MapFrom(src => src.Name))
                 .ForMember(vm => vm.Password, opt => opt.Ignore())
                 .ForMember(vm => vm.ConfirmPassword, opt => opt.Ignore())
                 .ForMember(vm => vm.AgreeTerms, opt => opt.Ignore())

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Fanda.Shared;
+using System.ComponentModel.DataAnnotations;
 
 namespace Fanda.Dto.ViewModels
 {
@@ -7,7 +8,7 @@ namespace Fanda.Dto.ViewModels
         [Required]
         [Display(Name = "User Name")]
         [StringLength(16)]
-        public string Name { get; set; }
+        public string Username { get; set; }
 
         [Required]
         [EmailAddress]
@@ -26,7 +27,7 @@ namespace Fanda.Dto.ViewModels
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
-        [Required]
+        [RequiredTrue]
         public bool AgreeTerms { get; set; }
     }
 }
