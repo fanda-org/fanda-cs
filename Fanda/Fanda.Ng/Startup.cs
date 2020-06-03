@@ -1,4 +1,6 @@
 using AutoMapper;
+using Fanda.Helpers;
+using Fanda.Models.Context;
 using Fanda.Repository;
 using Fanda.Repository.Extensions;
 using Fanda.Shared;
@@ -18,6 +20,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.IO;
 using System.Linq;
+using System.Net.Mime;
 using System.Reflection;
 using System.Text;
 using System.Text.Json;
@@ -39,7 +42,8 @@ namespace Fanda
         public void ConfigureServices(IServiceCollection services)
         {
             #region Health checks
-            services.AddHealthChecks();
+            services.AddHealthChecks()
+                .AddDbContextCheck<FandaContext>();
             #endregion
 
             #region AppSettings
@@ -52,7 +56,27 @@ namespace Fanda
             #endregion
 
             #region CORS
-            services.AddCors();
+            services.AddCors(options =>
+            {
+                //var urls = new[]
+                //{
+                //    Configuration["Fanda.Web.Url"],
+                //    Configuration["Fanda.Ng.Url"]
+                //};
+                options.AddPolicy("_MyAllowedOrigins", builder =>
+                {
+                    builder //.WithOrigins(urls)
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+                    //.AllowCredentials();
+                });
+                //options.AddPolicy("OrderApp",
+                //    policy => policy.AllowAnyOrigin()
+                //    .AllowAnyHeader()
+                //    .AllowAnyMethod());
+            });
+
+            //services.AddCors();
             //options =>
             //{
             //    options.AddPolicy("AllowAll", builder =>
@@ -183,6 +207,17 @@ namespace Fanda
 
             #region Angular SPA
             services.AddControllers()
+                .ConfigureApiBehaviorOptions(options =>
+                {
+                    options.InvalidModelStateResponseFactory = actionContext =>
+                    {
+                        var result = new ValidationFailedResult(actionContext.ModelState);
+                        // add `using using System.Net.Mime;` to resolve MediaTypeNames
+                        result.ContentTypes.Add(MediaTypeNames.Application.Json);
+                        result.ContentTypes.Add(MediaTypeNames.Application.Xml);
+                        return result;
+                    };
+                })
                 .AddXmlSerializerFormatters()
                 .AddJsonOptions(options =>
                 {
@@ -210,6 +245,23 @@ namespace Fanda
             //    configuration.RootPath = "ClientApp/dist";
             //});
             #endregion
+
+            //services.Configure<ApiBehaviorOptions>(options =>
+            //{
+            //    options.InvalidModelStateResponseFactory = actionContext =>
+            //    {
+            //        return new ValidationFailedResult(actionContext.ModelState);
+            //        //var errors = actionContext.ModelState
+            //        //    .Where(e => e.Value.Errors.Count > 0)
+            //        //    .Select(e => new Error
+            //        //    {
+            //        //        Name = e.Key,
+            //        //        Message = e.Value.Errors.First().ErrorMessage
+            //        //    }).ToArray();
+
+            //        //return new BadRequestObjectResult(errors);
+            //    };
+            //});
 
             #region Swagger
             // Register the Swagger generator, defining 1 or more Swagger documents
@@ -282,22 +334,9 @@ namespace Fanda
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            //app.UseStaticFiles();
-
-            // Enable middleware to serve generated Swagger as a JSON endpoint.
-            app.UseSwagger();
-
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
-            // specifying the Swagger JSON endpoint.
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Fanda API V1");
-                //c.RoutePrefix = string.Empty;
-            });
-
-            app.UseHttpsRedirection();
             autoMapperConfigProvider.AssertConfigurationIsValid();
 
+            app.UseHttpsRedirection();
             #region Angular SPA
             //app.UseStaticFiles();
             //if (!env.IsDevelopment())
@@ -305,25 +344,28 @@ namespace Fanda
             //    app.UseSpaStaticFiles();
             //}
             #endregion
-
             app.UseRouting();
             app.UseResponseCaching();
             app.UseResponseCompression();
-            //app.UseCors("AllowAll");
             // global cors policy
-            app.UseCors(x => x
-                .SetIsOriginAllowed(origin => true)
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .AllowCredentials());
+            app.UseCors("_MyAllowedOrigins");
+            //app.UseCors(x => x
+            //    .SetIsOriginAllowed(origin => true)
+            //    .AllowAnyMethod()
+            //    .AllowAnyHeader()
+            //    .AllowCredentials());
             app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller}/{action=Index}/{id?}");
+                //endpoints.MapControllerRoute(
+                //    name: "default",
+                //    pattern: "{controller}/{action=Index}/{id?}");
+                endpoints.MapControllers()
+                    .RequireCors("_MyAllowedOrigins");
+                endpoints.MapHealthChecks("/health")
+                    .RequireCors("_MyAllowedOrigins");
             });
 
             #region Angular SPA
@@ -339,6 +381,19 @@ namespace Fanda
             //        spa.UseAngularCliServer(npmScript: "start");
             //    }
             //});
+            #endregion
+
+            #region Swagger
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Fanda API V1");
+                //c.RoutePrefix = string.Empty;
+            });
             #endregion
         }
     }

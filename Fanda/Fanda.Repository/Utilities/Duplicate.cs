@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Fanda.Repository.Utilities
 {
-    public class Duplicate
+    public class ParentDuplicate
     {
         [Required]
         public DuplicateField Field { get; set; }
@@ -11,7 +11,7 @@ namespace Fanda.Repository.Utilities
         public string Value { get; set; }
         public Guid Id { get; set; } = default;
     }
-    public class ChildDuplicate : Duplicate
+    public class Duplicate : ParentDuplicate
     {
         public Guid ParentId { get; set; } = default;
     }
@@ -20,6 +20,7 @@ namespace Fanda.Repository.Utilities
         Id = 1,
         Code = 2,
         Name = 3,
-        Number = 4
+        Email = 4,
+        Number = 5        
     }
 }

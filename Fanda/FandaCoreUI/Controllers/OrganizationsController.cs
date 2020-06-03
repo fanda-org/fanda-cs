@@ -155,6 +155,6 @@ namespace Fanda.Controllers
         }
 
         private async Task<bool> OrganizationExists(Guid id) =>
-            await _repository.ExistsAsync(new Duplicate { Field = DuplicateField.Id, Id = id });
+            await _repository.ExistsAsync(new ParentDuplicate { Field = DuplicateField.Id, Id = id });
     }
 }

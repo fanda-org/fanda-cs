@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -38,11 +39,11 @@ namespace FandaTabler.Controllers
                 var currentOrg = HttpContext.Session.Get<OrganizationDto>("CurrentOrg");
                 var currentYear = HttpContext.Session.Get<AccountYearDto>("CurrentYear");
 
-                var orgs = await GetAll();
+                var response = await GetAll();
                 #region Selected org and accounting year
-                if (orgs.Data != null)
+                if (response.Data != null)
                 {
-                    foreach (var org in orgs.Data)
+                    foreach (var org in response.Data)
                     {
                         if (currentOrg != null && org.Id == currentOrg.Id)
                         {
@@ -58,7 +59,7 @@ namespace FandaTabler.Controllers
                     }
                 }
                 #endregion
-                return PartialView("_List", orgs);
+                return PartialView("_List", response);
             }
             catch (Exception ex)
             {
@@ -142,14 +143,14 @@ namespace FandaTabler.Controllers
                 #region Validation: Basic model validation
                 if (ModelState.IsValid)
                 {
-                    #region
-                    var errors = await _repository.ValidateAsync(org);
-                    foreach (var field in errors)
+                    #region Validation
+                    var validationResult = await _repository.ValidateAsync(org);
+                    foreach (var error in validationResult)
                     {
-                        foreach (var value in field.Value)
-                        {
-                            ModelState.AddModelError(field.Key, value);
-                        }
+                        //foreach (var value in error.Field)
+                        //{
+                        ModelState.AddModelError(error.Field, error.Message);
+                        //}
                     }
                     #endregion
                     if (ModelState.IsValid)
@@ -213,7 +214,7 @@ namespace FandaTabler.Controllers
         }
 
         #region Private methods
-        private async Task<PagedResponse<OrgYearListDto>> GetAll()
+        private async Task<PagedResponse<IEnumerable<OrgYearListDto>>> GetAll()
         {
             Guid userId = GetCurrentUserId();
 

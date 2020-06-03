@@ -6,17 +6,17 @@ namespace Fanda.Api.Base
 {
     public static class ResponseExtensions
     {
-        public static IActionResult ToHttpResponse(this IResponse response)
-        {
-            var status = response.Success ? HttpStatusCode.OK : HttpStatusCode.InternalServerError ;
+        //public static IActionResult ToHttpResponse(this IDataResponse response)
+        //{
+        //    var status = response.Success ? HttpStatusCode.OK : HttpStatusCode.InternalServerError ;
 
-            return new ObjectResult(response)
-            {
-                StatusCode = (int)status
-            };
-        }
+        //    return new ObjectResult(response)
+        //    {
+        //        StatusCode = (int)status
+        //    };
+        //}
 
-        public static IActionResult ToHttpResponse<TModel>(this ISingleResponse<TModel> response)
+        public static IActionResult ToHttpResponse<TModel>(this IDataResponse<TModel> response)
         {
             var status = HttpStatusCode.OK;
 
@@ -35,7 +35,7 @@ namespace Fanda.Api.Base
             };
         }
 
-        public static IActionResult ToHttpResponse<TModel>(this IListResponse<TModel> response)
+        public static IActionResult ToHttpResponse<TModel>(this IPagedResponse<TModel> response)
         {
             var status = HttpStatusCode.OK;
 

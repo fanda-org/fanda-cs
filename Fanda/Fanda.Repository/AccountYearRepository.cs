@@ -125,8 +125,8 @@ namespace Fanda.Repository
             throw new KeyNotFoundException("Account year not found");
         }
 
-        public Task<bool> ExistsAsync(ChildDuplicate data) => _context.ExistsAsync<AccountYear>(data);
+        public Task<bool> ExistsAsync(Duplicate data) => _context.ExistsAsync<AccountYear>(data);
 
-        public Task<DtoErrors> ValidateAsync(Guid orgId, AccountYearDto model) => throw new NotImplementedException();
+        public Task<ValidationResultModel> ValidateAsync(Guid orgId, AccountYearDto model) => throw new NotImplementedException();
     }
 }

@@ -7,6 +7,8 @@ using Fanda.Models;
 using Fanda.Models.Context;
 using Fanda.Repository.Base;
 using Fanda.Repository.Extensions;
+using Fanda.Repository.Helpers;
+using Fanda.Repository.SqlClients;
 using Fanda.Repository.Utilities;
 using Fanda.Shared;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +25,8 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Dapper;
+using Microsoft.AspNetCore.Mvc.Internal;
 
 namespace Fanda.Repository
 {
@@ -30,6 +34,8 @@ namespace Fanda.Repository
         IParentRepository<UserDto>,
         IListRepository<UserListDto>
     {
+        Task<ValidationResultModel> ValidateAsync(RegisterViewModel model);
+
         Task<UserDto> LoginAsync(LoginViewModel model);
         Task<UserDto> RegisterAsync(RegisterViewModel model, string callbackUrl);
         Task<AuthenticateResponse> Authenticate(AuthenticateRequest model, string ipAddress);
@@ -50,16 +56,18 @@ namespace Fanda.Repository
         private readonly IEmailSender _emailSender;
         private readonly ILogger<UserRepository> _logger;
         private readonly AppSettings _appSettings;
+        private IDbClient _dbClient;
 
         public UserRepository(FandaContext context, IMapper mapper,
             IEmailSender emailSender, ILogger<UserRepository> logger,
-            IOptions<AppSettings> options)
+            IOptions<AppSettings> options, IDbClient dbClient)
         {
             _context = context;
             _mapper = mapper;
             _emailSender = emailSender;
             _logger = logger;
             _appSettings = options.Value;
+            _dbClient = dbClient;
         }
 
         public async Task<UserDto> LoginAsync(LoginViewModel model)
@@ -95,16 +103,6 @@ namespace Fanda.Repository
 
         public async Task<UserDto> RegisterAsync(RegisterViewModel model, string callbackUrl)
         {
-            // validation
-            if (string.IsNullOrWhiteSpace(model.Password))
-            {
-                throw new BadRequestException("Password is required");
-            }
-            if (_context.Users.Any(x => x.Name == model.Username))
-            {
-                throw new DuplicateException("Username \"" + model.Username + "\" is already taken");
-            }
-
             PasswordStorage.CreatePasswordHash(model.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
             UserDto userModel;
@@ -225,8 +223,24 @@ namespace Fanda.Repository
 
         public async Task<IEnumerable<RefreshTokenDto>> GetRefreshTokens(Guid userId)
         {
-            var user = await _context.Users.FindAsync(userId);
-            return _mapper.Map<IEnumerable<RefreshTokenDto>>(user.RefreshTokens);
+            //var result =
+            //    (from u in _context.Users
+            //     where u.Id.Equals(userId) && u.RefreshTokens.Any(t => t.Revoked==null && t.Expires >= DateTime.UtcNow)
+            //     select u.RefreshTokens)
+            //    .AsNoTracking()
+            //    .ToList();
+            //var user = await _context.Users.FindAsync(userId);
+            //var result = user.RefreshTokens.Where(t => t.IsActive);
+            //return _mapper.Map<IEnumerable<RefreshTokenDto>>(result);
+            string sql =
+                "SELECT r.Id, r.UserId, r.Token, r.Expires, r.Created, r.CreatedByIp, r.Revoked, r.RevokedByIp, r.ReplacedByToken " +
+                "FROM Users u " +
+                "INNER JOIN RefreshTokens r ON u.Id = r.UserId " +
+                "WHERE u.Id = @UserId " +
+                "AND r.Revoked IS NULL AND r.Expires >= GETUTCDATE()";
+            var result = await _dbClient.Connection.QueryAsync<RefreshTokenDto>(sql, new { UserId = userId });
+
+            return result;
         }
 
         public IQueryable<UserListDto> GetAll(Guid orgId)
@@ -301,14 +315,6 @@ namespace Fanda.Repository
             PasswordStorage.CreatePasswordHash(dto.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
             var user = _mapper.Map<User>(dto);
-            if (dto.Name != user.Name)
-            {
-                // username has changed so check if the new username is already taken
-                if (_context.Users.Any(x => x.Name == dto.Name))
-                {
-                    throw new DuplicateException("Username '" + dto.Name + "' is already taken");
-                }
-            }
             user.DateModified = DateTime.UtcNow;
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
@@ -497,9 +503,45 @@ namespace Fanda.Repository
             throw new KeyNotFoundException("User not found");
         }
 
-        public async Task<bool> ExistsAsync(Duplicate data) => await _context.ExistsAsync<User>(data, true);
+        public async Task<bool> ExistsAsync(ParentDuplicate data) => await _context.ExistsAsync<User>(true, data);
 
-        public Task<DtoErrors> ValidateAsync(UserDto model) => throw new NotImplementedException();
+        public async Task<ValidationResultModel> ValidateAsync(RegisterViewModel model)
+        {
+            var userDto = _mapper.Map<UserDto>(model);
+            return await ValidateAsync(userDto);
+        }
+
+        public async Task<ValidationResultModel> ValidateAsync(UserDto model)
+        {
+            // Reset validation errors
+            model.Errors.Clear();
+
+            #region Formatting: Cleansing and formatting
+            model.Email = model.Email.TrimExtraSpaces();
+            if (!EmailHelper.IsValid(model.Email))
+            {
+                model.Errors.AddError(nameof(model.Email), $"{model.Email} is not valid email format");
+            }
+            model.Name = model.Name.TrimExtraSpaces();
+            #endregion
+
+            #region Validation: Dupllicate
+            // Check email duplicate
+            var duplEmail = new Duplicate { Field = DuplicateField.Email, Value = model.Email, Id = model.Id };
+            if (await ExistsAsync(duplEmail))
+            {
+                model.Errors.AddError(nameof(model.Email), $"{nameof(model.Email)} '{model.Email}' already exists");
+            }
+            // Check name duplicate
+            var duplName = new Duplicate { Field = DuplicateField.Name, Value = model.Name, Id = model.Id };
+            if (await ExistsAsync(duplName))
+            {
+                model.Errors.AddError(nameof(model.Name), $"{nameof(model.Name)} '{model.Name}' already exists");
+            }
+            #endregion
+
+            return model.Errors;
+        }
 
         #region Privates
         private string GenerateJwtToken(User user)

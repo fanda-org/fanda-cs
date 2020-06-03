@@ -3031,6 +3031,7 @@
         "framework": ".NETCoreApp,Version=v5.0",
         "dependencies": {
           "AutoMapper": "9.0.0",
+          "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
           "System.ComponentModel.Annotations": "4.7.0"
         },
         "compile": {

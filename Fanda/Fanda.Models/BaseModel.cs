@@ -11,6 +11,11 @@ namespace Fanda.Models
         public DateTime? DateModified { get; set; }
     }
 
+    public class EmailModel : RootModel
+    {
+        public string Email { get; set; }
+    }
+
     public class BaseModel : RootModel
     {
         public string Code { get; set; }

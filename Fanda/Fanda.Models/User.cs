@@ -5,14 +5,14 @@ using System.Collections.Generic;
 
 namespace Fanda.Models
 {
-    public class User : RootModel
+    public class User : EmailModel
     {
         public User()
         {
             OrgUsers = new HashSet<OrgUser>();
         }
         //public string UserName { get; set; }
-        public string Email { get; set; }
+        //public string Email { get; set; }
         [JsonIgnore]
         public byte[] PasswordHash { get; set; }
         [JsonIgnore]

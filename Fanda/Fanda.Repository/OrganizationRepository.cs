@@ -218,7 +218,7 @@ namespace Fanda.Repository
             //return model;
         }
 
-        public async Task<DtoErrors> ValidateAsync(OrganizationDto model)
+        public async Task<ValidationResultModel> ValidateAsync(OrganizationDto model)
         {
             // Reset validation errors
             model.Errors.Clear();
@@ -231,16 +231,16 @@ namespace Fanda.Repository
 
             #region Validation: Dupllicate
             // Check code duplicate
-            var duplCode = new Duplicate { Field = DuplicateField.Code, Value = model.Code, Id = model.Id };
+            var duplCode = new ParentDuplicate { Field = DuplicateField.Code, Value = model.Code, Id = model.Id };
             if (await ExistsAsync(duplCode))
             {
-                model.Errors.AddErrors(nameof(model.Code), $"{nameof(model.Code)} '{model.Code}' already exists");
+                model.Errors.AddError(nameof(model.Code), $"{nameof(model.Code)} '{model.Code}' already exists");
             }
             // Check name duplicate
-            var duplName = new Duplicate { Field = DuplicateField.Name, Value = model.Name, Id = model.Id };
+            var duplName = new ParentDuplicate { Field = DuplicateField.Name, Value = model.Name, Id = model.Id };
             if (await ExistsAsync(duplName))
             {
-                model.Errors.AddErrors(nameof(model.Name), $"{nameof(model.Name)} '{model.Name}' already exists");
+                model.Errors.AddError(nameof(model.Name), $"{nameof(model.Name)} '{model.Name}' already exists");
             }
             #endregion
 
@@ -294,7 +294,7 @@ namespace Fanda.Repository
             throw new KeyNotFoundException("Organization not found");
         }
 
-        public Task<bool> ExistsAsync(Duplicate data) => _context.ExistsAsync<Organization>(data);
+        public Task<bool> ExistsAsync(ParentDuplicate data) => _context.ExistsAsync<Organization>(data);
 
         #region List
         //public IQueryable<OrgListDto> GetAll(Guid userId)

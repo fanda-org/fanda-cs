@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace Fanda.Models.Context
 {
@@ -78,13 +79,13 @@ namespace Fanda.Models.Context
             modelBuilder.ApplyConfiguration(new StockConfig());
             modelBuilder.ApplyConfiguration(new SerialNumberConfig());
 
-            //foreach (var property in modelBuilder.Model.GetEntityTypes()
-            //    .SelectMany(t => t.GetProperties())
-            //    .Where(p => p.ClrType == typeof(decimal)))
-            //{
-            //    property.SetColumnType("decimal(16, 4)");
-            //    //.Relational().ColumnType = "decimal(16, 4)";
-            //}
+            foreach (var property in modelBuilder.Model.GetEntityTypes()
+                .SelectMany(t => t.GetProperties())
+                .Where(p => p.ClrType == typeof(decimal)))
+            {
+                property.SetColumnType("decimal(18, 4)");
+                //.Relational().ColumnType = "decimal(18, 4)";
+            }
 
             base.OnModelCreating(modelBuilder);
         }

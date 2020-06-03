@@ -191,6 +191,14 @@ namespace Fanda.Repository.AutoMapperProfile
             CreateMap<AccountYear, AccountYearDto>()
                 .ReverseMap();
 
+            #region ViewModel to Dto
+            CreateMap<UserDto, RegisterViewModel>()
+                .ForMember(vm => vm.Username, opt => opt.MapFrom(src => src.Name))
+                .ForMember(vm => vm.ConfirmPassword, opt => opt.Ignore())
+                .ForMember(vm => vm.AgreeTerms, opt => opt.Ignore())
+                .ReverseMap();
+            #endregion
+
             #region List mappings
             CreateMap<AccountYear, YearListDto>();
             //.ReverseMap();

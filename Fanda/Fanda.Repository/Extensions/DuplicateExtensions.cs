@@ -9,7 +9,7 @@ namespace Fanda.Repository.Extensions
 {
     public static class DuplicateExtensions
     {
-        public static async Task<bool> ExistsAsync<TModel>(this FandaContext context, Duplicate data, bool isRoot)
+        public static async Task<bool> ExistsAsync<TModel>(this FandaContext context, ParentDuplicate data, bool isRoot)
             where TModel : RootModel
         {
             if (isRoot && data.Field == DuplicateField.Code)
@@ -25,6 +25,18 @@ namespace Fanda.Repository.Extensions
                     {
                         return await context.Set<TModel>()
                             .AnyAsync(pc => pc.Id == data.Id);
+                    }
+                    return result;
+                case DuplicateField.Email:
+                    if (data.Id == Guid.Empty)
+                    {
+                        result = await context.Set<TModel>()
+                            .AnyAsync(pc => pc.Name == data.Value);
+                    }
+                    else if (data.Id != Guid.Empty)
+                    {
+                        result = await context.Set<TModel>()
+                            .AnyAsync(pc => pc.Name == data.Value && pc.Id != data.Id);
                     }
                     return result;
                 case DuplicateField.Name:
@@ -44,7 +56,54 @@ namespace Fanda.Repository.Extensions
             }
         }
 
-        public static async Task<bool> ExistsAsync<TModel>(this FandaContext context, Duplicate data)
+        public static async Task<bool> ExistsAsync<TModel>(this FandaContext context, bool isEmailModel, ParentDuplicate data)
+            where TModel : EmailModel
+        {
+            if (isEmailModel && data.Field == DuplicateField.Code)
+            {
+                throw new ArgumentException("Root should not have field 'code' for exist validation");
+            }
+
+            bool result = true;
+            switch (data.Field)
+            {
+                case DuplicateField.Id:
+                    if (data.Id != Guid.Empty)
+                    {
+                        return await context.Set<TModel>()
+                            .AnyAsync(pc => pc.Id == data.Id);
+                    }
+                    return result;
+                case DuplicateField.Email:
+                    if (data.Id == Guid.Empty)
+                    {
+                        result = await context.Set<TModel>()
+                            .AnyAsync(pc => pc.Email== data.Value);
+                    }
+                    else if (data.Id != Guid.Empty)
+                    {
+                        result = await context.Set<TModel>()
+                            .AnyAsync(pc => pc.Email == data.Value && pc.Id != data.Id);
+                    }
+                    return result;
+                case DuplicateField.Name:
+                    if (data.Id == Guid.Empty)
+                    {
+                        result = await context.Set<TModel>()
+                            .AnyAsync(pc => pc.Name == data.Value);
+                    }
+                    else if (data.Id != Guid.Empty)
+                    {
+                        result = await context.Set<TModel>()
+                            .AnyAsync(pc => pc.Name == data.Value && pc.Id != data.Id);
+                    }
+                    return result;
+                default:
+                    return true;
+            }
+        }
+
+        public static async Task<bool> ExistsAsync<TModel>(this FandaContext context, ParentDuplicate data)
             where TModel : BaseModel
         {
             bool result = true;
@@ -86,7 +145,7 @@ namespace Fanda.Repository.Extensions
             }
         }
 
-        public static async Task<bool> ExistsAsync<TModel>(this FandaContext context, ChildDuplicate data)
+        public static async Task<bool> ExistsAsync<TModel>(this FandaContext context, Duplicate data)
             where TModel : BaseOrgModel
         {
 

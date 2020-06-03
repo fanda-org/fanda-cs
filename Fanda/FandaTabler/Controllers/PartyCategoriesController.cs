@@ -96,17 +96,13 @@ namespace FandaTabler.Controllers
                 #region Validation
                 if (ModelState.IsValid)
                 {
-                    var errors = await _repository.ValidateAsync(org.Id, model);
-                    //foreach (var err in errors)
-                    //{
-                    //    ModelState.AddModelError(err.Key, err.Value);
-                    //}
-                    foreach (var field in errors)
+                    var validationResult = await _repository.ValidateAsync(org.Id, model);
+                    foreach (var error in validationResult)
                     {
-                        foreach (var value in field.Value)
-                        {
-                            ModelState.AddModelError(field.Key, value);
-                        }
+                        //foreach (var value in error.Field)
+                        //{
+                        ModelState.AddModelError(error.Field, error.Message);
+                        //}
                     }
                 }
                 #endregion

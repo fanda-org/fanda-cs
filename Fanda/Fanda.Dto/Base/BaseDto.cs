@@ -10,7 +10,7 @@ namespace Fanda.Dto.Base
     {
         public RootDto()
         {
-            Errors = new DtoErrors();
+            Errors = new ValidationResultModel();
         }
 
         [Required]
@@ -27,7 +27,7 @@ namespace Fanda.Dto.Base
         public DateTime? DateModified { get; set; }
 
         [JsonIgnore(), IgnoreDataMember(), IgnoreMap()]
-        public DtoErrors Errors { get; set; }
+        public ValidationResultModel Errors { get; set; }
         public bool IsValid() => Errors.Count == 0;
     }
 

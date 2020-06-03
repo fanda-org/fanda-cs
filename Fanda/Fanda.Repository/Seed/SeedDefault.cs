@@ -32,7 +32,7 @@ namespace Fanda.Repository.Seed
                 IOrganizationRepository repository = _provider.GetRequiredService<IOrganizationRepository>();
 
                 string orgCode = orgName.ToUpper();
-                if (!await repository.ExistsAsync(new Duplicate { Field = DuplicateField.Code, Value = orgCode }))
+                if (!await repository.ExistsAsync(new ParentDuplicate { Field = DuplicateField.Code, Value = orgCode }))
                 {
                     OrganizationDto org = await repository.CreateAsync(new OrganizationDto
                     {
@@ -129,7 +129,7 @@ namespace Fanda.Repository.Seed
                     //LocationId = loc.LocationId,
                     Active = true
                 };
-                if (!await repository.ExistsAsync(new Duplicate { Field = DuplicateField.Name, Value = superAdmin.Name }))
+                if (!await repository.ExistsAsync(new ParentDuplicate { Field = DuplicateField.Name, Value = superAdmin.Name }))
                 {
                     var user = await repository.CreateAsync(superAdmin);
                     await repository.MapOrgAsync(user.Id, org.Id);
@@ -152,7 +152,7 @@ namespace Fanda.Repository.Seed
             try
             {
                 IUnitRepository repository = _provider.GetRequiredService<IUnitRepository>();
-                if (!await repository.ExistsAsync(new ChildDuplicate
+                if (!await repository.ExistsAsync(new Duplicate
                 {
                     Field = DuplicateField.Code,
                     Value = "DEFAULT",
@@ -179,7 +179,7 @@ namespace Fanda.Repository.Seed
             try
             {
                 IPartyCategoryRepository repository = _provider.GetRequiredService<IPartyCategoryRepository>();
-                if (!await repository.ExistsAsync(new ChildDuplicate
+                if (!await repository.ExistsAsync(new Duplicate
                 {
                     Field = DuplicateField.Code,
                     Value = "DEFAULT",

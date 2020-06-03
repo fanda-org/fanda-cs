@@ -3,19 +3,17 @@ using Fanda.Dto;
 using Fanda.Dto.ViewModels;
 using Fanda.Repository;
 using Fanda.Repository.Base;
-using Fanda.Shared;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Net.Mime;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Fanda.Controllers
 {
-    //[EnableCors("AllowAll")]
+    //[EnableCors("_MyAllowedOrigins")]
     //[Authorize]
     //[Produces(MediaTypeNames.Application.Json)]
     //[ApiController]
@@ -29,11 +27,11 @@ namespace Fanda.Controllers
             _repository = repository;
         }
 
+        [HttpPost("authenticate")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [HttpPost("authenticate")]
         public async Task<IActionResult> Authenticate([FromBody] AuthenticateRequest model)
         {
             try
@@ -42,98 +40,95 @@ namespace Fanda.Controllers
                 if (response == null)
                 {
                     return BadRequest(
-                        SingleResponse<AuthenticateResponse>.Failure("Username or password is incorrect"));
+                        DataResponse.Failure("Username or password is incorrect"));
                 }
 
                 SetTokenCookie(response.RefreshToken);
-
                 return Ok(
-                    SingleResponse<AuthenticateResponse>.Succeeded(response));
+                    DataResponse<AuthenticateResponse>.Succeeded(response));
             }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    SingleResponse<AuthenticateResponse>.Failure(ex.Message));
+                    DataResponse.Failure(ex.Message));
             }
         }
 
+        [HttpPost("refresh-token")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [HttpPost("refresh-token")]
         public async Task<IActionResult> RefreshToken()
         {
             try
             {
                 var refreshToken = Request.Cookies["refreshToken"];
                 var response = await _repository.RefreshToken(refreshToken, IpAddress());
-
                 if (response == null)
                 {
                     return Unauthorized(
-                        SingleResponse<AuthenticateResponse>.Failure("Invalid token"));
+                        DataResponse.Failure("Invalid token"));
                 }
 
                 SetTokenCookie(response.RefreshToken);
-
                 return Ok(
-                    SingleResponse<AuthenticateResponse>.Succeeded(response));
+                    DataResponse<AuthenticateResponse>.Succeeded(response));
             }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    SingleResponse<AuthenticateResponse>.Failure(ex.Message));
+                    DataResponse.Failure(ex.Message));
             }
         }
 
+        [HttpPost("revoke-token")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [HttpPost("revoke-token")]
         public async Task<IActionResult> RevokeToken([FromBody] RevokeTokenRequest model)
         {
             try
             {
                 // accept token from request body or cookie
                 var token = model.Token ?? Request.Cookies["refreshToken"];
-
                 if (string.IsNullOrEmpty(token))
                 {
                     return BadRequest(
-                        Repository.Base.Response.Failure(errorMessage: "Token is required"));
+                        DataResponse.Failure(errorMessage: "Token is required"));
                 }
 
                 var response = await _repository.RevokeToken(token, IpAddress());
-
                 if (!response)
                 {
                     return NotFound(
-                        Repository.Base.Response.Failure(errorMessage: "Token not found"));
+                        DataResponse.Failure(errorMessage: "Token not found"));
                 }
-
-                return Ok(Repository.Base.Response.Succeeded(message: "Token revoked"));
+                return Ok(DataResponse.Succeeded(message: "Token revoked"));
             }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    Repository.Base.Response.Failure(ex.Message));
+                    DataResponse.Failure(ex.Message));
             }
         }
 
+        [HttpPost("register")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             try
             {
-                //if (!ModelState.IsValid)
-                //{
-                //    return View(model);
-                //}
+                var validationResult = await _repository.ValidateAsync(model);
+                if (!validationResult.IsValid)
+                {
+                    return BadRequest(
+                        DataResponse.Failure(validationResult));
+                }
+
                 string token = Guid.NewGuid().ToString();
                 string callbackUrl = Url.Page(
                     pageName: "/Users/ConfirmEmail",
@@ -143,84 +138,132 @@ namespace Fanda.Controllers
                 );
                 // save
                 var userDto = await _repository.RegisterAsync(model, callbackUrl);
-                return CreatedAtAction(nameof(GetById), userDto.Id);
+                //return CreatedAtAction(nameof(GetById), userDto.Id);
+                return CreatedAtAction(nameof(GetById), new { userId = userDto.Id },
+                    DataResponse<UserDto>.Succeeded(userDto));
             }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    Repository.Base.Response.Failure(ex.Message));
+                    DataResponse.Failure(ex.Message));
             }
         }
 
-        // users/getall/5
-        [HttpGet("getall/{orgId}")]
-        public async Task<IActionResult> GetAll([FromRoute] Guid orgId)
+        // users/all/5
+        [HttpGet("all/{orgId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetAll(Guid orgId)
         {
-            var users = await _repository.GetAll(orgId)
-                .ToListAsync();
-            return Ok(users);
+            try
+            {
+                var users = await _repository.GetAll(orgId)
+                    .ToListAsync();
+                return Ok(DataResponse<IEnumerable<UserListDto>>.Succeeded(users));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    DataResponse.Failure(ex.Message));
+            }
         }
 
         // users/5
         [HttpGet("{userId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetById(Guid userId)
         {
-            var user = await _repository.GetByIdAsync(userId);
-            return Ok(user);
+            try
+            {
+                var user = await _repository.GetByIdAsync(userId);
+                return Ok(DataResponse<UserDto>.Succeeded(user));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    DataResponse.Failure(ex.Message));
+            }
         }
 
         [HttpGet("{userId}/refresh-tokens")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetRefreshTokens(Guid userId)
         {
-            var tokens = await _repository.GetRefreshTokens(userId);
-            return Ok(tokens);
+            try
+            {
+                var tokens = await _repository.GetRefreshTokens(userId);
+                return Ok(DataResponse<IEnumerable<RefreshTokenDto>>.Succeeded(tokens));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    DataResponse.Failure(ex.Message));
+            }
         }
 
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Create(UserDto model)
         {
-            await _repository.CreateAsync(model);
-            return CreatedAtAction(nameof(GetById), model.Id);
+            try
+            {
+                var userDto = await _repository.CreateAsync(model);
+                return CreatedAtAction(nameof(GetById), new { userId = model.Id },
+                    DataResponse<UserDto>.Succeeded(userDto));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    DataResponse.Failure(ex.Message));
+            }
         }
 
         [HttpPut]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Update(Guid userId, UserDto model)
         {
             try
             {
                 if (userId != model.Id)
                 {
-                    return BadRequest(new { message = "User Id mismatch" });
+                    return BadRequest(DataResponse.Failure("User Id mismatch"));
                 }
-
                 var user = await _repository.GetByIdAsync(userId);
                 if (user == null)
                 {
-                    return NotFound(new { message = "User not found" });
+                    return NotFound(DataResponse.Failure("User not found"));
                 }
-
-                // save 
+                // save
                 //model.Password = password;
                 await _repository.UpdateAsync(userId, model);
-                return Ok();
+                return NoContent(); //(DataResponse<UserDto>.Succeeded(UserDto));
             }
-            catch (BadRequestException ex)
-            {
-                // return error message if there was an exception
-                return BadRequest(new { message = ex.Message });
-            }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    Repository.Base.Response.Failure(ex.Message));
+                    DataResponse<string>.Failure(ex.Message));
             }
         }
 
         [HttpDelete("{orgId}/{userId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete(Guid orgId, Guid userId)
         {
-            await _repository.UnmapOrgAsync(userId, orgId);
-            return Ok();
+            try
+            {
+                await _repository.UnmapOrgAsync(userId, orgId);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    DataResponse<string>.Failure(ex.Message));
+            }
         }
 
         #region helper methods

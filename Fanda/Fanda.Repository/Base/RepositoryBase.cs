@@ -23,8 +23,8 @@ namespace Fanda.Repository.Base
         // POST
         Task<TModel> CreateAsync(TModel model);
         // GET
-        Task<bool> ExistsAsync(Duplicate data);
-        Task<DtoErrors> ValidateAsync(TModel model);
+        Task<bool> ExistsAsync(ParentDuplicate data);
+        Task<ValidationResultModel> ValidateAsync(TModel model);
     }
 
     public interface IRepository<TModel> : IRepositoryBase<TModel>
@@ -32,8 +32,8 @@ namespace Fanda.Repository.Base
         // POST
         Task<TModel> CreateAsync(Guid parentId, TModel model);
         // GET
-        Task<bool> ExistsAsync(ChildDuplicate data);
-        Task<DtoErrors> ValidateAsync(Guid parentId, TModel model);
+        Task<bool> ExistsAsync(Duplicate data);
+        Task<ValidationResultModel> ValidateAsync(Guid parentId, TModel model);
     }
 
     #region Get data of children

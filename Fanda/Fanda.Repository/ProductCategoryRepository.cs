@@ -130,9 +130,9 @@ namespace Fanda.Repository
             throw new KeyNotFoundException("Product category not found");
         }
 
-        public async Task<bool> ExistsAsync(ChildDuplicate data) => await _context.ExistsAsync<ProductCategory>(data);
+        public async Task<bool> ExistsAsync(Duplicate data) => await _context.ExistsAsync<ProductCategory>(data);
 
-        public async Task<DtoErrors> ValidateAsync(Guid orgId, ProductCategoryDto model)
+        public async Task<ValidationResultModel> ValidateAsync(Guid orgId, ProductCategoryDto model)
         {
             // Reset validation errors
             model.Errors.Clear();
@@ -145,16 +145,16 @@ namespace Fanda.Repository
 
             #region Validation: Dupllicate
             // Check code duplicate
-            var duplCode = new ChildDuplicate { Field = DuplicateField.Code, Value = model.Code, Id = model.Id, ParentId = orgId };
+            var duplCode = new Duplicate { Field = DuplicateField.Code, Value = model.Code, Id = model.Id, ParentId = orgId };
             if (await ExistsAsync(duplCode))
             {
-                model.Errors.AddErrors(nameof(model.Code), $"{nameof(model.Code)} '{model.Code}' already exists");
+                model.Errors.AddError(nameof(model.Code), $"{nameof(model.Code)} '{model.Code}' already exists");
             }
             // Check name duplicate
-            var duplName = new ChildDuplicate { Field = DuplicateField.Name, Value = model.Name, Id = model.Id, ParentId = orgId };
+            var duplName = new Duplicate { Field = DuplicateField.Name, Value = model.Name, Id = model.Id, ParentId = orgId };
             if (await ExistsAsync(duplName))
             {
-                model.Errors.AddErrors(nameof(model.Name), $"{nameof(model.Name)} '{model.Name}' already exists");
+                model.Errors.AddError(nameof(model.Name), $"{nameof(model.Name)} '{model.Name}' already exists");
             }
             #endregion
 

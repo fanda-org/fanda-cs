@@ -25,22 +25,22 @@ namespace Fanda.Repository.Extensions
         //    return dbQuery.GetPagedAsync(); //ToDynamicListAsync();
         //}
 
-        public static async Task<ListResponse<TModel>> GetList<TModel>(this IListRepository<TModel> listRepository,
+        public static async Task<DataResponse<IEnumerable<TModel>>> GetList<TModel>(this IListRepository<TModel> listRepository,
             Guid parentId, Query queryInput)
         {
             var (qry, _) = listRepository.GetQueryable(parentId, queryInput);
             var list = await qry.ToListAsync();
-            var response = new ListResponse<TModel> { Data = list };
+            var response = DataResponse<IEnumerable<TModel>>.Succeeded(list);
 
             return response;
         }
 
-        public static async Task<PagedResponse<TModel>> GetPaged<TModel>(this IListRepository<TModel> listRepository,
+        public static async Task<PagedResponse<IEnumerable<TModel>>> GetPaged<TModel>(this IListRepository<TModel> listRepository,
             Guid parentId, Query queryInput)
         {
             var (qry, itemsCount) = listRepository.GetQueryable(parentId, queryInput);
             var list = await qry.ToListAsync();
-            var response = new PagedResponse<TModel>
+            var response = new PagedResponse<IEnumerable<TModel>>
             {
                 ItemsCount = itemsCount,
                 Page = queryInput.Page,

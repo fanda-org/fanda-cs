@@ -5,7 +5,7 @@ using System.Net.Mime;
 
 namespace Fanda.Base
 {
-    [EnableCors("AllowAll")]
+    [EnableCors("_MyAllowedOrigins")]
     [Authorize]
     [Produces(MediaTypeNames.Application.Json)]
     [ApiController]

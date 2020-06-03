@@ -215,7 +215,7 @@ namespace FandaTabler.Controllers
                 await _repository.UpdateAsync(userId, model);
                 return Ok();
             }
-            catch (BadRequestException ex)
+            catch (Exception ex)
             {
                 // return error message if there was an exception
                 return BadRequest(new { message = ex.Message });
