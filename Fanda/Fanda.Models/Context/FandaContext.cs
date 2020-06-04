@@ -12,6 +12,7 @@ namespace Fanda.Models.Context
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<Organization> Organizations { get; set; }
         public DbSet<Role> Roles { get; set; }
 
@@ -26,14 +27,14 @@ namespace Fanda.Models.Context
         public DbSet<LedgerGroup> LedgerGroups { get; set; }
         public DbSet<Ledger> Ledgers { get; set; }
         public DbSet<PartyCategory> PartyCategories { get; set; }
-        public DbSet<Party> Parties { get; set; }
-        public DbSet<Bank> Banks { get; set; }
+        //public DbSet<Party> Parties { get; set; }
+        //public DbSet<Bank> Banks { get; set; }
         public DbSet<AccountYear> AccountYears { get; set; }
         public DbSet<InvoiceCategory> InvoiceCategories { get; set; }
 
         public DbSet<Invoice> Invoices { get; set; }
-        public DbSet<InvoiceItem> InvoiceItems { get; set; }
-        public DbSet<Stock> Stock { get; set; }
+        //public DbSet<InvoiceItem> InvoiceItems { get; set; }
+        //public DbSet<Stock> Stock { get; set; }
         public DbSet<SerialNumber> SerialNumbers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -43,7 +44,7 @@ namespace Fanda.Models.Context
             modelBuilder.ApplyConfiguration(new ContactConfig());
             modelBuilder.ApplyConfiguration(new AddressConfig());
             modelBuilder.ApplyConfiguration(new UserConfig());
-            //modelBuilder.ApplyConfiguration(new RefreshTokenConfig());
+            modelBuilder.ApplyConfiguration(new RefreshTokenConfig());
             modelBuilder.ApplyConfiguration(new OrganizationConfig());
             modelBuilder.ApplyConfiguration(new OrgContactConfig());
             modelBuilder.ApplyConfiguration(new OrgAddressConfig());

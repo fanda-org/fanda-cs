@@ -281,7 +281,7 @@ namespace FandaTabler
 
             services.AddScoped<IAccountYearRepository, AccountYearRepository>();
 
-            services.AddSingleton<ISerialNumberRepository>(new SerialNumberRepository(appSettings));
+            services.AddScoped<ISerialNumberRepository, SerialNumberRepository>();
             services.AddHttpContextAccessor();
             #endregion
         }

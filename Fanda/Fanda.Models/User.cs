@@ -7,10 +7,12 @@ namespace Fanda.Models
 {
     public class User : EmailModel
     {
-        public User()
-        {
-            OrgUsers = new HashSet<OrgUser>();
-        }
+        //public User()
+        //{
+        //    OrgUsers = new HashSet<OrgUser>();
+        //    RefreshTokens = new HashSet<RefreshToken>();
+        //}
+
         //public string UserName { get; set; }
         //public string Email { get; set; }
         [JsonIgnore]
@@ -20,6 +22,7 @@ namespace Fanda.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime? DateLastLogin { get; set; }
+
         [JsonIgnore]
         public virtual ICollection<RefreshToken> RefreshTokens { get; set; }
         public virtual ICollection<OrgUser> OrgUsers { get; set; }

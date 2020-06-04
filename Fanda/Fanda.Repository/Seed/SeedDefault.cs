@@ -1,5 +1,4 @@
 ﻿using Fanda.Dto;
-using Fanda.Repository.Base;
 using Fanda.Repository.Utilities;
 using Fanda.Shared;
 using Microsoft.Extensions.DependencyInjection;

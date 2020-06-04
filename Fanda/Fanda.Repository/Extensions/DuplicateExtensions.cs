@@ -78,7 +78,7 @@ namespace Fanda.Repository.Extensions
                     if (data.Id == Guid.Empty)
                     {
                         result = await context.Set<TModel>()
-                            .AnyAsync(pc => pc.Email== data.Value);
+                            .AnyAsync(pc => pc.Email == data.Value);
                     }
                     else if (data.Id != Guid.Empty)
                     {

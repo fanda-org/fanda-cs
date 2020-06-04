@@ -1,4 +1,6 @@
-﻿using Fanda.Repository;
+﻿using Fanda.Models.Context;
+using Fanda.Repository;
+using Fanda.Repository.Extensions;
 using Fanda.Shared;
 using System;
 using System.Collections.Generic;
@@ -14,7 +16,7 @@ namespace Fanda.Tests
         private const int UserCount = 100;
         private const int ThreadCount = 100;
 
-        private static void Main(string[] args)
+        private static void Main()
         {
             AppSettings settings = new AppSettings
             {
@@ -25,7 +27,9 @@ namespace Fanda.Tests
                     "Server=(local)\\sqlexpress;Database=Fanda;UID=sa;PWD=tbm@1234;Application Name=Fanda;Connection Lifetime=0;Min Pool Size=10;Max Pool Size=100;Pooling=true;"
                 }
             };
-            SerialNumberRepository repo = new SerialNumberRepository(settings);
+            var optionsBuilder = DbContextExtensions.CreateDbContextOptionsBuilder(settings);
+            using var context = new FandaContext(optionsBuilder.Options);
+            SerialNumberRepository repo = new SerialNumberRepository(context);
             Guid yearId = new Guid("639CCA31-D61A-49B5-BFC4-424200C3F5F5");
 
             Console.WriteLine("Starting..");

@@ -2,7 +2,6 @@
 using Fanda.Repository;
 using Fanda.Repository.Base;
 using Fanda.Repository.Extensions;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;

@@ -8,7 +8,6 @@ using Fanda.Models.Context;
 using Fanda.Repository.Base;
 using Fanda.Repository.Extensions;
 using Fanda.Repository.Helpers;
-using Fanda.Repository.SqlClients;
 using Fanda.Repository.Utilities;
 using Fanda.Shared;
 using Microsoft.EntityFrameworkCore;
@@ -25,8 +24,6 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using Dapper;
-using Microsoft.AspNetCore.Mvc.Internal;
 
 namespace Fanda.Repository
 {
@@ -41,7 +38,7 @@ namespace Fanda.Repository
         Task<AuthenticateResponse> Authenticate(AuthenticateRequest model, string ipAddress);
         Task<AuthenticateResponse> RefreshToken(string token, string ipAddress);
         Task<bool> RevokeToken(string token, string ipAddress);
-        Task<IEnumerable<RefreshTokenDto>> GetRefreshTokens(Guid userId);
+        Task<IEnumerable<ActiveTokenDto>> GetRefreshTokens(Guid userId);
 
         Task<bool> MapOrgAsync(Guid userId, Guid orgId);
         Task<bool> UnmapOrgAsync(Guid userId, Guid orgId);
@@ -56,18 +53,18 @@ namespace Fanda.Repository
         private readonly IEmailSender _emailSender;
         private readonly ILogger<UserRepository> _logger;
         private readonly AppSettings _appSettings;
-        private IDbClient _dbClient;
+        //private readonly IDbClient _dbClient;
 
         public UserRepository(FandaContext context, IMapper mapper,
             IEmailSender emailSender, ILogger<UserRepository> logger,
-            IOptions<AppSettings> options, IDbClient dbClient)
+            IOptions<AppSettings> options/*, IDbClient dbClient*/)
         {
             _context = context;
             _mapper = mapper;
             _emailSender = emailSender;
             _logger = logger;
             _appSettings = options.Value;
-            _dbClient = dbClient;
+            //_dbClient = dbClient;
         }
 
         public async Task<UserDto> LoginAsync(LoginViewModel model)
@@ -77,13 +74,14 @@ namespace Fanda.Repository
                 User user;
                 if (RegEx.IsEmail(model.NameOrEmail))
                 {
-                    user = await _context.Users.SingleOrDefaultAsync(x => x.Email == model.NameOrEmail);
+                    user = await _context.Users
+                        .FirstOrDefaultAsync(x => x.Email == model.NameOrEmail);
                 }
                 else
                 {
-                    user = await _context.Users.SingleOrDefaultAsync(x => x.Name == model.NameOrEmail);
+                    user = await _context.Users
+                        .FirstOrDefaultAsync(x => x.Name == model.NameOrEmail);
                 }
-
                 // return null if user not found
                 if (user == null)
                 {
@@ -130,7 +128,8 @@ namespace Fanda.Repository
         public async Task<AuthenticateResponse> Authenticate(AuthenticateRequest model, string ipAddress)
         {
             var user = await _context.Users
-                .SingleOrDefaultAsync(x => x.Name == model.Username /*&& x.Password == model.Password*/);
+                .Include(u => u.RefreshTokens)
+                .FirstOrDefaultAsync(x => x.Name == model.Username);
 
             // return null if user not found
             if (user == null)
@@ -161,7 +160,8 @@ namespace Fanda.Repository
         public async Task<AuthenticateResponse> RefreshToken(string token, string ipAddress)
         {
             var user = await _context.Users
-                .SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == token));
+                .Include(u => u.RefreshTokens)
+                .FirstOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == token));
 
             // return null if no user found with token
             if (user == null)
@@ -196,6 +196,7 @@ namespace Fanda.Repository
         public async Task<bool> RevokeToken(string token, string ipAddress)
         {
             var user = await _context.Users
+                .Include(u => u.RefreshTokens)
                 .SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == token));
 
             // return false if no user found with token
@@ -221,7 +222,7 @@ namespace Fanda.Repository
             return true;
         }
 
-        public async Task<IEnumerable<RefreshTokenDto>> GetRefreshTokens(Guid userId)
+        public async Task<IEnumerable<ActiveTokenDto>> GetRefreshTokens(Guid userId)
         {
             //var result =
             //    (from u in _context.Users
@@ -229,18 +230,28 @@ namespace Fanda.Repository
             //     select u.RefreshTokens)
             //    .AsNoTracking()
             //    .ToList();
-            //var user = await _context.Users.FindAsync(userId);
+
+            //var user = await _context.Users
+            //    .Include(u => u.RefreshTokens)
+            //    //.Where(t => t.RefreshTokens.Any(r => r.Revoked == null && r.Expires >= DateTime.UtcNow))
+            //    .AsNoTracking()
+            //    .FirstOrDefaultAsync(u => u.Id == userId);
+
+            var tokens = await _context.RefreshTokens
+                .Where(t => t.UserId == userId && t.Revoked == null && t.Expires >= DateTime.UtcNow)
+                .ProjectTo<ActiveTokenDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
             //var result = user.RefreshTokens.Where(t => t.IsActive);
             //return _mapper.Map<IEnumerable<RefreshTokenDto>>(result);
-            string sql =
-                "SELECT r.Id, r.UserId, r.Token, r.Expires, r.Created, r.CreatedByIp, r.Revoked, r.RevokedByIp, r.ReplacedByToken " +
-                "FROM Users u " +
-                "INNER JOIN RefreshTokens r ON u.Id = r.UserId " +
-                "WHERE u.Id = @UserId " +
-                "AND r.Revoked IS NULL AND r.Expires >= GETUTCDATE()";
-            var result = await _dbClient.Connection.QueryAsync<RefreshTokenDto>(sql, new { UserId = userId });
 
-            return result;
+            //string sql =
+            //    "SELECT r.Id, r.UserId, r.Token, r.Expires, r.Created, r.CreatedByIp, r.Revoked, r.RevokedByIp, r.ReplacedByToken " +
+            //    "FROM RefreshTokens r WITH (NOLOCK)" +
+            //    "WHERE r.UserId = @UserId " +
+            //    "AND r.Revoked IS NULL AND r.Expires >= GETUTCDATE()";
+            //var result = await _dbClient.Connection.QueryAsync<RefreshTokenDto>(sql, new { UserId = userId });
+
+            return tokens; //_mapper.Map<IEnumerable<RefreshTokenDto>>(user.RefreshTokens.Where(t => t.Revoked == null && t.Expires >= DateTime.UtcNow));
         }
 
         public IQueryable<UserListDto> GetAll(Guid orgId)
@@ -266,12 +277,11 @@ namespace Fanda.Repository
 
         public async Task<UserDto> GetByIdAsync(Guid id, bool includeChildren = false)
         {
-            UserDto user = null;
             if (id == null || id == Guid.Empty)
             {
                 throw new ArgumentNullException("id", "Id is missing");
             }
-            user = await _context.Users
+            var user = await _context.Users
                 .AsNoTracking()
                 .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(u => u.Id == id);
@@ -557,7 +567,7 @@ namespace Fanda.Repository
                     new Claim(ClaimTypes.Email, user.Email),
                     new Claim(ClaimTypes.GivenName, $"{user.FirstName} {user.LastName}"),
                 }),
-                Expires = DateTime.UtcNow.AddMinutes(15),
+                Expires = DateTime.UtcNow.AddMinutes(180),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateJwtSecurityToken(tokenDescriptor);

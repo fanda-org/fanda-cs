@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Fanda.Models;
-using Fanda.Models.Context;
 using Fanda.Dto;
 using Fanda.Dto.Base;
+using Fanda.Models;
+using Fanda.Models.Context;
 using Fanda.Repository.Base;
 using Fanda.Repository.Extensions;
 using Fanda.Repository.Utilities;
@@ -73,9 +73,9 @@ namespace Fanda.Repository
 
             PartyCategory category = _mapper.Map<PartyCategory>(model);
             category.OrgId = orgId;
-                category.DateCreated = DateTime.UtcNow;
-                category.DateModified = null;
-                await _context.PartyCategories.AddAsync(category);
+            category.DateCreated = DateTime.UtcNow;
+            category.DateModified = null;
+            await _context.PartyCategories.AddAsync(category);
             await _context.SaveChangesAsync();
             return _mapper.Map<PartyCategoryDto>(category);
         }
@@ -83,7 +83,9 @@ namespace Fanda.Repository
         public async Task UpdateAsync(Guid id, PartyCategoryDto model)
         {
             if (id != model.Id)
+            {
                 throw new ArgumentException("Party category id mismatch");
+            }
 
             PartyCategory category = _mapper.Map<PartyCategory>(model);
             category.DateModified = DateTime.UtcNow;

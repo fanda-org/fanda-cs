@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Fanda.Models;
-using Fanda.Models.Context;
 using Fanda.Dto;
 using Fanda.Dto.Base;
+using Fanda.Models;
+using Fanda.Models.Context;
 using Fanda.Repository.Base;
 using Fanda.Repository.Extensions;
 using Fanda.Repository.Utilities;

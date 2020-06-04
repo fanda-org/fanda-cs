@@ -21,6 +21,6 @@ namespace Fanda.Repository.Utilities
         Code = 2,
         Name = 3,
         Email = 4,
-        Number = 5        
+        Number = 5
     }
 }

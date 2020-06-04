@@ -1,8 +1,8 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Fanda.Dto;
 using Fanda.Models;
 using Fanda.Models.Context;
-using Fanda.Dto;
 //using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;

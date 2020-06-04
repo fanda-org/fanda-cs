@@ -1,9 +1,9 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Fanda.Models;
-using Fanda.Models.Context;
 using Fanda.Dto;
 using Fanda.Dto.Base;
+using Fanda.Models;
+using Fanda.Models.Context;
 using Fanda.Repository.Base;
 using Fanda.Repository.Extensions;
 using Fanda.Repository.Utilities;
@@ -12,9 +12,9 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 //using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
-using System.Linq.Dynamic.Core;
 
 namespace Fanda.Repository
 {
@@ -312,7 +312,9 @@ namespace Fanda.Repository
         IQueryable<OrgYearListDto> IListRepository<OrgYearListDto>.GetAll(Guid userId)
         {
             if (userId == null || userId == Guid.Empty)
+            {
                 throw new ArgumentNullException("userId", "User id is missing");
+            }
 
             IQueryable<OrgYearListDto> query = _context.Organizations
                 .Include(o => o.AccountYears)

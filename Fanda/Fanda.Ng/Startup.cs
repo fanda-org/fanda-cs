@@ -201,6 +201,7 @@ namespace Fanda
             #region Repositorires
             services.AddTransient<IEmailSender, EmailSender>();
 
+            services.AddScoped<ISerialNumberRepository, SerialNumberRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUnitRepository, UnitRepository>();
             #endregion
@@ -345,7 +346,7 @@ namespace Fanda
             //}
             #endregion
             app.UseRouting();
-            app.UseResponseCaching();
+            //app.UseResponseCaching();
             app.UseResponseCompression();
             // global cors policy
             app.UseCors("_MyAllowedOrigins");

@@ -85,6 +85,7 @@ namespace Fanda.Controllers
         [HttpPost("revoke-token")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> RevokeToken([FromBody] RevokeTokenRequest model)
@@ -152,6 +153,7 @@ namespace Fanda.Controllers
         // users/all/5
         [HttpGet("all/{orgId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAll(Guid orgId)
         {
@@ -171,6 +173,7 @@ namespace Fanda.Controllers
         // users/5
         [HttpGet("{userId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetById(Guid userId)
         {
@@ -188,13 +191,14 @@ namespace Fanda.Controllers
 
         [HttpGet("{userId}/refresh-tokens")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetRefreshTokens(Guid userId)
         {
             try
             {
                 var tokens = await _repository.GetRefreshTokens(userId);
-                return Ok(DataResponse<IEnumerable<RefreshTokenDto>>.Succeeded(tokens));
+                return Ok(DataResponse<IEnumerable<ActiveTokenDto>>.Succeeded(tokens));
             }
             catch (Exception ex)
             {
@@ -205,6 +209,7 @@ namespace Fanda.Controllers
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Create(UserDto model)
         {
@@ -223,6 +228,7 @@ namespace Fanda.Controllers
 
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Update(Guid userId, UserDto model)
         {
@@ -251,6 +257,7 @@ namespace Fanda.Controllers
 
         [HttpDelete("{orgId}/{userId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete(Guid orgId, Guid userId)
         {

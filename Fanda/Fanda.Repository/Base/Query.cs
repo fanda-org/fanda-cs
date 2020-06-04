@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Fanda.Repository.Base
+﻿namespace Fanda.Repository.Base
 {
     public class Query
     {

@@ -1,15 +1,8 @@
 ﻿using Fanda.Models.Context;
-using Fanda.Shared;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Concurrent;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using Fanda.Repository.Extensions;
-using Dapper;
-using System.Transactions;
+using Fanda.Shared;
+using System;
+using System.Text;
 
 namespace Fanda.Repository
 {
@@ -22,12 +15,17 @@ namespace Fanda.Repository
     {
         //private static volatile SerialNumberRepository _instance;
         private static readonly object syncRoot = new object();
-        private readonly AppSettings _settings;
+        //private readonly AppSettings _settings;
+        private readonly FandaContext _context;
 
-        public SerialNumberRepository(AppSettings settings)
+        public SerialNumberRepository(FandaContext context)
         {
-            _settings = settings;
+            _context = context;
         }
+        //public SerialNumberRepository(AppSettings settings)
+        //{
+        //    _settings = settings;
+        //}
         //public static SerialNumberRepository Instance
         //{
         //    get
@@ -49,14 +47,14 @@ namespace Fanda.Repository
         {
             try
             {
-                var optionsBuilder = DbContextExtensions.CreateDbContextOptionsBuilder(_settings);
+                //var optionsBuilder = DbContextExtensions.CreateDbContextOptionsBuilder(_settings);
                 //using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
-                using var context = new FandaContext(optionsBuilder.Options);
+                //using var context = new FandaContext(optionsBuilder.Options);
                 string moduleString = module.ToString();
 
                 lock (syncRoot)
                 {
-                    var serialNumber = context.SerialNumbers
+                    var serialNumber = _context.SerialNumbers
                         .Find(yearId, moduleString);
 
                     int firstIndex = serialNumber.SerialFormat.IndexOf('N');    // YYJJJNNNNN = 5
@@ -127,8 +125,8 @@ namespace Fanda.Repository
                     serialNumber.LastValue = nextValue;
                     serialNumber.LastNumber = nextNumber;
                     serialNumber.LastDate = DateTime.Now;
-                    context.SerialNumbers.Update(serialNumber);
-                    context.SaveChanges();
+                    _context.SerialNumbers.Update(serialNumber);
+                    _context.SaveChanges();
                     //scope.Complete();
                     return nextValue;
                 }

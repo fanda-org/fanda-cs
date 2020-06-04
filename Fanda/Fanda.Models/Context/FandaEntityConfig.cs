@@ -102,13 +102,54 @@ namespace Fanda.Models.Context
             //builder.Property(o => o.DateModified).ValueGeneratedOnUpdate();
 
             // Foreign keys - Owns
-            builder.OwnsMany(u => u.RefreshTokens);
+            //builder.OwnsMany(u => u.RefreshTokens);
 
             // index
             builder.HasIndex(u => u.Name)
                 .IsUnique();
             builder.HasIndex(u => u.Email)
                 .IsUnique();
+        }
+    }
+    
+    public class RefreshTokenConfig : IEntityTypeConfiguration<RefreshToken>
+    {
+        public void Configure(EntityTypeBuilder<RefreshToken> builder)
+        {
+            // table
+            builder.ToTable("RefreshTokens");
+
+            // key
+            builder.HasKey(u => new { u.Id, u.UserId });
+            builder.Property(t => t.Id).ValueGeneratedOnAdd();
+
+            // columns
+            builder.Property(u => u.Token)
+                .IsRequired()
+                .IsUnicode(false)
+                .HasMaxLength(100);
+            builder.Property(u => u.CreatedByIp)
+                .IsRequired()
+                .IsUnicode(false)
+                .HasMaxLength(50);
+            builder.Property(u => u.RevokedByIp)
+                .IsRequired(false)
+                .IsUnicode(false)
+                .HasMaxLength(50);
+            builder.Property(u => u.ReplacedByToken)
+                .IsRequired(false)
+                .IsUnicode(false)
+                .HasMaxLength(100);
+            //builder.Property(o => o.DateCreated).ValueGeneratedOnAdd();
+            //builder.Property(o => o.DateModified).ValueGeneratedOnUpdate();
+
+            // Foreign keys - Owns
+            builder.HasOne(u => u.User)
+                .WithMany(t => t.RefreshTokens)
+                .HasForeignKey(u => u.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // index
         }
     }
     #endregion

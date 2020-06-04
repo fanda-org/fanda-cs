@@ -4,7 +4,6 @@ using Fanda.Shared;
 //using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 //using MySql.Data.EntityFrameworkCore.Extensions;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Pomelo.EntityFrameworkCore.MySql.Storage;
@@ -21,35 +20,35 @@ namespace Fanda.Repository.Extensions
             switch (settings.DatabaseType)
             {
                 case "MSSQL":
-                    //services.AddEntityFrameworkSqlServer()
-                    services.AddDbContextPool<FandaContext>(options =>
-                    {
-                        MsSqlOptions(options, settings.ConnectionStrings.MsSqlConnection);
-                    });
+                    services.AddEntityFrameworkSqlServer()
+                        .AddDbContextPool<FandaContext>((sp, options) =>
+                        {
+                            MsSqlOptions(sp, options, settings.ConnectionStrings.MsSqlConnection);
+                        });
                     services.AddTransient<IDbClient>(_ => new SqlServerClient(settings.ConnectionStrings.MsSqlConnection));
                     break;
                 case "MYSQL":
-                    //services.AddEntityFrameworkMySql()
-                    services.AddDbContextPool<FandaContext>((_, options) =>
-                    {
-                        MySqlOptions(options, settings.ConnectionStrings.MySqlConnection);
-                    });
+                    services.AddEntityFrameworkMySql()
+                        .AddDbContextPool<FandaContext>((sp, options) =>
+                        {
+                            MySqlOptions(sp, options, settings.ConnectionStrings.MySqlConnection);
+                        });
                     services.AddTransient<IDbClient>(_ => new MySqlClient(settings.ConnectionStrings.MySqlConnection));
                     break;
                 case "PGSQL":
-                    //services.AddEntityFrameworkNpgsql()
-                    services.AddDbContextPool<FandaContext>((_, options) =>
-                    {
-                        PgSqlOptions(options, settings.ConnectionStrings.PgSqlConnection);
-                    });
+                    services.AddEntityFrameworkNpgsql()
+                        .AddDbContextPool<FandaContext>((sp, options) =>
+                        {
+                            PgSqlOptions(sp, options, settings.ConnectionStrings.PgSqlConnection);
+                        });
                     services.AddTransient<IDbClient>(_ => new PgSqlClient(settings.ConnectionStrings.PgSqlConnection));
                     break;
                 default:
-                    //services.AddEntityFrameworkSqlServer()
-                    services.AddDbContextPool<FandaContext>(options =>
-                    {
-                        MsSqlOptions(options, settings.ConnectionStrings.DefaultConnection);
-                    });
+                    services.AddEntityFrameworkSqlServer()
+                        .AddDbContextPool<FandaContext>((sp, options) =>
+                        {
+                            MsSqlOptions(sp, options, settings.ConnectionStrings.DefaultConnection);
+                        });
                     services.AddTransient<IDbClient>(_ => new SqlServerClient(settings.ConnectionStrings.DefaultConnection));
                     break;
             }
@@ -91,59 +90,59 @@ namespace Fanda.Repository.Extensions
             switch (settings.DatabaseType)
             {
                 case "MSSQL":
-                    MsSqlOptions(options, settings.ConnectionStrings.MsSqlConnection);
+                    MsSqlOptions(null, options, settings.ConnectionStrings.MsSqlConnection);
                     break;
                 case "MYSQL":
-                    MySqlOptions(options, settings.ConnectionStrings.MySqlConnection);
+                    MySqlOptions(null, options, settings.ConnectionStrings.MySqlConnection);
                     break;
                 case "PGSQL":
-                    PgSqlOptions(options, settings.ConnectionStrings.PgSqlConnection);
+                    PgSqlOptions(null, options, settings.ConnectionStrings.PgSqlConnection);
                     break;
                 default:
-                    MsSqlOptions(options, settings.ConnectionStrings.DefaultConnection);
+                    MsSqlOptions(null, options, settings.ConnectionStrings.DefaultConnection);
                     break;
             }
             return options;
         }
 
-        private static void MsSqlOptions(DbContextOptionsBuilder options, string connectionString)
+        private static void MsSqlOptions(IServiceProvider sp, DbContextOptionsBuilder options, string connectionString)
         {
             options.UseSqlServer(connectionString, sqlOptions =>
             {
                 //sqlOptions.EnableRetryOnFailure();
                 //sqlopt.UseRowNumberForPaging();
-            });
-            //.UseInternalServiceProvider(serviceProvider);
-            //options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-            //options.EnableDetailedErrors();
-            //options.EnableSensitiveDataLogging();
-            //options.EnableServiceProviderCaching();
+            })
+            .UseInternalServiceProvider(sp);
+            options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            //options.EnableDetailedErrors(true);
+            //options.EnableSensitiveDataLogging(true);
+            options.EnableServiceProviderCaching();
         }
 
-        private static void MySqlOptions(DbContextOptionsBuilder options, string connectionString)
+        private static void MySqlOptions(IServiceProvider sp, DbContextOptionsBuilder options, string connectionString)
         {
             options.UseMySql(connectionString, mysqlOptions =>
             {
                 mysqlOptions.ServerVersion(new ServerVersion(new Version(10, 4), ServerType.MariaDb));
-            });
-            //.UseInternalServiceProvider(serviceProvider);
-            //options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            })
+            .UseInternalServiceProvider(sp);
+            options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             //options.EnableDetailedErrors();
             //options.EnableSensitiveDataLogging();
-            //options.EnableServiceProviderCaching();
+            options.EnableServiceProviderCaching();
         }
 
-        private static void PgSqlOptions(DbContextOptionsBuilder options, string connectionString)
+        private static void PgSqlOptions(IServiceProvider sp, DbContextOptionsBuilder options, string connectionString)
         {
             options.UseNpgsql(connectionString, pgsqlOptions =>
             {
                 pgsqlOptions.EnableRetryOnFailure();
-            });
-            //.UseInternalServiceProvider(serviceProvider);
-            //options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            })
+            .UseInternalServiceProvider(sp);
+            options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             //options.EnableDetailedErrors();
             //options.EnableSensitiveDataLogging();
-            //options.EnableServiceProviderCaching();
+            options.EnableServiceProviderCaching();
         }
     }
 }

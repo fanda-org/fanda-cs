@@ -4,11 +4,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Fanda.Models
 {
-    [Table("RefreshTokens")]
-    [Owned]
+    //[Table("RefreshTokens")]
+    //[Owned]
     public class RefreshToken
     {
         public Guid Id { get; set; }
+        public Guid UserId { get; set; }
         public string Token { get; set; }
         public DateTime Expires { get; set; }
         public bool IsExpired => DateTime.UtcNow >= Expires;
@@ -18,5 +19,7 @@ namespace Fanda.Models
         public string RevokedByIp { get; set; }
         public string ReplacedByToken { get; set; }
         public bool IsActive => Revoked == null && !IsExpired;
+
+        public virtual User User { get; set; }
     }
 }

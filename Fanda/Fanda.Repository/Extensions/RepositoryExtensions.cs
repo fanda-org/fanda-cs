@@ -1,11 +1,9 @@
 ﻿using Fanda.Repository.Base;
-using Microsoft.AspNetCore.Mvc.Internal;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 
 namespace Fanda.Repository.Extensions
