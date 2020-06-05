@@ -44,12 +44,12 @@ namespace Fanda.Repository.Extensions
                     services.AddTransient<IDbClient>(_ => new PgSqlClient(settings.ConnectionStrings.PgSqlConnection));
                     break;
                 default:
-                    services.AddEntityFrameworkSqlServer()
+                    services.AddEntityFrameworkMySql()
                         .AddDbContextPool<FandaContext>((sp, options) =>
                         {
-                            MsSqlOptions(sp, options, settings.ConnectionStrings.DefaultConnection);
+                            MySqlOptions(sp, options, settings.ConnectionStrings.MySqlConnection);
                         });
-                    services.AddTransient<IDbClient>(_ => new SqlServerClient(settings.ConnectionStrings.DefaultConnection));
+                    services.AddTransient<IDbClient>(_ => new MySqlClient(settings.ConnectionStrings.MySqlConnection));
                     break;
             }
 

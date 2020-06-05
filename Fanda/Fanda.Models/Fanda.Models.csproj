@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="mssql-migrations\**" />
+    <EmbeddedResource Remove="mssql-migrations\**" />
+    <None Remove="mssql-migrations\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="AuditTrail.cs" />
     <Compile Remove="Context\MsSqlDbContext.cs" />
     <Compile Remove="Context\MySqlDbContext.cs" />
