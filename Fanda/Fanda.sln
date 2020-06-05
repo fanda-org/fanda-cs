@@ -18,17 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Readme.md = Readme.md
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{BB267BE1-1BD0-4FFE-9E8A-2086D6BF7BC0}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fanda.Tests", "Fanda.Test\Fanda.Tests.csproj", "{322FA2C3-D797-4988-9C3A-4298031750B3}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fanda.Ng", "Fanda.Ng\Fanda.Ng.csproj", "{92A5ECD3-394C-49B5-93EB-68B3880C872E}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FandaTabler", "FandaTabler\FandaTabler.csproj", "{2204A2BF-1558-4E10-B7DD-CC2EDB3A76A6}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FandaCoreUI", "FandaCoreUI\FandaCoreUI.csproj", "{9BF86B6C-4157-42F2-A9DE-854C83F12DA3}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataTables.Queryable", "DataTables.Queryable\DataTables.Queryable.csproj", "{63B59A55-46EB-4AE1-B3FA-77E4221CE97C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,9 +65,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{322FA2C3-D797-4988-9C3A-4298031750B3} = {BB267BE1-1BD0-4FFE-9E8A-2086D6BF7BC0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {378F5CA3-14DC-43F3-B3CA-7D9C2DDF26AF}

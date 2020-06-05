@@ -203,6 +203,7 @@ namespace Fanda
 
             services.AddScoped<ISerialNumberRepository, SerialNumberRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IOrganizationRepository, OrganizationRepository>();
             services.AddScoped<IUnitRepository, UnitRepository>();
             #endregion
 
