@@ -8,7 +8,7 @@
     "chart.js": "2.7.3",
     "datatables.net": "2.1.1",
     "datatables.net-bs4": "3.2.2",
-    "jquery": "3.3.1",
+    "jquery": "3.5.0",
     "jquery-ajax-unobtrusive": "3.2.6",
     "jquery-validation": "1.19.0",
     "jquery-validation-unobtrusive": "3.2.11",
