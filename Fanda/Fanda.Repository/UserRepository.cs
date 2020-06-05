@@ -114,7 +114,7 @@ namespace Fanda.Repository
                 userModel = _mapper.Map<UserDto>(user);
             }
 
-            // Ignore if error occured while sending email
+            // Ignore if error occurred while sending email
             try
             {
                 await _emailSender.SendEmailAsync(model.Email, "Fanda: Confirm your email",
@@ -535,7 +535,7 @@ namespace Fanda.Repository
             model.Name = model.Name.TrimExtraSpaces();
             #endregion
 
-            #region Validation: Dupllicate
+            #region Validation: Duplicate
             // Check email duplicate
             var duplEmail = new Duplicate { Field = DuplicateField.Email, Value = model.Email, Id = model.Id };
             if (await ExistsAsync(duplEmail))
