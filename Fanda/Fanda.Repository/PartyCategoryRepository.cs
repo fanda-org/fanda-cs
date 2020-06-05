@@ -6,7 +6,6 @@ using Fanda.Models;
 using Fanda.Models.Context;
 using Fanda.Repository.Base;
 using Fanda.Repository.Extensions;
-using Fanda.Repository.Base;
 using Fanda.Shared;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -144,7 +143,7 @@ namespace Fanda.Repository
             model.Description = model.Description.TrimExtraSpaces();
             #endregion
 
-            #region Validation: Dupllicate
+            #region Validation: Duplicate
             // Check code duplicate
             var duplCode = new Duplicate { Field = DuplicateField.Code, Value = model.Code, Id = model.Id, ParentId = orgId };
             if (await ExistsAsync(duplCode))
