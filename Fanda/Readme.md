@@ -1,3 +1,7 @@
+vscode-github authorization token
+vscode://vscode.github-authentication/did-authenticate?windowId=1&code=6b92e504477a40108811&state=346be1ce-c76b-444c-adfa-f9ddcf84cb6f
+
+
 GST: https://cleartax.in/s/impact-of-gst-on-it-sector
 Intra-State (CGST, SGST) & Inter-State(IGST): https://cleartax.in/s/what-is-sgst-cgst-igst
 Find GST rate, HSN & SAC code: https://www.indiafilings.com/find-gst-rate
