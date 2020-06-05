@@ -226,4 +226,13 @@ namespace Fanda.Shared
         CalendarYear,
         AccountingYear
     }
+
+    public enum DuplicateField
+    {
+        Id = 1,
+        Code = 2,
+        Name = 3,
+        Email = 4,
+        Number = 5
+    }
 }

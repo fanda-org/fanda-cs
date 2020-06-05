@@ -14,4 +14,13 @@ namespace Fanda.Helpers
             StatusCode = StatusCodes.Status422UnprocessableEntity;
         }
     }
+
+    public class InternalServerErrorResult : ObjectResult
+    {
+        public InternalServerErrorResult(IResponse value) :
+            base(value)
+        {
+            StatusCode = StatusCodes.Status500InternalServerError;
+        }
+    }
 }

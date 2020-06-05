@@ -1,5 +1,5 @@
 ﻿using Fanda.Dto;
-using Fanda.Repository.Utilities;
+using Fanda.Repository.Base;
 using Fanda.Shared;
 using Microsoft.Extensions.DependencyInjection;
 //using Microsoft.Extensions.Hosting;

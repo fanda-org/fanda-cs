@@ -1,6 +1,7 @@
 ﻿using Fanda.Models;
 using Fanda.Models.Context;
-using Fanda.Repository.Utilities;
+using Fanda.Repository.Base;
+using Fanda.Shared;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;

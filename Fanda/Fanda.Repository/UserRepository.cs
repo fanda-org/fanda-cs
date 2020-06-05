@@ -8,7 +8,7 @@ using Fanda.Models.Context;
 using Fanda.Repository.Base;
 using Fanda.Repository.Extensions;
 using Fanda.Repository.Helpers;
-using Fanda.Repository.Utilities;
+using Fanda.Repository.Base;
 using Fanda.Shared;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;

@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Fanda.Helpers;
+using Fanda.Repository.Base;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using System.Net.Mime;
 
 namespace Fanda.Base
@@ -12,6 +15,12 @@ namespace Fanda.Base
     [Route("api/[controller]")]
     public class BaseController : ControllerBase
     {
+        [NonAction]
+        public virtual InternalServerErrorResult InternalServerError([ActionResultObjectValueAttribute] IResponse value)
+        {
+            return new InternalServerErrorResult(value);
+        }
+
         //protected async Task<IActionResult> HandleComputationFailure<T>(Task<T> f)
         //{
         //    try
@@ -34,7 +43,7 @@ namespace Fanda.Base
         //        if (succeeded(result))
         //            return Ok(Response<T>.Succeeded(result));
         //        else
-        //            return BadRequest(Response<T>.Failure("Internal error occured"));
+        //            return BadRequest(Response<T>.Failure("Internal error occurred"));
         //    }
         //    catch (Exception ex)
         //    {

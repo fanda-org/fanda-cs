@@ -6,11 +6,10 @@ using Fanda.Models;
 using Fanda.Models.Context;
 using Fanda.Repository.Base;
 using Fanda.Repository.Extensions;
-using Fanda.Repository.Utilities;
+using Fanda.Repository.Base;
 using Fanda.Shared;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 //using System.Linq.Dynamic.Core;
@@ -54,7 +53,7 @@ namespace Fanda.Repository
 
             if (org == null)
             {
-                throw new KeyNotFoundException("Organization not found");
+                throw new NotFoundException("Organization not found");
             }
             else if (!includeChildren)
             {
@@ -86,17 +85,17 @@ namespace Fanda.Repository
             var org = new OrgChildrenDto
             {
                 Contacts = await _context.Organizations
-                .AsNoTracking()
-                .Where(m => m.Id == id)
-                .SelectMany(oc => oc.OrgContacts.Select(c => c.Contact))
-                .ProjectTo<ContactDto>(_mapper.ConfigurationProvider)
-                .ToListAsync(),
+                    .AsNoTracking()
+                    .Where(m => m.Id == id)
+                    .SelectMany(oc => oc.OrgContacts.Select(c => c.Contact))
+                    .ProjectTo<ContactDto>(_mapper.ConfigurationProvider)
+                    .ToListAsync(),
                 Addresses = await _context.Organizations
-                .AsNoTracking()
-                .Where(m => m.Id == id)
-                .SelectMany(oa => oa.OrgAddresses.Select(a => a.Address))
-                .ProjectTo<AddressDto>(_mapper.ConfigurationProvider)
-                .ToListAsync()
+                    .AsNoTracking()
+                    .Where(m => m.Id == id)
+                    .SelectMany(oa => oa.OrgAddresses.Select(a => a.Address))
+                    .ProjectTo<AddressDto>(_mapper.ConfigurationProvider)
+                    .ToListAsync()
             };
             return org;
         }
@@ -116,7 +115,7 @@ namespace Fanda.Repository
         {
             if (id != model.Id)
             {
-                throw new ArgumentException("Org id mismatch");
+                throw new BadRequestException("Org id mismatch");
             }
 
             Organization org = _mapper.Map<Organization>(model);
@@ -132,7 +131,7 @@ namespace Fanda.Repository
                 //org.DateCreated = DateTime.UtcNow;
                 //org.DateModified = null;
                 //await _context.Organizations.AddAsync(org);
-                throw new KeyNotFoundException("Org id not found");
+                throw new NotFoundException("Org id not found");
             }
 
             // delete all contacts that are no longer exists
@@ -229,7 +228,7 @@ namespace Fanda.Repository
             model.Description = model.Description.TrimExtraSpaces();
             #endregion
 
-            #region Validation: Dupllicate
+            #region Validation: Duplicate
             // Check code duplicate
             var duplCode = new ParentDuplicate { Field = DuplicateField.Code, Value = model.Code, Id = model.Id };
             if (await ExistsAsync(duplCode))
@@ -272,7 +271,7 @@ namespace Fanda.Repository
                 await _context.SaveChangesAsync();
                 return true;
             }
-            throw new KeyNotFoundException("Organization not found");
+            throw new NotFoundException("Organization not found");
         }
 
         public async Task<bool> ChangeStatusAsync(ActiveStatus status)
@@ -291,7 +290,7 @@ namespace Fanda.Repository
                 await _context.SaveChangesAsync();
                 return true;
             }
-            throw new KeyNotFoundException("Organization not found");
+            throw new NotFoundException("Organization not found");
         }
 
         public Task<bool> ExistsAsync(ParentDuplicate data) => _context.ExistsAsync<Organization>(data);

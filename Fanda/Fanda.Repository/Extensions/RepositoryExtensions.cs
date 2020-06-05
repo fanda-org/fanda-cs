@@ -29,7 +29,6 @@ namespace Fanda.Repository.Extensions
             var (qry, _) = listRepository.GetQueryable(parentId, queryInput);
             var list = await qry.ToListAsync();
             var response = DataResponse<IEnumerable<TModel>>.Succeeded(list);
-
             return response;
         }
 
@@ -38,14 +37,7 @@ namespace Fanda.Repository.Extensions
         {
             var (qry, itemsCount) = listRepository.GetQueryable(parentId, queryInput);
             var list = await qry.ToListAsync();
-            var response = new PagedResponse<IEnumerable<TModel>>
-            {
-                ItemsCount = itemsCount,
-                Page = queryInput.Page,
-                PageSize = queryInput.PageSize,
-                Data = list
-            };
-
+            var response = PagedResponse<IEnumerable<TModel>>.Succeeded(list, itemsCount, queryInput.Page, queryInput.PageSize);
             return response;
         }
 
@@ -57,11 +49,11 @@ namespace Fanda.Repository.Extensions
             {
                 dbQuery = dbQuery.Where(queryInput.Filter, queryInput.FilterArgs);
             }
+            int itemsCount = dbQuery.Count();
             if (!string.IsNullOrEmpty(queryInput.Sort))
             {
                 dbQuery = dbQuery.OrderBy(queryInput.Sort);
             }
-            int itemsCount = dbQuery.Count();
             if (queryInput.Page > 0)
             {
                 dbQuery = dbQuery.Page(queryInput.Page, queryInput.PageSize > 0 ? queryInput.PageSize : 100);

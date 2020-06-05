@@ -4,19 +4,20 @@ using System;
 
 namespace Fanda.Repository.Base
 {
-    //public interface IResponse
-    //{
-    //    string Message { get; set; }
-    //    bool Success { get; set; }
-    //    ValidationResultModel Errors { get; set; }
-    //}
-
-    public interface IDataResponse<TModel> //: IResponse
+    public interface IResponse
     {
         string Message { get; set; }
         bool Success { get; set; }
         string ErrorMessage { get; set; }
         ValidationResultModel Errors { get; set; }
+    }
+
+    public interface IDataResponse<TModel> : IResponse
+    {
+        // string Message { get; set; }
+        // bool Success { get; set; }
+        // string ErrorMessage { get; set; }
+        // ValidationResultModel Errors { get; set; }
         TModel Data { get; set; }
     }
 
@@ -30,35 +31,35 @@ namespace Fanda.Repository.Base
         public int LastRowOnPage { get; }
     }
 
-    //public class Response : IResponse
-    //{
-    //    public string Message { get; set; }
-    //    public bool Success { get; set; }
-    //    public string ErrorMessage { get; set; }
-    //    public ValidationResultModel Errors { get; set; }
+    // public class Response : IResponse
+    // {
+    //     public string Message { get; set; }
+    //     public bool Success { get; set; }
+    //     public string ErrorMessage { get; set; }
+    //     public ValidationResultModel Errors { get; set; }
 
-    //    public static Response Succeeded(string message = null) => new Response
-    //    {
-    //        Success = true,
-    //        Message = message
-    //    };
-    //    public static Response Failure(string errorMessage) => new Response
-    //    {
-    //        Success = false,
-    //        ErrorMessage = errorMessage
-    //    };
-    //    public static Response Failure(ValidationResultModel errors, string errorMessage = null) => new Response
-    //    {
-    //        Success = false,
-    //        Errors = errors,
-    //        ErrorMessage = errorMessage
-    //    };
-    //    public static Response Failure(ModelStateDictionary modelState) => new Response
-    //    {
-    //        Success = false,
-    //        Errors = new ValidationResultModel(modelState)
-    //    };
-    //}
+    //     public static Response Succeeded(string message = null) => new Response
+    //     {
+    //         Success = true,
+    //         Message = message
+    //     };
+    //     public static Response Failure(string errorMessage) => new Response
+    //     {
+    //         Success = false,
+    //         ErrorMessage = errorMessage
+    //     };
+    //     public static Response Failure(ValidationResultModel errors, string errorMessage = null) => new Response
+    //     {
+    //         Success = false,
+    //         Errors = errors,
+    //         ErrorMessage = errorMessage
+    //     };
+    //     public static Response Failure(ModelStateDictionary modelState) => new Response
+    //     {
+    //         Success = false,
+    //         Errors = new ValidationResultModel(modelState)
+    //     };
+    // }
 
     public class DataResponse : DataResponse<object> { }
 
@@ -113,5 +114,16 @@ namespace Fanda.Repository.Base
         public int LastRowOnPage
             => Math.Min(ItemsCount, FirstRowOnPage + PageSize - 1);
         //=> Math.Min((int)PageNumber * (int)PageSize, (int)ItemsCount);
+
+        public static PagedResponse<TModel> Succeeded(TModel data, int itemsCount, int page, int pageSize, string message = null)
+            => new PagedResponse<TModel>
+            {
+                Success = true,
+                Data = data,
+                ItemsCount = itemsCount,
+                Page = page,
+                PageSize = pageSize,
+                Message = message
+            };
     }
 }

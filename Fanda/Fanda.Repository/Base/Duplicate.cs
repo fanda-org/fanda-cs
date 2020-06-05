@@ -1,7 +1,8 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Fanda.Shared;
 
-namespace Fanda.Repository.Utilities
+namespace Fanda.Repository.Base
 {
     public class ParentDuplicate
     {
@@ -14,13 +15,5 @@ namespace Fanda.Repository.Utilities
     public class Duplicate : ParentDuplicate
     {
         public Guid ParentId { get; set; } = default;
-    }
-    public enum DuplicateField
-    {
-        Id = 1,
-        Code = 2,
-        Name = 3,
-        Email = 4,
-        Number = 5
     }
 }

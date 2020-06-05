@@ -140,7 +140,7 @@ namespace Fanda.Controllers
                 // save
                 var userDto = await _repository.RegisterAsync(model, callbackUrl);
                 //return CreatedAtAction(nameof(GetById), userDto.Id);
-                return CreatedAtAction(nameof(GetById), new { userId = userDto.Id },
+                return CreatedAtAction(nameof(GetById), new { id = userDto.Id },
                     DataResponse<UserDto>.Succeeded(userDto));
             }
             catch (Exception ex)
@@ -171,15 +171,15 @@ namespace Fanda.Controllers
         }
 
         // users/5
-        [HttpGet("{userId}")]
+        [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetById(Guid userId)
+        public async Task<IActionResult> GetById(Guid id)
         {
             try
             {
-                var user = await _repository.GetByIdAsync(userId);
+                var user = await _repository.GetByIdAsync(id);
                 return Ok(DataResponse<UserDto>.Succeeded(user));
             }
             catch (Exception ex)
@@ -189,15 +189,15 @@ namespace Fanda.Controllers
             }
         }
 
-        [HttpGet("{userId}/refresh-tokens")]
+        [HttpGet("{id}/refresh-tokens")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetRefreshTokens(Guid userId)
+        public async Task<IActionResult> GetRefreshTokens(Guid id)
         {
             try
             {
-                var tokens = await _repository.GetRefreshTokens(userId);
+                var tokens = await _repository.GetRefreshTokens(id);
                 return Ok(DataResponse<IEnumerable<ActiveTokenDto>>.Succeeded(tokens));
             }
             catch (Exception ex)
@@ -216,7 +216,7 @@ namespace Fanda.Controllers
             try
             {
                 var userDto = await _repository.CreateAsync(model);
-                return CreatedAtAction(nameof(GetById), new { userId = model.Id },
+                return CreatedAtAction(nameof(GetById), new { id = model.Id },
                     DataResponse<UserDto>.Succeeded(userDto));
             }
             catch (Exception ex)
@@ -226,26 +226,26 @@ namespace Fanda.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Update(Guid userId, UserDto model)
+        public async Task<IActionResult> Update(Guid id, UserDto model)
         {
             try
             {
-                if (userId != model.Id)
+                if (id != model.Id)
                 {
                     return BadRequest(DataResponse.Failure("User Id mismatch"));
                 }
-                var user = await _repository.GetByIdAsync(userId);
+                var user = await _repository.GetByIdAsync(id);
                 if (user == null)
                 {
                     return NotFound(DataResponse.Failure("User not found"));
                 }
                 // save
                 //model.Password = password;
-                await _repository.UpdateAsync(userId, model);
+                await _repository.UpdateAsync(id, model);
                 return NoContent(); //(DataResponse<UserDto>.Succeeded(UserDto));
             }
             catch (Exception ex)
@@ -255,15 +255,15 @@ namespace Fanda.Controllers
             }
         }
 
-        [HttpDelete("{orgId}/{userId}")]
+        [HttpDelete("{orgId}/{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Delete(Guid orgId, Guid userId)
+        public async Task<IActionResult> Delete(Guid orgId, Guid id)
         {
             try
             {
-                await _repository.UnmapOrgAsync(userId, orgId);
+                await _repository.UnmapOrgAsync(id, orgId);
                 return NoContent();
             }
             catch (Exception ex)
