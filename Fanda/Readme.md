@@ -32,6 +32,8 @@ Refit - REST
 LazyCache
 https://hotchocolate.io/docs/dataloaders
 
+Serilog: https://nblumhardt.com/2019/10/serilog-in-aspnetcore-3/
+
 from Master to Transaction: Functionalities apart from Create/Edit/Delete
 ---------------------------------------------------------------------------------------
 https://crowdin.com/ - Agile localization for tech companies
