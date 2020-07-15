@@ -1,6 +1,0 @@
-https://andrewlock.net/introduction-to-authentication-with-asp-net-core/
-
-https://stackoverflow.com/questions/12373738/how-do-i-set-a-cookie-on-httpclients-httprequestmessage
-
-https://www.osas.com/accounting
-
