@@ -47,8 +47,8 @@ namespace Fanda.Auth
             services.AddScoped<IRoleRepository, RoleRepository>();
 
             services.AddScoped<IApplicationRepository, ApplicationRepository>();
-            services.AddScoped<IResourceRepository, ResourceRepository>();
-            services.AddScoped<IActionRepository, ActionRepository>();
+            //services.AddScoped<IResourceRepository, ResourceRepository>();
+            //services.AddScoped<IActionRepository, ActionRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

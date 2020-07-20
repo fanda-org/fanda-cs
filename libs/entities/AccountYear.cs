@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Fanda.Entities
 {
-    public class AccountYear : BaseOrgModel
+    public class AccountYear : BaseOrgEntity
     {
         //public Guid Id { get; set; }
         //public string YearCode { get; set; }

@@ -8,12 +8,15 @@ namespace Fanda.Core.Auth
         // Role
         [Required]
         public Guid RoleId { get; set; }
-        // AppResourceAction
+        // AppResource
         [Required]
-        public Guid ApplicationId { get; set; }
-        [Required]
-        public Guid ResourceId { get; set; }
-        [Required]
-        public Guid ActionId { get; set; }
+        public Guid AppResourceId { get; set; }
+        public bool Create { get; set; }
+        public bool Update { get; set; }
+        public bool Delete { get; set; }
+        public bool Read { get; set; }
+        public bool Print { get; set; }
+        public bool Import { get; set; }
+        public bool Export { get; set; }
     }
 }

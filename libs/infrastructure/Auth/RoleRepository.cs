@@ -17,8 +17,8 @@ namespace Fanda.Infrastructure
         IRepository<RoleDto>,
         IListRepository<RoleListDto>
     {
-        Task<bool> AddPrivilege(PrivilegeDto model);
-        Task<bool> RemovePrivilege(PrivilegeDto model);
+        //Task<bool> AddPrivilege(PrivilegeDto model);
+        //Task<bool> RemovePrivilege(PrivilegeDto model);
     }
 
     public class RoleRepository : IRoleRepository
@@ -158,37 +158,37 @@ namespace Fanda.Infrastructure
             return model.Errors;
         }
 
-        public async Task<bool> AddPrivilege(PrivilegeDto model)
-        {
-            var appResource = await context.Set<AppResource>()
-                .FirstOrDefaultAsync(ar => ar.ApplicationId == model.ApplicationId &&
-                    ar.ResourceId == model.ResourceId);
-            var resourceAction = await context.Set<ResourceAction>()
-                .FirstOrDefaultAsync(ra => ra.ResourceId == model.ResourceId &&
-                    ra.ActionId == ra.ActionId);
+        // public async Task<bool> AddPrivilege(PrivilegeDto model)
+        // {
+        //     var appResource = await context.Set<AppResource>()
+        //         .FirstOrDefaultAsync(ar => ar.ApplicationId == model.ApplicationId &&
+        //             ar.ResourceId == model.ResourceId);
+        //     var resourceAction = await context.Set<ResourceAction>()
+        //         .FirstOrDefaultAsync(ra => ra.ResourceId == model.ResourceId &&
+        //             ra.ActionId == ra.ActionId);
 
-            var privilege = new Privilege
-            {
-                RoleId = model.RoleId,
-                AppResourceId = appResource.Id,
-                ResourceActionId = resourceAction.Id
-            };
-            await context.Set<Privilege>().AddAsync(privilege);
-            await context.SaveChangesAsync();
-            return true;
-        }
+        //     var privilege = new Privilege
+        //     {
+        //         RoleId = model.RoleId,
+        //         AppResourceId = appResource.Id,
+        //         ResourceActionId = resourceAction.Id
+        //     };
+        //     await context.Set<Privilege>().AddAsync(privilege);
+        //     await context.SaveChangesAsync();
+        //     return true;
+        // }
 
-        public async Task<bool> RemovePrivilege(PrivilegeDto model)
-        {
-            var privilege = context.Set<Privilege>()
-                .FirstOrDefault(r => r.RoleId == model.RoleId &&
-                    r.AppResource.ApplicationId == model.ApplicationId &&
-                    r.AppResource.ResourceId == model.ResourceId &&
-                    r.ResourceAction.ResourceId == model.ResourceId &&
-                    r.ResourceAction.ActionId == model.ActionId);
-            context.Set<Privilege>().Remove(privilege);
-            await context.SaveChangesAsync();
-            return true;
-        }
+        // public async Task<bool> RemovePrivilege(PrivilegeDto model)
+        // {
+        //     var privilege = context.Set<Privilege>()
+        //         .FirstOrDefault(r => r.RoleId == model.RoleId &&
+        //             r.AppResource.ApplicationId == model.ApplicationId &&
+        //             r.AppResource.ResourceId == model.ResourceId &&
+        //             r.ResourceAction.ResourceId == model.ResourceId &&
+        //             r.ResourceAction.ActionId == model.ActionId);
+        //     context.Set<Privilege>().Remove(privilege);
+        //     await context.SaveChangesAsync();
+        //     return true;
+        // }
     }
 }

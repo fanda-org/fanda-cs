@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Fanda.Entities
 {
-    public class Ledger : BaseOrgModel
+    public class Ledger : BaseOrgEntity
     {
         //public Guid Id { get; set; }
         //public string LedgerCode { get; set; }

@@ -2,7 +2,7 @@
 
 namespace Fanda.Entities
 {
-    public class PartyCategory : BaseOrgModel
+    public class PartyCategory : BaseOrgEntity
     {
         //public Guid Id { get; set; }
         //public string Code { get; set; }

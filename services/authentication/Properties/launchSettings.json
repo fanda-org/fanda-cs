@@ -1,30 +1,30 @@
 ﻿{
-  "$schema": "http://json.schemastore.org/launchsettings.json",
-  "iisSettings": {
-    "windowsAuthentication": false,
-    "anonymousAuthentication": true,
-    "iisExpress": {
-      "applicationUrl": "http://localhost:8881",
-      "sslPort": 44342
-    }
-  },
-  "profiles": {
-    "IIS Express": {
-      "commandName": "IISExpress",
-      "launchBrowser": true,
-      "launchUrl": "swagger",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+    "$schema": "http://json.schemastore.org/launchsettings.json",
+    "iisSettings": {
+        "windowsAuthentication": false,
+        "anonymousAuthentication": true,
+        "iisExpress": {
+            "applicationUrl": "http://localhost:8881",
+            "sslPort": 44342
+        }
     },
-    "Fanda.Auth": {
-      "commandName": "Project",
-      "launchBrowser": true,
-      "launchUrl": "swagger",
-      "applicationUrl": "https://localhost:5101;http://localhost:5100",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+    "profiles": {
+        "IIS Express": {
+            "commandName": "IISExpress",
+            "launchBrowser": true,
+            "launchUrl": "swagger",
+            "environmentVariables": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            }
+        },
+        "Fanda.Auth": {
+            "commandName": "Project",
+            "launchBrowser": true,
+            "launchUrl": "swagger",
+            "applicationUrl": "http://localhost:5100",
+            "environmentVariables": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            }
+        }
     }
-  }
 }

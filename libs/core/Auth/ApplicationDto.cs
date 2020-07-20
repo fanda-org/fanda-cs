@@ -9,7 +9,7 @@ namespace Fanda.Core.Auth
         public string Edition { get; set; }
         public string Version { get; set; }
 
-        public virtual ICollection<ResourceDto> Resources { get; set; }
+        public ICollection<AppResourceDto> AppResources { get; set; }
     }
 
     public class ApplicationListDto : BaseListDto
@@ -20,6 +20,6 @@ namespace Fanda.Core.Auth
 
     public class AppChildrenDto
     {
-        public virtual ICollection<ResourceDto> Resources { get; set; }
+        public ICollection<AppResourceDto> AppResources { get; set; }
     }
 }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Fanda.Entities
 {
-    public class Product : BaseOrgModel
+    public class Product : BaseOrgEntity
     {
         //public Guid Id { get; set; }
         //public string Code { get; set; }

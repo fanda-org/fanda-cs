@@ -2,7 +2,7 @@
 
 namespace Fanda.Entities
 {
-    public class RootModel
+    public class RootEntity
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
@@ -11,19 +11,19 @@ namespace Fanda.Entities
         public DateTime? DateModified { get; set; }
     }
 
-    public class BaseParentModel : RootModel
+    public class BaseEntity : RootEntity
     {
         public string Code { get; set; }
         public string Description { get; set; }
     }
 
-    public class BaseOrgModel : BaseParentModel
+    public class BaseOrgEntity : BaseEntity
     {
         public Guid OrgId { get; set; }
         public virtual Organization Organization { get; set; }
     }
 
-    public class BaseYearModel
+    public class BaseYearEntity
     {
         public Guid Id { get; set; }
         public string Number { get; set; }

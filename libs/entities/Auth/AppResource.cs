@@ -2,16 +2,27 @@ namespace Fanda.Entities.Auth
 {
     using System;
     using System.Collections.Generic;
+    using Fanda.Shared;
 
-    public class AppResource
+    public class AppResource : BaseEntity
     {
-        public Guid Id { get; set; }
+        public ResourceType ResourceType { get; set; }
+        public string ResourceTypeString
+        {
+            get { return ResourceType.ToString(); }
+            set { ResourceType = (ResourceType)Enum.Parse(typeof(ResourceType), value, true); }
+        }
         public Guid ApplicationId { get; set; }
-        public Guid ResourceId { get; set; }
-
+        #region Action fields
+        public bool Creatable { get; set; }
+        public bool Updateable { get; set; }
+        public bool Deleteable { get; set; }
+        public bool Readable { get; set; }
+        public bool Printable { get; set; }
+        public bool Importable { get; set; }
+        public bool Exportable { get; set; }
+        #endregion
         public virtual Application Application { get; set; }
-        public virtual Resource Resource { get; set; }
-
         public virtual ICollection<Privilege> Privileges { get; set; }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Fanda.Entities
 {
-    public class ProductSegment : BaseOrgModel
+    public class ProductSegment : BaseOrgEntity
     {
         public virtual ICollection<Product> Products { get; set; }
     }

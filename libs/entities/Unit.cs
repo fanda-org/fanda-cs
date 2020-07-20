@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Fanda.Entities
 {
-    public class Unit : BaseOrgModel
+    public class Unit : BaseOrgEntity
     {
         public virtual ICollection<Product> Products { get; set; }
         public virtual ICollection<InvoiceItem> InvoiceItems { get; set; }

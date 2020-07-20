@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Fanda.Entities
 {
-    public class LedgerGroup : BaseOrgModel
+    public class LedgerGroup : BaseOrgEntity
     {
         //public Guid Id { get; set; }
         //public string GroupCode { get; set; }

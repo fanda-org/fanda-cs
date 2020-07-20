@@ -12,7 +12,7 @@ namespace Fanda.Infrastructure.Extensions
     public static class DuplicateExtensions
     {
         public static async Task<bool> ExistsAsync<TModel>(this DbContext context, ParentDuplicate data, bool isRoot)
-            where TModel : RootModel
+            where TModel : RootEntity
         {
             if (isRoot && data.Field == DuplicateField.Code)
             {
@@ -59,7 +59,7 @@ namespace Fanda.Infrastructure.Extensions
         }
 
         public static async Task<bool> ExistsAsync<TModel>(this DbContext context, bool isEmailModel, ParentDuplicate data)
-            where TModel : EmailModel
+            where TModel : EmailEntity
         {
             if (isEmailModel && data.Field == DuplicateField.Code)
             {
@@ -106,7 +106,7 @@ namespace Fanda.Infrastructure.Extensions
         }
 
         public static async Task<bool> ExistsAsync<TModel>(this DbContext context, ParentDuplicate data)
-            where TModel : BaseParentModel
+            where TModel : BaseEntity
         {
             bool result = true;
             switch (data.Field)
@@ -148,7 +148,7 @@ namespace Fanda.Infrastructure.Extensions
         }
 
         public static async Task<bool> ExistsAsync<TModel>(this DbContext context, Duplicate data)
-            where TModel : BaseOrgModel
+            where TModel : BaseOrgEntity
         {
 
             bool result = true;
@@ -201,7 +201,7 @@ namespace Fanda.Infrastructure.Extensions
         }
 
         public static async Task<bool> ExistsAsync<TModel>(this AuthContext context, Duplicate data, bool isTenant)
-            where TModel : BaseTenantModel
+            where TModel : BaseTenantEntity
         {
 
             bool result = true;

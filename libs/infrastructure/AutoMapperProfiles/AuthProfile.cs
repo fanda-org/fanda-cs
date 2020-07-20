@@ -37,35 +37,36 @@ namespace Fanda.Infrastructure.AutoMapperProfiles
 
             #region Application models
             CreateMap<Application, ApplicationDto>()
-                .ForPath(vm => vm.Resources, opt => opt.MapFrom(src => src.AppResources.Select(c => c.Resource).ToList()))
-                .ReverseMap()
-                .ForMember(x => x.AppResources,
-                    src => src.MapFrom((appVM, app, oc, context) =>
-                      {
-                          return appVM.Resources?.Select(r => new AppResource
-                          {
-                              ApplicationId = appVM.Id,
-                              Application = app,
-                              ResourceId = r.Id,
-                              Resource = context.Mapper.Map<ResourceDto, Resource>(r)
-                          }).ToList();
-                      }));
-            CreateMap<Resource, ResourceDto>()
+                //.ForPath(vm => vm.Resources, opt => opt.MapFrom(src => src.AppResources.Select(c => c.Resource).ToList()))
                 .ReverseMap();
-            CreateMap<Action, ActionDto>()
-                .ReverseMap();
+            // .ForMember(x => x.AppResources,
+            //     src => src.MapFrom((appVM, app, oc, context) =>
+            //       {
+            //           return appVM.Resources?.Select(r => new AppResource
+            //           {
+            //               ApplicationId = appVM.Id,
+            //               Application = app,
+            //               ResourceId = r.Id,
+            //               Resource = context.Mapper.Map<ResourceDto, Resource>(r)
+            //           }).ToList();
+            //       }));
+
+            // CreateMap<Resource, ResourceDto>()
+            //     .ReverseMap();
+            // CreateMap<Action, ActionDto>()
+            //     .ReverseMap();
             #endregion
 
             #region Maps - Many to many
             CreateMap<AppResource, AppResourceDto>()
                 .ReverseMap();
-            CreateMap<ResourceAction, ResourceActionDto>()
-                .ReverseMap();
+            // CreateMap<ResourceAction, ResourceActionDto>()
+            //     .ReverseMap();
             CreateMap<Privilege, PrivilegeDto>()
-                .ForMember(vm => vm.ApplicationId, opt => opt.MapFrom(src => src.AppResource.ApplicationId))
-                .ForMember(vm => vm.ResourceId, opt => opt.MapFrom(src => src.AppResource.ResourceId))
-                .ForMember(vm => vm.ResourceId, opt => opt.MapFrom(src => src.ResourceAction.ResourceId))
-                .ForMember(vm => vm.ActionId, opt => opt.MapFrom(src => src.ResourceAction.ActionId))
+                //.ForMember(vm => vm.ApplicationId, opt => opt.MapFrom(src => src.AppResource.ApplicationId))
+                //.ForMember(vm => vm.ResourceId, opt => opt.MapFrom(src => src.AppResource.ResourceId))
+                //.ForMember(vm => vm.ResourceId, opt => opt.MapFrom(src => src.ResourceAction.ResourceId))
+                //.ForMember(vm => vm.ActionId, opt => opt.MapFrom(src => src.ResourceAction.ActionId))
                 .ReverseMap();
             #endregion
 
@@ -82,8 +83,8 @@ namespace Fanda.Infrastructure.AutoMapperProfiles
             CreateMap<User, UserListDto>();
 
             CreateMap<Application, ApplicationListDto>();
-            CreateMap<Resource, ResourceListDto>();
-            CreateMap<Action, ActionListDto>();
+            //CreateMap<Resource, ResourceListDto>();
+            //CreateMap<Action, ActionListDto>();
             #endregion
         }
     }

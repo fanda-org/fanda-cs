@@ -2,7 +2,7 @@ namespace Fanda.Entities
 {
     using System;
     using System.Collections.Generic;
-    public class Organization : BaseParentModel
+    public class Organization : BaseEntity
     {
         //public Guid Id { get; set; }
         //public string OrgCode { get; set; }

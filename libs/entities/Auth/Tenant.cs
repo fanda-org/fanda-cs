@@ -2,7 +2,7 @@ namespace Fanda.Entities.Auth
 {
     using System.Collections.Generic;
 
-    public class Tenant : BaseParentModel
+    public class Tenant : BaseEntity
     {
         public int OrgCount { get; set; }
 

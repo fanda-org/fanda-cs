@@ -42,76 +42,6 @@ namespace Fanda.Entities.Auth
         }
     }
 
-    public class ResourceConfig : IEntityTypeConfiguration<Resource>
-    {
-        public void Configure(EntityTypeBuilder<Resource> builder)
-        {
-            // table
-            builder.ToTable("Resources");
-
-            // key
-            builder.HasKey(a => a.Id);
-            builder.Property(a => a.Id).ValueGeneratedOnAdd();
-
-            // columns
-            builder.Property(t => t.Code)
-                .IsRequired()
-                .IsUnicode(false)
-                .HasMaxLength(16);
-            builder.Property(t => t.Name)
-                .IsRequired()
-                .IsUnicode(false)
-                .HasMaxLength(50);
-            builder.Property(t => t.Description)
-                .IsUnicode(false)
-                .HasMaxLength(255);
-            builder.Ignore(r => r.ResourceType);
-            builder.Property(r => r.ResourceTypeString)
-                .HasColumnName("ResourceType")
-                .IsRequired()
-                .IsUnicode(false)
-                .HasMaxLength(16);
-
-            // index
-            builder.HasIndex(a => a.Code)
-                .IsUnique();
-            builder.HasIndex(a => a.Name)
-                .IsUnique();
-        }
-    }
-
-    public class ActionConfig : IEntityTypeConfiguration<Action>
-    {
-        public void Configure(EntityTypeBuilder<Action> builder)
-        {
-            // table
-            builder.ToTable("Actions");
-
-            // key
-            builder.HasKey(a => a.Id);
-            builder.Property(a => a.Id).ValueGeneratedOnAdd();
-
-            // columns
-            builder.Property(t => t.Code)
-                .IsRequired()
-                .IsUnicode(false)
-                .HasMaxLength(16);
-            builder.Property(t => t.Name)
-                .IsRequired()
-                .IsUnicode(false)
-                .HasMaxLength(50);
-            builder.Property(t => t.Description)
-                .IsUnicode(false)
-                .HasMaxLength(255);
-
-            // index
-            builder.HasIndex(a => a.Code)
-                .IsUnique();
-            builder.HasIndex(a => a.Name)
-                .IsUnique();
-        }
-    }
-
     public class AppResourceConfig : IEntityTypeConfiguration<AppResource>
     {
         public void Configure(EntityTypeBuilder<AppResource> builder)
@@ -124,44 +54,15 @@ namespace Fanda.Entities.Auth
             builder.Property(ar => ar.Id).ValueGeneratedOnAdd();
 
             // index
-            builder.HasIndex(ar => new { ar.ApplicationId, ar.ResourceId })
+            builder.HasIndex(ar => new { ar.ApplicationId, ar.Code })
+                .IsUnique();
+            builder.HasIndex(ar => new { ar.ApplicationId, ar.Name })
                 .IsUnique();
 
             // foreign key
             builder.HasOne(ar => ar.Application)
                 .WithMany(a => a.AppResources)
                 .HasForeignKey(ar => ar.ApplicationId)
-                .OnDelete(DeleteBehavior.Cascade);
-            builder.HasOne(r => r.Resource)
-                .WithMany(a => a.AppResources)
-                .HasForeignKey(r => r.ResourceId)
-                .OnDelete(DeleteBehavior.Cascade);
-        }
-    }
-
-    public class ResourceActionConfig : IEntityTypeConfiguration<ResourceAction>
-    {
-        public void Configure(EntityTypeBuilder<ResourceAction> builder)
-        {
-            // table
-            builder.ToTable("ResourceActions");
-
-            // key
-            builder.HasKey(ar => new { ar.Id });
-            builder.Property(a => a.Id).ValueGeneratedOnAdd();
-
-            // index
-            builder.HasIndex(ar => new { ar.ResourceId, ar.ActionId })
-                .IsUnique();
-
-            // foreign keys
-            builder.HasOne(ar => ar.Resource)
-                .WithMany(r => r.ResourceActions)
-                .HasForeignKey(ar => ar.ResourceId)
-                .OnDelete(DeleteBehavior.Cascade);
-            builder.HasOne(ar => ar.Action)
-                .WithMany(r => r.ResourceActions)
-                .HasForeignKey(ar => ar.ActionId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }
@@ -176,7 +77,7 @@ namespace Fanda.Entities.Auth
             builder.ToTable("Privileges");
 
             // key
-            builder.HasKey(p => new { p.RoleId, p.AppResourceId, p.ResourceActionId });
+            builder.HasKey(p => new { p.RoleId, p.AppResourceId });
 
             // index
 
@@ -188,10 +89,6 @@ namespace Fanda.Entities.Auth
             builder.HasOne(p => p.AppResource)
                 .WithMany(ra => ra.Privileges)
                 .HasForeignKey(p => new { p.AppResourceId })
-                .OnDelete(DeleteBehavior.Cascade);
-            builder.HasOne(p => p.ResourceAction)
-                .WithMany(ra => ra.Privileges)
-                .HasForeignKey(p => new { p.ResourceActionId })
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

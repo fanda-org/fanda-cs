@@ -2,8 +2,8 @@
 {
     using System.Collections.Generic;
 
-    public class Role : BaseTenantModel
+    public class Role : BaseTenantEntity
     {
-        public virtual ICollection<Privilege> Privileges { get; set; }
+        public ICollection<Privilege> Privileges { get; set; }
     }
 }

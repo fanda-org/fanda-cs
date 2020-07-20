@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Fanda.Entities
 {
-    public class Invoice : BaseYearModel
+    public class Invoice : BaseYearEntity
     {
         //public Guid Id { get; set; }
         //public string InvoiceNumber { get; set; }

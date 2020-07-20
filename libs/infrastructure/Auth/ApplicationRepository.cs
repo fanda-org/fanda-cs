@@ -18,8 +18,8 @@ namespace Fanda.Infrastructure.Auth
         IRepositoryChildData<AppChildrenDto>,
         IListRepository<ApplicationListDto>
     {
-        Task<bool> MapResource(AppResourceDto model);
-        Task<bool> UnmapResource(AppResourceDto model);
+        //Task<bool> MapResource(AppResourceDto model);
+        //Task<bool> UnmapResource(AppResourceDto model);
     }
 
     public class ApplicationRepository : IApplicationRepository
@@ -99,6 +99,7 @@ namespace Fanda.Infrastructure.Auth
                 throw new ArgumentNullException("id", "Id is missing");
             }
             var app = await context.Applications
+                //.Include(app => app.AppResources)
                 .AsNoTracking()
                 .ProjectTo<ApplicationDto>(mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(t => t.Id == id);
@@ -111,12 +112,13 @@ namespace Fanda.Infrastructure.Auth
                 return app;
             }
 
-            app.Resources = await context.Applications
+            app.AppResources = await context.Set<AppResource>()
                 .AsNoTracking()
-                .Where(m => m.Id == id)
-                .SelectMany(oc => oc.AppResources.Select(c => c.Resource))
-                .ProjectTo<ResourceDto>(mapper.ConfigurationProvider)
+                .Where(m => m.ApplicationId == id)
+                //.SelectMany(oc => oc.AppResources.Select(c => c.Resource))
+                .ProjectTo<AppResourceDto>(mapper.ConfigurationProvider)
                 .ToListAsync();
+
             if (app != null)
             {
                 return app;
@@ -131,16 +133,16 @@ namespace Fanda.Infrastructure.Auth
                 throw new ArgumentNullException("Id", "Id is missing");
             }
 
-            var org = new AppChildrenDto
+            var app = new AppChildrenDto
             {
-                Resources = await context.Applications
+                AppResources = await context.Set<AppResource>()
                     .AsNoTracking()
-                    .Where(m => m.Id == id)
-                    .SelectMany(oc => oc.AppResources.Select(c => c.Resource))
-                    .ProjectTo<ResourceDto>(mapper.ConfigurationProvider)
+                    .Where(m => m.ApplicationId == id)
+                    //.SelectMany(oc => oc.AppResources.Select(c => c.Resource))
+                    .ProjectTo<AppResourceDto>(mapper.ConfigurationProvider)
                     .ToListAsync()
             };
-            return org;
+            return app;
         }
 
         public async Task UpdateAsync(Guid id, ApplicationDto model)
@@ -202,9 +204,7 @@ namespace Fanda.Infrastructure.Auth
                     var appResource = new AppResource
                     {
                         ApplicationId = app.Id,
-                        //Application = app,
-                        ResourceId = pair.curr.Id,
-                        //Resource = pair.curr
+                        //ResourceId = pair.curr.Id,
                     };
                     //dbApp.AppResources.Add(appResource);
                     context.Set<AppResource>().Add(appResource);
@@ -214,8 +214,6 @@ namespace Fanda.Infrastructure.Auth
 
             context.Applications.Update(dbApp);
             await context.SaveChangesAsync();
-            //model = _mapper.Map<OrganizationDto>(org);
-            //return model;
         }
 
         public async Task<ValidationResultModel> ValidateAsync(ApplicationDto model)
@@ -246,26 +244,26 @@ namespace Fanda.Infrastructure.Auth
             return model.Errors;
         }
 
-        public async Task<bool> MapResource(AppResourceDto model)
-        {
-            var appResource = mapper.Map<AppResource>(model);
-            await context.Set<AppResource>().AddAsync(appResource);
-            await context.SaveChangesAsync();
-            return true;
-        }
+        // public async Task<bool> MapResource(AppResourceDto model)
+        // {
+        //     var appResource = mapper.Map<AppResource>(model);
+        //     await context.Set<AppResource>().AddAsync(appResource);
+        //     await context.SaveChangesAsync();
+        //     return true;
+        // }
 
-        public async Task<bool> UnmapResource(AppResourceDto model)
-        {
-            var appResource = await context.Set<AppResource>()
-                .FirstOrDefaultAsync(ar => ar.ApplicationId == model.ApplicationId &&
-                    ar.ResourceId == model.ResourceId);
-            if (appResource == null)
-            {
-                throw new NotFoundException("App Resource not found");
-            }
-            context.Set<AppResource>().Remove(appResource);
-            await context.SaveChangesAsync();
-            return true;
-        }
+        // public async Task<bool> UnmapResource(AppResourceDto model)
+        // {
+        //     var appResource = await context.Set<AppResource>()
+        //         .FirstOrDefaultAsync(ar => ar.ApplicationId == model.ApplicationId &&
+        //             ar.ResourceId == model.ResourceId);
+        //     if (appResource == null)
+        //     {
+        //         throw new NotFoundException("App Resource not found");
+        //     }
+        //     context.Set<AppResource>().Remove(appResource);
+        //     await context.SaveChangesAsync();
+        //     return true;
+        // }
     }
 }

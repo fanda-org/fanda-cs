@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Fanda.Entities.Auth
 {
-    public class User : EmailModel
+    public class User : EmailEntity
     {
         [JsonIgnore]
         public string PasswordHash { get; set; }

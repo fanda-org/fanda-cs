@@ -26,6 +26,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Fanda.Entities.Context;
+using Microsoft.AspNetCore.SpaServices.AngularCli;
 
 [assembly: ApiController]
 namespace Fanda.Web
@@ -47,20 +48,20 @@ namespace Fanda.Web
             #region Repositories
             services.AddTransient<IEmailSender, EmailSender>();
 
-            services.AddScoped<ISerialNumberRepository, SerialNumberRepository>();
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IOrganizationRepository, OrganizationRepository>();
+            //services.AddScoped<ISerialNumberRepository, SerialNumberRepository>();
+            //services.AddScoped<IUserRepository, UserRepository>();
+            //services.AddScoped<IOrganizationRepository, OrganizationRepository>();
             services.AddScoped<IUnitRepository, UnitRepository>();
             #endregion
 
             #region Angular SPA
-            //services.AddControllersWithViews();
-            //.AddRazorRuntimeCompilation();
-            //// In production, the Angular files will be served from this directory
-            //services.AddSpaStaticFiles(configuration =>
-            //{
-            //    configuration.RootPath = "ClientApp/dist";
-            //});
+            services.AddControllersWithViews();
+                //.AddRazorRuntimeCompilation();
+            // In production, the Angular files will be served from this directory
+            services.AddSpaStaticFiles(configuration =>
+            {
+               configuration.RootPath = "ClientApp/dist";
+            });
             #endregion
         }
 
@@ -71,11 +72,11 @@ namespace Fanda.Web
             app.ConfigureStartup(env, autoMapperConfigProvider);
 
             #region Angular SPA
-            //app.UseStaticFiles();
-            //if (!env.IsDevelopment())
-            //{
-            //    app.UseSpaStaticFiles();
-            //}
+            app.UseStaticFiles();
+            if (!env.IsDevelopment())
+            {
+               app.UseSpaStaticFiles();
+            }
             #endregion
 
             // app.UseEndpoints(endpoints =>
@@ -86,18 +87,18 @@ namespace Fanda.Web
             // });
 
             #region Angular SPA
-            //app.UseSpa(spa =>
-            //{
-            //    // To learn more about options for serving an Angular SPA from ASP.NET Core,
-            //    // see https://go.microsoft.com/fwlink/?linkid=864501
+            app.UseSpa(spa =>
+            {
+               // To learn more about options for serving an Angular SPA from ASP.NET Core,
+               // see https://go.microsoft.com/fwlink/?linkid=864501
 
-            //    spa.Options.SourcePath = "ClientApp";
+               spa.Options.SourcePath = "ClientApp";
 
-            //    if (env.IsDevelopment())
-            //    {
-            //        spa.UseAngularCliServer(npmScript: "start");
-            //    }
-            //});
+               if (env.IsDevelopment())
+               {
+                   spa.UseAngularCliServer(npmScript: "start");
+               }
+            });
             #endregion
         }
     }

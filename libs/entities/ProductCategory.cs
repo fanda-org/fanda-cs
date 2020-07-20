@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Fanda.Entities
 {
-    public class ProductCategory : BaseOrgModel
+    public class ProductCategory : BaseOrgEntity
     {
         public Guid? ParentId { get; set; }
 

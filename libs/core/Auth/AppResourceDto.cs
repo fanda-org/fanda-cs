@@ -1,13 +1,26 @@
 namespace Fanda.Core.Auth
 {
     using System;
+    using Fanda.Core.Base;
+    using Fanda.Shared;
 
-    public class AppResourceDto
+    public class AppResourceDto : BaseDto
     {
+        public ResourceType ResourceType { get; set; }
         public Guid ApplicationId { get; set; }
-        public Guid ResourceId { get; set; }
+        #region Action fields
+        public bool Creatable { get; set; }
+        public bool Updateable { get; set; }
+        public bool Deleteable { get; set; }
+        public bool Readable { get; set; }
+        public bool Printable { get; set; }
+        public bool Importable { get; set; }
+        public bool Exportable { get; set; }
+        #endregion
+    }
 
-        public virtual ApplicationDto Application { get; set; }
-        public virtual ResourceDto Resource { get; set; }
+    public class AppResourceListDto : BaseListDto
+    {
+        public ResourceType ResourceType { get; set; }
     }
 }
