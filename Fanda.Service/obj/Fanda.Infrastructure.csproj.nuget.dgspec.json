@@ -1,0 +1,395 @@
+{
+  "format": 1,
+  "restore": {
+    "D:\\Development\\Projects\\dotnet\\Fanda\\src\\libs\\infrastructure\\Fanda.Infrastructure.csproj": {}
+  },
+  "projects": {
+    "D:\\Development\\Projects\\dotnet\\Fanda\\src\\libs\\core\\Fanda.Core.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\libs\\core\\Fanda.Core.csproj",
+        "projectName": "Fanda.Core",
+        "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\libs\\core\\Fanda.Core.csproj",
+        "packagesPath": "C:\\Users\\tbala\\.nuget\\packages\\",
+        "outputPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\libs\\core\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\tbala\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "projectReferences": {
+              "D:\\Development\\Projects\\dotnet\\Fanda\\src\\libs\\shared\\Fanda.Shared.csproj": {
+                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\libs\\shared\\Fanda.Shared.csproj",
+                "privateAssets": "all"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[10.0.0, )"
+            },
+            "Microsoft.AspNetCore.Mvc.Core": {
+              "target": "Package",
+              "version": "[2.2.5, )"
+            },
+            "System.ComponentModel.Annotations": {
+              "target": "Package",
+              "version": "[4.7.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.100-preview.7.20366.6\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\Development\\Projects\\dotnet\\Fanda\\src\\libs\\entities\\Fanda.Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\libs\\entities\\Fanda.Domain.csproj",
+        "projectName": "Fanda.Domain",
+        "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\libs\\entities\\Fanda.Domain.csproj",
+        "packagesPath": "C:\\Users\\tbala\\.nuget\\packages\\",
+        "outputPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\libs\\entities\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\tbala\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "projectReferences": {
+              "D:\\Development\\Projects\\dotnet\\Fanda\\src\\libs\\shared\\Fanda.Shared.csproj": {
+                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\libs\\shared\\Fanda.Shared.csproj",
+                "privateAssets": "all"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[3.1.5, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[3.1.5, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[3.1.5, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[3.1.5, )"
+            },
+            "Microsoft.Extensions.Configuration": {
+              "target": "Package",
+              "version": "[3.1.5, )"
+            },
+            "Microsoft.Extensions.Configuration.Json": {
+              "target": "Package",
+              "version": "[3.1.5, )"
+            },
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[3.1.4, )"
+            },
+            "Pomelo.EntityFrameworkCore.MySql": {
+              "target": "Package",
+              "version": "[3.1.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.100-preview.6.20318.15\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\Development\\Projects\\dotnet\\Fanda\\src\\libs\\infrastructure\\Fanda.Infrastructure.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\libs\\infrastructure\\Fanda.Infrastructure.csproj",
+        "projectName": "Fanda.Infrastructure",
+        "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\libs\\infrastructure\\Fanda.Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\tbala\\.nuget\\packages\\",
+        "outputPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\libs\\infrastructure\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\tbala\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "projectReferences": {
+              "D:\\Development\\Projects\\dotnet\\Fanda\\src\\libs\\core\\Fanda.Core.csproj": {
+                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\libs\\core\\Fanda.Core.csproj",
+                "privateAssets": "all"
+              },
+              "D:\\Development\\Projects\\dotnet\\Fanda\\src\\libs\\entities\\Fanda.Domain.csproj": {
+                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\libs\\entities\\Fanda.Domain.csproj"
+              },
+              "D:\\Development\\Projects\\dotnet\\Fanda\\src\\libs\\shared\\Fanda.Shared.csproj": {
+                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\libs\\shared\\Fanda.Shared.csproj",
+                "privateAssets": "all"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[10.0.0, )"
+            },
+            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[8.0.1, )"
+            },
+            "Dapper": {
+              "target": "Package",
+              "version": "[2.0.35, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[3.1.6, )"
+            },
+            "Microsoft.AspNetCore.Mvc.Core": {
+              "target": "Package",
+              "version": "[2.2.5, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[3.1.6, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[3.1.6, )"
+            },
+            "Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[3.1.6, )"
+            },
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[3.1.4, )"
+            },
+            "Pomelo.EntityFrameworkCore.MySql": {
+              "target": "Package",
+              "version": "[3.1.2, )"
+            },
+            "Serilog.AspNetCore": {
+              "target": "Package",
+              "version": "[3.4.0, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[5.5.1, )"
+            },
+            "System.IdentityModel.Tokens.Jwt": {
+              "target": "Package",
+              "version": "[6.7.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.100-preview.7.20366.6\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\Development\\Projects\\dotnet\\Fanda\\src\\libs\\shared\\Fanda.Shared.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\libs\\shared\\Fanda.Shared.csproj",
+        "projectName": "Fanda.Shared",
+        "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\libs\\shared\\Fanda.Shared.csproj",
+        "packagesPath": "C:\\Users\\tbala\\.nuget\\packages\\",
+        "outputPath": "D:\\Development\\Projects\\dotnet\\Fanda\\src\\libs\\shared\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\tbala\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[10.0.0, )"
+            },
+            "Microsoft.AspNetCore.Mvc.Core": {
+              "target": "Package",
+              "version": "[2.2.5, )"
+            },
+            "Microsoft.AspNetCore.Mvc.Cors": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[3.1.6, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[3.1.6, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[3.1.6, )"
+            },
+            "Microsoft.Extensions.Options": {
+              "target": "Package",
+              "version": "[3.1.6, )"
+            },
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[3.1.4, )"
+            },
+            "Pomelo.EntityFrameworkCore.MySql": {
+              "target": "Package",
+              "version": "[3.1.1, )"
+            },
+            "SendGrid": {
+              "target": "Package",
+              "version": "[9.19.0, )"
+            },
+            "System.Linq.Dynamic.Core": {
+              "target": "Package",
+              "version": "[1.2.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.100-preview.7.20366.6\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,4 @@
+D:\Development\Projects\dotnet\Fanda\src\libs\domain\obj\Debug\net5.0\Fanda.Domain.csprojAssemblyReference.cache
+D:\Development\Projects\dotnet\Fanda\src\libs\domain\obj\Debug\net5.0\Fanda.Domain.AssemblyInfoInputs.cache
+D:\Development\Projects\dotnet\Fanda\src\libs\domain\obj\Debug\net5.0\Fanda.Domain.AssemblyInfo.cs
+D:\Development\Projects\dotnet\Fanda\src\libs\domain\obj\Debug\net5.0\Fanda.Domain.csproj.CoreCompileInputs.cache

@@ -1,0 +1,109 @@
+{
+  "format": 1,
+  "restore": {
+    "D:\\Development\\Projects\\dotnet\\Fanda-Apps\\src\\Fanda\\Fanda.Web\\Fanda.Web.csproj": {}
+  },
+  "projects": {
+    "D:\\Development\\Projects\\dotnet\\Fanda-Apps\\src\\Fanda\\Fanda.Web\\Fanda.Web.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Development\\Projects\\dotnet\\Fanda-Apps\\src\\Fanda\\Fanda.Web\\Fanda.Web.csproj",
+        "projectName": "Fanda.Web",
+        "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda-Apps\\src\\Fanda\\Fanda.Web\\Fanda.Web.csproj",
+        "packagesPath": "C:\\Users\\tbala\\.nuget\\packages\\",
+        "outputPath": "D:\\Development\\Projects\\dotnet\\Fanda-Apps\\src\\Fanda\\Fanda.Web\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\tbala\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "projectReferences": {
+              "D:\\Development\\Projects\\dotnet\\Fanda-Apps\\src\\Fanda\\libs\\core\\Fanda.Core.csproj": {
+                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda-Apps\\src\\Fanda\\libs\\core\\Fanda.Core.csproj"
+              },
+              "D:\\Development\\Projects\\dotnet\\Fanda-Apps\\src\\Fanda\\libs\\infrastructure\\Fanda.Infrastructure.csproj": {
+                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda-Apps\\src\\Fanda\\libs\\infrastructure\\Fanda.Infrastructure.csproj"
+              },
+              "D:\\Development\\Projects\\dotnet\\Fanda-Apps\\src\\Fanda\\libs\\shared\\Fanda.Shared.csproj": {
+                "projectPath": "D:\\Development\\Projects\\dotnet\\Fanda-Apps\\src\\Fanda\\libs\\shared\\Fanda.Shared.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "dependencies": {
+            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[8.0.1, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[3.1.6, )"
+            },
+            "Microsoft.AspNetCore.SpaServices.Extensions": {
+              "target": "Package",
+              "version": "[5.0.0-preview.2.20167.3, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[3.1.6, )"
+            },
+            "Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[3.1.6, )"
+            },
+            "Serilog.AspNetCore": {
+              "target": "Package",
+              "version": "[3.4.0, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[5.5.1, )"
+            },
+            "System.IdentityModel.Tokens.Jwt": {
+              "target": "Package",
+              "version": "[6.7.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.100-preview.7.20366.6\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

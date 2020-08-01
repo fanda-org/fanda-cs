@@ -1,0 +1,41 @@
+{
+    "cSpell.words": [
+        "fanda",
+        "postgres",
+        "tbalakpm"
+    ],
+    "cSpell.ignoreWords": [
+        "a",
+        "anzr",
+        "bmwufr",
+        "csk",
+        "e",
+        "f",
+        "gi",
+        "j",
+        "l",
+        "lw",
+        "nxa",
+        "o",
+        "olf",
+        "ph",
+        "pxzw",
+        "q",
+        "s",
+        "sg",
+        "sg xz pxzw csk wy s e anzr a l nxa bmwufr lw q olf o v gi y ph zd zo yu f j xazks",
+        "v",
+        "wy",
+        "xazks",
+        "xz",
+        "y",
+        "yu",
+        "zd",
+        "zo"
+    ],
+    "files.exclude": {
+        "**/.vs": true,
+        "**/bin": true,
+        "**/obj": true
+    }
+}
